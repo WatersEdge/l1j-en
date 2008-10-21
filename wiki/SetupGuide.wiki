@@ -1,0 +1,60 @@
+#summary How to setup your own server
+#labels Featured
+
+= Server Setup Guide =
+
+== Introduction ==
+
+This document is a platform-independent guide to setting up and installing your own local instance of this server. As multiple operating systems are supported, the steps involved will not be detailed to the extent where every dialog and button to click on are listed. When something is specific to a particular operating system, it will be explicitly stated as such.
+
+This document will evolve over time as changes are made to the codebase. This document mainly outlines how to follow the latest server version. We also provide pre-built milestones after significant stability or feature goals are met. If you are having problems following the steps outlined herein, using the latest of these will negate the need to perform many of the following steps, though you will miss out on all of the added content since then. Non-technical users are encouraged to make use of this option.
+
+== Accessing the Repository ==
+
+To download the files contained in this repository, follow the instructions already provided by Google on the Source tab. You'll need an SVN client to create a local target for the repository, and the options provided by each vary per client. Here, you can also follow the latest changes or browse individual files remotely.
+
+Some recommendations: The command line Subversion client is best for shell scripts, TortoiseSVN is popular for Windows users, Subclipse allows for integrated SVN access from the Eclipse IDE, and psvn.el is a full-featured Emacs SVN module.
+
+== Setting up your Environment ==
+
+Like most MMOs, Lineage operates on a client-server, or n-tiered architecture (where n=3). These tiers consist of the presentation layer: the client, the application layer: the server, and the data layer: the database. 
+
+You probably already have the game client installed. If not, see our [http://lineagedc.com/index.php?option=com_fireboard&Itemid=55&func=view&id=103&catid=2 Best Client Guide]. 
+
+The server is written in Java. If using a pre-built milestone, you'll only need a JRE installation of v1.6 or greater. Most Windows and OSX users will already have this installed. You may need to set system/user environmental variables to ensure that your PATH includes the directory for the JRE executables. If you intend to compile the latest source, you'll need the Java SE Development Kit (or JDK). Compilation of the source can be done without an IDE, but an Eclipse-compatible .project file and an Ant build directive are already provided to make this much easier. Simply install Eclipse and load the project, then run the Ant build. Alternatively, if you want the latest source but don't feel like installing a huge IDE, just install the Apache Ant build manager and run the build from the command line. Other IDEs can also be used, and project files for these may be provided later (if you create one for your favorite IDE, feel free to send it in).
+
+The database requires an installation of MySQL. The community edition of MySQL is free, so download and install it. MySQL comes with a full-featured command line interface, from which you can perform any task relevant to working on the database. There are also several graphical interfaces to MySQL with varying subsets of the functionality of the CLI. Navicat is probably the most popular among Windows users and is reasonably priced. 
+
+== Installing ==
+
+If using the provided Ant build, this will by default generate output in the form of a file named l1jen.jar. The server should compile without any errors. Some warnings may be generated, depending on your IDE's warning level setting. Most of these are unused variable declarations and log instances in packet classes, and are left in intentionally at the moment. You can suppress or ignore these if you want.
+
+Log into your database instance and execute the base database installation script, l1jdb_m2.sql. The base database creation script is the latest complete database from the time of the last milestone build (in this case, milestone 2). To convert this to the latest L1J-En database, first apply the DDL scripts against the base database and then the DML scripts. There are two main database build paths: new installation and migration. We always confirm that the migration works on a per-commit basis to the DDL and DML scripts, but since these files change so often, occasionally the new install build has broken for the database creation. If this occurs, you can fix it yourself or submit an issue with the file, line number, error returned, and the sequence of scripts executed up to that point. 
+
+Server side changes will occasionally rely on recent datamodel changes. In such an event, or if you just want to test or follow the latest database changes, you can also execute the pending_changes.sql file in the update_history directory. This file is a working, in-progress collection of the queries that are being collected for the upcoming update. Once confirmed working together, they are migrated to the new install build path and that collection of queries is labeled and archived. To mitigate schema change inconsistencies with inline SQL, we often migrate critical DDL queries to their respective destinations as soon as possible.
+
+With these tasks complete, you can now create a directory for your server to execute from and copy over the startup script, the build .jar file, and the config, data, maps, and lib subdirectories to it. If you plan to do development on the server, you'll want a separate execution folder for the server. 
+
+== Configuration ==
+
+All configurable options are present in the config subdirectory. Any new feature that has been deemed as something other servers might want to deactivate or adjust has been left as a config setting. This trend will continue in the future as more servers with their own custom features commit their changes. Most of these settings should be self-explanatory. If not, you can easily check references to it within the code to see how it is used.
+
+With the config settings tweaked to your liking, you are now ready to host your own server. In Windows, unless you changed some filenames from their default, serverstart-console.bat should run the server without any further effort on your part. In Unix variants, you may need to modify the directory bash is in (e.g. on BSD, the default is /usr/local/bin/bash) or JRE flags in the provided shell scripts.
+
+== Making Modifications ==
+
+So, you now have your own server up and running. If you did everything correctly, you should have a clean slate copy of what is currently in production on the live LinDC server (minus any player data, of course). If you used a pre-built milestone distribution, you'll have a snapshot of how it was at some point in the recent past. 
+
+Whether you're just a normal Lineage player you or have ambitions to host your own server, if you want to make modifications, you'll probably want to follow the latest source code. Bugs are fixed and features added on practically a daily basis, so make sure you understand the update process thoroughly before changing anything. If not, you may make changes that conflict with the current state of the codebase, which equals wasted effort. If you aren't sure what to change, take a look at the Issues tab on this site, which is an up to date listing of the things that need to be addressed. If you know about an issue not listed, go ahead and add it. You do not need to be a project member to add an issue to this list. 
+
+Once you've identified something you want to change, do so, and let us know about it! The popularity of this codebase is growing, and many people follow its progress and use it for their own servers. If you fix something or add a feature, not only will many people appreciate it now, but all future servers that derive their code from here will owe you thanks. See the main page of this project to get the full details. 
+
+== Getting Further Help ==
+
+If you run into problems setting the server up, feel free to post on the [http://lineagedc.com/index.php?option=com_fireboard&Itemid=55&func=showcat&catid=2 LinDC forums]. There you can get help from the core L1J-En userbase and other people following the latest code. If you've found what you're sure is a bug with the project itself, don't hesitate to add it to the Issues tab. 
+
+If you're only interested in milestone builds, and only use Windows, see this very detailed step-by-step [http://lineagedc.com/index.php?option=com_fireboard&Itemid=55&func=view&catid=2&id=428#428 Windows setup guide]. Note that this is somewhat outdated and refers to the old project site. 
+
+While you do not need to know how to program or know anything about databases or networks to setup the server, it certainly doesn't hurt. You'll also want to have at least some basic programming skills if you plan to make meaningful contributions back to the project, as it is very easy to make a modification that will make the server unstable. There's no shortage of great tutorials online, and if you're starting from nothing, search for ones related to Java, SQL, or MySQL. 
+
+Hopefully, this document demystifies server setup for those who are almost there but couldn't quite figure it out on their own. Literally anyone should be able to follow the steps here and have their own server up and running within an hour or two. Have fun, and let us know how it goes.
