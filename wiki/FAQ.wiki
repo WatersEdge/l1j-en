@@ -1,0 +1,22 @@
+#summary Frequently Asked Questions
+#labels Featured
+
+= Server Setup Guide =
+
+== Introduction ==
+
+This document is an in-progress collection of information about L1J-En.
+
+== What are the goals of L1J-En? ==
+
+In short, the primary goal of L1J-En is to create the most stable English language Lineage Server Emulator currently possible. The specific goals of the project are as follows, in descending order of priority:
+
+1. Stability: The server should foremost be as stable as possible. By stability, we mean both that the server should be able to run as long as possible unattended and also that the gameplay should be as free of fundamental flaws as possible. The latest feature doesn't do a public server any good if it introduces dozens of bugs in the process or has the potential to unbalance a public server with an active playerbase. 
+
+2. Fixing bugs: Non-functional or improperly functioning aspects of existing features takes precedence over adding new features. Bug fixing itself is prioritized by the effect it has on gameplay. 
+
+3. Translation: Since this server is the only actively developed English language port of L1J, we'll do our best to translate all text content to English. This task is already completed for all existing aspects of the server.
+
+4. New Features: We do want all of the latest new features worked on by the other various L1J projects. However, we take a more conservative approach with new features than other L1J ports, as they tend to be bug-prone when first added. We will also implement missing features ourselves as developer time permits. 
+
+5. Server enhancements: Increasing the ease by which server admins can administrate their servers is a final goal. This includes custom settings, support for multiple OSes, GM/Monitor commands, stored procedures, and various other administrative functions. We also maintain an upgrade path for in-use databases.  
