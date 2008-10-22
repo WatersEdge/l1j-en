@@ -1,7 +1,7 @@
 #summary Frequently Asked Questions
 #labels Featured
 
-= Server Setup Guide =
+= Frequently Asked Questions =
 
 == Introduction ==
 
