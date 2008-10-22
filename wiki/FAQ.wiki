@@ -17,15 +17,17 @@ L1J-En was chosen as a name because this project is in fact an L1J port. The "En
 
 In short, the primary goal of L1J-En is to create the most stable English language Lineage Server Emulator currently possible. The specific goals of the project are as follows, in descending order of priority:
 
-1. Stability: The server should foremost be as stable as possible. By stability, we mean both that the server should be able to run as long as possible unattended and also that the gameplay should be as free of fundamental flaws as possible. The latest feature doesn't do a public server any good if it introduces dozens of bugs in the process or has the potential to unbalance a public server with an active playerbase. 
+1. Stability: The server should foremost be as stable as possible. By stability, we mean both that the server should be able to run as long as possible unattended and also that the gameplay should be as free of fundamental flaws as possible. The latest feature doesn't do a public server any good if it introduces dozens of bugs in the process or has the potential to unbalance a server with an active playerbase. 
 
 2. Fixing bugs: Non-functional or improperly functioning aspects of existing features takes precedence over adding new features. Bug fixing itself is prioritized by the effect it has on gameplay. 
 
 3. Translation: Since this server is the only actively developed English language port of L1J, we'll do our best to translate all text content to English. This task is already completed for all existing aspects of the server.
 
-4. New Features: We do want all of the latest new features worked on by the other various L1J projects. However, we take a more conservative approach with new features than other L1J ports, as they tend to be bug-prone when first added. We will also implement missing features ourselves as developer time permits. 
+4. New Features: We do want all of the latest new features worked on by the other various L1J projects. However, we take a more conservative approach with new features than other L1J ports, as they tend to be bug-prone when first added. We also implement missing features ourselves as developer time permits. 
 
-5. Server enhancements: Increasing the ease by which server admins can administrate their servers is a final goal. This includes custom settings, support for multiple OSes, GM/Monitor commands, stored procedures, and various other administrative functions. We also maintain an upgrade path for in-use databases.  
+5. Balance adjustments: The Asian L1J efforts largely target private servers that run at very high rates (i.e. the kind of server where everyone is level 80+ in a few days). While this is fine for some quick fun, we also want to support the ability to run a long-term, if not permanent, public server. This requires a lot of attention to droprates, spawn, and minor features players don't care about on a temporary, high rate server. 
+
+6. Server enhancements: Increasing the ease by which server admins can administrate their servers is a final goal. This includes custom settings, support for multiple OSes, GM/Monitor commands, stored procedures, and various other administrative functions. We also maintain an upgrade path for in-use databases.  
 
 == What are NOT the goals of L1J-En? ==
 
@@ -64,5 +66,3 @@ We definitely always need more help! Please see the information on the main proj
 One option here would be to help out with testing, documentation, managing various aspects of this site, assisting users on the LineageDC forum, helping the community on a public server, or anything else you can think of. This kind of community help has been essential to this project (especially the testing). 
 
 The other option is to learn one of the technical skills necessary to help out. If you're starting from nothing, pick an aspect of the server that interests you to focus on. For example, the database could really use the attention of someone skilled in SQL that closely monitored the datapack. Alternatively, you could just learn Java and help out on that end. Or, master some of the tools and help monitor the build process. These are just examples. Any of these skills are valuable in other aspects of real life too. There are thousands of books and free tutorials on all of these topics, and none of them are exceptionally complicated, so the only thing required is time.
-
-
