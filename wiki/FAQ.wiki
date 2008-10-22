@@ -51,7 +51,7 @@ As previously mentioned in this document, what you should NOT do is track down a
 
 == How do I report bugs? ==
 
-There's a Issues tab on the site that is open to the general public to add bug reports. Create a new issue and fill out the form fields. Please add as much details as possible, so that whoever looks at it can recreate the bug in a test environment. Recreating the bug is almost always a necessary part of finding the bad code and fixing it. 
+There's a Issues tab on the site that is open to the general public to add bug reports. Create a new issue and fill out the form fields. Please add as much detail as possible, so that whoever looks at it can recreate the bug in a test environment. Recreating the bug is almost always a necessary part of finding the bad code and fixing it. 
 
 Bugs are prioritized by severity, but are not necessarily fixed in that order. If someone only has a few minutes of free time, they may just fix a smaller issue. Also, some issues are inherent to the current design, have client-related causes, or are otherwise impossible to resolve at the current time. These may linger indefinitely.
 
@@ -59,10 +59,10 @@ If there is a bug that really bothers you personally and it isn't being addresse
 
 == How do I help this project? ==
 
-We definitely always need more help! Please see the information on the main project page regarding how to help. 
+We definitely always need more help! Please see the information on the main project page for the full details on how to do so. 
 
 == I want to help, but am too unskilled and/or stupid. ==
 
 One option here would be to help out with testing, documentation, managing various aspects of this site, assisting users on the LineageDC forum, helping the community on a public server, or anything else you can think of. This kind of community help has been essential to this project (especially the testing). 
 
-The other option is to learn one of the technical skills necessary to help out. If you're starting from nothing, pick an aspect of the server that interests you to focus on. For example, the database could really use the attention of someone skilled in SQL that closely monitored the datapack. Alternatively, you could just learn Java and help out on that end. Or, master some of the tools and help monitor the build process. These are just examples. Any of these skills are valuable in other aspects of real life too. There are thousands of books and free tutorials on all of these topics, and none of them are exceptionally complicated, so the only thing required is time.
+The other option is to learn one of the technical skills necessary to help out. If you're starting from nothing, pick an aspect of the server that interests you to focus on. For example, the database could really use the attention of someone skilled in SQL that closely monitored the datapack. Alternatively, you could just learn Java and help out on that end. Or, master some of the tools and help monitor the build process. These are just examples. Any of these skills are valuable in other aspects of real life too. There are thousands of books and free tutorials on all of these topics, and none of the technologies in use here are exceptionally complicated, so the only thing required is time.
