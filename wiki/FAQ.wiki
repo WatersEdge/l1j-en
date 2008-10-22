@@ -20,3 +20,11 @@ In short, the primary goal of L1J-En is to create the most stable English langua
 4. New Features: We do want all of the latest new features worked on by the other various L1J projects. However, we take a more conservative approach with new features than other L1J ports, as they tend to be bug-prone when first added. We will also implement missing features ourselves as developer time permits. 
 
 5. Server enhancements: Increasing the ease by which server admins can administrate their servers is a final goal. This includes custom settings, support for multiple OSes, GM/Monitor commands, stored procedures, and various other administrative functions. We also maintain an upgrade path for in-use databases.  
+
+== What are NOT the goals of L1J-En? ==
+
+There are several things that we could do, but won't for what we feel are valid reasons. A few of the major things we will not do are:
+
+1. Refactoring the codebase: We are well aware of the fact that L1J is rife with lame technologies and very uninspired design. L1J is a great example of how NOT to design a large piece of software. While we share in the many complaints anyone with experience in software development will have within a few minutes of examining its architecture (or lack thereof), we will do as little refactoring as possible simply because we want to leverage the work being done by other L1J efforts. Diverging too far from their structure complicates the merge process, and while it would still be possible to make use of their additions, the English-speaking Lineage community lacks the talented manpower to re-implement every one of these individually. 
+
+2. Support: While members of the development team do actively assist in the efforts of some of the public servers using the codebase, what we won't do is provide personal support for every person that downloads the code. The reason for this is simply that dev team members don't have time to provide individual walkthroughs of the setup process and all of the aspects of server administration. A setup guide is provided on this site, and support can be had from other admins and users on the LineageDC forum, however. We'll also do our best to make the various steps of the processes as self-explanatory as possible, but don't guarantee that it will be accessible to those who lack basic computer skills. 
