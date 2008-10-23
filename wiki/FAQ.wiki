@@ -27,7 +27,7 @@ In short, the primary goal of L1J-En is to create the most stable English langua
 
 5. Balance adjustments: The Asian L1J efforts largely target private servers that run at very high rates (i.e. the kind of server where everyone is level 80+ in a few days). While this is fine for some quick fun, we also want to support the ability to run a long-term, if not permanent, public server. This requires a lot of attention to droprates, spawn, and minor features players don't care about on a temporary, high rate server. 
 
-6. Server enhancements: Increasing the ease by which server admins can administrate their servers is a final goal. This includes custom settings, support for multiple OSes, GM/Monitor commands, stored procedures, and various other administrative functions. We also maintain an upgrade path for in-use databases.  
+6. Server enhancements: Increasing the ease by which server owners can administrate their servers is a final goal. This includes custom settings, support for multiple OSes, GM/Monitor commands, stored procedures, and various other administrative functions. We also maintain an upgrade path for in-use databases.  
 
 == What are NOT the goals of L1J-En? ==
 
