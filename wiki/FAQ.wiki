@@ -69,7 +69,7 @@ The other option is to learn one of the technical skills necessary to help out. 
 
 == What are Milestone builds? ==
 
-Milestone builds are released to help those of you who make lack some of the technical skills needed to setup your own server via compiling and applying updates. If you find compilers and databases intimidating, these are for you. 
+Milestone builds are released to help those of you who may lack some of the technical skills needed to setup your own server via compiling and applying updates. If you find compilers and databases intimidating, these are for you. 
 
 Milestone 1: This was an Ep5 release. It is still available on the old project site for those wanting to run an Ep5 server. 
 
