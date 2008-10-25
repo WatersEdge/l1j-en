@@ -66,3 +66,15 @@ We definitely always need more help! Please see the information on the main proj
 One option here would be to help out with testing, documentation, managing various aspects of this site, assisting users on the LineageDC forum, helping the community on a public server, or anything else you can think of. This kind of community help has been essential to this project (especially the testing). 
 
 The other option is to learn one of the technical skills necessary to help out. If you're starting from nothing, pick an aspect of the server that interests you to focus on. For example, the database could really use the attention of someone skilled in SQL that closely monitors the datapack. Alternatively, you could just learn Java and help out on that end. Or, master some of the tools and help monitor the build process. These are just examples. Any of these skills are valuable in other aspects of real life too. There are thousands of books and free tutorials on all of these topics, and none of the technologies in use here are exceptionally complicated, so the only thing required is time.
+
+== What are Milestone builds? ==
+
+Milestone builds are released to help those of you who make lack some of the technical skills needed to setup your own server via compiling and applying updates. If you find compilers and databases intimidating, these are for you. 
+
+Milestone 1: This was an Ep5 release. It is still available on the old project site for those wanting to run an Ep5 server. 
+
+Milestone 2: This was a post-EpU merge release. It also is only available on the old site.
+
+Milestone 3: This was an internal re-baselining milestone for correcting some of the bad development work that occurred during and in the 6 weeks after the EpU merge. No precompiled server binary exists for this release.
+
+Milestone 4: This milestone will be published after the first L1J-En update has completed testing and goes live on the LineageDC public server. This will be the milestone to use from now on.
