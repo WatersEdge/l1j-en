@@ -3,11 +3,29 @@
 
 = Server Setup Guide =
 
+Last updated: Nov 4, 2008 (in progress)
+
 == Introduction ==
 
-This document is a platform-independent guide to setting up and installing your own local instance of this server. As multiple operating systems are supported, the steps involved will not be detailed to the extent where every dialog and button to click on are listed. When something is specific to a particular operating system, it will be explicitly stated as such.
+This document is a platform-independent guide to setting up and installing your own local instance of the L1J-En Lineage server.
 
-This document will evolve over time as changes are made to the codebase. This document mainly outlines how to follow the latest server version. We also provide pre-built milestones after significant stability or feature goals are met. If you are having problems following the steps outlined herein, using the latest of these will negate the need to perform many of the following steps, though you will miss out on all of the added content since then. Non-technical users are encouraged to make use of this option.
+Some words of caution: 
+
+This guide is, by necessity, platform independent. We support multiple OSes, and don't want to provide a guide for each. When something is OS-specific, it will be noted as such.
+
+Along those lines, the guide is tool independent. What that means is we will not provide a walkthrough of the level of detail such as "First click this button. Now, click this." Learning how to use your computer is beyond the scope of this document, and any software used changes too frequently for us to track. 
+
+And lastly, we are not responsible for anything that you do to your computer. If you misinterpret something here and delete your pr0n collection as a result, well, that's your fault.
+
+With those formalities out of the way, follow the steps here to get your server up with minimal effort.
+
+== Choosing an Update Method ==
+
+The L1J-En team realizes that not everyone is patient or skilled enough to follow this guide to completion. If you consider yourself a novice or have trouble at some point following the steps here, then you have the option of using a pre-built version of the server and a pre-packaged database that is associated with it. This will spare you multiple, potentially-confusing steps in this process. We will try to release milestones at points were either significant progress has been made on our part and/or a large amount of new features have been merged in from the Asian L1J teams. 
+
+To use a milestone build, grab the latest pre-built server binary from the Downloads tab and check out the full repository from ONLY the revision in which it is noted to be associated with. Then use the l1jdb_mX.sql file (where X is the number of the milestone) to build your database in MySQL. Once you've done this, jump to the configuration section below for the rest of the setup process.
+
+If you want to run a permanent server that gets updated regularly or if you just want to keep up with the latest changes, then ignore the previous text in this section and follow the remaining instructions below.
 
 == Accessing the Repository ==
 
