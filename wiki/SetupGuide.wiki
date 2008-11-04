@@ -11,9 +11,11 @@ This document is a platform-independent guide to setting up and installing your 
 
 Some words of caution: 
 
-*This guide is, by necessity, platform independent. We support multiple OSes, and don't want to provide a guide for each. When something is OS-specific, it will be noted as such.
-*Along those lines, the guide is tool independent. What that means is we will not provide a walkthrough of the level of detail such as "First click this button. Now, click this." Learning how to use your computer is beyond the scope of this document, and any software used changes too frequently for us to track. 
-*And lastly, we are not responsible for anything that you do to your computer. If you misinterpret something here and delete your pr0n collection as a result, well, that's your fault.
+* This guide is, by necessity, platform independent. We support multiple OSes, and don't want to provide a guide for each. When something is OS-specific, it will be noted as such.
+
+* Along those lines, the guide is tool independent. What that means is we will not provide a walkthrough of the level of detail such as "First click this button. Now, click this." Learning how to use your computer is beyond the scope of this document, and any software used changes too frequently for us to track. 
+
+* And lastly, we are not responsible for anything that you do to your computer. If you misinterpret something here and delete your pr0n collection as a result, well, that's your fault.
 
 With those formalities out of the way, follow the steps here to get your server up with minimal effort.
 
