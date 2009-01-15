@@ -9,7 +9,7 @@ This document is an in-progress collection of information about L1J-En.
 
 == What is L1J-En? ==
 
-L1J-En is a server emulator for the MMORPG [http://en.wikipedia.org/wiki/Lineage_(video_game) Lineage 1]. 
+L1J-En is a server emulator for the MMORPG [http://www.lineage.com/ Lineage 1]. 
 
 As far as MMORPG server emulators go, most projects are fairly buggy, only support a small percent of the features of their official counterparts, or don't work at all. L1J-En is one of the few emulators where this isn't the case, and is on par with efforts such as RunUO and L2J. Many hundreds of players actively play on servers using L1J-En. 
 
