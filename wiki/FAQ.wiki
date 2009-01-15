@@ -7,11 +7,21 @@
 
 This document is an in-progress collection of information about L1J-En.
 
+== What is L1J-En? ==
+
+L1J-En is a server emulator for the MMORPG [http://en.wikipedia.org/wiki/Lineage_(video_game) Lineage 1]. 
+
+As far as MMORPG server emulators go, most projects are fairly buggy, only support a small percent of the features of their official counterparts, or don't work at all. L1J-En is one of the few emulators where this isn't the case, and is on par with efforts such as RunUO and L2J. Many hundreds of players actively play on servers using L1J-En. 
+
+== How does L1J-En compare to other L1J variants? ==
+
+L1J-En is the only active English language Lineage emulator, and one of only two open source ones. We also aggregate all of the features and bugfixes from Asian L1J efforts as well as add many of our own. While it may take some time for all of the features to filter down to this project, the result is arguably the most stable Lineage 1 emulator available and servers have been able to run wipe-free since its inception (something not possible until L1J-En).
+
 == What happened to the LinDC emulation project? ==
 
-This codebase is a fork of the LinDC codebase from its revision 894. The reason this new project was created was mainly: 1.) to implement a long planned name change that wasn't specific to one private server, 2.) to address some of the dev team's internal disagreements on project goals, and 3.) to lose some of the baggage associated with the LinDC codebase going down what we feel was the wrong path. 
+This codebase is a fork of the LinDC codebase from its revision 894. The reason this new project was created was mainly: 1.) to implement a long planned name change that wasn't specific to one private server, 2.) to address some of the dev team's internal disagreements on project goals, and 3.) to lose some of the baggage associated with the LinDC codebase going down what we feel was the wrong path.
 
-L1J-En was chosen as a name because this project is in fact an L1J port. The "En" part of it denotes the English language aspect of this server. We considered L1J-US, since we do use the US client, but since we have no intention of implementing the US servers' LoA ruleset, this would have been a misnomer. 
+L1J-En was chosen as a name because this project is in fact an L1J port. The "En" part of it denotes the English language aspect of this server. We considered L1J-US, since we do use the US client, but since we have no intention of implementing the US servers' LoA ruleset, this would have been a misnomer.
 
 == What are the goals of L1J-En? ==
 
