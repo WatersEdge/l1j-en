@@ -94,3 +94,5 @@ Milestone 2: This was a post-EpU merge release. It also is only available on the
 Milestone 3: This was an internal re-baselining milestone for correcting some of the bad development work that occurred during and in the 6 weeks after the EpU merge. No precompiled server binary exists for this release.
 
 Milestone 4: This milestone will be published after the first L1J-En update has completed testing and goes live on the LineageDC public server. This will be the milestone to use from now on.
+
+Milestone 5: Currently in progress!
