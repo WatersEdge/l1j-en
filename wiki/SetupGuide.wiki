@@ -69,6 +69,8 @@ Once you've identified something you want to change, do so, and let us know abou
 
 If you run into problems setting the server up, feel free to post on the [http://lineagedc.com/index.php?option=com_fireboard&Itemid=55&func=showcat&catid=2 LinDC forums]. There you can get help from the core L1J-En userbase and other people following the latest code. If you've found what you're sure is a bug with the project itself, don't hesitate to add it to the Issues tab. 
 
+A new setup guide is now available [http://l1j.tricid.org/wiki/Tricid%27s_Complete_l1j-en_Guide here]. This guide is in more of a walkthrough format and attempts to provide a sequence of install steps for multiple platforms. 
+
 If you're only interested in milestone builds, and only use Windows, see this very detailed step-by-step [http://lineagedc.com/index.php?option=com_fireboard&Itemid=55&func=view&catid=2&id=428#428 Windows setup guide]. Note that this is somewhat outdated and refers to the old project site. 
 
 While you do not need to know how to program or know anything about databases or networks to setup the server, it certainly doesn't hurt. You'll also want to have at least some basic programming skills if you plan to make meaningful contributions back to the project, as it is very easy to make a modification that will make the server unstable. There's no shortage of great tutorials online, and if you're starting from nothing, search for ones related to Java, SQL, or MySQL. 
