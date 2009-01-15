@@ -59,7 +59,23 @@ If there is a bug that really bothers you personally and it isn't being addresse
 
 == How do I help this project? ==
 
-We definitely always need more help! Please see the information on the main project page for the full details on how to do so. 
+Are you technically capable? We want your help! As an open source project, you can assist the further progress of Lineage 1 emulation by contributing to this project. Feel free to download the code and get familiar with it. Then, if you identify something needing attention or can address something on the issues list, let us know. Continue reading for full details.
+
+== How do I submit a patch? ==
+
+If you're already on the development team, just check in via SVN. Otherwise, email your patches to one of the project owners, and if it meets at least minimal quality standards, we'll gladly add it to the project. Please test all changes locally before submitting. 
+
+== What skills are needed to help? == 
+
+Anyone with moderate Java development experience (or any high-level OOP language), database experience, knowledge of the software development process, or an ability to learn these skills will have no problems contributing here. This codebase is easy to understand and modify, but also very fragile, so attention to detail is necessary. There are no positions or openings to apply for; if you want to help, just start coding! :) If you're helping, you'll be added to the project members.
+
+You do not need to play on our production server to help this project, and we won't stop you from running your own server with your own vision of what Lineage should be. In fact, many servers have done just that, and several are now using this repository as their codebase. Contributing your changes/fixes back to this project will not just make updating easier, but help Lineage emulation for everyone.
+
+== What quality standards are in effect? ==
+
+We do reserve the right to not include patches that are of extremely poor quality or don't follow basic best design practices. We are aware of the fact that the codebase could use a ground-up refactoring, but will not do so in order to maintain L1J portability. Along those lines, in rare cases, patches may not be acceptable due to the fact that it would make L1J  merges significantly more difficult. The only other reason a patch might not be accepted is that it involves the hardcoding of gameplay mechanics that are contrary to the goals of the L1J-En server project. In that case, we will be happy to add it as an optional component or you can feel free to add it as a configurable setting. We don't want to discourage anyone, so in such an event we'll be happy to work with committers to get their submissions up to par (developer time permitting). 
+
+Database changes must be submitted in the form of SQL queries for just that change/fix (do not send us dump files).
 
 == I want to help, but am too unskilled and/or stupid. ==
 
