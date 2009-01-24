@@ -105,4 +105,4 @@ Milestone 3: This was an internal re-baselining milestone for correcting some of
 
 Milestone 4: This milestone has been published after the first L1J-En update completed testing and went live on the LineageDC public server.
 
-Milestone 5: Currently in progress!
+Milestone 5: Just released! This is a maintenance update with a ton of minor bugfixes.
