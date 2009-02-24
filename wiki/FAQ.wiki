@@ -33,7 +33,7 @@ Choose from one of the many servers currently running L1J-En (and various custom
 
 [http://linzm.game-host.org LinZM] - Low and high rate servers with some custom features.
 
-[http://linexcalibur.ucoz.com/ Lin Excalibur] - Little known about this server.
+[http://linexcalibur.ucoz.com/ Lin Excalibur] - Currently down for rework.
 
 If you're running an L1J-En PS, let us know and we'll add it here.
 
