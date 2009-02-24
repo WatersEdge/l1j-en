@@ -22,11 +22,16 @@ L1J-En is the only active English language Lineage emulator, and one of only two
 Choose from one of the many servers currently running L1J-En (and various customized versions of it). Here's a list of the major publicly-available ones we know of:
 
 [http://www.lineagedc.com/ Lineage DC]
+
 [http://friskycow.net/ Frisky Cow]
+
 [http://risenserver.com/news.php Risen Server]
+
 [http://epicl1.ucoz.com/ EpicL1]
+
 [http://lineagedj.ucoz.com/ Lineage Heroes]
-[linzm.game-host.org LinZM]
+
+[http://linzm.game-host.org LinZM]
 
 If you're running an L1J-En PS, let us know and we'll add it here.
 
