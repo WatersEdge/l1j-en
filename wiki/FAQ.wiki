@@ -27,7 +27,7 @@ Choose from one of the many servers currently running L1J-En (and various custom
 
 [http://risenserver.com/news.php Risen Server] - Fast leveling and lots of custom items.
 
-[http://epicl1.ucoz.com/ EpicL1] - Spanish language L1.
+[http://epicl1.ucoz.com/ EpicL1] - A primarily Spanish language server.
 
 [http://lineagedj.ucoz.com/ Lineage Heroes] - Another Spanish language server.
 
@@ -35,7 +35,7 @@ Choose from one of the many servers currently running L1J-En (and various custom
 
 [http://linexcalibur.ucoz.com/ Lin Excalibur] - Currently down for rework.
 
-If you're running an L1J-En PS, let us know and we'll add it here.
+If you're running an L1J-En based server, let us know and we'll add it here.
 
 == What happened to the LinDC emulation project? ==
 
