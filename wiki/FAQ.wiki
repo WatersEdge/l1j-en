@@ -19,21 +19,21 @@ L1J-En is the only active English language Lineage emulator, and one of only two
 
 == I just wanna play Lineage! Where do I go? ==
 
-Choose from one of the many servers currently running L1J-En (and various customized versions of it). Here's a list of the major publicly-available ones we know of:
+Choose from one of the many servers currently running L1J-En (and various customized versions of it). Here's a list of the major publicly-available ones we know of, ordered by estimated population:
 
-[http://www.lineagedc.com/ Lineage DC]
+[http://www.lineagedc.com/ Lineage DC] - Currently the largest Lineage 1 private server. Long running with moderate rates and live-like gameplay.
 
-[http://friskycow.net/ Frisky Cow]
+[http://friskycow.net/ Frisky Cow] - Oldest L1 server, recently switched to L1J-En. Includes some of the latest features from Asian L1J teams.
 
-[http://risenserver.com/news.php Risen Server]
+[http://risenserver.com/news.php Risen Server] - Fast leveling and lots of custom items.
 
-[http://epicl1.ucoz.com/ EpicL1]
+[http://epicl1.ucoz.com/ EpicL1] - Spanish language L1.
 
-[http://lineagedj.ucoz.com/ Lineage Heroes]
+[http://lineagedj.ucoz.com/ Lineage Heroes] - Another Spanish language server.
 
-[http://linzm.game-host.org LinZM]
+[http://linzm.game-host.org LinZM] - Low and high rate servers with some custom features.
 
-[http://linexcalibur.ucoz.com/ Lin Excalibur]
+[http://linexcalibur.ucoz.com/ Lin Excalibur] - Little known about this server.
 
 If you're running an L1J-En PS, let us know and we'll add it here.
 
