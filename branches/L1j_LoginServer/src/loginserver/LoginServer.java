@@ -22,9 +22,12 @@ import java.security.GeneralSecurityException;
 
 import org.apache.log4j.Logger;
 
-import l1j-emu.commons.database.DatabaseFactory;
-import l1j-emu.commons.services.LoggingService;
-
+import l1jemu.commons.database.DatabaseFactory;
+import l1jemu.commons.services.LoggingService;
+import loginserver.network.NetworkServer;
+import loginserver.utils.DeadLockDetector;
+import loginserver.utils.ThreadPoolManager;
+import loginserver.configs.Config;
 /**
  * @author -DarkWolf-
  */
@@ -37,7 +40,8 @@ public class LoginServer
 		LoggingService.init(); // initializing Logging Service
 		DatabaseFactory.init(); // initializing Database Connection
 		Config.load(); // Load Config
-		
+		new DeadLockDetector(60, DeadLockDetector.RESTART).start();//DeadLockTester
+		ThreadPoolManager.getInstance();//initializing ThreadPool
 		try
 		{
 			LoginController.load();
@@ -49,7 +53,7 @@ public class LoginServer
 		}
 
 		GameServerTable.load();
-		BanIpList.load();
+		//BanIpList.load();
 
 		NetworkServer.getInstance();
 		Runtime.getRuntime().addShutdownHook(Shutdown.getInstance());

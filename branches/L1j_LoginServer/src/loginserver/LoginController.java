@@ -28,7 +28,7 @@ import org.apache.log4j.Logger;
 
 import javax.crypto.Cipher;
 
-import l1j-emu.loginserver.network.crypt.ScrambledKeyPair;
+import loginserver.network.crypt.ScrambledKeyPair;
 
 /**
  * @author -Darkwolf-
