@@ -31,6 +31,8 @@ Choose from one of the many servers currently running L1J-En (and various custom
 
 [http://epicl1.ucoz.com/ EpicL1] - A primarily Spanish language server.
 
+[http://www.westknights.com/ Westknights Lineage 1] - Mid rate English server.
+
 [http://lineagedj.ucoz.com/ Lineage Heroes] - Another Spanish language server.
 
 [http://87.98.140.119/foro/ Lineage Evolution] - Yet another mainly Spanish language server.
