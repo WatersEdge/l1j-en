@@ -35,7 +35,7 @@ Choose from one of the many servers currently running L1J-En (and various custom
 
 [http://lineagedj.ucoz.com/ Lineage Heroes] - Another Spanish language server.
 
-[http://87.98.140.119/foro/ Lineage Evolution] - Yet another mainly Spanish language server.
+[http://www.lineage-evolution.es/ Lineage Evolution] - Yet another mainly Spanish language server.
 
 [http://linzm.game-host.org LinZM] - Low and high rate servers with some custom features.
 
