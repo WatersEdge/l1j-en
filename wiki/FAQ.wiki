@@ -23,7 +23,7 @@ Choose from one of the many servers currently running L1J-En (and various custom
 
 [http://www.lineagedc.com/ Lineage DC] - Currently the largest Lineage 1 private server. Long running with moderate rates and live-like gameplay.
 
-[http://friskycow.net/ Frisky Cow] - Oldest L1 server, recently switched to L1J-En. Includes some of the latest features from Asian L1J teams.
+[http://friskycowreborn.com Frisky Cow] - Oldest L1 server, recently switched to L1J-En. Includes some of the latest features from Asian L1J teams.
 
 [http://risenserver.com/news.php Risen Server] - Fast leveling and lots of custom items.
 
