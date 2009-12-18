@@ -137,8 +137,12 @@ Milestone 5: Just released! This is a maintenance update with a ton of minor bug
 
 Milestone 6: Another maintenance update.
 
+== What's the current status? ==
+
+Currently, there's not enough interest among current project members to extend L1J-en to support episodes after EpU.  Ideally, everyone would agree staying current is a good thing, but unless someone with more interest in it takes initiative, it's probably not going to happen.
+
 = Using L1J-En = 
 
 == Castle sieges don't work! ==
 
-They work, you just need to set them up properly. If this is on your own server, to do so, shutdown the server then manually set the castle ownership to a test/gm prince by changing that bp's hasCastle value in clan_data. Log in as that char to verify that he does in fact own the castle (you should see a crown over his head and be able to use bp return scrolls). Then, shut the server down again and set the castle's war_time to the near future in local time. Other princes should now be able to declare as long as they follow the normal game rules for being able to do so. Do this for all of your castles until player bps own all of them.
+They work, you just need to set them up properly. If this is on your own server, to do so, shutdown the server then manually set the castle ownership to a test/gm prince by changing that bp's hasCastle value in clan_data. Log in as that char to verify that he does in fact own the castle (you should see a crown over his head and be able to use BP return scrolls). Then, shut the server down again and set the castle's war_time to the near future in local time. Other princes should now be able to declare as long as they follow the normal game rules for being able to do so. Do this for all of your castles until player bps own all of them.
