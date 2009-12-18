@@ -135,6 +135,8 @@ Milestone 4: This milestone has been published after the first L1J-En update com
 
 Milestone 5: Just released! This is a maintenance update with a ton of minor bugfixes.
 
+Milestone 6: Another maintenance update.
+
 = Using L1J-En = 
 
 == Castle sieges don't work! ==
