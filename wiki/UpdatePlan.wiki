@@ -1,0 +1,20 @@
+#summary Plan and notes related to updating l1j-en.
+
+= Introduction =
+
+The l1j effort has been stagnant for awhile, but due to the increased interest in l1 private servers (and frankly, since I want some of the updates) there's interest in updating l1j-en.
+
+
+= Details =
+
+Several other l1j branches have been much better at keeping up with (not-so) recent client changes. l1j-jp2 and l1j-tw both seem to support at least 3.3, if not more recent clients. The short term goal is to get l1j-en back up to parity.
+
+Things which would have to be done:
+  * Pick a branch of l1j to pull changes from - leaning towards l1j-jp2
+  * Determine exact client version compatible with current server and obtain a copy
+  * Get base code up and running, ideally connecting to it with the appropriate client
+  * Pull changes back to l1j-en & test
+
+Things which would be nice to do:
+  * figure out a clean way of keeping multiple lineage clients installed at a time
+  * translate some of the related pages for whichever l1j we use as a base. 
