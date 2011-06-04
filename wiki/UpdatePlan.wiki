@@ -43,4 +43,6 @@ I hope its ok if we share this document, if not remove me, but I think its a goo
 
 *y says* Mind elaborating on this a little more? If you're talking about code changes, is there something wrong with using the normal /branches and /trunk for organization? We could possibly make /branches world writable and reserve /trunk for mainline development - or am I missing something obvious here? =) If we're talking about moving more gameplay options into config files, I agree that'd be nice - and there are definitely LOTS of places in the code that should probably be pulled out into constants, at which point it's easy to use the default value (allowing a config file to override it).
 
+*t says* You got the last half right, but for the first half I mean that some possible configuration options may be easier to handle in pre-compile helper scripts, if that makes sense.  Hell it may make not make any sense outside of my own head lol.  Feel free to move what I added here around however you like.  I can't remember all teh wiki formatting tags anymore so you can probably keep it cleaner than I can 
+
   * A seperate tools directory that I'll be uploading soon that I wrote that helped me with the maintanance of this project.  They were mostly ruby scripts that helped me do database merges with l1j-jp and things of that nature
