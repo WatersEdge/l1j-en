@@ -13,3 +13,17 @@ With the code base being updated to support the latest american client, we will 
 = Instructions =
 
 I'll put these up soon.  I have it figured out, I just need to start back over with step one and write them down.  It isn't difficult.
+
+Here is a start of some ghetto instructions.
+
+  * Download the latest connector from the l1j-jp2 google code project.  Currently its Login_240.zip
+  * Extract
+  * Go to the Encode folder and run encode.exe
+  * The first box, which on my screen looks like its filled with a few boxes, put in the server name
+  * The box that has 127.0.0.1, put the IP address of your server
+  * On the bottom left is a select box, choose s3ep1.
+  * Click the bottom right button
+  * This should create a file called Login.ini.  Copy that, and from the login folder copy Login.exe Login.dll S3EP1.bin and skin to your lineage folder
+  * Run Login.exe and connect to your server!
+
+Now there's other steps and options, if you look at the login.ini that came with it (in the login folder) you can see some of them, including the remote config option.  I'll cover those with better instructions later.  Also the skin folder has the images the program uses for its look, including the buttons, so its possible to edit those so it doesn't look so...asian lol.  
