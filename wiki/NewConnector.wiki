@@ -1,0 +1,15 @@
+#summary Instructions to use the new connector from l1j-jp2
+
+= Introduction =
+
+With the code base being updated to support the latest american client, we will also need to start using a new connector.  Thankfully, l1j-jp2 has a new connector that works perfectly with the american client, and is also very configurable.   Unfortunately, the program you use to set it up along with the instructions are either in japanese or are just lacking.
+ 
+= Features =
+
+  * Configurable remotely.  Server admins can set up the initial connector, then repackage it for their users to download, and have it so it loads its configuration from a remote file.  This means anytime your IP changes, or you add another server, your users won't have to do anything.  They'll see those changes automatically next time they open the connector.
+  * It has some custom encryption options, but I haven't tested those yet.  I'm just using it with default setings on the server and connector.  I'm not sure what the benefit of this would be, but maybe it would prevent bots from connecting to your servers.  That's assuming it even works.  It's very low on my list of priorities to test this at the moment
+  * The connector opens up a menu where you can choose what server you want to connect to.  Obviously the servers are configurable, but the entire program is also theme-able.  Server admins can make it look however they want.  It can also load your own html file for the "news" section like you see on live when you connect.
+
+= Instructions =
+
+I'll put these up soon.  I have it figured out, I just need to start back over with step one and write them down.  It isn't difficult.
