@@ -23,7 +23,7 @@ Here is a start of some ghetto instructions.
   * The box that has 127.0.0.1, put the IP address of your server
   * On the bottom left is a select box, choose s3ep1.
   * Click the bottom right button
-  * This should create a file called Login.ini.  Copy that, and from the login folder copy Login.exe Login.dll S3EP1.bin and skin to your lineage folder
+  * This should create a file called Login.ini.  Edit it and set the remote option to 0 if it is set as one, then copy that, and from the login folder copy Login.exe Login.dll S3EP1.bin and skin to your lineage folder
   * Run Login.exe and connect to your server!
 
 Now there's other steps and options, if you look at the login.ini that came with it (in the login folder) you can see some of them, including the remote config option.  I'll cover those with better instructions later.  Also the skin folder has the images the program uses for its look, including the buttons, so its possible to edit those so it doesn't look so...asian lol.  
