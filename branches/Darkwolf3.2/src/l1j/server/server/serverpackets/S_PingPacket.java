@@ -33,7 +33,7 @@ public class S_PingPacket extends ServerBasePacket {
     	}
     	private void buildPacket() {
                 // XXX:ServerPingTime Send)
-                //writeC(Opcodes.S_OPCODE_SERVERPING);
+                writeC(Opcodes.S_OPCODE_SERVERPING);
         }
 
     	@Override

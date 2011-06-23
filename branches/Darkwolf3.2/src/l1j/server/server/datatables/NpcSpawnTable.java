@@ -75,12 +75,6 @@ public class NpcSpawnTable {
 						continue;
 					}
 				}
-				if (Config.ALT_JPPRIVILEGED == false) {
-					int npcid = rs.getInt("id");
-					if (npcid >= 1310368 && npcid <= 1310379) {
-						continue;
-					}
-				}
 				if (Config.ALT_TALKINGSCROLLQUEST == false) {
 					int npcid = rs.getInt("id");
 					if (npcid >= 87537 && npcid <= 87551 || npcid >= 1310387 && npcid <= 1310389) {

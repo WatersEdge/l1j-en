@@ -43,8 +43,6 @@ public class C_MoveChar extends ClientBasePacket {
 	private static final byte HEADING_TABLE_X[] = { 0, 1, 1, 1, 0, -1, -1, -1 };
 	private static final byte HEADING_TABLE_Y[] = { -1, -1, 0, 1, 1, 1, 0, -1 };
 
-	private static final int CLIENT_LANGUAGE = Config.CLIENT_LANGUAGE;
-
 	private void sendMapTileLog(L1PcInstance pc) {
 		pc.sendPackets(new S_SystemMessage(pc.getMap().toString(pc.getLocation())));
 	}
@@ -76,12 +74,6 @@ public class C_MoveChar extends ClientBasePacket {
 			pc.setRegenState(REGENSTATE_MOVE);
 		}
 		pc.getMap().setPassable(pc.getLocation(), true);
-
-		if (CLIENT_LANGUAGE == 3) { // Taiwan Only
-			heading ^= 0x49;
-			locx = pc.getX();
-			locy = pc.getY();
-		}
 
 		locx += HEADING_TABLE_X[heading];
 		locy += HEADING_TABLE_Y[heading];

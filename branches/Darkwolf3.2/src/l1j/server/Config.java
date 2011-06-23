@@ -18,14 +18,13 @@
  */
 package l1j.server;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.util.Calendar;
-import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import l1j.server.Annotations.Configure;
+import l1j.server.CustomLoaders.WarTimeLoader;
+import l1j.server.CustomLoaders.WarTimeUnitLoader;
 import l1j.server.server.utils.IntRange;
 
 public final class Config {
@@ -33,1058 +32,642 @@ public final class Config {
 
 	/** Debug/release mode */
 	public static final boolean DEBUG = false;
+	
+	/** Configuration files */
+	public static final String SERVER = "./config/server.properties";
+	public static final String RATE = "./config/rates.properties";
+	public static final String ALTSETTINGS = "./config/altsettings.properties";
+	public static final String CHARSETTINGS = "./config/charsettings.properties";
+	public static final String PCOMMANDS = "./config/pcommands.properties";
 
 	/** Thread pools size */
-	public static int THREAD_P_EFFECTS;
+	@Configure(file = SERVER, key = "GeneralThreadPoolType")
+	public static int THREAD_P_TYPE_GENERAL = 0;
 
+	@Configure(file = SERVER, key = "GeneralThreadPoolSize")
+	public static int THREAD_P_SIZE_GENERAL = 0;
+
+	public static int THREAD_P_EFFECTS;
+	
 	public static int THREAD_P_GENERAL;
 
-	public static int AI_MAX_THREAD;
-
-	public static int THREAD_P_TYPE_GENERAL;
-
-	public static int THREAD_P_SIZE_GENERAL;
-
 	/** Server control */
-	public static String GAME_SERVER_HOST_NAME;
+	@Configure(file = SERVER, key = "GameserverHostname")
+	public static String GAME_SERVER_HOST_NAME = "*";
 
-	public static int GAME_SERVER_PORT;
+	@Configure(file = SERVER, key = "GameserverPort")
+	public static int GAME_SERVER_PORT = 2000;
 
-	public static String DB_DRIVER;
+	@Configure(file = SERVER, key = "Driver")
+	public static String DB_DRIVER = "com.mysql.jdbc.Driver";
 
-	public static String DB_URL;
+	@Configure(file = SERVER, key = "URL")
+	public static String DB_URL = "jdbc:mysql://localhost/l1jdb?useUnicode=true&characterEncoding=UTF8";
 
-	public static String DB_LOGIN;
+	@Configure(file = SERVER, key = "Login")
+	public static String DB_LOGIN = "root";
 
-	public static String DB_PASSWORD;
+	@Configure(file = SERVER, key = "Password")
+	public static String DB_PASSWORD = "";
 
-	public static String PASSWORD_SALT;
+	@Configure(file = SERVER, key = "PasswordSalt")
+	public static String PASSWORD_SALT = "lineage";
 
-	public static String TIME_ZONE;
+	@Configure(file = SERVER, key = "TimeZone")
+	public static String TIME_ZONE = "EST";
 
-	public static int CLIENT_LANGUAGE;
+	@Configure(file = SERVER, key = "HostnameLookups")
+	public static boolean HOSTNAME_LOOKUPS = false;
 
-	public static boolean HOSTNAME_LOOKUPS;
+	@Configure(file = SERVER, key = "AutomaticKick")
+	public static int AUTOMATIC_KICK = 10;
 
-	public static int AUTOMATIC_KICK;
+	@Configure(file = SERVER, key = "AutoCreateAccounts")
+	public static boolean AUTO_CREATE_ACCOUNTS = true;
 
-	public static boolean AUTO_CREATE_ACCOUNTS;
+	@Configure(file = SERVER, key = "MaximumOnlineUsers")
+	public static int MAX_ONLINE_USERS = 30;
 
-	public static short MAX_ONLINE_USERS;
+	@Configure(file = SERVER, key = "CacheMapFiles")
+	public static boolean CACHE_MAP_FILES = false;
 
-	public static boolean CACHE_MAP_FILES;
+	@Configure(file = SERVER, key = "CheckMoveInterval")
+	public static boolean CHECK_MOVE_INTERVAL = false;
 
-	public static boolean CHECK_MOVE_INTERVAL;
-
-	public static boolean CHECK_ATTACK_INTERVAL;
+	@Configure(file = SERVER, key = "CheckAttackInterval")
+	public static boolean CHECK_ATTACK_INTERVAL = false;
 	
-	public static boolean CHECK_SPELL_INTERVAL;
+	@Configure(file = SERVER, key = "CheckSpellInterval")
+	public static boolean CHECK_SPELL_INTERVAL = false;
 
-	public static short INJUSTICE_COUNT;
+	@Configure(file = SERVER, key = "InjusticeCount")
+	public static int INJUSTICE_COUNT = 10;
 
-	public static int JUSTICE_COUNT;
+	@Configure(file = SERVER, key = "JusticeCount")
+	public static int JUSTICE_COUNT = 4;
 
-	public static int CHECK_STRICTNESS;
+	@Configure(file = SERVER, key = "CheckStrictness")
+	public static int CHECK_STRICTNESS = 102;
 
-	public static byte LOGGING_WEAPON_ENCHANT;
+	@Configure(file = SERVER, key = "LoggingWeaponEnchant")
+	public static int LOGGING_WEAPON_ENCHANT = 0;
 
-	public static byte LOGGING_ARMOR_ENCHANT;
+	@Configure(file = SERVER, key = "LoggingArmorEnchant")
+	public static int LOGGING_ARMOR_ENCHANT = 0;
 
-	public static boolean LOGGING_CHAT_NORMAL;
+	@Configure(file = SERVER, key = "LoggingChatNormal")
+	public static boolean LOGGING_CHAT_NORMAL = false;
 
-	public static boolean LOGGING_CHAT_WHISPER;
+	@Configure(file = SERVER, key = "LoggingChatWhisper")
+	public static boolean LOGGING_CHAT_WHISPER = false;
 
-	public static boolean LOGGING_CHAT_SHOUT;
+	@Configure(file = SERVER, key = "LoggingChatShout")
+	public static boolean LOGGING_CHAT_SHOUT = false;
 
-	public static boolean LOGGING_CHAT_WORLD;
+	@Configure(file = SERVER, key = "LoggingChatWorld")
+	public static boolean LOGGING_CHAT_WORLD = false;
 
-	public static boolean LOGGING_CHAT_CLAN;
+	@Configure(file = SERVER, key = "LoggingChatClan")
+	public static boolean LOGGING_CHAT_CLAN = false;
 
-	public static boolean LOGGING_CHAT_PARTY;
+	@Configure(file = SERVER, key = "LoggingChatParty")
+	public static boolean LOGGING_CHAT_PARTY = false;
 
-	public static boolean LOGGING_CHAT_COMBINED;
+	@Configure(file = SERVER, key = "LoggingChatCombined")
+	public static boolean LOGGING_CHAT_COMBINED = false;
 
-	public static boolean LOGGING_CHAT_CHAT_PARTY;
+	@Configure(file = SERVER, key = "LoggingChatChatParty")
+	public static boolean LOGGING_CHAT_CHAT_PARTY = false;
 
-	public static boolean LOGGING_INCOMING_PACKETS;
+	@Configure(file = SERVER, key = "LoggingIncomingPackets")
+	public static boolean LOGGING_INCOMING_PACKETS = false;
 
-	public static int AUTOSAVE_INTERVAL;
+	@Configure(file = SERVER, key = "AutosaveInterval")
+	public static int AUTOSAVE_INTERVAL = 1200;
 
-	public static int AUTOSAVE_INTERVAL_INVENTORY;
+	@Configure(file = SERVER, key = "AutosaveIntervalOfInventory")
+	public static int AUTOSAVE_INTERVAL_INVENTORY = 300;
 
-	public static int SKILLTIMER_IMPLTYPE;
+	@Configure(file = SERVER, key = "SkillTimerImplType")
+	public static int SKILLTIMER_IMPLTYPE = 1;
 
-	public static int NPCAI_IMPLTYPE;
+	@Configure(file = SERVER, key = "NpcAIImplType")
+	public static int NPCAI_IMPLTYPE = 2;
 
-	public static boolean TELNET_SERVER;
+	@Configure(file = SERVER, key = "TelnetServer")
+	public static boolean TELNET_SERVER = false;
 
-	public static int TELNET_SERVER_PORT;
+	@Configure(file = SERVER, key = "TelnetServerPort")
+	public static int TELNET_SERVER_PORT = 23;
 
-	public static int PC_RECOGNIZE_RANGE;
+	@Configure(file = SERVER, key = "PcRecognizeRange")
+	public static int PC_RECOGNIZE_RANGE = 20;
+	
+	@Configure(file = SERVER, key = "CharacterConfigInServerSide")
+	public static boolean CHARACTER_CONFIG_IN_SERVER_SIDE = true;
 
-	public static boolean CHARACTER_CONFIG_IN_SERVER_SIDE;
+	@Configure(file = SERVER, key = "Allow2PC")
+	public static boolean ALLOW_2PC = true;
 
-	public static boolean ALLOW_2PC;
+	@Configure(file = SERVER, key = "LevelDownRange")
+	public static int LEVEL_DOWN_RANGE = 0;
 
-	public static int LEVEL_DOWN_RANGE;
+	@Configure(file = SERVER, key = "SendPacketBeforeTeleport")
+	public static boolean SEND_PACKET_BEFORE_TELEPORT = false;
 
-	public static boolean SEND_PACKET_BEFORE_TELEPORT;
+	@Configure(file = SERVER, key = "EnableDatabaseResourceLeaksDetection")
+	public static boolean DETECT_DB_RESOURCE_LEAKS = false;
 
-	public static boolean DETECT_DB_RESOURCE_LEAKS;
+	@Configure(file = SERVER, key = "UseINGAMENEWS_Time")
+	public static boolean Use_Show_INGAMENEWS_Time = true; 
 
+	@Configure(file = SERVER, key = "ShowINGAMENEWS_Time")
+	public static int Show_INGAMENEWS_Time = 500;
+	
 	/** Rate control */
-	public static int RATE_HP_REGEN;
+	@Configure(file = RATE, key = "RateHpRegen")
+	public static int RATE_HP_REGEN = 1;
 	
-    public static int RATE_MP_REGEN;
+	@Configure(file = RATE, key = "RateMpRegen")
+    public static int RATE_MP_REGEN = 1;
     
-    public static int RATE_HP_CASTLE;
+	@Configure(file = RATE, key = "RateHpCastle")
+    public static int RATE_HP_CASTLE = 5;
     
-    public static int RATE_HP_HOUSE;
+	@Configure(file = RATE, key = "RateHpHouse")
+    public static int RATE_HP_HOUSE = 5;
     
-    public static int RATE_HP_HOTEL;
+	@Configure(file = RATE, key = "RateHpHotel")
+    public static int RATE_HP_HOTEL = 5;
     
-    public static int RATE_HP_MOTHERTREE;
+	@Configure(file = RATE, key = "RateHpMotherTree")
+    public static int RATE_HP_MOTHERTREE = 5;
     
-    public static int RATE_HP_DRAGONKNIGHTTOWN;
+	@Configure(file = RATE, key = "RateMpDragonknighttown")
+    public static int RATE_HP_DRAGONKNIGHTTOWN = 5;
     
-    public static int RATE_HP_ILLUSIONISTTOWN;
+	@Configure(file = RATE, key = "RateMpIllusionisttown")
+    public static int RATE_HP_ILLUSIONISTTOWN = 5;
     
-    public static int RATE_MP_CASTLE;
+	@Configure(file = RATE, key = "RateMpCastle")
+    public static int RATE_MP_CASTLE = 3;
     
-    public static int RATE_MP_HOUSE;
+	@Configure(file = RATE, key = "RateMpHouse")
+    public static int RATE_MP_HOUSE = 3;
     
-    public static int RATE_MP_HOTEL;
+	@Configure(file = RATE, key = "RateMpHotel")
+    public static int RATE_MP_HOTEL = 3;
     
-    public static int RATE_MP_MOTHERTREE;
+	@Configure(file = RATE, key = "RateMpMotherTree")
+    public static int RATE_MP_MOTHERTREE = 3;
     
-    public static int RATE_MP_DRAGONKNIGHTTOWN;
+	@Configure(file = RATE, key = "RateMpDragonknighttown")
+    public static int RATE_MP_DRAGONKNIGHTTOWN = 3;
     
-    public static int RATE_MP_ILLUSIONISTTOWN;
+	@Configure(file = RATE, key = "RateMpIllusionisttown")
+    public static int RATE_MP_ILLUSIONISTTOWN = 3;
     
-	public static double PETEXP_RATE;
+	@Configure(file = RATE, key = "PetExp")
+	public static double PETEXP_RATE = 1.0;
 	
-	public static double PARTYEXP_RATE;
+	@Configure(file = RATE, key = "PartyExp")
+	public static double PARTYEXP_RATE = 1.0;
 	
-	public static double RATE_XP;
+	@Configure(file = RATE, key = "RateXp")
+	public static double RATE_XP = 1.0;
 
-	public static double RATE_LA;
+	@Configure(file = RATE, key = "RateLawful")
+	public static double RATE_LA = 1.0;
 
-	public static double RATE_KARMA;
+	@Configure(file = RATE, key = "RateKarma")
+	public static double RATE_KARMA = 1.0;
 
-	public static double RATE_DROP_ADENA;
+	@Configure(file = RATE, key = "RateDropAdena")
+	public static double RATE_DROP_ADENA = 1.0;
 
-	public static double RATE_DROP_ITEMS;
+	@Configure(file = RATE, key = "RateDropItems")
+	public static double RATE_DROP_ITEMS = 1.0;
 
-	public static int ENCHANT_CHANCE_WEAPON;
+	@Configure(file = RATE, key = "EnchantChanceWeapon")
+	public static int ENCHANT_CHANCE_WEAPON = 1;
 
-	public static int ENCHANT_CHANCE_ARMOR;
+	@Configure(file = RATE, key = "EnchantChanceArmor")
+	public static int ENCHANT_CHANCE_ARMOR = 1;
 
-	public static int ATTR_ENCHANT_CHANCE;
+	@Configure(file = RATE, key = "AttrEnchantChance")
+	public static int ATTR_ENCHANT_CHANCE = 10;
 
-	public static double RATE_WEIGHT_LIMIT;
+	@Configure(file = RATE, key = "RateWeightLimit")
+	public static double RATE_WEIGHT_LIMIT = 1.0;
 
-	public static double RATE_WEIGHT_LIMIT_PET;
+	@Configure(file = RATE, key = "RateWeightLimitforPet")
+	public static double RATE_WEIGHT_LIMIT_PET = 1.0;
 
-	public static double RATE_SHOP_SELLING_PRICE;
+	@Configure(file = RATE, key = "RateShopSellingPrice")
+	public static double RATE_SHOP_SELLING_PRICE = 1.0;
 
-	public static double RATE_SHOP_PURCHASING_PRICE;
+	@Configure(file = RATE, key = "RateShopPurchasingPrice")
+	public static double RATE_SHOP_PURCHASING_PRICE = 1.0;
 
-	/* Original settings to enable on-the-fly changes and reset of the rates */
-	public static double RATE_LA_ORG;
+	@Configure(file = RATE, key = "CreateChanceDiary")
+	public static int CREATE_CHANCE_DIARY = 67;
 
-	public static double RATE_KARMA_ORG;
+	@Configure(file = RATE, key = "CreateChanceRecollection")
+	public static int CREATE_CHANCE_RECOLLECTION = 90;
 
-	public static double RATE_XP_ORG;
+	@Configure(file = RATE, key = "CreateChanceMysterious")
+	public static int CREATE_CHANCE_MYSTERIOUS = 90;
 
-	public static double RATE_DROP_ADENA_ORG;
+	@Configure(file = RATE, key = "CreateChanceProcessing")
+	public static int CREATE_CHANCE_PROCESSING = 90;
 
-	public static double RATE_DROP_ITEMS_ORG;
+	@Configure(file = RATE, key = "CreateChanceProcessingDiamond")
+	public static int CREATE_CHANCE_PROCESSING_DIAMOND = 90;
 
-	public static double RATE_WEIGHT_LIMIT_ORG;
-	/* Org Rates End */
+	@Configure(file = RATE, key = "CreateChanceDantes")
+	public static int CREATE_CHANCE_DANTES = 50;
 
-	public static int CREATE_CHANCE_DIARY;
+	@Configure(file = RATE, key = "CreateChanceAncientAmulet")
+	public static int CREATE_CHANCE_ANCIENT_AMULET = 90;
 
-	public static int CREATE_CHANCE_RECOLLECTION;
-
-	public static int CREATE_CHANCE_MYSTERIOUS;
-
-	public static int CREATE_CHANCE_PROCESSING;
-
-	public static int CREATE_CHANCE_PROCESSING_DIAMOND;
-
-	public static int CREATE_CHANCE_DANTES;
-
-	public static int CREATE_CHANCE_ANCIENT_AMULET;
-
-	public static int CREATE_CHANCE_HISTORY_BOOK;
+	@Configure(file = RATE, key = "CreateChanceHistory")
+	public static int CREATE_CHANCE_HISTORY_BOOK = 50;
 
 	/** AltSettings control */
-	public static short GLOBAL_CHAT_LEVEL;
+	@Configure(file = ALTSETTINGS, key = "GlobalChatLevel")
+	public static int GLOBAL_CHAT_LEVEL = 30;
 
-	public static short WHISPER_CHAT_LEVEL;
+	@Configure(file = ALTSETTINGS, key = "WhisperChatLevel")
+	public static int WHISPER_CHAT_LEVEL = 5;
 
-	public static byte AUTO_LOOT;
+	@Configure(file = ALTSETTINGS, key = "AutoLoot")
+	public static int AUTO_LOOT = 1;
 
-	public static int LOOTING_RANGE;
+	@Configure(file = ALTSETTINGS, key = "LootingRange")
+	public static int LOOTING_RANGE = 3;
 
-	public static boolean ALT_NONPVP;
+	@Configure(file = ALTSETTINGS, key = "NonPvP")
+	public static boolean ALT_NONPVP = true;
 
-	public static boolean ALT_ATKMSG;
+	@Configure(file = ALTSETTINGS, key = "AttackMessageOn")
+	public static boolean ALT_ATKMSG = false;
 
-	public static boolean CHANGE_TITLE_BY_ONESELF;
+	@Configure(file = ALTSETTINGS, key = "ChangeTitleByOneself")
+	public static boolean CHANGE_TITLE_BY_ONESELF = true;
 
-	public static int MAX_CLAN_MEMBER;
+	@Configure(file = ALTSETTINGS, key = "MaxClanMember")
+	public static int MAX_CLAN_MEMBER = 0;
 
-	public static boolean CLAN_ALLIANCE;
+	@Configure(file = ALTSETTINGS, key = "ClanAlliance")
+	public static boolean CLAN_ALLIANCE = true;
 
-	public static int MAX_PT;
+	@Configure(file = ALTSETTINGS, key = "MaxPT")
+	public static int MAX_PT = 8;
 
-	public static int MAX_CHAT_PT;
+	@Configure(file = ALTSETTINGS, key = "MaxChatPT")
+	public static int MAX_CHAT_PT = 8;
 
-	public static boolean SIM_WAR_PENALTY;
+	@Configure(file = ALTSETTINGS, key = "SimWarPenalty")
+	public static boolean SIM_WAR_PENALTY = true;
 
-	public static boolean GET_BACK;
+	@Configure(file = ALTSETTINGS, key = "GetBack")
+	public static boolean GET_BACK = true;
 	
-	public static int NEWBIEMAPLEVELS;
+	@Configure(file = ALTSETTINGS, key = "Newbiemaplevel")
+	public static int NEWBIEMAPLEVELS = 15;
 
-	public static String ALT_ITEM_DELETION_TYPE;
+	@Configure(file = ALTSETTINGS, key = "ItemDeletionType")
+	public static String ALT_ITEM_DELETION_TYPE = "std";
 
-	public static int ALT_ITEM_DELETION_TIME;
+	@Configure(file = ALTSETTINGS, key = "ItemDeletionTime")
+	public static int ALT_ITEM_DELETION_TIME = 30;
 
-	public static int ALT_ITEM_DELETION_RANGE;
+	@Configure(file = ALTSETTINGS, key = "ItemDeletionRange")
+	public static int ALT_ITEM_DELETION_RANGE = 5;
 
-	public static boolean ALT_GMSHOP;
+	@Configure(file = ALTSETTINGS, key = "GMshop")
+	public static boolean ALT_GMSHOP = false;
 
-	public static int ALT_GMSHOP_MIN_ID;
+	@Configure(file = ALTSETTINGS, key = "GMshopMinID")
+	public static int ALT_GMSHOP_MIN_ID = 89508;
 
-	public static int ALT_GMSHOP_MAX_ID;
+	@Configure(file = ALTSETTINGS, key = "GMshopMaxID")
+	public static int ALT_GMSHOP_MAX_ID = 89535;
 
-	public static boolean ALT_HALLOWEENIVENT;
-	public static boolean ALT_JPPRIVILEGED;
+	@Configure(file = ALTSETTINGS, key = "HalloweenIvent")
+	public static boolean ALT_HALLOWEENIVENT = false;
 
-	public static boolean ALT_TALKINGSCROLLQUEST;
+	@Configure(file = ALTSETTINGS, key = "TalkingScrollQuest")
+	public static boolean ALT_TALKINGSCROLLQUEST = false;
 
-	public static boolean ALT_WHO_COMMAND;
+	@Configure(file = ALTSETTINGS, key = "WhoCommand")
+	public static boolean ALT_WHO_COMMAND = true;
 
-	public static boolean ALT_REVIVAL_POTION;
+	@Configure(file = ALTSETTINGS, key = "RevivalPotion")
+	public static boolean ALT_REVIVAL_POTION = false;
 
-	public static int ALT_WAR_TIME;
+	@Configure(file = ALTSETTINGS, key = "WarTime", loader = WarTimeUnitLoader.class)
+	public static int ALT_WAR_TIME = 2;
 
-	public static int ALT_WAR_TIME_UNIT;
+	@Configure(file = ALTSETTINGS, key = "WarTime", loader = WarTimeUnitLoader.class)
+	public static int ALT_WAR_TIME_UNIT = Calendar.HOUR_OF_DAY;
 
-	public static int ALT_WAR_INTERVAL;
+	@Configure(file = ALTSETTINGS, key = "WarInterval", loader = WarTimeUnitLoader.class)
+	public static int ALT_WAR_INTERVAL = 4;
 
-	public static int ALT_WAR_INTERVAL_UNIT;
+	@Configure(file = ALTSETTINGS, key = "WarInterval", loader = WarTimeUnitLoader.class)
+	public static int ALT_WAR_INTERVAL_UNIT = Calendar.DATE;
 
-	public static int ALT_RATE_OF_DUTY;
+	@Configure(file = ALTSETTINGS, key = "SpawnHomePoint")
+	public static boolean SPAWN_HOME_POINT = true;
 
-	public static boolean SPAWN_HOME_POINT;
+	@Configure(file = ALTSETTINGS, key = "SpawnHomePointRange")
+	public static int SPAWN_HOME_POINT_RANGE = 8;
 
-	public static int SPAWN_HOME_POINT_RANGE;
+	@Configure(file = ALTSETTINGS, key = "SpawnHomePointCount")
+	public static int SPAWN_HOME_POINT_COUNT = 2;
 
-	public static int SPAWN_HOME_POINT_COUNT;
+	@Configure(file = ALTSETTINGS, key = "SpawnHomePointDelay")
+	public static int SPAWN_HOME_POINT_DELAY = 100;
 
-	public static int SPAWN_HOME_POINT_DELAY;
+	@Configure(file = ALTSETTINGS, key = "InitBossSpawn")
+	public static boolean INIT_BOSS_SPAWN = true;
 
-	public static boolean INIT_BOSS_SPAWN;
+	@Configure(file = ALTSETTINGS, key = "ElementalStoneAmount")
+	public static int ELEMENTAL_STONE_AMOUNT = 300;
 
-	public static int ELEMENTAL_STONE_AMOUNT;
+	@Configure(file = ALTSETTINGS, key = "HouseTaxInterval")
+	public static int HOUSE_TAX_INTERVAL = 10;
 
-	public static int HOUSE_TAX_INTERVAL;
+	@Configure(file = ALTSETTINGS, key = "MaxDollCount")
+	public static int MAX_DOLL_COUNT = 1;
 
-	public static int MAX_DOLL_COUNT;
+	@Configure(file = ALTSETTINGS, key = "ReturnToNature")
+	public static boolean RETURN_TO_NATURE = false;
 
-	public static boolean RETURN_TO_NATURE;
+	@Configure(file = ALTSETTINGS, key = "MaxNpcItem")
+	public static int MAX_NPC_ITEM = 8;
 
-	public static int MAX_NPC_ITEM;
+	@Configure(file = ALTSETTINGS, key = "MaxPersonalWarehouseItem")
+	public static int MAX_PERSONAL_WAREHOUSE_ITEM = 100;
 
-	public static int MAX_PERSONAL_WAREHOUSE_ITEM;
+	@Configure(file = ALTSETTINGS, key = "MaxClanWarehouseItem")
+	public static int MAX_CLAN_WAREHOUSE_ITEM = 200;
 
-	public static int MAX_CLAN_WAREHOUSE_ITEM;
-
-	public static boolean DELETE_CHARACTER_AFTER_7DAYS;
+	@Configure(file = ALTSETTINGS, key = "DeleteCharacterAfter7Days")
+	public static boolean DELETE_CHARACTER_AFTER_7DAYS = true;
 	
-	public static boolean MONITOR_COMMANDS;
+	@Configure(file = ALTSETTINGS, key = "MonitorCommands")
+	public static boolean MONITOR_COMMANDS = true;
 
-	public static boolean WARP;
+	@Configure(file = ALTSETTINGS, key = "Warp")
+	public static boolean WARP = false;
 
-	public static boolean STACKING;
+	@Configure(file = ALTSETTINGS, key = "Stacking")
+	public static boolean STACKING = true;
 
-	public static boolean SKT_START;
+	@Configure(file = ALTSETTINGS, key = "SKTStart")
+	public static boolean SKT_START = false;
 	
-	public static boolean SOFT_AC;
+	@Configure(file = ALTSETTINGS, key = "SoftAC")
+	public static boolean SOFT_AC = true;
 	
-	public static boolean GHEY_MARRAIGE;
+	@Configure(file = ALTSETTINGS, key = "GheyMarraige")
+	public static boolean GHEY_MARRAIGE = false;
 
-	public static int NPC_DELETION_TIME;
+	@Configure(file = ALTSETTINGS, key = "NpcDeletionTime")
+	public static int NPC_DELETION_TIME = 50;
 
-	public static int DEFAULT_CHARACTER_SLOT;
+	@Configure(file = ALTSETTINGS, key = "DefaultCharacterSlot")
+	public static int DEFAULT_CHARACTER_SLOT = 6;
 	
-	public static int MONSTERPOTIONINTUSE;
+	@Configure(file = ALTSETTINGS, key = "MonsterIntPotions")
+	public static int MONSTERPOTIONINTUSE = 13;
 
 	/** CharSettings control */
+	@Configure(file = CHARSETTINGS, key = "PrinceMaxHP")
 	public static int PRINCE_MAX_HP;
 
-	public static int PRINCE_MAX_MP;
+	@Configure(file = CHARSETTINGS, key = "PrinceMaxMP")
+	public static int PRINCE_MAX_MP = 800;
 
-	public static int KNIGHT_MAX_HP;
+	@Configure(file = CHARSETTINGS, key = "KnightMaxHP")
+	public static int KNIGHT_MAX_HP = 1400;
 
-	public static int KNIGHT_MAX_MP;
+	@Configure(file = CHARSETTINGS, key = "KnightMaxMP")
+	public static int KNIGHT_MAX_MP = 600;
 
-	public static int ELF_MAX_HP;
+	@Configure(file = CHARSETTINGS, key = "ElfMaxHP")
+	public static int ELF_MAX_HP = 1000;
 
-	public static int ELF_MAX_MP;
+	@Configure(file = CHARSETTINGS, key = "ElfMaxMP")
+	public static int ELF_MAX_MP = 900;
 
-	public static int WIZARD_MAX_HP;
+	@Configure(file = CHARSETTINGS, key = "WizardMaxHP")
+	public static int WIZARD_MAX_HP = 800;
 
-	public static int WIZARD_MAX_MP;
+	@Configure(file = CHARSETTINGS, key = "WizardMaxMP")
+	public static int WIZARD_MAX_MP = 1200;
 
-	public static int DARKELF_MAX_HP;
+	@Configure(file = CHARSETTINGS, key = "DarkelfMaxHP")
+	public static int DARKELF_MAX_HP = 1000;
 
-	public static int DARKELF_MAX_MP;
+	@Configure(file = CHARSETTINGS, key = "DarkelfMaxMP")
+	public static int DARKELF_MAX_MP = 900;
 
-	public static int DRAGONKNIGHT_MAX_HP;
+	@Configure(file = CHARSETTINGS, key = "DragonKnightMaxHP")
+	public static int DRAGONKNIGHT_MAX_HP = 1400;
 
-	public static int DRAGONKNIGHT_MAX_MP;
+	@Configure(file = CHARSETTINGS, key = "DragonKnightMaxMP")
+	public static int DRAGONKNIGHT_MAX_MP = 600;
 
-	public static int ILLUSIONIST_MAX_HP;
+	@Configure(file = CHARSETTINGS, key = "IllusionistMaxHP")
+	public static int ILLUSIONIST_MAX_HP = 900;
 
-	public static int ILLUSIONIST_MAX_MP;
+	@Configure(file = CHARSETTINGS, key = "IllusionistMaxMP")
+	public static int ILLUSIONIST_MAX_MP = 1100;
 
-	public static int LV50_EXP;
+	@Configure(file = CHARSETTINGS, key = "Lv50Exp")
+	public static int LV50_EXP = 1;
 
-	public static int LV51_EXP;
+	@Configure(file = CHARSETTINGS, key = "Lv51Exp")
+	public static int LV51_EXP = 1;
 
-	public static int LV52_EXP;
+	@Configure(file = CHARSETTINGS, key = "Lv52Exp")
+	public static int LV52_EXP = 1;
 
-	public static int LV53_EXP;
+	@Configure(file = CHARSETTINGS, key = "Lv53Exp")
+	public static int LV53_EXP = 1;
 
-	public static int LV54_EXP;
+	@Configure(file = CHARSETTINGS, key = "Lv54Exp")
+	public static int LV54_EXP = 1;
 
-	public static int LV55_EXP;
+	@Configure(file = CHARSETTINGS, key = "Lv55Exp")
+	public static int LV55_EXP = 1;
 
-	public static int LV56_EXP;
+	@Configure(file = CHARSETTINGS, key = "Lv56Exp")
+	public static int LV56_EXP = 1;
 
-	public static int LV57_EXP;
+	@Configure(file = CHARSETTINGS, key = "Lv57Exp")
+	public static int LV57_EXP = 1;
 
-	public static int LV58_EXP;
+	@Configure(file = CHARSETTINGS, key = "Lv58Exp")
+	public static int LV58_EXP = 1;
 
-	public static int LV59_EXP;
+	@Configure(file = CHARSETTINGS, key = "Lv59Exp")
+	public static int LV59_EXP = 1;
 
-	public static int LV60_EXP;
+	@Configure(file = CHARSETTINGS, key = "Lv60Exp")
+	public static int LV60_EXP = 1;
 
-	public static int LV61_EXP;
+	@Configure(file = CHARSETTINGS, key = "Lv61Exp")
+	public static int LV61_EXP = 1;
 
-	public static int LV62_EXP;
+	@Configure(file = CHARSETTINGS, key = "Lv62Exp")
+	public static int LV62_EXP = 1;
 
-	public static int LV63_EXP;
+	@Configure(file = CHARSETTINGS, key = "Lv63Exp")
+	public static int LV63_EXP = 1;
 
-	public static int LV64_EXP;
+	@Configure(file = CHARSETTINGS, key = "Lv64Exp")
+	public static int LV64_EXP = 1;
 
-	public static int LV65_EXP;
+	@Configure(file = CHARSETTINGS, key = "Lv65Exp")
+	public static int LV65_EXP = 2;
 
-	public static int LV66_EXP;
+	@Configure(file = CHARSETTINGS, key = "Lv66Exp")
+	public static int LV66_EXP = 2;
 
-	public static int LV67_EXP;
+	@Configure(file = CHARSETTINGS, key = "Lv67Exp")
+	public static int LV67_EXP = 2;
 
-	public static int LV68_EXP;
+	@Configure(file = CHARSETTINGS, key = "Lv68Exp")
+	public static int LV68_EXP = 2;
 
-	public static int LV69_EXP;
+	@Configure(file = CHARSETTINGS, key = "Lv69Exp")
+	public static int LV69_EXP = 2;
 
-	public static int LV70_EXP;
+	@Configure(file = CHARSETTINGS, key = "Lv70Exp")
+	public static int LV70_EXP = 4;
 
-	public static int LV71_EXP;
+	@Configure(file = CHARSETTINGS, key = "Lv71Exp")
+	public static int LV71_EXP = 4;
 
-	public static int LV72_EXP;
+	@Configure(file = CHARSETTINGS, key = "Lv72Exp")
+	public static int LV72_EXP = 4;
 
-	public static int LV73_EXP;
+	@Configure(file = CHARSETTINGS, key = "Lv73Exp")
+	public static int LV73_EXP = 4;
 
-	public static int LV74_EXP;
+	@Configure(file = CHARSETTINGS, key = "Lv74Exp")
+	public static int LV74_EXP = 4;
 
-	public static int LV75_EXP;
+	@Configure(file = CHARSETTINGS, key = "Lv75Exp")
+	public static int LV75_EXP = 8;
 
-	public static int LV76_EXP;
+	@Configure(file = CHARSETTINGS, key = "Lv76Exp")
+	public static int LV76_EXP = 8;
 
-	public static int LV77_EXP;
+	@Configure(file = CHARSETTINGS, key = "Lv77Exp")
+	public static int LV77_EXP = 8;
 
-	public static int LV78_EXP;
+	@Configure(file = CHARSETTINGS, key = "Lv78Exp")
+	public static int LV78_EXP = 8;
 
-	public static int LV79_EXP;
+	@Configure(file = CHARSETTINGS, key = "Lv79Exp")
+	public static int LV79_EXP = 16;
 
-	public static int LV80_EXP;
+	@Configure(file = CHARSETTINGS, key = "Lv80Exp")
+	public static int LV80_EXP = 32;
 
-	public static int LV81_EXP;
+	@Configure(file = CHARSETTINGS, key = "Lv81Exp")
+	public static int LV81_EXP = 64;
 
-	public static int LV82_EXP;
+	@Configure(file = CHARSETTINGS, key = "Lv82Exp")
+	public static int LV82_EXP = 128;
 
-	public static int LV83_EXP;
+	@Configure(file = CHARSETTINGS, key = "Lv83Exp")
+	public static int LV83_EXP = 256;
 
-	public static int LV84_EXP;
+	@Configure(file = CHARSETTINGS, key = "Lv84Exp")
+	public static int LV84_EXP = 512;
 
-	public static int LV85_EXP;
+	@Configure(file = CHARSETTINGS, key = "Lv85Exp")
+	public static int LV85_EXP = 1024;
 
-	public static int LV86_EXP;
+	@Configure(file = CHARSETTINGS, key = "Lv86Exp")
+	public static int LV86_EXP = 2048;
 
-	public static int LV87_EXP;
+	@Configure(file = CHARSETTINGS, key = "Lv87Exp")
+	public static int LV87_EXP = 4096;
 
-	public static int LV88_EXP;
+	@Configure(file = CHARSETTINGS, key = "Lv88Exp")
+	public static int LV88_EXP = 8192;
 
-	public static int LV89_EXP;
+	@Configure(file = CHARSETTINGS, key = "Lv89Exp")
+	public static int LV89_EXP = 16384;
 
-	public static int LV90_EXP;
+	@Configure(file = CHARSETTINGS, key = "Lv90Exp")
+	public static int LV90_EXP = 32768;
 
-	public static int LV91_EXP;
+	@Configure(file = CHARSETTINGS, key = "Lv91Exp")
+	public static int LV91_EXP = 65536;
 
-	public static int LV92_EXP;
+	@Configure(file = CHARSETTINGS, key = "Lv92Exp")
+	public static int LV92_EXP = 131072;
 
-	public static int LV93_EXP;
+	@Configure(file = CHARSETTINGS, key = "Lv93Exp")
+	public static int LV93_EXP = 262144;
 
-	public static int LV94_EXP;
+	@Configure(file = CHARSETTINGS, key = "Lv94Exp")
+	public static int LV94_EXP = 524288;
 
-	public static int LV95_EXP;
+	@Configure(file = CHARSETTINGS, key = "Lv95Exp")
+	public static int LV95_EXP = 1048576;
 
-	public static int LV96_EXP;
+	@Configure(file = CHARSETTINGS, key = "Lv96Exp")
+	public static int LV96_EXP = 2097152;
 
-	public static int LV97_EXP;
+	@Configure(file = CHARSETTINGS, key = "Lv97Exp")
+	public static int LV97_EXP = 4194304;
 
-	public static int LV98_EXP;
+	@Configure(file = CHARSETTINGS, key = "Lv98Exp")
+	public static int LV98_EXP = 8388608;
 
-	public static int LV99_EXP;
+	@Configure(file = CHARSETTINGS, key = "Lv99Exp")
+	public static int LV99_EXP = 16777216;
 	
 	/** Player Command Settings */
-	public static boolean PLAYER_COMMANDS;
+	@Configure(file = PCOMMANDS, key = "PlayerCommands")
+	public static boolean PLAYER_COMMANDS = true;
 	
-	public static boolean PLAYER_BUFF;
+	@Configure(file = PCOMMANDS, key = "PlayerBuff")
+	public static boolean PLAYER_BUFF = true;
 	
-	public static boolean POWER_BUFF;
+	@Configure(file = PCOMMANDS, key = "PowerBuff")
+	public static boolean POWER_BUFF = false;
 
-	/** Configuration files */
-	public static final String SERVER_CONFIG_FILE = "./config/server.properties";
-
-	public static final String RATES_CONFIG_FILE = "./config/rates.properties";
-
-	public static final String ALT_SETTINGS_FILE = "./config/altsettings.properties";
-
-	public static final String CHAR_SETTINGS_CONFIG_FILE = "./config/charsettings.properties";
-	
-	public static final String PCOMMANDS_SETTINGS_FILE = "./config/pcommands.properties";
-
+	/** Settings */
 	public static final int MANA_DRAIN_LIMIT_PER_NPC = 40;
-
 	public static final int MANA_DRAIN_LIMIT_PER_SOM_ATTACK = 9;
-
-	public static boolean Use_Show_INGAMENEWS_Time; 
-
-	public static int Show_INGAMENEWS_Time;
-
-	public static void load() {
-		System.out.println("Loading GameServer config.");
-		// server.properties
-		try {
-			Properties serverSettings = new Properties();
-			InputStream is = new FileInputStream(new File(SERVER_CONFIG_FILE));
-			serverSettings.load(is);
-			is.close();
-			GAME_SERVER_HOST_NAME = serverSettings.getProperty("GameserverHostname", "*");
-			GAME_SERVER_PORT = Integer.parseInt(serverSettings.getProperty("GameserverPort", "2000"));
-			DB_DRIVER = serverSettings.getProperty("Driver", "com.mysql.jdbc.Driver");
-			DB_URL = serverSettings.getProperty("URL", "jdbc:mysql://localhost/l1jdb?useUnicode=True&characterEncoding=UTF-8");
-			DB_LOGIN = serverSettings.getProperty("Login", "root");
-			DB_PASSWORD = serverSettings.getProperty("Password", "");
-			PASSWORD_SALT = serverSettings.getProperty("PasswordSalt", "");
-			THREAD_P_TYPE_GENERAL = Integer.parseInt(serverSettings.getProperty("GeneralThreadPoolType", "0"), 10);
-			THREAD_P_SIZE_GENERAL = Integer.parseInt(serverSettings.getProperty("GeneralThreadPoolSize", "0"), 10);
-			TIME_ZONE = serverSettings.getProperty("TimeZone", "EST");
-			HOSTNAME_LOOKUPS = Boolean.parseBoolean(serverSettings.getProperty("HostnameLookups", "False"));
-			AUTOMATIC_KICK = Integer.parseInt(serverSettings.getProperty("AutomaticKick", "10"));
-			AUTO_CREATE_ACCOUNTS = Boolean.parseBoolean(serverSettings.getProperty("AutoCreateAccounts", "True"));
-			MAX_ONLINE_USERS = Short.parseShort(serverSettings.getProperty("MaximumOnlineUsers", "30"));
-			CACHE_MAP_FILES = Boolean.parseBoolean(serverSettings.getProperty("CacheMapFiles", "False"));
-			CHECK_MOVE_INTERVAL = Boolean.parseBoolean(serverSettings.getProperty("CheckMoveInterval", "False"));
-			CHECK_ATTACK_INTERVAL = Boolean.parseBoolean(serverSettings.getProperty("CheckAttackInterval", "False"));
-			CHECK_SPELL_INTERVAL = Boolean.parseBoolean(serverSettings.getProperty("CheckSpellInterval", "False"));
-			Use_Show_INGAMENEWS_Time = Boolean.parseBoolean(serverSettings.getProperty("UseINGAMENEWS_Time", "False"));
-			Show_INGAMENEWS_Time = Integer.parseInt(serverSettings.getProperty("ShowINGAMENEWS_Time", "30"));
-			INJUSTICE_COUNT = Short.parseShort(serverSettings.getProperty("InjusticeCount", "10"));
-			JUSTICE_COUNT = Integer.parseInt(serverSettings.getProperty("JusticeCount", "4"));
-			CHECK_STRICTNESS = Integer.parseInt(serverSettings.getProperty("CheckStrictness", "102"));
-			LOGGING_WEAPON_ENCHANT = Byte.parseByte(serverSettings.getProperty("LoggingWeaponEnchant", "0"));
-			LOGGING_ARMOR_ENCHANT = Byte.parseByte(serverSettings.getProperty("LoggingArmorEnchant", "0"));
-			LOGGING_CHAT_NORMAL = Boolean.parseBoolean(serverSettings.getProperty("LoggingChatNormal", "False"));
-			LOGGING_CHAT_WHISPER = Boolean.parseBoolean(serverSettings.getProperty("LoggingChatWhisper", "False"));
-			LOGGING_CHAT_SHOUT = Boolean.parseBoolean(serverSettings.getProperty("LoggingChatShout", "False"));
-			LOGGING_CHAT_WORLD = Boolean.parseBoolean(serverSettings.getProperty("LoggingChatWorld", "False"));
-			LOGGING_CHAT_CLAN = Boolean.parseBoolean(serverSettings.getProperty("LoggingChatClan", "False"));
-			LOGGING_CHAT_PARTY = Boolean.parseBoolean(serverSettings.getProperty("LoggingChatParty", "False"));
-			LOGGING_CHAT_COMBINED = Boolean.parseBoolean(serverSettings.getProperty("LoggingChatCombined", "False"));
-			LOGGING_CHAT_CHAT_PARTY = Boolean.parseBoolean(serverSettings.getProperty("LoggingChatChatParty", "False"));
-			LOGGING_INCOMING_PACKETS = Boolean.parseBoolean(serverSettings.getProperty("LoggingIncomingPackets", "False"));
-			AUTOSAVE_INTERVAL = Integer.parseInt(serverSettings.getProperty("AutosaveInterval", "1200"), 10);
-			AUTOSAVE_INTERVAL_INVENTORY = Integer.parseInt(serverSettings.getProperty("AutosaveIntervalOfInventory", "300"), 10);
-			SKILLTIMER_IMPLTYPE = Integer.parseInt(serverSettings.getProperty("SkillTimerImplType", "1"));
-			NPCAI_IMPLTYPE = Integer.parseInt(serverSettings.getProperty("NpcAIImplType", "1"));
-			TELNET_SERVER = Boolean.parseBoolean(serverSettings.getProperty("TelnetServer", "False"));
-			TELNET_SERVER_PORT = Integer.parseInt(serverSettings.getProperty("TelnetServerPort", "23"));
-			PC_RECOGNIZE_RANGE = Integer.parseInt(serverSettings.getProperty("PcRecognizeRange", "20"));
-			CHARACTER_CONFIG_IN_SERVER_SIDE = Boolean.parseBoolean(serverSettings.getProperty("CharacterConfigInServerSide", "True"));
-			ALLOW_2PC = Boolean.parseBoolean(serverSettings.getProperty("Allow2PC", "True"));
-			LEVEL_DOWN_RANGE = Integer.parseInt(serverSettings.getProperty("LevelDownRange", "0"));
-			SEND_PACKET_BEFORE_TELEPORT = Boolean.parseBoolean(serverSettings.getProperty("SendPacketBeforeTeleport", "False"));
-			DETECT_DB_RESOURCE_LEAKS = Boolean.parseBoolean(serverSettings.getProperty("EnableDatabaseResourceLeaksDetection", "False"));
-		} catch (Exception e) {
-			_log.log(Level.SEVERE, e.getLocalizedMessage(), e);
-			throw new Error("Failed to load " + SERVER_CONFIG_FILE + " file.");
-		}
-
-		// rates.properties
-		System.out.println("Loading Rates config.");
-		try {
-			Properties rateSettings = new Properties();
-			InputStream is = new FileInputStream(new File(RATES_CONFIG_FILE));
-			rateSettings.load(is);
-			is.close();
-			RATE_HP_REGEN = Integer.parseInt(rateSettings.getProperty("RateHpRegen", "2"));
-			RATE_MP_REGEN = Integer.parseInt(rateSettings.getProperty("RateMpRegen", "1"));
-			RATE_HP_CASTLE = Integer.parseInt(rateSettings.getProperty("RateHpCastle", "5"));
-			RATE_MP_CASTLE = Integer.parseInt(rateSettings.getProperty("RateMpCastle", "3"));
-			RATE_HP_HOUSE = Integer.parseInt(rateSettings.getProperty("RateHpHouse", "5"));
-			RATE_MP_HOUSE = Integer.parseInt(rateSettings.getProperty("RateMpHouse", "3"));
-			RATE_HP_HOTEL = Integer.parseInt(rateSettings.getProperty("RateHpHotel", "5"));
-			RATE_MP_HOTEL = Integer.parseInt(rateSettings.getProperty("RateMpHotel", "3"));
-			RATE_HP_MOTHERTREE = Integer.parseInt(rateSettings.getProperty("RateHpMotherTree", "5"));
-			RATE_MP_MOTHERTREE = Integer.parseInt(rateSettings.getProperty("RateMpMotherTree", "3"));
-			
-			RATE_HP_ILLUSIONISTTOWN = Integer.parseInt(rateSettings.getProperty("RateHpIllusionisttown", "5"));
-			RATE_MP_ILLUSIONISTTOWN = Integer.parseInt(rateSettings.getProperty("RateMpIllusionisttown", "3"));
-			RATE_HP_DRAGONKNIGHTTOWN = Integer.parseInt(rateSettings.getProperty("RateHpDragonknighttown", "5"));
-			RATE_MP_DRAGONKNIGHTTOWN = Integer.parseInt(rateSettings.getProperty("RateMpDragonknighttown", "3"));
-			
-			PETEXP_RATE = Double.parseDouble(rateSettings.getProperty("PetExp", "1.0"));
-			PARTYEXP_RATE = Double.parseDouble(rateSettings.getProperty("PartyExp", "1.0"));
-			RATE_XP = Double.parseDouble(rateSettings.getProperty("RateXp", "1.0"));
-			RATE_LA = Double.parseDouble(rateSettings.getProperty("RateLawful", "1.0"));
-			RATE_KARMA = Double.parseDouble(rateSettings.getProperty("RateKarma", "1.0"));
-			RATE_DROP_ADENA = Double.parseDouble(rateSettings.getProperty("RateDropAdena", "1.0"));
-			RATE_DROP_ITEMS = Double.parseDouble(rateSettings.getProperty("RateDropItems", "1.0"));
-			ENCHANT_CHANCE_WEAPON = Integer.parseInt(rateSettings.getProperty("EnchantChanceWeapon", "68"));
-			ENCHANT_CHANCE_ARMOR = Integer.parseInt(rateSettings.getProperty("EnchantChanceArmor", "52"));
-			ATTR_ENCHANT_CHANCE = Integer.parseInt(rateSettings.getProperty("AttrEnchantChance", "10"));
-			RATE_WEIGHT_LIMIT = Double.parseDouble(rateSettings.getProperty("RateWeightLimit", "1"));
-			RATE_WEIGHT_LIMIT_PET = Double.parseDouble(rateSettings.getProperty("RateWeightLimitforPet", "1"));
-			RATE_SHOP_SELLING_PRICE = Double.parseDouble(rateSettings.getProperty("RateShopSellingPrice", "1.0"));
-			RATE_SHOP_PURCHASING_PRICE = Double.parseDouble(rateSettings.getProperty("RateShopPurchasingPrice", "1.0"));
-			CREATE_CHANCE_DIARY = Integer.parseInt(rateSettings.getProperty("CreateChanceDiary", "33"));
-			CREATE_CHANCE_RECOLLECTION = Integer.parseInt(rateSettings.getProperty("CreateChanceRecollection", "90"));
-			CREATE_CHANCE_MYSTERIOUS = Integer.parseInt(rateSettings.getProperty("CreateChanceMysterious", "90"));
-			CREATE_CHANCE_PROCESSING = Integer.parseInt(rateSettings.getProperty("CreateChanceProcessing", "90"));
-			CREATE_CHANCE_PROCESSING_DIAMOND = Integer.parseInt(rateSettings.getProperty("CreateChanceProcessingDiamond", "90"));
-			CREATE_CHANCE_DANTES = Integer.parseInt(rateSettings.getProperty("CreateChanceDantes", "50"));
-			CREATE_CHANCE_ANCIENT_AMULET = Integer.parseInt(rateSettings.getProperty("CreateChanceAncientAmulet", "90"));
-			CREATE_CHANCE_HISTORY_BOOK = Integer.parseInt(rateSettings.getProperty("CreateChanceHistoryBook", "50"));
-			RATE_LA_ORG = RATE_LA;
-			RATE_KARMA_ORG = RATE_KARMA;
-			RATE_XP_ORG=RATE_XP;
-			RATE_DROP_ADENA_ORG=RATE_DROP_ADENA;
-			RATE_DROP_ITEMS_ORG=RATE_DROP_ITEMS;
-			RATE_WEIGHT_LIMIT_ORG=RATE_WEIGHT_LIMIT;
-		} catch (Exception e) {
-			_log.log(Level.SEVERE, e.getLocalizedMessage(), e);
-			throw new Error("Failed to load " + RATES_CONFIG_FILE + " file.");
-		}
-
-		// altsettings.properties
-		System.out.println("Loading AltSettings config.");
-		try {
-			Properties altSettings = new Properties();
-			InputStream is = new FileInputStream(new File(ALT_SETTINGS_FILE));
-			altSettings.load(is);
-			is.close();
-			GLOBAL_CHAT_LEVEL = Short.parseShort(altSettings.getProperty("GlobalChatLevel", "30"));
-			WHISPER_CHAT_LEVEL = Short.parseShort(altSettings.getProperty("WhisperChatLevel", "5"));
-			AUTO_LOOT = Byte.parseByte(altSettings.getProperty("AutoLoot", "2"));
-			LOOTING_RANGE = Integer.parseInt(altSettings.getProperty("LootingRange", "3"));
-			NEWBIEMAPLEVELS = Integer.parseInt(altSettings.getProperty("Newbiemaplevel", "15"));
-			ALT_NONPVP = Boolean.parseBoolean(altSettings.getProperty("NonPvP", "True"));
-			ALT_ATKMSG = Boolean.parseBoolean(altSettings.getProperty("AttackMessageOn", "False"));
-			CHANGE_TITLE_BY_ONESELF = Boolean.parseBoolean(altSettings.getProperty("ChangeTitleByOneself", "False"));
-			MAX_CLAN_MEMBER = Integer.parseInt(altSettings.getProperty("MaxClanMember", "0"));
-			CLAN_ALLIANCE = Boolean.parseBoolean(altSettings.getProperty("ClanAlliance", "True"));
-			MAX_PT = Integer.parseInt(altSettings.getProperty("MaxPT", "8"));
-			MAX_CHAT_PT = Integer.parseInt(altSettings.getProperty("MaxChatPT", "8"));
-			SIM_WAR_PENALTY = Boolean.parseBoolean(altSettings.getProperty("SimWarPenalty", "True"));
-			GET_BACK = Boolean.parseBoolean(altSettings.getProperty("GetBack", "False"));
-			ALT_ITEM_DELETION_TYPE = altSettings.getProperty("ItemDeletionType", "auto");
-			ALT_ITEM_DELETION_TIME = Integer.parseInt(altSettings.getProperty("ItemDeletionTime", "10"));
-			ALT_ITEM_DELETION_RANGE = Integer.parseInt(altSettings.getProperty("ItemDeletionRange", "5"));
-			ALT_GMSHOP = Boolean.parseBoolean(altSettings.getProperty("GMshop", "False"));
-			ALT_GMSHOP_MIN_ID = Integer.parseInt(altSettings.getProperty("GMshopMinID", "0xffffffff"));
-			ALT_GMSHOP_MAX_ID = Integer.parseInt(altSettings.getProperty("GMshopMaxID", "0xffffffff"));
-			ALT_HALLOWEENIVENT = Boolean.parseBoolean(altSettings.getProperty("HalloweenIvent", "False"));
-			ALT_JPPRIVILEGED = Boolean.parseBoolean(altSettings.getProperty("JpPrivileged", "False"));
-			ALT_TALKINGSCROLLQUEST = Boolean.parseBoolean(altSettings.getProperty("TalkingScrollQuest", "False"));
-			ALT_WHO_COMMAND = Boolean.parseBoolean(altSettings.getProperty("WhoCommand", "False"));
-			ALT_REVIVAL_POTION = Boolean.parseBoolean(altSettings.getProperty("RevivalPotion", "False"));
-			MONSTERPOTIONINTUSE = Integer.parseInt(altSettings.getProperty("MonsterIntPotions", "13"));
-			String strWar;
-			strWar = altSettings.getProperty("WarTime", "2h");
-			if (strWar.indexOf("d") >= 0) {
-				ALT_WAR_TIME_UNIT = Calendar.DATE;
-				strWar = strWar.replace("d", "");
-			} else if (strWar.indexOf("h") >= 0) {
-				ALT_WAR_TIME_UNIT = Calendar.HOUR_OF_DAY;
-				strWar = strWar.replace("h", "");
-			} else if (strWar.indexOf("m") >= 0) {
-				ALT_WAR_TIME_UNIT = Calendar.MINUTE;
-				strWar = strWar.replace("m", "");
-			}
-			ALT_WAR_TIME = Integer.parseInt(strWar);
-			strWar = altSettings.getProperty("WarInterval", "4d");
-			if (strWar.indexOf("d") >= 0) {
-				ALT_WAR_INTERVAL_UNIT = Calendar.DATE;
-				strWar = strWar.replace("d", "");
-			} else if (strWar.indexOf("h") >= 0) {
-				ALT_WAR_INTERVAL_UNIT = Calendar.HOUR_OF_DAY;
-				strWar = strWar.replace("h", "");
-			} else if (strWar.indexOf("m") >= 0) {
-				ALT_WAR_INTERVAL_UNIT = Calendar.MINUTE;
-				strWar = strWar.replace("m", "");
-			}
-			ALT_WAR_INTERVAL = Integer.parseInt(strWar);
-			SPAWN_HOME_POINT = Boolean.parseBoolean(altSettings.getProperty("SpawnHomePoint", "True"));
-			SPAWN_HOME_POINT_COUNT = Integer.parseInt(altSettings.getProperty("SpawnHomePointCount", "2"));
-			SPAWN_HOME_POINT_DELAY = Integer.parseInt(altSettings.getProperty("SpawnHomePointDelay", "100"));
-			SPAWN_HOME_POINT_RANGE = Integer.parseInt(altSettings.getProperty("SpawnHomePointRange", "8"));
-			INIT_BOSS_SPAWN = Boolean.parseBoolean(altSettings.getProperty("InitBossSpawn", "True"));
-			ELEMENTAL_STONE_AMOUNT = Integer.parseInt(altSettings.getProperty("ElementalStoneAmount", "300"));
-			HOUSE_TAX_INTERVAL = Integer.parseInt(altSettings.getProperty("HouseTaxInterval", "10"));
-			MAX_DOLL_COUNT = Integer.parseInt(altSettings.getProperty("MaxDollCount", "1"));
-			MONITOR_COMMANDS = Boolean.parseBoolean(altSettings.getProperty("MonitorCommands", "True"));
-			WARP = Boolean.parseBoolean(altSettings.getProperty("Warp", "True"));
-			STACKING = Boolean.parseBoolean(altSettings.getProperty("Stacking", "True"));
-			SKT_START = Boolean.parseBoolean(altSettings.getProperty("SKTStart", "False"));
-			SOFT_AC = Boolean.parseBoolean(altSettings.getProperty("SoftAC", "True"));
-			GHEY_MARRAIGE = Boolean.parseBoolean(altSettings.getProperty("GheyMarraige", "False"));
-			MAX_CLAN_MEMBER = Integer.parseInt(altSettings.getProperty("MaxClanMember", "0"));   
-			CLAN_ALLIANCE = Boolean.parseBoolean(altSettings.getProperty("ClanAlliance", "True")); 
-			RETURN_TO_NATURE = Boolean.parseBoolean(altSettings.getProperty("ReturnToNature", "False"));
-			MAX_NPC_ITEM = Integer.parseInt(altSettings.getProperty("MaxNpcItem", "8"));
-			MAX_PERSONAL_WAREHOUSE_ITEM = Integer.parseInt(altSettings.getProperty("MaxPersonalWarehouseItem", "100"));
-			MAX_CLAN_WAREHOUSE_ITEM = Integer.parseInt(altSettings.getProperty("MaxClanWarehouseItem", "200"));
-			DELETE_CHARACTER_AFTER_7DAYS = Boolean.parseBoolean(altSettings.getProperty("DeleteCharacterAfter7Days", "True"));
-			NPC_DELETION_TIME = Integer.parseInt(altSettings.getProperty("NpcDeletionTime", "10"));
-			DEFAULT_CHARACTER_SLOT = Integer.parseInt(altSettings.getProperty("DefaultCharacterSlot", "6"));
-		} catch (Exception e) {
-			_log.log(Level.SEVERE, e.getLocalizedMessage(), e);
-			throw new Error("Failed to load " + ALT_SETTINGS_FILE + " file.");
-		}
-
-		// charsettings.properties
-		System.out.println("Loading CharSettings config.");
-		try {
-			Properties charSettings = new Properties();
-			InputStream is = new FileInputStream(new File(CHAR_SETTINGS_CONFIG_FILE));
-			charSettings.load(is);
-			is.close();
-
-			PRINCE_MAX_HP = Integer.parseInt(charSettings.getProperty("PrinceMaxHP", "1000"));
-			PRINCE_MAX_MP = Integer.parseInt(charSettings.getProperty("PrinceMaxMP", "800"));
-			KNIGHT_MAX_HP = Integer.parseInt(charSettings.getProperty("KnightMaxHP", "1400"));
-			KNIGHT_MAX_MP = Integer.parseInt(charSettings.getProperty("KnightMaxMP", "600"));
-			ELF_MAX_HP = Integer.parseInt(charSettings.getProperty("ElfMaxHP", "1000"));
-			ELF_MAX_MP = Integer.parseInt(charSettings.getProperty("ElfMaxMP", "900"));
-			WIZARD_MAX_HP = Integer.parseInt(charSettings.getProperty("WizardMaxHP", "800"));
-			WIZARD_MAX_MP = Integer.parseInt(charSettings.getProperty("WizardMaxMP", "1200"));
-			DARKELF_MAX_HP = Integer.parseInt(charSettings.getProperty("DarkelfMaxHP", "1000"));
-			DARKELF_MAX_MP = Integer.parseInt(charSettings.getProperty("DarkelfMaxMP", "900"));
-			DRAGONKNIGHT_MAX_HP = Integer.parseInt(charSettings.getProperty("DragonKnightMaxHP", "1400"));
-			DRAGONKNIGHT_MAX_MP = Integer.parseInt(charSettings.getProperty("DragonKnightMaxMP", "600"));
-			ILLUSIONIST_MAX_HP = Integer.parseInt(charSettings.getProperty("IllusionistMaxHP", "900"));
-			ILLUSIONIST_MAX_MP = Integer.parseInt(charSettings.getProperty("IllusionistMaxMP", "1100"));
-			LV50_EXP = Integer.parseInt(charSettings.getProperty("Lv50Exp", "1"));
-			LV51_EXP = Integer.parseInt(charSettings.getProperty("Lv51Exp", "1"));
-			LV52_EXP = Integer.parseInt(charSettings.getProperty("Lv52Exp", "1"));
-			LV53_EXP = Integer.parseInt(charSettings.getProperty("Lv53Exp", "1"));
-			LV54_EXP = Integer.parseInt(charSettings.getProperty("Lv54Exp", "1"));
-			LV55_EXP = Integer.parseInt(charSettings.getProperty("Lv55Exp", "1"));
-			LV56_EXP = Integer.parseInt(charSettings.getProperty("Lv56Exp", "1"));
-			LV57_EXP = Integer.parseInt(charSettings.getProperty("Lv57Exp", "1"));
-			LV58_EXP = Integer.parseInt(charSettings.getProperty("Lv58Exp", "1"));
-			LV59_EXP = Integer.parseInt(charSettings.getProperty("Lv59Exp", "1"));
-			LV60_EXP = Integer.parseInt(charSettings.getProperty("Lv60Exp", "1"));
-			LV61_EXP = Integer.parseInt(charSettings.getProperty("Lv61Exp", "1"));
-			LV62_EXP = Integer.parseInt(charSettings.getProperty("Lv62Exp", "1"));
-			LV63_EXP = Integer.parseInt(charSettings.getProperty("Lv63Exp", "1"));
-			LV64_EXP = Integer.parseInt(charSettings.getProperty("Lv64Exp", "1"));
-			LV65_EXP = Integer.parseInt(charSettings.getProperty("Lv65Exp", "2"));
-			LV66_EXP = Integer.parseInt(charSettings.getProperty("Lv66Exp", "2"));
-			LV67_EXP = Integer.parseInt(charSettings.getProperty("Lv67Exp", "2"));
-			LV68_EXP = Integer.parseInt(charSettings.getProperty("Lv68Exp", "2"));
-			LV69_EXP = Integer.parseInt(charSettings.getProperty("Lv69Exp", "2"));
-			LV70_EXP = Integer.parseInt(charSettings.getProperty("Lv70Exp", "4"));
-			LV71_EXP = Integer.parseInt(charSettings.getProperty("Lv71Exp", "4"));
-			LV72_EXP = Integer.parseInt(charSettings.getProperty("Lv72Exp", "4"));
-			LV73_EXP = Integer.parseInt(charSettings.getProperty("Lv73Exp", "4"));
-			LV74_EXP = Integer.parseInt(charSettings.getProperty("Lv74Exp", "4"));
-			LV75_EXP = Integer.parseInt(charSettings.getProperty("Lv75Exp", "8"));
-			LV76_EXP = Integer.parseInt(charSettings.getProperty("Lv76Exp", "8"));
-			LV77_EXP = Integer.parseInt(charSettings.getProperty("Lv77Exp", "8"));
-			LV78_EXP = Integer.parseInt(charSettings.getProperty("Lv78Exp", "8"));
-			LV79_EXP = Integer.parseInt(charSettings.getProperty("Lv79Exp", "16"));
-			LV80_EXP = Integer.parseInt(charSettings.getProperty("Lv80Exp", "32"));
-			LV81_EXP = Integer.parseInt(charSettings.getProperty("Lv81Exp", "64"));
-			LV82_EXP = Integer.parseInt(charSettings.getProperty("Lv82Exp", "128"));
-			LV83_EXP = Integer.parseInt(charSettings.getProperty("Lv83Exp", "256"));
-			LV84_EXP = Integer.parseInt(charSettings.getProperty("Lv84Exp", "512"));
-			LV85_EXP = Integer.parseInt(charSettings.getProperty("Lv85Exp", "1024"));
-			LV86_EXP = Integer.parseInt(charSettings.getProperty("Lv86Exp", "2048"));
-			LV87_EXP = Integer.parseInt(charSettings.getProperty("Lv87Exp", "4096"));
-			LV88_EXP = Integer.parseInt(charSettings.getProperty("Lv88Exp", "8192"));
-			LV89_EXP = Integer.parseInt(charSettings.getProperty("Lv89Exp", "16384"));
-			LV90_EXP = Integer.parseInt(charSettings.getProperty("Lv90Exp", "32768"));
-			LV91_EXP = Integer.parseInt(charSettings.getProperty("Lv91Exp", "65536"));
-			LV92_EXP = Integer.parseInt(charSettings.getProperty("Lv92Exp", "131072"));
-			LV93_EXP = Integer.parseInt(charSettings.getProperty("Lv93Exp", "262144"));
-			LV94_EXP = Integer.parseInt(charSettings.getProperty("Lv94Exp", "524288"));
-			LV95_EXP = Integer.parseInt(charSettings.getProperty("Lv95Exp", "1048576"));
-			LV96_EXP = Integer.parseInt(charSettings.getProperty("Lv96Exp", "2097152"));
-			LV97_EXP = Integer.parseInt(charSettings.getProperty("Lv97Exp", "4194304"));
-			LV98_EXP = Integer.parseInt(charSettings.getProperty("Lv98Exp", "8388608"));
-			LV99_EXP = Integer.parseInt(charSettings.getProperty("Lv99Exp", "16777216"));
-		} catch (Exception e) {
-			_log.log(Level.SEVERE, e.getLocalizedMessage(), e);
-			throw new Error("Failed to load " + CHAR_SETTINGS_CONFIG_FILE + " file.");
-		}
-		System.out.println("Loading PcCommandSettings config.");
-		try {
-			Properties pcommandSettings = new Properties();
-			InputStream is = new FileInputStream(new File(PCOMMANDS_SETTINGS_FILE));
-			pcommandSettings.load(is);
-			is.close();
-
-			PLAYER_COMMANDS = Boolean.parseBoolean(pcommandSettings.getProperty("PlayerCommands", "True"));
-			PLAYER_BUFF = Boolean.parseBoolean(pcommandSettings.getProperty("PlayerBuff", "True"));
-			POWER_BUFF = Boolean.parseBoolean(pcommandSettings.getProperty("PowerBuff", "False"));
-
-		} catch (Exception e) {
-			_log.log(Level.SEVERE, e.getLocalizedMessage(), e);
-			throw new Error("Failed to load " + PCOMMANDS_SETTINGS_FILE	+ " file.");
-		}
-		validate();
-	}
-
+	public static int AI_MAX_THREAD;
+	
 	private static void validate() {
 		if (!IntRange.includes(Config.ALT_ITEM_DELETION_RANGE, 0, 5)) {
-			throw new IllegalStateException("ItemDeletionRangel");
+			throw new IllegalStateException("ItemDeletionRange infailed");
 		}
 
 		if (!IntRange.includes(Config.ALT_ITEM_DELETION_TIME, 1, 35791)) {
-			throw new IllegalStateException("ItemDeletionTimel");
+			throw new IllegalStateException("ItemDeletionTime infailed");
 		}
 	}
 
-	public static boolean setParameterValue(String pName, String pValue) {
-		// server.properties
-		if (pName.equalsIgnoreCase("GameserverHostname")) {
-			GAME_SERVER_HOST_NAME = pValue;
-		} else if (pName.equalsIgnoreCase("GameserverPort")) {
-			GAME_SERVER_PORT = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("Driver")) {
-			DB_DRIVER = pValue;
-		} else if (pName.equalsIgnoreCase("URL")) {
-			DB_URL = pValue;
-		} else if (pName.equalsIgnoreCase("Login")) {
-			DB_LOGIN = pValue;
-		} else if (pName.equalsIgnoreCase("Password")) {
-			DB_PASSWORD = pValue;
-		} else if (pName.equalsIgnoreCase("ClientLanguage")) {
-			CLIENT_LANGUAGE = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("TimeZone")) {
-			TIME_ZONE = pValue;
-		} else if (pName.equalsIgnoreCase("AutomaticKick")) {
-			AUTOMATIC_KICK = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("AutoCreateAccounts")) {
-			AUTO_CREATE_ACCOUNTS = Boolean.parseBoolean(pValue);
-		} else if (pName.equalsIgnoreCase("MaximumOnlineUsers")) {
-			MAX_ONLINE_USERS = Short.parseShort(pValue);
-		} else if (pName.equalsIgnoreCase("LoggingWeaponEnchant")) {
-			LOGGING_WEAPON_ENCHANT = Byte.parseByte(pValue);
-		} else if (pName.equalsIgnoreCase("LoggingArmorEnchant")) {
-			LOGGING_ARMOR_ENCHANT = Byte.parseByte(pValue);
-		} else if (pName.equalsIgnoreCase("CharacterConfigInServerSide")) {
-			CHARACTER_CONFIG_IN_SERVER_SIDE = Boolean.parseBoolean(pValue);
-		} else if (pName.equalsIgnoreCase("Allow2PC")) {
-			ALLOW_2PC = Boolean.parseBoolean(pValue);
-		} else if (pName.equalsIgnoreCase("LevelDownRange")) {
-			LEVEL_DOWN_RANGE = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("SendPacketBeforeTeleport")) {
-			SEND_PACKET_BEFORE_TELEPORT = Boolean.parseBoolean(pValue);
-		}
-		// rates.properties
-		else if (pName.equalsIgnoreCase("RateHpRegen")) {
-			RATE_HP_REGEN = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("RateMpRegen")) {
-			RATE_MP_REGEN = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("RateHpCastle")) {
-			RATE_HP_CASTLE = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("RateMpCastle")) {
-			RATE_MP_CASTLE = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("RateHpHouse")) {
-			RATE_HP_HOUSE = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("RateMpHouse")) {
-			RATE_MP_HOUSE = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("RateHpHotel")) {
-			RATE_HP_HOTEL = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("RateMpHotel")) {
-			RATE_MP_HOTEL = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("RateHpMotherTree")) {
-			RATE_HP_MOTHERTREE = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("RateMpMotherTree")) {
-			RATE_MP_MOTHERTREE = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("PetExp")) {
-			PETEXP_RATE = Double.parseDouble(pValue);
-		} else if (pName.equalsIgnoreCase("PartyExp")) {
-		    PARTYEXP_RATE = Double.parseDouble(pValue);
-		} else if (pName.equalsIgnoreCase("RateXp")) {
-			RATE_XP = Double.parseDouble(pValue);
-		} else if (pName.equalsIgnoreCase("RateLawful")) {
-			RATE_LA = Double.parseDouble(pValue);
-		} else if (pName.equalsIgnoreCase("RateKarma")) {
-			RATE_KARMA = Double.parseDouble(pValue);
-		} else if (pName.equalsIgnoreCase("RateDropAdena")) {
-			RATE_DROP_ADENA = Double.parseDouble(pValue);
-		} else if (pName.equalsIgnoreCase("RateDropItems")) {
-			RATE_DROP_ITEMS = Double.parseDouble(pValue);
-		} else if (pName.equalsIgnoreCase("EnchantChanceWeapon")) {
-			ENCHANT_CHANCE_WEAPON = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("EnchantChanceArmor")) {
-			ENCHANT_CHANCE_ARMOR = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("AttrEnchantChance")) {
-			ATTR_ENCHANT_CHANCE = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("Weightrate")) {
-			RATE_WEIGHT_LIMIT = Byte.parseByte(pValue);
-		}
-		// altsettings.properties
-		else if (pName.equalsIgnoreCase("GlobalChatLevel")) {
-			GLOBAL_CHAT_LEVEL = Short.parseShort(pValue);
-		} else if (pName.equalsIgnoreCase("WhisperChatLevel")) {
-			WHISPER_CHAT_LEVEL = Short.parseShort(pValue);
-		} else if (pName.equalsIgnoreCase("AutoLoot")) {
-			AUTO_LOOT = Byte.parseByte(pValue);
-		} else if (pName.equalsIgnoreCase("LOOTING_RANGE")) {
-			LOOTING_RANGE = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("AltNonPvP")) {
-			ALT_NONPVP = Boolean.valueOf(pValue);
-		} else if (pName.equalsIgnoreCase("AttackMessageOn")) {
-			ALT_ATKMSG = Boolean.valueOf(pValue);
-		} else if (pName.equalsIgnoreCase("ChangeTitleByOneself")) {
-			CHANGE_TITLE_BY_ONESELF = Boolean.valueOf(pValue);
-		} else if (pName.equalsIgnoreCase("MaxClanMember")) {
-			MAX_CLAN_MEMBER = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("ClanAlliance")) {
-			CLAN_ALLIANCE = Boolean.valueOf(pValue);
-		} else if (pName.equalsIgnoreCase("MaxPT")) {
-			MAX_PT = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("MaxChatPT")) {
-			MAX_CHAT_PT = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("SimWarPenalty")) {
-			SIM_WAR_PENALTY = Boolean.valueOf(pValue);
-		} else if (pName.equalsIgnoreCase("GetBack")) {
-			GET_BACK = Boolean.valueOf(pValue);
-		} else if (pName.equalsIgnoreCase("AutomaticItemDeletionTime")) {
-			ALT_ITEM_DELETION_TIME = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("AutomaticItemDeletionRange")) {
-			ALT_ITEM_DELETION_RANGE = Byte.parseByte(pValue);
-		} else if (pName.equalsIgnoreCase("GMshop")) {
-			ALT_GMSHOP = Boolean.valueOf(pValue);
-		} else if (pName.equalsIgnoreCase("GMshopMinID")) {
-			ALT_GMSHOP_MIN_ID = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("GMshopMaxID")) {
-			ALT_GMSHOP_MAX_ID = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("HalloweenIvent")) {
-			ALT_HALLOWEENIVENT = Boolean.valueOf(pValue);
-		} else if (pName.equalsIgnoreCase("JpPrivileged")) {
-			ALT_JPPRIVILEGED = Boolean.valueOf(pValue);
-		} else if (pName.equalsIgnoreCase("TalkingScrollQuest")) {
-			ALT_TALKINGSCROLLQUEST = Boolean.valueOf(pValue);
-		} else if (pName.equalsIgnoreCase("HouseTaxInterval")) {
-			HOUSE_TAX_INTERVAL = Integer.valueOf(pValue);
-		} else if (pName.equalsIgnoreCase("MaxDollCount")) {
-			MAX_DOLL_COUNT = Integer.valueOf(pValue);
-		} else if (pName.equalsIgnoreCase("ReturnToNature")) {
-			RETURN_TO_NATURE = Boolean.valueOf(pValue);
-		} else if (pName.equalsIgnoreCase("MaxNpcItem")) {
-			MAX_NPC_ITEM = Integer.valueOf(pValue);
-		} else if (pName.equalsIgnoreCase("MaxPersonalWarehouseItem")) {
-			MAX_PERSONAL_WAREHOUSE_ITEM = Integer.valueOf(pValue);
-		} else if (pName.equalsIgnoreCase("MaxClanWarehouseItem")) {
-			MAX_CLAN_WAREHOUSE_ITEM = Integer.valueOf(pValue);
-		} else if (pName.equalsIgnoreCase("DeleteCharacterAfter7Days")) {
-			DELETE_CHARACTER_AFTER_7DAYS = Boolean.valueOf(pValue);
-		} else if (pName.equalsIgnoreCase("NpcDeletionTime")) {
-			NPC_DELETION_TIME = Integer.valueOf(pValue);
-		} else if (pName.equalsIgnoreCase("DefaultCharacterSlot")) {
-			DEFAULT_CHARACTER_SLOT = Integer.valueOf(pValue);
-		}
-		// charsettings.properties
-		else if (pName.equalsIgnoreCase("PrinceMaxHP")) {
-			PRINCE_MAX_HP = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("PrinceMaxMP")) {
-			PRINCE_MAX_MP = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("KnightMaxHP")) {
-			KNIGHT_MAX_HP = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("KnightMaxMP")) {
-			KNIGHT_MAX_MP = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("ElfMaxHP")) {
-			ELF_MAX_HP = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("ElfMaxMP")) {
-			ELF_MAX_MP = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("WizardMaxHP")) {
-			WIZARD_MAX_HP = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("WizardMaxMP")) {
-			WIZARD_MAX_MP = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("DarkelfMaxHP")) {
-			DARKELF_MAX_HP = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("DarkelfMaxMP")) {
-			DARKELF_MAX_MP = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("DragonKnightMaxHP")) {
-			DRAGONKNIGHT_MAX_HP = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("DragonKnightMaxMP")) {
-			DRAGONKNIGHT_MAX_MP = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("IllusionistMaxHP")) {
-			ILLUSIONIST_MAX_HP = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("IllusionistMaxMP")) {
-			ILLUSIONIST_MAX_MP = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("Lv50Exp")) {
-			LV50_EXP = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("Lv51Exp")) {
-			LV51_EXP = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("Lv52Exp")) {
-			LV52_EXP = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("Lv53Exp")) {
-			LV53_EXP = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("Lv54Exp")) {
-			LV54_EXP = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("Lv55Exp")) {
-			LV55_EXP = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("Lv56Exp")) {
-			LV56_EXP = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("Lv57Exp")) {
-			LV57_EXP = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("Lv58Exp")) {
-			LV58_EXP = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("Lv59Exp")) {
-			LV59_EXP = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("Lv60Exp")) {
-			LV60_EXP = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("Lv61Exp")) {
-			LV61_EXP = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("Lv62Exp")) {
-			LV62_EXP = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("Lv63Exp")) {
-			LV63_EXP = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("Lv64Exp")) {
-			LV64_EXP = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("Lv65Exp")) {
-			LV65_EXP = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("Lv66Exp")) {
-			LV66_EXP = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("Lv67Exp")) {
-			LV67_EXP = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("Lv68Exp")) {
-			LV68_EXP = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("Lv69Exp")) {
-			LV69_EXP = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("Lv70Exp")) {
-			LV70_EXP = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("Lv71Exp")) {
-			LV71_EXP = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("Lv72Exp")) {
-			LV72_EXP = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("Lv73Exp")) {
-			LV73_EXP = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("Lv74Exp")) {
-			LV74_EXP = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("Lv75Exp")) {
-			LV75_EXP = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("Lv76Exp")) {
-			LV76_EXP = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("Lv77Exp")) {
-			LV77_EXP = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("Lv78Exp")) {
-			LV78_EXP = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("Lv79Exp")) {
-			LV79_EXP = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("Lv80Exp")) {
-			LV80_EXP = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("Lv81Exp")) {
-			LV81_EXP = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("Lv82Exp")) {
-			LV82_EXP = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("Lv83Exp")) {
-			LV83_EXP = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("Lv84Exp")) {
-			LV84_EXP = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("Lv85Exp")) {
-			LV85_EXP = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("Lv86Exp")) {
-			LV86_EXP = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("Lv87Exp")) {
-			LV87_EXP = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("Lv88Exp")) {
-			LV88_EXP = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("Lv89Exp")) {
-			LV89_EXP = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("Lv90Exp")) {
-			LV90_EXP = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("Lv91Exp")) {
-			LV91_EXP = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("Lv92Exp")) {
-			LV92_EXP = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("Lv93Exp")) {
-			LV93_EXP = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("Lv94Exp")) {
-			LV94_EXP = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("Lv95Exp")) {
-			LV95_EXP = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("Lv96Exp")) {
-			LV96_EXP = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("Lv97Exp")) {
-			LV97_EXP = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("Lv98Exp")) {
-			LV98_EXP = Integer.parseInt(pValue);
-		} else if (pName.equalsIgnoreCase("Lv99Exp")) {
-			LV99_EXP = Integer.parseInt(pValue);
-		} 
-		//pcommand.properties
-		else if (pName.equalsIgnoreCase("PlayerCommands")){
-			PLAYER_COMMANDS = Boolean.parseBoolean(pValue);
-		}else if (pName.equalsIgnoreCase("PlayerBuff")){
-			PLAYER_BUFF = Boolean.parseBoolean(pValue);
-		}else if (pName.equalsIgnoreCase("PowerBuff")){
-			POWER_BUFF = Boolean.parseBoolean(pValue);
-		}
-		else {
-			return false;
-		}
-		return true;
+	public static void load() {
+		System.out.println("Reading server config files.");
+		new ConfigLoader().load(Config.class);
+		validate();
 	}
-
-	/* Functions to reset the rates */
-	public static void reset() {
-		_log.info("Reloading rates config.");
-		try {
-			RATE_XP = RATE_XP_ORG;
-			RATE_DROP_ADENA = RATE_DROP_ADENA_ORG;
-			RATE_DROP_ITEMS = RATE_DROP_ITEMS_ORG;
-			RATE_LA = RATE_LA_ORG;
-			RATE_KARMA = RATE_KARMA_ORG;
-			RATE_WEIGHT_LIMIT = RATE_WEIGHT_LIMIT_ORG;
-		} catch (Exception e) {
-			_log.severe(e.toString());
-		}
-	}
-
+	
 	private Config() {
 	}
 }

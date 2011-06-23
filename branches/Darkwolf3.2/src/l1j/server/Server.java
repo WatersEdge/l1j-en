@@ -62,8 +62,13 @@ public class Server {
 		L1DatabaseFactory.getInstance();
 
 		// Intialize GameServer
-		GameServer.getInstance().initialize();
-		
+		try {
+			GameServer.getInstance().initialize();
+		} catch (Exception e) {
+			_log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			System.exit(0);
+		}
+
 		// Telent Server
 		if ( Config.TELNET_SERVER )
 		{
