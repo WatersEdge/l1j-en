@@ -80,9 +80,9 @@ public abstract class ClientBasePacket {
 	public String readS() {
 		String s = null;
 		try {
-			s = new String(_decrypt, _off, _decrypt.length - _off, "UTF-8");
+			s = new String(_decrypt, _off, _decrypt.length - _off, "UTF8");
 			s = s.substring(0, s.indexOf('\0'));
-			_off += s.getBytes("UTF-8").length + 1;
+			_off += s.getBytes("UTF8").length + 1;
 		} catch (Exception e) {
 			_log.log(Level.SEVERE, "OpCode=" + (_decrypt[0] & 0xff), e);
 		}

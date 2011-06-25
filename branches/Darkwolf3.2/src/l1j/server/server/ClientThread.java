@@ -414,11 +414,9 @@ public class ClientThread implements Runnable, PacketOutput {
 		stop = true;
 		} catch (Exception e) {
 		System.out.println("* * * Failed stopping thread	* * *");
+	    }
 	}
-
-
-
-	}
+	
 	public void close() throws IOException {
 		_csocket.close();
 	}
