@@ -42,7 +42,7 @@ public class S_PingPacket extends ServerBasePacket {
                 // XXX:ServerPingTime Send)
                 writeC(Opcodes.S_PING);
                 writeD(_ping);
-                System.out.println("ServerPING:");
+                System.out.println("ServerPINGsended:");
         }
 
     	@Override

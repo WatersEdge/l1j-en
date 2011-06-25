@@ -258,5 +258,13 @@ public GameServerThread() throws Exception {
 	NpcChatTable.getInstance();
 	LightSpawnTable.getInstance();
 	MailTable.getInstance();
+	if (Config.PING_ENABLED)
+		{
+		System.out.println("Starting pinger.");
+		final Thread pThread = Pinger.getInstance();
+		pThread.setDaemon(true);
+		pThread.setPriority(Thread.MIN_PRIORITY);
+		pThread.start();
     }
+  }
 }

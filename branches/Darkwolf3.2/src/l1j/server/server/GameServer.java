@@ -96,7 +96,6 @@ public class GameServer extends Thread {
         GameServerThread.getInstance();
 		Runtime.getRuntime().addShutdownHook(Shutdown.getInstance());
 		this.start();
-		Pinger.getInstance();
 	}
 
 	/**

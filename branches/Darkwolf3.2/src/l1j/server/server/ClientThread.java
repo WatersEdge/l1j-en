@@ -230,7 +230,13 @@ public class ClientThread implements Runnable, PacketOutput {
 
 				if (opcode != Opcodes.C_OPCODE_KEEPALIVE) {
 					observer.packetReceived();
+					//System.out.println("Keepalive received");
 				}
+				if (opcode != Opcodes.S_PING) {
+					observer.packetReceived();
+					//System.out.println("Serverping received");
+				}
+				
 				if (_activeChar == null) {
 					_handler.handlePacket(data, _activeChar);
 					continue;

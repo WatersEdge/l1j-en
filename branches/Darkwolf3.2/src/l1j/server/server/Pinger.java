@@ -79,13 +79,13 @@ public class Pinger extends Thread
                 FastMap<Integer, Integer> newPingTimes = new FastMap<Integer, Integer>();
                 synchronized (pingTimes)
                 {
-                    for (final L1PcInstance player : L1World.getInstance().getAllPlayers())
+                    for (L1PcInstance player : L1World.getInstance().getAllPlayers())
                     {
                     	if (player == null || player != null && !player.isPrivateShop())
-                            continue;
+                        continue;
                         
                         int oid = player.getId();
-                        final int times = getPingTimes(oid);
+                        int times = getPingTimes(oid);
                         if (times > Config.PING_IGNORED_REQEST_LIMIT - 1)
                         	 player.sendPackets(new S_Disconnect());
                         else
@@ -93,7 +93,7 @@ public class Pinger extends Thread
                             newPingTimes.put(oid, times + 1);
                             System.out.println("::::::::::::"+times);
                         }
-                        player.sendPackets(new S_PingPacket(oid));
+                        player.sendPackets(new S_PingPacket(player.getId()));
                     }
                 }
                 pingTimes = newPingTimes;

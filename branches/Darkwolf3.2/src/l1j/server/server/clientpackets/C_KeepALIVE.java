@@ -38,13 +38,14 @@ public class C_KeepALIVE extends ClientBasePacket {
 	    ping = readD();
 	    mtu = readD();
     	
-	    final L1PcInstance activeChar = client.getActiveChar();
+	    L1PcInstance activeChar = client.getActiveChar();
     	
     	if (activeChar == null || activeChar != null && !activeChar.isPrivateShop())
         return;
         
         Pinger.getInstance().answerPing(activeChar.getId());
         System.out.println("PING:"+ping+":MTU:"+mtu);
+        System.out.println("C_Keepalive Sended");
     }
 
 	@Override
