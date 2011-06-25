@@ -415,7 +415,7 @@ public class L1World {
 				continue;
 			}
 
-			if (Config.PC_RECOGNIZE_RANGE == -1) {
+			if (Config.PC_RECOGNIZE_RANGE == 20) {
 				if (objectPt.isInScreen(element.getLocation())) {
 					if (!targetPt.isInScreen(element.getLocation())) {
 						result.add(element);
