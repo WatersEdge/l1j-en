@@ -36,7 +36,7 @@ public class C_LoginToServerOK extends ClientBasePacket {
 		int button = readC();
 
 		L1PcInstance pc = client.getActiveChar();
-
+		System.out.println("Loginserverok: Bug It Is Sended 2 times Wrong Should be sended 1 time");
 		if (type == 255) { // Whisper
 			if (button == 95 || button == 127) {
 				pc.setShowWorldChat(true); // open

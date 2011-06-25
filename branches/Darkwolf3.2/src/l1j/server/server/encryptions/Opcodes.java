@@ -226,4 +226,5 @@ public class Opcodes {
 	public static final int S_OPCODE_MOVEOBJECT = 126;
 	public static final int S_OPCODE_MAIL = 127;
 	public static final int S_OPCODE_SERVERPING = 40;
+	public static final int S_PING = 40;
 }

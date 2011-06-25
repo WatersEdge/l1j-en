@@ -48,6 +48,10 @@ public class GameServer extends Thread {
 				String host = socket.getInetAddress().getHostAddress();
 				if (IpTable.getInstance().isBannedIp(host)) {
 					_log.info("Banned IP(" + host + ")");
+				}
+				else if (socket.getPort() == 0) { 
+						 System.out.println("Accepted connection on port"); 
+						 System.out.println("[Connected]: "+socket.getInetAddress()+" :"+socket.getPort()+" ["+host+"]");
 				} else {
 					ClientThread client = new ClientThread(socket);
 					GeneralThreadPool.getInstance().execute(client);
@@ -92,6 +96,7 @@ public class GameServer extends Thread {
         GameServerThread.getInstance();
 		Runtime.getRuntime().addShutdownHook(Shutdown.getInstance());
 		this.start();
+		Pinger.getInstance();
 	}
 
 	/**

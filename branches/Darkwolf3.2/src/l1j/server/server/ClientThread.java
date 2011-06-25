@@ -69,6 +69,7 @@ public class ClientThread implements Runnable, PacketOutput {
 	private String _ip;
 	private String _hostname;
 	private Socket _csocket;
+	private int _portip;
 	private int _loginStatus = 0;
 	private boolean _charRestart = true;
 	private long _lastSavedTime = System.currentTimeMillis();
@@ -103,10 +104,11 @@ public class ClientThread implements Runnable, PacketOutput {
 	public ClientThread(Socket socket) throws IOException {
 		_csocket = socket;
 		_ip = socket.getInetAddress().getHostAddress();
+		_portip = socket.getPort();
 		if (Config.HOSTNAME_LOOKUPS) {
 			_hostname = socket.getInetAddress().getHostName();
 		} else {
-			_hostname = _ip;
+			_hostname = _ip + _portip;
 		}
 		_in = socket.getInputStream();
 		_out = new BufferedOutputStream(socket.getOutputStream());
@@ -347,6 +349,10 @@ public class ClientThread implements Runnable, PacketOutput {
 					kick();
 					_log.warning("Kicking character from (" + _hostname + ").");
 					cancel();
+				if (_portip == 0) { 
+					_log.info("[Client] [" + getAccountName() + ":" + _hostname + "] Connected. "); 
+					System.out.println("Memory: " + SystemUtil.getUsedMemoryMB() + "MB");  System.out.println("waiting for connections...");
+					}
 					return;
 				}
 			} catch (Exception e) {
