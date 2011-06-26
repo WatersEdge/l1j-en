@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF8"?>
 <project name="l1j-en" default="all" basedir=".">
     <description>
         This script will build the L1J server.
@@ -26,6 +26,7 @@
     <property name="lib.dir" value="lib" />
     <property name="build.dir" value="build" />
     <property name="jarfile" value="l1jen.jar" />
+	<property name="compile.optimize" value="true"/>  
 
     <path id="classpath">
         <fileset dir="${lib.dir}">
@@ -47,8 +48,8 @@
     <target name="compile">
         <mkdir dir="${build.dir}" />
         <javac destdir="${build.dir}"
-               optimize="on"
-               encoding="UTF-8">
+               optimize="${compile.optimize}"
+               encoding="UTF8">
             <src path="${src.dir}" />
             <classpath refid="classpath" />
         </javac>
