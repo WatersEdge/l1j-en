@@ -218,7 +218,7 @@ public class C_CreateChar extends ClientBasePacket {
 	private static boolean isInvalidName(String name) {
 		int numOfNameBytes = 0;
 		try {
-			numOfNameBytes = name.getBytes("UTF-8").length;
+			numOfNameBytes = name.getBytes("UTF8").length;
 		} catch (UnsupportedEncodingException e) {
 			_log.log(Level.SEVERE, e.getLocalizedMessage(), e);
 			return false;

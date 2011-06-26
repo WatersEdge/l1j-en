@@ -75,15 +75,6 @@ public final class Config {
 
 	@Configure(file = SERVER, key = "TimeZone")
 	public static String TIME_ZONE = "EST";
-
-	@Configure(file = SERVER, key = "pingenabled")
-	public static boolean PING_ENABLED = false;
-	
-	@Configure(file = SERVER, key = "pingignored")
-	public static int PING_IGNORED_REQEST_LIMIT = 2;
-	
-	@Configure(file = SERVER, key = "pinginterval")
-	public static int PING_INTERVAL = 30000;
 	
 	@Configure(file = SERVER, key = "HostnameLookups")
 	public static boolean HOSTNAME_LOOKUPS = false;

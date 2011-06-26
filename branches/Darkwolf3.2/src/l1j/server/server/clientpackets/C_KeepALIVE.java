@@ -20,9 +20,8 @@ package l1j.server.server.clientpackets;
 import java.util.logging.Logger;
 
 import l1j.server.server.ClientThread;
-import l1j.server.server.Pinger;
 import l1j.server.server.model.Instance.L1PcInstance;
-
+import l1j.server.server.serverpackets.S_PingPacket;
 // Referenced classes of package l1j.server.server.clientpackets:
 // ClientBasePacket
 public class C_KeepALIVE extends ClientBasePacket {
@@ -31,21 +30,10 @@ public class C_KeepALIVE extends ClientBasePacket {
 
 	public C_KeepALIVE(byte decrypt[], ClientThread client) {
 		super(decrypt);
-		int pING;
-	    int ping;
-	    int mtu;
-	    pING = readD();
-	    ping = readD();
-	    mtu = readD();
     	
 	    L1PcInstance activeChar = client.getActiveChar();
-    	
-    	if (activeChar == null || activeChar != null && !activeChar.isPrivateShop())
-        return;
-        
-        Pinger.getInstance().answerPing(activeChar.getId());
-        System.out.println("PING:"+ping+":MTU:"+mtu);
-        System.out.println("C_Keepalive Sended");
+	    client.sendPacket(new S_PingPacket());
+       // System.out.println("C_Keepalive Sended");
     }
 
 	@Override

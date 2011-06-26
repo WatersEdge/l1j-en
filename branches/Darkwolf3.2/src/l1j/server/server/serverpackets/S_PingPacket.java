@@ -27,13 +27,7 @@ public class S_PingPacket extends ServerBasePacket {
 	private static Logger _log = Logger.getLogger(S_PingPacket.class.getName());
         private static final String S_ServerPing = "[S] S_ServerPing";
     	private byte[] _byte = null;
-    	private int _ping;
- 
-    	public S_PingPacket(int pING)
-    	{
-    	   _ping = pING;
-    	}
-    	
+
     	public S_PingPacket() {
     		buildPacket();
     	}
@@ -41,8 +35,7 @@ public class S_PingPacket extends ServerBasePacket {
     		
                 // XXX:ServerPingTime Send)
                 writeC(Opcodes.S_PING);
-                writeD(_ping);
-                System.out.println("ServerPINGsended:");
+                //System.out.println("ServerPINGsended:");
         }
 
     	@Override
