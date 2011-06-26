@@ -29,7 +29,8 @@ import l1j.server.server.serverpackets.S_SystemMessage;
 // Referenced classes of package l1j.server.server:
 // Opcodes, LoginController, ClientThread, Logins
 public class PacketHandler {
-	private static Logger _log = Logger.getLogger(PacketHandler.class.getName());
+	private static Logger _log = Logger.getLogger(PacketHandler.class
+			.getName());
 	private final ClientThread _client;
 	
 	public PacketHandler(ClientThread clientthread) {
@@ -39,8 +40,10 @@ public class PacketHandler {
 	public void handlePacket(byte abyte0[], L1PcInstance object) throws Exception {
 		int i = abyte0[0] & 0xff;
 		if(_client.getActiveChar() != null) {
-			if(Config.LOGGING_INCOMING_PACKETS && (_client.getActiveChar().isGm() || _client.getActiveChar().isMonitor())){
-				_client.getActiveChar().sendPackets(new S_SystemMessage("Sent from client: "+i));
+			if(Config.LOGGING_INCOMING_PACKETS && (_client.getActiveChar().isGm() || 
+					_client.getActiveChar().isMonitor())){
+				_client.getActiveChar().sendPackets(
+						new S_SystemMessage("Sent from client: "+i));
 			}
 		}
 		switch (i) {

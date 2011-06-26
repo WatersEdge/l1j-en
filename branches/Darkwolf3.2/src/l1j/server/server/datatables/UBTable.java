@@ -32,9 +32,11 @@ import l1j.server.server.model.L1UltimateBattle;
 import l1j.server.server.utils.SQLUtil;
 
 public class UBTable {
-	private static Logger _log = Logger.getLogger(UBTable.class.getName());
+	private static Logger _log = Logger.getLogger(UBTable.class
+			.getName());
 	private static UBTable _instance = new UBTable();
-	private HashMap<Integer, L1UltimateBattle> _ub = new HashMap<Integer, L1UltimateBattle>();
+	private HashMap<Integer, L1UltimateBattle> _ub = 
+		new HashMap<Integer, L1UltimateBattle>();
 
 	public static UBTable getInstance() {
 		return _instance;
@@ -150,7 +152,8 @@ public class UBTable {
 		ResultSet rs = null;
 		try {
 			con = L1DatabaseFactory.getInstance().getConnection();
-			pstm = con.prepareStatement("SELECT MAX(pattern) FROM spawnlist_ub WHERE ub_id=?");
+			pstm = con.prepareStatement("SELECT MAX(pattern) FROM " +
+					"spawnlist_ub WHERE ub_id=?");
 			pstm.setInt(1, ubId);
 			rs = pstm.executeQuery();
 			if (rs.next()) {

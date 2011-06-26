@@ -35,9 +35,11 @@ import l1j.server.server.utils.SQLUtil;
 // Referenced classes of package l1j.server.server:
 // IdFactory
 public class BuddyTable {
-	private static Logger _log = Logger.getLogger(BuddyTable.class.getName());
+	private static Logger _log = Logger.getLogger(BuddyTable.class
+			.getName());
 	private static BuddyTable _instance;
-	private final Map<Integer, L1Buddy> _buddys = new HashMap<Integer, L1Buddy>();
+	private final Map<Integer, L1Buddy> _buddys = 
+		new HashMap<Integer, L1Buddy>();
 
 	public static BuddyTable getInstance() {
 		if (_instance == null) {
@@ -53,13 +55,15 @@ public class BuddyTable {
 
 		try {
 			con = L1DatabaseFactory.getInstance().getConnection();
-			charIdPS = con.prepareStatement("SELECT distinct(char_id) as char_id FROM character_buddys");
+			charIdPS = con.prepareStatement("SELECT distinct(char_id) as char_id " +
+					"FROM character_buddys");
 			charIdRS = charIdPS.executeQuery();
 			while (charIdRS.next()) {
 				PreparedStatement buddysPS = null;
 				ResultSet buddysRS = null;
 				try {
-					buddysPS = con.prepareStatement("SELECT buddy_id, buddy_name FROM character_buddys WHERE char_id = ?");
+					buddysPS = con.prepareStatement("SELECT buddy_id, buddy_name " +
+							"FROM character_buddys WHERE char_id = ?");
 					int charId = charIdRS.getInt("char_id");
 					buddysPS.setInt(1, charId);
 					L1Buddy buddy = new L1Buddy(charId);
@@ -101,7 +105,8 @@ public class BuddyTable {
 
 		try {
 			con = L1DatabaseFactory.getInstance().getConnection();
-			pstm = con.prepareStatement("INSERT INTO character_buddys SET char_id=?, buddy_id=?, buddy_name=?");
+			pstm = con.prepareStatement("INSERT INTO character_buddys " +
+					"SET char_id=?, buddy_id=?, buddy_name=?");
 			pstm.setInt(1, charId);
 			pstm.setInt(2, objId);
 			pstm.setString(3, name);
@@ -123,7 +128,8 @@ public class BuddyTable {
 		}
 		try {
 			con = L1DatabaseFactory.getInstance().getConnection();
-			pstm = con.prepareStatement("DELETE FROM character_buddys WHERE char_id=? AND buddy_name=?");
+			pstm = con.prepareStatement("DELETE FROM character_buddys WHERE " +
+					"char_id=? AND buddy_name=?");
 			pstm.setInt(1, charId);
 			pstm.setString(2, buddyName);
 			pstm.execute();

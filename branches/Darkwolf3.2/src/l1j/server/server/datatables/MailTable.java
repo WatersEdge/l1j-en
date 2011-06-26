@@ -176,7 +176,9 @@ public class MailTable {
 		PreparedStatement pstm2 = null;
 		try {
 			con = L1DatabaseFactory.getInstance().getConnection();
-			pstm2 = con.prepareStatement("INSERT INTO mail SET " + "id=?, type=?, sender=?, receiver=?," + " date=?, read_status=?, subject=?, content=?");
+			pstm2 = con.prepareStatement("INSERT INTO mail SET " + "id=?, type=?, " +
+					"sender=?, receiver=?," + " date=?, read_status=?, " +
+							"subject=?, content=?");
 			int id = IdFactory.getInstance().nextId();
 			pstm2.setInt(1, id);
 			pstm2.setInt(2, type);

@@ -38,9 +38,11 @@ import l1j.server.server.utils.SQLUtil;
 // Referenced classes of package l1j.server.server:
 // IdFactory
 public class AuctionBoardTable {
-	private static Logger _log = Logger.getLogger(AuctionBoardTable.class.getName());
+	private static Logger _log = Logger.getLogger(AuctionBoardTable.class
+			.getName());
 	private static AuctionBoardTable _instance;
-	private final Map<Integer, L1AuctionBoard> _boards = new ConcurrentHashMap<Integer, L1AuctionBoard>();
+	private final Map<Integer, L1AuctionBoard> _boards = 
+		new ConcurrentHashMap<Integer, L1AuctionBoard>();
 
 	private static AuctionBoardTable getInstance() {
 		if (_instance == null) {
@@ -62,14 +64,16 @@ public class AuctionBoardTable {
 
 		try {
 			con = L1DatabaseFactory.getInstance().getConnection();
-			pstm = con.prepareStatement("SELECT * FROM board_auction ORDER BY house_id");
+			pstm = con.prepareStatement("SELECT * FROM board_auction " +
+					"ORDER BY house_id");
 			rs = pstm.executeQuery();
 			while (rs.next()) {
 				L1AuctionBoard board = new L1AuctionBoard();
 				board.setHouseId(rs.getInt(1));
 				board.setHouseName(rs.getString(2));
 				board.setHouseArea(rs.getInt(3));
-				board.setDeadline(timestampToCalendar((Timestamp) rs.getObject(4)));
+				board.setDeadline(timestampToCalendar((Timestamp) 
+						rs.getObject(4)));
 				board.setPrice(rs.getInt(5));
 				board.setLocation(rs.getString(6));
 				board.setOldOwner(rs.getString(7));
@@ -101,7 +105,9 @@ public class AuctionBoardTable {
 
 		try {
 			con = L1DatabaseFactory.getInstance().getConnection();
-			pstm = con.prepareStatement("INSERT INTO board_auction SET house_id=?, house_name=?, house_area=?, deadline=?, price=?, location=?, old_owner=?, old_owner_id=?, bidder=?, bidder_id=?");
+			pstm = con.prepareStatement("INSERT INTO board_auction SET house_id=?, " +
+					"house_name=?, house_area=?, deadline=?, price=?, location=?, " +
+					"old_owner=?, old_owner_id=?, bidder=?, bidder_id=?");
 			pstm.setInt(1, board.getHouseId());
 			pstm.setString(2, board.getHouseName());
 			pstm.setInt(3, board.getHouseArea());
@@ -130,7 +136,9 @@ public class AuctionBoardTable {
 
 		try {
 			con = L1DatabaseFactory.getInstance().getConnection();
-			pstm = con.prepareStatement("UPDATE board_auction SET house_name=?, house_area=?, deadline=?, price=?, location=?, old_owner=?, old_owner_id=?, bidder=?, bidder_id=? WHERE house_id=?");
+			pstm = con.prepareStatement("UPDATE board_auction SET house_name=?, " +
+					"house_area=?, deadline=?, price=?, location=?, old_owner=?, " +
+					"old_owner_id=?, bidder=?, bidder_id=? WHERE house_id=?");
 			pstm.setString(1, board.getHouseName());
 			pstm.setInt(2, board.getHouseArea());
 			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); //this format saves and updates the time of your system for auctiontable

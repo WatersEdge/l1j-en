@@ -39,9 +39,11 @@ import l1j.server.server.utils.SQLUtil;
 // Referenced classes of package l1j.server.server:
 // IdFactory
 public class HouseTable {
-	private static Logger _log = Logger.getLogger(HouseTable.class.getName());
+	private static Logger _log = Logger.getLogger(HouseTable.class
+			.getName());
 	private static HouseTable _instance;
-	private final Map<Integer, L1House> _house = new ConcurrentHashMap<Integer, L1House>();
+	private final Map<Integer, L1House> _house = 
+		new ConcurrentHashMap<Integer, L1House>();
 
 	public static HouseTable getInstance() {
 		if (_instance == null) {
@@ -98,7 +100,9 @@ public class HouseTable {
 		PreparedStatement pstm = null;
 		try {
 			con = L1DatabaseFactory.getInstance().getConnection();
-			pstm = con.prepareStatement("UPDATE house SET house_name=?, house_area=?, location=?, keeper_id=?, is_on_sale=?, is_purchase_basement=?, tax_deadline=? WHERE house_id=?");
+			pstm = con.prepareStatement("UPDATE house SET house_name=?, house_area=?, " +
+					"location=?, keeper_id=?, is_on_sale=?, is_purchase_basement=?, " +
+					"tax_deadline=? WHERE house_id=?");
 			pstm.setString(1, house.getHouseName());
 			pstm.setInt(2, house.getHouseArea());
 			pstm.setString(3, house.getLocation());

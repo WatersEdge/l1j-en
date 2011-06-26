@@ -41,13 +41,20 @@ import l1j.server.server.utils.SQLUtil;
 
 public class ItemTable {
 	private static final long serialVersionUID = 1L;
-	private static Logger _log = Logger.getLogger(ItemTable.class.getName());
-	private static final Map<String, Integer> _armorTypes = new HashMap<String, Integer>();
-	private static final Map<String, Integer> _weaponTypes = new HashMap<String, Integer>();
-	private static final Map<String, Integer> _weaponId = new HashMap<String, Integer>();
-	private static final Map<String, Integer> _materialTypes = new HashMap<String, Integer>();
-	private static final Map<String, Integer> _etcItemTypes = new HashMap<String, Integer>();
-	private static final Map<String, Integer> _useTypes = new HashMap<String, Integer>();
+	private static Logger _log = Logger.getLogger(ItemTable.class
+			.getName());
+	private static final Map<String, Integer> _armorTypes = 
+		new HashMap<String, Integer>();
+	private static final Map<String, Integer> _weaponTypes = 
+		new HashMap<String, Integer>();
+	private static final Map<String, Integer> _weaponId = 
+		new HashMap<String, Integer>();
+	private static final Map<String, Integer> _materialTypes = 
+		new HashMap<String, Integer>();
+	private static final Map<String, Integer> _etcItemTypes = 
+		new HashMap<String, Integer>();
+	private static final Map<String, Integer> _useTypes = 
+		new HashMap<String, Integer>();
 	private static ItemTable _instance;
 	private L1Item _allTemplates[];
 	private final Map<Integer, L1EtcItem> _etcitems;

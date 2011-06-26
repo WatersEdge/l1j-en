@@ -32,9 +32,11 @@ import l1j.server.server.templates.L1Npc;
 import l1j.server.server.utils.SQLUtil;
 
 public class UBSpawnTable {
-	private static Logger _log = Logger.getLogger(UBSpawnTable.class.getName());
+	private static Logger _log = Logger.getLogger(UBSpawnTable.class
+			.getName());
 	private static UBSpawnTable _instance;
-	private HashMap<Integer, L1UbSpawn> _spawnTable = new HashMap<Integer, L1UbSpawn>();;
+	private HashMap<Integer, L1UbSpawn> _spawnTable = 
+		new HashMap<Integer, L1UbSpawn>();;
 
 	public static UBSpawnTable getInstance() {
 		if (_instance == null) {
@@ -100,7 +102,8 @@ public class UBSpawnTable {
 		ResultSet rs = null;
 		try {
 			con = L1DatabaseFactory.getInstance().getConnection();
-			pstm = con.prepareStatement("SELECT MAX(pattern) FROM spawnlist_ub WHERE ub_id=?");
+			pstm = con.prepareStatement("SELECT MAX(pattern) " +
+					"FROM spawnlist_ub WHERE ub_id=?");
 			pstm.setInt(1, ubId);
 			rs = pstm.executeQuery();
 			if (rs.next()) {

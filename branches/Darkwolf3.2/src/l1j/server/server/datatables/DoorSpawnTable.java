@@ -36,9 +36,11 @@ import l1j.server.server.templates.L1Npc;
 import l1j.server.server.utils.SQLUtil;
 
 public class DoorSpawnTable {
-	private static Logger _log = Logger.getLogger(DoorSpawnTable.class.getName());
+	private static Logger _log = Logger.getLogger(DoorSpawnTable.class
+			.getName());
 	private static DoorSpawnTable _instance;
-	private final ArrayList<L1DoorInstance> _doorList = new ArrayList<L1DoorInstance>();
+	private final ArrayList<L1DoorInstance> _doorList = 
+		new ArrayList<L1DoorInstance>();
 
 	public static DoorSpawnTable getInstance() {
 		if (_instance == null) {

@@ -35,9 +35,11 @@ import l1j.server.server.utils.SQLUtil;
 // Referenced classes of package l1j.server.server:
 // IdFactory
 public class TownTable {
-	private static Logger _log = Logger.getLogger(TownTable.class.getName());
+	private static Logger _log = Logger.getLogger(TownTable.class
+			.getName());
 	private static TownTable _instance;
-	private final Map<Integer, L1Town> _towns = new ConcurrentHashMap<Integer, L1Town>();
+	private final Map<Integer, L1Town> _towns = 
+		new ConcurrentHashMap<Integer, L1Town>();
 
 	public static TownTable getInstance() {
 		if (_instance == null) {
@@ -113,7 +115,9 @@ public class TownTable {
 		}
 		try {
 			con = L1DatabaseFactory.getInstance().getConnection();
-			pstm = con.prepareStatement("UPDATE town SET sales_money = sales_money + ?, town_tax = town_tax + ?, town_fix_tax = town_fix_tax + ? WHERE town_id = ?");
+			pstm = con.prepareStatement("UPDATE town SET sales_money = " +
+					"sales_money + ?, town_tax = town_tax + ?, " +
+					"town_fix_tax = town_fix_tax + ? WHERE town_id = ?");
 			pstm.setInt(1, salesMoney);
 			pstm.setInt(2, townTax);
 			pstm.setInt(3, townFixTax);
@@ -137,7 +141,8 @@ public class TownTable {
 		town.set_town_fix_tax(0);
 		try {
 			con = L1DatabaseFactory.getInstance().getConnection();
-			pstm = con.prepareStatement("UPDATE town SET town_fix_tax = 0 WHERE town_id = ?");
+			pstm = con.prepareStatement("UPDATE town SET town_fix_tax = " +
+					"0 WHERE town_id = ?");
 			pstm.setInt(1, town_id);
 			pstm.execute();
 		} catch (SQLException e) {
@@ -155,7 +160,8 @@ public class TownTable {
 		town.set_tax_rate(tax_rate);
 		try {
 			con = L1DatabaseFactory.getInstance().getConnection();
-			pstm = con.prepareStatement("UPDATE town SET tax_rate = ? WHERE town_id = ?");
+			pstm = con.prepareStatement("UPDATE town SET tax_rate = ? " +
+					"WHERE town_id = ?");
 			pstm.setInt(1, tax_rate);
 			pstm.setInt(2, town_id);
 			pstm.execute();
@@ -203,7 +209,8 @@ public class TownTable {
 		PreparedStatement pstm = null;
 		try {
 			con = L1DatabaseFactory.getInstance().getConnection();
-			pstm = con.prepareStatement("UPDATE town SET sales_money_yesterday = sales_money, sales_money = 0");
+			pstm = con.prepareStatement("UPDATE town SET " +
+					"sales_money_yesterday = sales_money, sales_money = 0");
 			pstm.execute();
 		} catch (SQLException e) {
 			_log.log(Level.SEVERE, e.getLocalizedMessage(), e);

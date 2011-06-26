@@ -31,10 +31,13 @@ import l1j.server.server.model.L1PolyMorph;
 import l1j.server.server.utils.SQLUtil;
 
 public class PolyTable {
-	private static Logger _log = Logger.getLogger(PolyTable.class.getName());
+	private static Logger _log = Logger.getLogger(PolyTable.class
+			.getName());
 	private static PolyTable _instance;
-	private final HashMap<String, L1PolyMorph> _polymorphs = new HashMap<String, L1PolyMorph>();
-	private final HashMap<Integer, L1PolyMorph> _polyIdIndex = new HashMap<Integer, L1PolyMorph>();
+	private final HashMap<String, L1PolyMorph> _polymorphs = 
+		new HashMap<String, L1PolyMorph>();
+	private final HashMap<Integer, L1PolyMorph> _polyIdIndex = 
+		new HashMap<Integer, L1PolyMorph>();
 
 	public static PolyTable getInstance() {
 		if (_instance == null) {

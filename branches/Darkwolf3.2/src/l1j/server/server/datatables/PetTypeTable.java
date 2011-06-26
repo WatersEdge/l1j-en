@@ -36,8 +36,10 @@ import l1j.server.server.utils.SQLUtil;
 
 public class PetTypeTable {
 	private static PetTypeTable _instance;
-	private static Logger _log = Logger.getLogger(PetTypeTable.class.getName());
-	private Map<Integer, L1PetType> _types = new HashMap<Integer, L1PetType>();
+	private static Logger _log = Logger.getLogger(PetTypeTable.class
+			.getName());
+	private Map<Integer, L1PetType> _types = 
+		new HashMap<Integer, L1PetType>();
 	private Set<String> _defaultNames = new HashSet<String>();
 
 	public static void load() {
@@ -76,7 +78,9 @@ public class PetTypeTable {
 				int defyMsgId = rs.getInt("DefyMessageId");
 				IntRange hpUpRange = new IntRange(hpUpMin, hpUpMax);
 				IntRange mpUpRange = new IntRange(mpUpMin, mpUpMax);
-				_types.put(baseNpcId, new L1PetType(baseNpcId, name, itemIdForTaming, hpUpRange, mpUpRange, npcIdForEvolving, msgIds, defyMsgId));
+				_types.put(baseNpcId, new L1PetType(baseNpcId, name, 
+						itemIdForTaming, hpUpRange, mpUpRange, npcIdForEvolving, 
+						msgIds, defyMsgId));
 				_defaultNames.add(name.toLowerCase());
 			}
 		} catch (SQLException e) {

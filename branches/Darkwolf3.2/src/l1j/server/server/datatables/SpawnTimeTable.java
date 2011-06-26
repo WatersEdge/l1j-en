@@ -32,9 +32,11 @@ import l1j.server.server.templates.L1SpawnTime;
 import l1j.server.server.utils.SQLUtil;
 
 public class SpawnTimeTable {
-	private static Logger _log = Logger.getLogger(SpawnTimeTable.class.getName());
+	private static Logger _log = Logger.getLogger(SpawnTimeTable.class
+			.getName());
 	private static SpawnTimeTable _instance;
-	private final Map<Integer, L1SpawnTime> _times = new HashMap<Integer, L1SpawnTime>();
+	private final Map<Integer, L1SpawnTime> _times = 
+		new HashMap<Integer, L1SpawnTime>();
 
 	public static SpawnTimeTable getInstance() {
 		if (_instance == null) {
@@ -61,7 +63,8 @@ public class SpawnTimeTable {
 			rs = pstm.executeQuery();
 			while (rs.next()) {
 				int id = rs.getInt("spawn_id");
-				L1SpawnTime.L1SpawnTimeBuilder builder = new L1SpawnTime.L1SpawnTimeBuilder(id);
+				L1SpawnTime.L1SpawnTimeBuilder builder = 
+					new L1SpawnTime.L1SpawnTimeBuilder(id);
 				builder.setTimeStart(rs.getTime("time_start"));
 				builder.setTimeEnd(rs.getTime("time_end"));
 				builder.setDeleteAtEndTime(rs.getBoolean("delete_at_endtime"));

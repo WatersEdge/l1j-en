@@ -34,9 +34,11 @@ import l1j.server.server.model.Instance.L1PcInstance;
 import l1j.server.server.model.L1World;
 
 public class SkillsTable {
-	private static Logger _log = Logger.getLogger(SkillsTable.class.getName());
+	private static Logger _log = Logger.getLogger(SkillsTable.class
+			.getName());
 	private static SkillsTable _instance;
-	private final Map<Integer, L1Skills> _skills = new HashMap<Integer, L1Skills>();
+	private final Map<Integer, L1Skills> _skills = 
+		new HashMap<Integer, L1Skills>();
 	private final boolean _initialized;
 	public static int SKILL_BRAVE_POTION = 1000;
 	public static int SKILL_GREEN_POTION = 1001;
@@ -115,7 +117,8 @@ public class SkillsTable {
 		_log.config("Skills List: " + _skills.size() + " Loaded");
 	}
 
-	public void spellMastery(int playerobjid, int skillid, String skillname, int active, int time) {
+	public void spellMastery(int playerobjid, int skillid, String skillname, 
+			int active, int time) {
 		if (spellCheck(playerobjid, skillid)) {
 			return;
 		}
@@ -127,7 +130,9 @@ public class SkillsTable {
 		PreparedStatement pstm = null;
 		try {
 			con = L1DatabaseFactory.getInstance().getConnection();
-			pstm = con.prepareStatement("INSERT INTO character_skills SET char_obj_id=?, skill_id=?, skill_name=?, is_active=?, activetimeleft=?");
+			pstm = con.prepareStatement("INSERT INTO character_skills SET " +
+					"char_obj_id=?, skill_id=?, skill_name=?, " +
+					"is_active=?, activetimeleft=?");
 			pstm.setInt(1, playerobjid);
 			pstm.setInt(2, skillid);
 			pstm.setString(3, skillname);
@@ -152,7 +157,8 @@ public class SkillsTable {
 		PreparedStatement pstm = null;
 		try {
 			con = L1DatabaseFactory.getInstance().getConnection();
-			pstm = con.prepareStatement("DELETE FROM character_skills WHERE char_obj_id=? AND skill_id=?");
+			pstm = con.prepareStatement("DELETE FROM character_skills " +
+					"WHERE char_obj_id=? AND skill_id=?");
 			pstm.setInt(1, playerobjid);
 			pstm.setInt(2, skillid);
 			pstm.execute();
@@ -171,7 +177,8 @@ public class SkillsTable {
 		ResultSet rs = null;
 		try {
 			con = L1DatabaseFactory.getInstance().getConnection();
-			pstm = con.prepareStatement("SELECT * FROM character_skills WHERE char_obj_id=? AND skill_id=?");
+			pstm = con.prepareStatement("SELECT * FROM character_skills " +
+					"WHERE char_obj_id=? AND skill_id=?");
 			pstm.setInt(1, playerobjid);
 			pstm.setInt(2, skillid);
 			rs = pstm.executeQuery();

@@ -37,9 +37,11 @@ import l1j.server.server.utils.SQLUtil;
 // Referenced classes of package l1j.server.server:
 // IdFactory
 public class CastleTable {
-	private static Logger _log = Logger.getLogger(CastleTable.class.getName());
+	private static Logger _log = Logger.getLogger(CastleTable.class
+			.getName());
 	private static CastleTable _instance;
-	private final Map<Integer, L1Castle> _castles = new ConcurrentHashMap<Integer, L1Castle>();
+	private final Map<Integer, L1Castle> _castles = 
+		new ConcurrentHashMap<Integer, L1Castle>();
 
 	public static CastleTable getInstance() {
 		if (_instance == null) {
@@ -97,7 +99,8 @@ public class CastleTable {
 		
 		try {
 			con = L1DatabaseFactory.getInstance().getConnection();
-			pstm = con.prepareStatement("UPDATE castle SET name=?, war_time=?, tax_rate=?, public_money=? WHERE castle_id=?");
+			pstm = con.prepareStatement("UPDATE castle SET name=?, war_time=?, " +
+					"tax_rate=?, public_money=? WHERE castle_id=?");
 			pstm.setString(1, castle.getName());
 	        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); //this format saves and updates the time of your system for castletable
 			String dateString = format.format(castle.getWarTime().getTime());

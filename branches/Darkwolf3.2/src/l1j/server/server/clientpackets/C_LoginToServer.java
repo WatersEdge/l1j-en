@@ -75,20 +75,23 @@ public class C_LoginToServer extends ClientBasePacket {
 	private static final String C_LOGIN_TO_SERVER = "[C] C_LoginToServer";
 	private static Logger _log = Logger.getLogger(C_LoginToServer.class.getName());
 
-	public C_LoginToServer(byte abyte0[], ClientThread client) throws FileNotFoundException, Exception {
+	public C_LoginToServer(byte abyte0[], ClientThread client) 
+	throws FileNotFoundException, Exception {
 		super(abyte0);
 
 		String login = client.getAccountName();
 		String charName = readS();
 
 		if (client.getActiveChar() != null) {
-			_log.info("Invalid character logged in from " + client.getHostname() + ".");
+			_log.info("Invalid character logged in from " 
+					+ client.getHostname() + ".");
 			client.close();
 			return;
 		}
 		L1PcInstance pc = L1PcInstance.load(charName);
 		if (pc == null || !login.equals(pc.getAccountName())) {
-			_log.info("Invalid login request=" + charName + " account=" + login + " host=" + client.getHostname());
+			_log.info("Invalid login request=" + charName + " account=" 
+					+ login + " host=" + client.getHostname());
 			client.close();
 			return;
 		}
@@ -100,7 +103,8 @@ public class C_LoginToServer extends ClientBasePacket {
 				return;
 			}
 		}
-		_log.info("Character login: char=" + charName + " account=" + login + " host=" + client.getHostname());
+		_log.info("Character login: char=" + charName + " account=" 
+				+ login + " host=" + client.getHostname());
 
 		int currentHpAtLoad = pc.getCurrentHp();
 		int currentMpAtLoad = pc.getCurrentMp();
@@ -244,9 +248,11 @@ public class C_LoginToServer extends ClientBasePacket {
 			}
 		}
 		if (pc.getPartnerId() != 0) { 
-			L1PcInstance partner = (L1PcInstance) L1World.getInstance().findObject(pc.getPartnerId());
+			L1PcInstance partner = (L1PcInstance) L1World.getInstance()
+			.findObject(pc.getPartnerId());
 			if (partner != null && partner.getPartnerId() != 0) {
-				if (pc.getPartnerId() == partner.getId() && partner.getPartnerId() == pc.getId()) {
+				if (pc.getPartnerId() == partner.getId() 
+						&& partner.getPartnerId() == pc.getId()) {
 					pc.sendPackets(new S_ServerMessage(548)); 
 					partner.sendPackets(new S_ServerMessage(549));
 				}
@@ -283,7 +289,8 @@ public class C_LoginToServer extends ClientBasePacket {
 		
 		try {
 			con = L1DatabaseFactory.getInstance().getConnection();
-			pstm = con.prepareStatement("SELECT * FROM character_teleport WHERE char_id=? ORDER BY name ASC");
+			pstm = con.prepareStatement("SELECT * FROM character_teleport WHERE char_id=? " +
+					"ORDER BY name ASC");
 			pstm.setInt(1, pc.getId());
 			rs = pstm.executeQuery();
 			while (rs.next()) {
@@ -435,13 +442,15 @@ public class C_LoginToServer extends ClientBasePacket {
 				}
 				i = lv1 + lv2 + lv3 + lv4 + lv5 + lv6 + lv7 + lv8 + lv9 + lv10
 				+ lv11 + lv12 + lv13 + lv14 + lv15 + lv16 + lv17 + lv18
-				+ lv19 + lv20 + lv21 + lv22 + lv23 + lv24 + lv25 + lv26 + lv27 + lv28;
+				+ lv19 + lv20 + lv21 + lv22 + lv23 + lv24 + 
+				lv25 + lv26 + lv27 + lv28;
 				pc.setSkillMastery(skillId);
 			}
 			if (i > 0) {
 				pc.sendPackets(new S_AddSkill(lv1, lv2, lv3, lv4, lv5, lv6,
 				lv7, lv8, lv9, lv10, lv11, lv12, lv13, lv14, lv15,
-				lv16, lv17, lv18, lv19, lv20, lv21, lv22, lv23, lv24, lv25, lv26, lv27, lv28));
+				lv16, lv17, lv18, lv19, lv20, lv21, lv22, lv23, lv24, 
+				lv25, lv26, lv27, lv28));
 			}
 		} catch (SQLException e) {
 			_log.log(Level.SEVERE, e.getLocalizedMessage(), e);
@@ -457,7 +466,8 @@ public class C_LoginToServer extends ClientBasePacket {
 			if (summon.getMaster().getId() == pc.getId()) {
 				summon.setMaster(pc);
 				pc.addPet(summon);
-				for (L1PcInstance visiblePc : L1World.getInstance().getVisiblePlayer(summon)) {
+				for (L1PcInstance visiblePc : L1World.getInstance()
+						.getVisiblePlayer(summon)) {
 					visiblePc.sendPackets(new S_SummonPack(summon, visiblePc));
 				}
 			}
@@ -479,19 +489,23 @@ public class C_LoginToServer extends ClientBasePacket {
 				int remaining_time = rs.getInt("remaining_time");
 				if (skillid == SHAPE_CHANGE) { 
 					int poly_id = rs.getInt("poly_id");
-					L1PolyMorph.doPoly(pc, poly_id, remaining_time, L1PolyMorph.MORPH_BY_LOGIN);
+					L1PolyMorph.doPoly(pc, poly_id, remaining_time, 
+							L1PolyMorph.MORPH_BY_LOGIN);
 				} else if (skillid == STATUS_BRAVE) {
-					pc.sendPackets(new S_SkillBrave(pc.getId(), 1, remaining_time));
+					pc.sendPackets(new S_SkillBrave(pc.getId(), 1, 
+							remaining_time));
 					pc.broadcastPacket(new S_SkillBrave(pc.getId(), 1, 0));
 					pc.setBraveSpeed(1);
 					pc.setSkillEffect(skillid, remaining_time * 1000);
 				} else if (skillid == STATUS_ELFBRAVE) {
-					pc.sendPackets(new S_SkillBrave(pc.getId(), 3, remaining_time));
+					pc.sendPackets(new S_SkillBrave(pc.getId(), 3, 
+							remaining_time));
 					pc.broadcastPacket(new S_SkillBrave(pc.getId(), 3, 0));
 					pc.setBraveSpeed(1);
 					pc.setSkillEffect(skillid, remaining_time * 1000);
 				} else if (skillid == STATUS_HASTE) { 
-					pc.sendPackets(new S_SkillHaste(pc.getId(), 1, remaining_time));
+					pc.sendPackets(new S_SkillHaste(pc.getId(), 1, 
+							remaining_time));
 					pc.broadcastPacket(new S_SkillHaste(pc.getId(), 1, 0));
 					pc.setMoveSpeed(1);
 					pc.setSkillEffect(skillid, remaining_time * 1000);
@@ -511,7 +525,8 @@ public class C_LoginToServer extends ClientBasePacket {
 				} else {
 					L1SkillUse l1skilluse = new L1SkillUse();
 					l1skilluse.handleCommands(clientthread.getActiveChar(),
-					skillid, pc.getId(), pc.getX(), pc.getY(), null, remaining_time, L1SkillUse.TYPE_LOGIN);
+					skillid, pc.getId(), pc.getX(), pc.getY(), null, 
+					remaining_time, L1SkillUse.TYPE_LOGIN);
 				}
 			}
 		} catch (SQLException e) {

@@ -39,9 +39,11 @@ import l1j.server.server.utils.SQLUtil;
 public class CharacterTable {
 	private CharacterStorage _charStorage;
 	private static CharacterTable _instance;
-	private static Logger _log = Logger.getLogger(CharacterTable.class.getName());
+	private static Logger _log = Logger.getLogger(CharacterTable.class
+			.getName());
 
-	private final Map<String, L1CharName> _charNameList = new ConcurrentHashMap<String, L1CharName>();
+	private final Map<String, L1CharName> _charNameList = 
+		new ConcurrentHashMap<String, L1CharName>();
 
 	private CharacterTable() {
 		_charStorage = new MySqlCharacterStorage();
@@ -130,7 +132,8 @@ public class CharacterTable {
 		PreparedStatement pstm = null;
 		try {
 			con = L1DatabaseFactory.getInstance().getConnection();
-			pstm = con.prepareStatement("UPDATE characters SET OnlineStatus=? WHERE objid=?");
+			pstm = con.prepareStatement("UPDATE characters SET OnlineStatus=? " +
+					"WHERE objid=?");
 			pstm.setInt(1, pc.getOnlineStatus());
 			pstm.setInt(2, pc.getId());
 			pstm.execute();
@@ -151,7 +154,8 @@ public class CharacterTable {
 		PreparedStatement pstm = null;
 		try {
 			con = L1DatabaseFactory.getInstance().getConnection();
-			pstm = con.prepareStatement("UPDATE characters SET PartnerID=? WHERE objid=?");
+			pstm = con.prepareStatement("UPDATE characters SET PartnerID=? " +
+					"WHERE objid=?");
 			pstm.setInt(1, partnerId);
 			pstm.setInt(2, targetId);
 			pstm.execute();
@@ -202,7 +206,8 @@ public class CharacterTable {
 		ResultSet rs = null;
 		try {
 			con = L1DatabaseFactory.getInstance().getConnection();
-			pstm = con.prepareStatement("SELECT account_name FROM characters WHERE char_name=?");
+			pstm = con.prepareStatement("SELECT account_name FROM characters " +
+					"WHERE char_name=?");
 			pstm.setString(1, name);
 			rs = pstm.executeQuery();
 			result = rs.next();

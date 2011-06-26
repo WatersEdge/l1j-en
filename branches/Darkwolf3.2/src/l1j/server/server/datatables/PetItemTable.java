@@ -31,9 +31,11 @@ import l1j.server.server.templates.L1PetItem;
 import l1j.server.server.utils.SQLUtil;
 
 public class PetItemTable {
-	private static Logger _log = Logger.getLogger(PetItemTable.class.getName());
+	private static Logger _log = Logger.getLogger(PetItemTable.class
+			.getName());
 	private static PetItemTable _instance;
-	private final HashMap<Integer, L1PetItem> _petItemIdIndex = new HashMap<Integer, L1PetItem>();
+	private final HashMap<Integer, L1PetItem> _petItemIdIndex = 
+		new HashMap<Integer, L1PetItem>();
 
 	public static PetItemTable getInstance() {
 		if (_instance == null) {

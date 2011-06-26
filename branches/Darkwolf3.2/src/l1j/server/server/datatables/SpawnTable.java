@@ -160,7 +160,9 @@ public class SpawnTable {
 			int maxRespawnDelay = 120;
 			String note = npc.get_name();
 			con = L1DatabaseFactory.getInstance().getConnection();
-			pstm = con.prepareStatement("INSERT INTO spawnlist SET location=?,count=?,npc_templateid=?,group_id=?,locx=?,locy=?,randomx=?,randomy=?,heading=?,min_respawn_delay=?,max_respawn_delay=?,mapid=?");
+			pstm = con.prepareStatement("INSERT INTO spawnlist SET location=?,count=?," +
+					"npc_templateid=?,group_id=?,locx=?,locy=?,randomx=?,randomy=?," +
+					"heading=?,min_respawn_delay=?,max_respawn_delay=?,mapid=?");
 			pstm.setString(1, note);
 			pstm.setInt(2, count);
 			pstm.setInt(3, npc.get_npcId());

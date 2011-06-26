@@ -39,7 +39,8 @@ public class GameServer extends Thread {
 
 	@Override
 	public void run() {
-		System.out.println("Server started. Memory used: " + SystemUtil.getUsedMemoryMB() + "MB");
+		System.out.println("Server started. Memory used: " 
+				+ SystemUtil.getUsedMemoryMB() + "MB");
 		System.out.println("Waiting for connections!");
 		while (true) {
 			try {
@@ -51,7 +52,9 @@ public class GameServer extends Thread {
 				}
 				else if (socket.getPort() == 0) { 
 						 System.out.println("Accepted connection on port"); 
-						 System.out.println("[Connected]: "+socket.getInetAddress()+" :"+socket.getPort()+" ["+host+"]");
+						 System.out.println("[Connected]: "+socket.getInetAddress()
+								 +" :"+socket.getPort()
+								 +" ["+host+"]");
 				} else {
 					ClientThread client = new ClientThread(socket);
 					GeneralThreadPool.getInstance().execute(client);
@@ -86,7 +89,8 @@ public class GameServer extends Thread {
 			InetAddress inetaddress = InetAddress.getByName(s);
 			inetaddress.getHostAddress();
 			_serverSocket = new ServerSocket(_port, 50, inetaddress);
-			System.out.println("Login Server ready on "+(inetaddress == null ? "Port" : inetaddress.getHostAddress())+":"+_port); 
+			System.out.println("Login Server ready on "+(inetaddress == null ? "Port" : 
+				inetaddress.getHostAddress())+":"+_port); 
 		} else {
 			_serverSocket = new ServerSocket(_port);
 			System.out.println("Port " + _port + " opened");
@@ -102,7 +106,8 @@ public class GameServer extends Thread {
 	 * All players online to kick, character and preservation of information.
 	 */
 	public void disconnectAllCharacters() {
-		Collection<L1PcInstance> players = L1World.getInstance().getAllPlayers();
+		Collection<L1PcInstance> players = L1World.getInstance()
+		.getAllPlayers();
 		for (L1PcInstance pc : players) {
 			pc.getNetConnection().setActiveChar(null);
 			pc.getNetConnection().kick();
@@ -134,7 +139,8 @@ public class GameServer extends Thread {
 						+ " seconds.  Please get to a safe area and logout.");
 					} else {
 						if (secondsCount % 60 == 0) {
-							world.broadcastServerMessage("Server will shutdown in " + secondsCount / 60 + " minutes.");
+							world.broadcastServerMessage("Server will shutdown in " 
+									+ secondsCount / 60 + " minutes.");
 						}
 					}
 					Thread.sleep(1000);

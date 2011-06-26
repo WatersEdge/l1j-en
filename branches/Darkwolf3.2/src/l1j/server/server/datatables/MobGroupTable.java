@@ -34,9 +34,11 @@ import l1j.server.server.utils.SQLUtil;
 import l1j.server.server.utils.collections.Lists;
 
 public class MobGroupTable {
-	private static Logger _log = Logger.getLogger(MobGroupTable.class.getName());
+	private static Logger _log = Logger.getLogger(MobGroupTable.class
+			.getName());
 	private static MobGroupTable _instance;
-	private final HashMap<Integer, L1MobGroup> _mobGroupIndex = new HashMap<Integer, L1MobGroup>();
+	private final HashMap<Integer, L1MobGroup> _mobGroupIndex = 
+		new HashMap<Integer, L1MobGroup>();
 
 	public static MobGroupTable getInstance() {
 		if (_instance == null) {
@@ -67,7 +69,8 @@ public class MobGroupTable {
 					int count = rs.getInt("minion" + i + "_count");
 					minions.add(new L1NpcCount(id, count));
 				}
-				L1MobGroup mobGroup = new L1MobGroup(mobGroupId, leaderId, minions, isRemoveGroup);
+				L1MobGroup mobGroup = new L1MobGroup(mobGroupId, leaderId, 
+						minions, isRemoveGroup);
 				_mobGroupIndex.put(mobGroupId, mobGroup);
 			}
 		_log.config("Mob Group Lists: " + _mobGroupIndex.size() + " loaded.");

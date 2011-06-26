@@ -60,7 +60,8 @@ import l1j.server.server.utils.SystemUtil;
 // ClanTable, IdFactory
 //
 public class ClientThread implements Runnable, PacketOutput {
-	private static Logger _log = Logger.getLogger(ClientThread.class.getName());
+	private static Logger _log = Logger.getLogger(ClientThread.class
+			.getName());
 	private InputStream _in;
 	private OutputStream _out;
 	private PacketHandler _handler;
@@ -153,11 +154,13 @@ public class ClientThread implements Runnable, PacketOutput {
 			return;
 		}
 		try {
-			if (Config.AUTOSAVE_INTERVAL * 1000 < System.currentTimeMillis() - _lastSavedTime) {
+			if (Config.AUTOSAVE_INTERVAL * 1000 < 
+					System.currentTimeMillis() - _lastSavedTime) {
 				_activeChar.save();
 				_lastSavedTime = System.currentTimeMillis();
 			}
-			if (Config.AUTOSAVE_INTERVAL_INVENTORY * 1000 < System.currentTimeMillis() - _lastSavedTime_inventory) {
+			if (Config.AUTOSAVE_INTERVAL_INVENTORY * 1000 < 
+					System.currentTimeMillis() - _lastSavedTime_inventory) {
 				_activeChar.saveInventory();
 				_lastSavedTime_inventory = System.currentTimeMillis();
 			}
@@ -171,14 +174,16 @@ public class ClientThread implements Runnable, PacketOutput {
 	@Override
 	public void run() {
 		_log.info("(" + _hostname + ") Login detected");
-		System.out.println("Current memory: " + SystemUtil.getUsedMemoryMB() + "MB");
+		System.out.println("Current memory: " + SystemUtil.getUsedMemoryMB() 
+				+ "MB");
 		System.out.println("Starting client thread...");
 		Socket socket = _csocket;
 		HcPacket movePacket = new HcPacket(M_CAPACITY);
 		HcPacket hcPacket = new HcPacket(H_CAPACITY);
 		GeneralThreadPool.getInstance().execute(movePacket);
 		GeneralThreadPool.getInstance().execute(hcPacket);
-		ClientThreadObserver observer = new ClientThreadObserver(Config.AUTOMATIC_KICK * 60 * 1000);
+		ClientThreadObserver observer = new ClientThreadObserver(
+				Config.AUTOMATIC_KICK * 60 * 1000);
 		if (Config.AUTOMATIC_KICK > 0) {
 			observer.start();
 		}
@@ -214,7 +219,8 @@ public class ClientThread implements Runnable, PacketOutput {
 				// ByteArrayUtil(data).dumpToString());
 				int opcode = data[0] & 0xFF;
 
-				if (opcode == Opcodes.C_OPCODE_COMMONCLICK || opcode == Opcodes.C_OPCODE_CHANGECHAR) {
+				if (opcode == Opcodes.C_OPCODE_COMMONCLICK || 
+						opcode == Opcodes.C_OPCODE_CHANGECHAR) {
 					_loginStatus = 1;
 				}
 				if (opcode == Opcodes.C_OPCODE_LOGINTOSERVER) {
@@ -222,7 +228,8 @@ public class ClientThread implements Runnable, PacketOutput {
 						continue;
 					}
 				}
-				if (opcode == Opcodes.C_OPCODE_LOGINTOSERVEROK || opcode == Opcodes.C_OPCODE_RETURNTOLOGIN) {
+				if (opcode == Opcodes.C_OPCODE_LOGINTOSERVEROK || 
+						opcode == Opcodes.C_OPCODE_RETURNTOLOGIN) {
 					_loginStatus = 0;
 				}
 
@@ -239,7 +246,8 @@ public class ClientThread implements Runnable, PacketOutput {
 					_handler.handlePacket(data, _activeChar);
 					continue;
 				}
-				if (opcode == Opcodes.C_OPCODE_CHANGECHAR || opcode == Opcodes.C_OPCODE_DROPITEM
+				if (opcode == Opcodes.C_OPCODE_CHANGECHAR || 
+						opcode == Opcodes.C_OPCODE_DROPITEM
 					|| opcode == Opcodes.C_OPCODE_DELETEINVENTORYITEM) {
 					_handler.handlePacket(data, _activeChar);
 				} else if (opcode == Opcodes.C_OPCODE_MOVECHAR) {
@@ -333,7 +341,8 @@ public class ClientThread implements Runnable, PacketOutput {
 		}
 
 		public void start() {
-			_observerTimer.scheduleAtFixedRate(ClientThreadObserver.this, 0, _disconnectTimeMillis);
+			_observerTimer.scheduleAtFixedRate(ClientThreadObserver.this, 
+					0, _disconnectTimeMillis);
 		}
 
 		@Override
@@ -349,7 +358,8 @@ public class ClientThread implements Runnable, PacketOutput {
 					return;
 				}
 
-				if (_activeChar == null || _activeChar != null && !_activeChar.isPrivateShop()) { 
+				if (_activeChar == null || _activeChar != null 
+						&& !_activeChar.isPrivateShop()) { 
 					kick();
 					_log.warning("Kicking character from (" + _hostname + ").");
 					cancel();
@@ -453,10 +463,12 @@ public class ClientThread implements Runnable, PacketOutput {
 		}
 		if (pc.getFightId() != 0) {
 			pc.setFightId(0);
-			L1PcInstance fightPc = (L1PcInstance) L1World.getInstance().findObject(pc.getFightId());
+			L1PcInstance fightPc = (L1PcInstance) L1World.getInstance()
+			.findObject(pc.getFightId());
 			if (fightPc != null) {
 				fightPc.setFightId(0);
-				fightPc.sendPackets(new S_PacketBox(S_PacketBox.MSG_DUEL, 0, 0));
+				fightPc.sendPackets(new S_PacketBox(S_PacketBox.MSG_DUEL
+						, 0, 0));
 			}
 		}
 		if (pc.isInParty()) {
@@ -476,8 +488,10 @@ public class ClientThread implements Runnable, PacketOutput {
 			}
 			if (petObject instanceof L1SummonInstance) {
 				L1SummonInstance summon = (L1SummonInstance) petObject;
-				for (L1PcInstance visiblePc : L1World.getInstance().getVisiblePlayer(summon)) {
-					visiblePc.sendPackets(new S_SummonPack(summon, visiblePc, false));
+				for (L1PcInstance visiblePc : L1World.getInstance()
+						.getVisiblePlayer(summon)) {
+					visiblePc.sendPackets(new S_SummonPack(summon, 
+							visiblePc, false));
 				}
 			}
 		}
@@ -491,7 +505,8 @@ public class ClientThread implements Runnable, PacketOutput {
 			L1FollowerInstance follower = (L1FollowerInstance) followerObject;
 			follower.setParalyzed(true);
 			follower.spawn(follower.getNpcTemplate().get_npcId(),
-			follower.getX(), follower.getY(), follower.getHeading(), follower.getMapId());
+			follower.getX(), follower.getY(), follower.getHeading(), 
+			follower.getMapId());
 			follower.deleteMe();
 		}
 		CharBuffTable.DeleteBuff(pc);

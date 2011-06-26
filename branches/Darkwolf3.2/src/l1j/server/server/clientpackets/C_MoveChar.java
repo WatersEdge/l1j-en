@@ -38,7 +38,8 @@ import static l1j.server.server.model.skill.L1SkillId.*;
 // ClientBasePacket
 public class C_MoveChar extends ClientBasePacket {
 
-	private static Logger _log = Logger.getLogger(C_MoveChar.class.getName());
+	private static Logger _log = Logger.getLogger(C_MoveChar.class
+			.getName());
 
 	private static final byte HEADING_TABLE_X[] = { 0, 1, 1, 1, 0, -1, -1, -1 };
 	private static final byte HEADING_TABLE_Y[] = { -1, -1, 0, 1, 1, 1, 0, -1 };
@@ -61,7 +62,8 @@ public class C_MoveChar extends ClientBasePacket {
 
 		if (Config.CHECK_MOVE_INTERVAL) {
 			int result;
-			result = pc.getAcceleratorChecker().checkInterval(AcceleratorChecker.ACT_TYPE.MOVE);
+			result = pc.getAcceleratorChecker().checkInterval(
+					AcceleratorChecker.ACT_TYPE.MOVE);
 			if (result == AcceleratorChecker.R_DISCONNECTED) {
 				return;
 			}
@@ -87,7 +89,8 @@ public class C_MoveChar extends ClientBasePacket {
 
 		// Esc bug fix. Don't remove.
 		L1Location oldLoc = pc.getLocation();
-		if ((oldLoc.getX() + 10 < locx) || (oldLoc.getX() - 10 > locx) || (oldLoc.getY() + 10 < locy) || (oldLoc.getX() - 10 > locx))
+		if ((oldLoc.getX() + 10 < locx) || (oldLoc.getX() - 10 > locx) || 
+				(oldLoc.getY() + 10 < locy) || (oldLoc.getX() - 10 > locx))
 		{
 			return;
 		}

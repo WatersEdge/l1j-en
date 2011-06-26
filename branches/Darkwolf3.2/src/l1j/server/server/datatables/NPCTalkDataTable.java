@@ -27,9 +27,11 @@ import l1j.server.server.model.L1NpcTalkData;
 import l1j.server.server.utils.SQLUtil;
 
 public class NPCTalkDataTable {
-	private static Logger _log = Logger.getLogger(NPCTalkDataTable.class.getName());
+	private static Logger _log = Logger.getLogger(NPCTalkDataTable.class
+			.getName());
 	private static NPCTalkDataTable _instance;
-	private HashMap<Integer, L1NpcTalkData> _datatable = new HashMap<Integer, L1NpcTalkData>();
+	private HashMap<Integer, L1NpcTalkData> _datatable = 
+		new HashMap<Integer, L1NpcTalkData>();
 
 	public static NPCTalkDataTable getInstance() {
 		if (_instance == null) {

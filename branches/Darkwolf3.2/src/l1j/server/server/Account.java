@@ -48,13 +48,15 @@ public class Account {
 	private Account() {
 	}
 
-	private static String encodePassword(final String rawPassword) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+	private static String encodePassword(final String rawPassword) throws NoSuchAlgorithmException, 
+	UnsupportedEncodingException {
 		byte[] buf = rawPassword.getBytes("UTF-8");
 		buf = MessageDigest.getInstance("SHA").digest(buf);
 		return Base64.encodeBytes(buf);
 	}
 
-	public static Account create(final String name, final String rawPassword, final String ip, final String host) {
+	public static Account create(final String name, final String rawPassword, 
+			final String ip, final String host) {
 		Connection con = null;
 		PreparedStatement pstm = null;
 		try {
@@ -66,7 +68,8 @@ public class Account {
 			account._banned = false;
 			account._lastActive = new Timestamp(System.currentTimeMillis());
 			con = L1DatabaseFactory.getInstance().getConnection();
-			String sqlstr = "INSERT INTO accounts SET login=?,password=?,lastactive=?,access_level=?,ip=?,host=?,banned=?,character_slot=?";
+			String sqlstr = "INSERT INTO accounts SET login=?,password=?" +
+					",lastactive=?,access_level=?,ip=?,host=?,banned=?,character_slot=?";
 			pstm = con.prepareStatement(sqlstr);
 			pstm.setString(1, account._name);
 			pstm.setString(2, account._password);

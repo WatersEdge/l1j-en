@@ -59,7 +59,8 @@ public class BoardTable {
 			if (rs.next()) {
 				count = rs.getInt("id");
 			}
-			pstm2 = con.prepareStatement("INSERT INTO board SET id=?, name=?, date=?, title=?, content=?");
+			pstm2 = con.prepareStatement("INSERT INTO board SET id=?, " +
+					"name=?, date=?, title=?, content=?");
 			pstm2.setInt(1, (count + 1));
 			pstm2.setString(2, pc.getName());
 			pstm2.setString(3, date);

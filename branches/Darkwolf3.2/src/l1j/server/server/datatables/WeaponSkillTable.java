@@ -31,9 +31,11 @@ import l1j.server.server.model.L1WeaponSkill;
 import l1j.server.server.utils.SQLUtil;
 
 public class WeaponSkillTable {
-	private static Logger _log = Logger.getLogger(WeaponSkillTable.class.getName());
+	private static Logger _log = Logger.getLogger(WeaponSkillTable.class
+			.getName());
 	private static WeaponSkillTable _instance;
-	private final HashMap<Integer, L1WeaponSkill> _weaponIdIndex = new HashMap<Integer, L1WeaponSkill>();
+	private final HashMap<Integer, L1WeaponSkill> _weaponIdIndex = 
+		new HashMap<Integer, L1WeaponSkill>();
 
 	public static WeaponSkillTable getInstance() {
 		if (_instance == null) {
@@ -77,7 +79,9 @@ public class WeaponSkillTable {
 			int effectTarget = rs.getInt("effect_target");
 			boolean isArrowType = rs.getBoolean("arrow_type");
 			int attr = rs.getInt("attr");
-			L1WeaponSkill weaponSkill = new L1WeaponSkill(weaponId, probability, fixDamage, randomDamage, area, skillId, skillTime, effectId, effectTarget, isArrowType, attr);
+			L1WeaponSkill weaponSkill = new L1WeaponSkill(weaponId, 
+					probability, fixDamage, randomDamage, area, skillId, 
+					skillTime, effectId, effectTarget, isArrowType, attr);
 			_weaponIdIndex.put(weaponId, weaponSkill);
 		}
 		_log.config("List of weapons skills: " + _weaponIdIndex.size() + " Loaded");

@@ -140,8 +140,10 @@ public class Shutdown extends Thread {
 	 */
 	public void startShutdown(L1PcInstance activeChar, int seconds, boolean restart) {
 		Announcements _an = Announcements.getInstance();
-		_log.warning("GM: " + activeChar.getId() + " issued shutdown command. " + _modeText[shutdownMode] + " in " + seconds + " seconds!");
-		_an.announceToAll("Server is " + _modeText[shutdownMode] + " in " + seconds + " seconds!");
+		_log.warning("GM: " + activeChar.getId() + " issued shutdown command. " + _modeText[shutdownMode] 
+		 + " in " + seconds + " seconds!");
+		_an.announceToAll("Server is " + _modeText[shutdownMode] + " in " + seconds 
+				+ " seconds!");
 
 		if (_counterInstance != null) {
 			_counterInstance._abort();
@@ -291,8 +293,10 @@ public class Shutdown extends Thread {
 
 	public void startTelnetShutdown(String IP, int seconds, boolean restart) {
 		Announcements _an = Announcements.getInstance();
-		_log.warning("IP: " + IP + " issued shutdown command. " + _modeText[shutdownMode] + " in " + seconds + " seconds!");
-		_an.announceToAll("Server is " + _modeText[shutdownMode] + " in " + seconds + " seconds!");
+		_log.warning("IP: " + IP + " issued shutdown command. " 
+				+ _modeText[shutdownMode] + " in " + seconds + " seconds!");
+		_an.announceToAll("Server is " + _modeText[shutdownMode] 
+		        + " in " + seconds + " seconds!");
 
 		if (_counterInstance != null) {
 			_counterInstance._abort();
@@ -309,8 +313,10 @@ public class Shutdown extends Thread {
 	 */
 	public void Telnetabort(String IP) {
 		Announcements _an = Announcements.getInstance();
-		_log.warning("IP: " + IP + " issued shutdown ABORT. " + _modeText[shutdownMode] + " has been stopped!");
-		_an.announceToAll("Server aborts " + _modeText[shutdownMode] + " and continues normal operation!");
+		_log.warning("IP: " + IP + " issued shutdown ABORT. " 
+				+ _modeText[shutdownMode] + " has been stopped!");
+		_an.announceToAll("Server aborts " + _modeText[shutdownMode] 
+		        + " and continues normal operation!");
 
 		if (_counterInstance != null) {
 			_counterInstance._abort();

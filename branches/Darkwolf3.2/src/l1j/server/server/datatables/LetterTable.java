@@ -31,7 +31,8 @@ import l1j.server.server.utils.SQLUtil;
 // Referenced classes of package l1j.server.server:
 // IdFactory
 public class LetterTable {
-	private static Logger _log = Logger.getLogger(LetterTable.class.getName());
+	private static Logger _log = Logger.getLogger(LetterTable.class
+			.getName());
 	private static LetterTable _instance;
 
 	public LetterTable() {
@@ -73,7 +74,8 @@ public class LetterTable {
 			con = L1DatabaseFactory.getInstance().getConnection();
 			pstm1 = con.prepareStatement("SELECT * FROM letter ORDER BY item_object_id");
 			rs = pstm1.executeQuery();
-			pstm2 = con.prepareStatement("INSERT INTO letter SET item_object_id=?, code=?, sender=?, receiver=?, date=?, template_id=?, subject=?, content=?");
+			pstm2 = con.prepareStatement("INSERT INTO letter SET item_object_id=?, " +
+					"code=?, sender=?, receiver=?, date=?, template_id=?, subject=?, content=?");
 			pstm2.setInt(1, itemObjectId);
 			pstm2.setInt(2, code);
 			pstm2.setString(3, sender);

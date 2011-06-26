@@ -25,7 +25,8 @@ import java.util.logging.Logger;
 import l1j.server.server.utils.PerformanceTimer;
 
 public class L1WorldMap {
-	private static Logger _log = Logger.getLogger(L1WorldMap.class.getName());
+	private static Logger _log = Logger.getLogger(L1WorldMap.class
+			.getName());
 
 	private static L1WorldMap _instance;
 	private Map<Integer, L1Map> _maps;
@@ -51,7 +52,8 @@ public class L1WorldMap {
 			_log.log(Level.SEVERE, e.getLocalizedMessage(), e);
 			System.exit(0);
 		}
-		System.out.println("            OK!     " + timer.elapsedTimeMillis() + "ms");
+		System.out.println("            OK!     " 
+				+ timer.elapsedTimeMillis() + "ms");
 	}
 	/**
 	 * The map information to hold L1Map returns.

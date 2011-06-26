@@ -69,7 +69,8 @@ public final class ExpTable {
 	}
 
 	public static int getExpPercentage(int level, int exp) {
-		return (int) (100.0 * ((double) (exp - getExpByLevel(level)) / (double) getNeedExpNextLevel(level)));
+		return (int) (100.0 * ((double) (exp - getExpByLevel(level)) 
+				/ (double) getNeedExpNextLevel(level)));
 	}
 
 	/**

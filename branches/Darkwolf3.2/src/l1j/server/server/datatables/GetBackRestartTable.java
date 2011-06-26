@@ -33,9 +33,11 @@ import l1j.server.server.utils.SQLUtil;
 // Referenced classes of package l1j.server.server:
 // IdFactory
 public class GetBackRestartTable {
-	private static Logger _log = Logger.getLogger(GetBackRestartTable.class.getName());
+	private static Logger _log = Logger.getLogger(GetBackRestartTable.class
+			.getName());
 	private static GetBackRestartTable _instance;
-	private final HashMap<Integer, L1GetBackRestart> _getbackrestart = new HashMap<Integer, L1GetBackRestart>();
+	private final HashMap<Integer, L1GetBackRestart> _getbackrestart = 
+		new HashMap<Integer, L1GetBackRestart>();
 
 	public static GetBackRestartTable getInstance() {
 		if (_instance == null) {

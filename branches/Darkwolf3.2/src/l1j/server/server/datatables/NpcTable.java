@@ -200,7 +200,8 @@ public class NpcTable {
 		ResultSet rs = null;
 		try {
 			con = L1DatabaseFactory.getInstance().getConnection();
-			pstm = con.prepareStatement("select distinct(family) as family from npc WHERE NOT trim(family) =''");
+			pstm = con.prepareStatement("select distinct(family) " +
+					"as family from npc WHERE NOT trim(family) =''");
 			rs = pstm.executeQuery();
 			int id = 1;
 			while (rs.next()) {

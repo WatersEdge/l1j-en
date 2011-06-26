@@ -36,7 +36,8 @@ import l1j.server.server.utils.SQLUtil;
 public class Logins {
 	private static Logger _log = Logger.getLogger(Logins.class.getName());
 
-	public static boolean loginValid(String account, String password, String ip, String host) {
+	public static boolean loginValid(String account, String password, 
+			String ip, String host) {
 		boolean flag1 = false;
 		_log.info("Connection from: " + account);
 		Connection con = null;
@@ -65,7 +66,8 @@ public class Logins {
 			if (abyte2 == null) {
 				if (Config.AUTO_CREATE_ACCOUNTS) {
 					con = L1DatabaseFactory.getInstance().getConnection();
-					pstm = con.prepareStatement("INSERT INTO accounts SET login=?,password=?,lastactive=?,access_level=?,ip=?,host=?");
+					pstm = con.prepareStatement("INSERT INTO accounts SET login=?,password=?," +
+							"lastactive=?,access_level=?,ip=?,host=?");
 					pstm.setString(1, account);
 					pstm.setString(2, Base64.encodeBytes(abyte1));
 					pstm.setLong(3, 0L);

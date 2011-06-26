@@ -38,7 +38,8 @@ import l1j.server.server.model.map.L1V1Map;
 public class TextMapReader extends MapReader {
 
 	/** For the message log. */
-	private static Logger _log = Logger.getLogger(TextMapReader.class.getName());
+	private static Logger _log = Logger.getLogger(TextMapReader.class
+			.getName());
 
 	/** Map holder. */
 	private static final String MAP_DIR = "./maps/";
@@ -105,7 +106,8 @@ public class TextMapReader extends MapReader {
 			int xSize = info[MAPINFO_END_X] - info[MAPINFO_START_X] + 1;
 			int ySize = info[MAPINFO_END_Y] - info[MAPINFO_START_Y] + 1;
 			if (mapId == id) {
-				L1V1Map map = new L1V1Map((short) mapId, this.read(mapId, xSize, ySize), info[MAPINFO_START_X], info[MAPINFO_START_Y],
+				L1V1Map map = new L1V1Map((short) mapId, this.read(mapId, xSize, ySize), 
+						info[MAPINFO_START_X], info[MAPINFO_START_Y],
 				MapsTable.getInstance().isUnderwater(mapId),
 				MapsTable.getInstance().isMarkable(mapId),
 				MapsTable.getInstance().isTeleportable(mapId),
@@ -137,7 +139,8 @@ public class TextMapReader extends MapReader {
 			int xSize = info[MAPINFO_END_X] - info[MAPINFO_START_X] + 1;
 			int ySize = info[MAPINFO_END_Y] - info[MAPINFO_START_Y] + 1;
 			try {
-				L1V1Map map = new L1V1Map((short) mapId, this.read(mapId, xSize, ySize), info[MAPINFO_START_X], info[MAPINFO_START_Y],
+				L1V1Map map = new L1V1Map((short) mapId, this.read(mapId, xSize, ySize), 
+						info[MAPINFO_START_X], info[MAPINFO_START_Y],
 				MapsTable.getInstance().isUnderwater(mapId),
 				MapsTable.getInstance().isMarkable(mapId),
 				MapsTable.getInstance().isTeleportable(mapId),

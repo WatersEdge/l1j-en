@@ -60,13 +60,15 @@ public class MobSkillTable {
 		ResultSet rs1 = null;
 		try {
 			con = L1DatabaseFactory.getInstance().getConnection();
-			pstm1 = con.prepareStatement("SELECT mobid,count(*) as cnt FROM mobskill group by mobid");
+			pstm1 = con.prepareStatement("SELECT mobid,count(*) as cnt FROM mobskill " +
+					"group by mobid");
 
 			int count = 0;
 			int mobid = 0;
 			int actNo = 0;
 			
-			pstm2 = con.prepareStatement("SELECT * FROM mobskill where mobid = ? order by mobid,actNo");
+			pstm2 = con.prepareStatement("SELECT * FROM mobskill where mobid = ? " +
+					"order by mobid,actNo");
 			for (rs1 = pstm1.executeQuery(); rs1.next();) {
 				mobid = rs1.getInt("mobid");
 				count = rs1.getInt("cnt");
