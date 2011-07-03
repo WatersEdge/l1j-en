@@ -54,7 +54,7 @@ public class L1DoorInstance extends L1NpcInstance {
 			L1Attack attack = new L1Attack(pc, this);
 			if (attack.calcHit()) {
 				attack.calcDamage();
-				attack.addPcPoisonAttack(pc, this);
+				attack.calcStaffOfMana();
 				attack.addChaserAttack();
 			}
 			attack.action();
