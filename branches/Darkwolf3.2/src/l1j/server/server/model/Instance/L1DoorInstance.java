@@ -46,7 +46,7 @@ public class L1DoorInstance extends L1NpcInstance {
 
 	@Override
 	public void onAction(L1PcInstance pc) {
-		if (getMaxHp() == 0 || getMaxHp() == 1) { //
+		if (getMaxHp() == 0 || getMaxHp() == 1) {
 			return;
 		}
 
@@ -54,7 +54,6 @@ public class L1DoorInstance extends L1NpcInstance {
 			L1Attack attack = new L1Attack(pc, this);
 			if (attack.calcHit()) {
 				attack.calcDamage();
-				attack.calcStaffOfMana();
 				attack.addChaserAttack();
 			}
 			attack.action();
@@ -143,7 +142,7 @@ public class L1DoorInstance extends L1NpcInstance {
 					}
 				}
 			}
-		} else if (!isDead()) { //
+		} else if (!isDead()) {
 			setDead(true);
 			setStatus(ActionCodes.ACTION_DoorDie);
 			Death death = new Death(attacker);
