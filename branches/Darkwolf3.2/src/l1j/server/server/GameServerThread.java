@@ -19,7 +19,9 @@
 package l1j.server.server;
 
 import l1j.server.Config;
+import l1j.server.server.GeneralThreadPool;
 import l1j.server.server.controllers.AuctionTimeController;
+import l1j.server.server.controllers.CrackOfTimeController;
 import l1j.server.server.controllers.FishingTimeController;
 import l1j.server.server.controllers.HomeTownTimeController;
 import l1j.server.server.controllers.HouseTaxTimeController;
@@ -207,6 +209,10 @@ public GameServerThread() throws Exception {
 	LightTimeController lightTimeController = LightTimeController.getInstance();
 	GeneralThreadPool.getInstance().execute(lightTimeController);
 
+	// Crack OF Time Controller
+	CrackOfTimeController crackTimeController = CrackOfTimeController.getStart();
+	GeneralThreadPool.getInstance().execute(crackTimeController);
+	
 	// AnnounceMents
 	Announcements.getInstance();
 	
