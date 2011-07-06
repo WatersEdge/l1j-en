@@ -60,7 +60,7 @@ public class C_DropItem extends ClientBasePacket {
 		if (pc.isGhost()) {
 			return;
 	    } else if (pc.getMapId() > 10000) { 
-		pc.sendPackets(new S_ServerMessage(76)); 
+		//pc.sendPackets(new S_ServerMessage(77)); need the right cant drop message
 		return;
 	    }
 		
