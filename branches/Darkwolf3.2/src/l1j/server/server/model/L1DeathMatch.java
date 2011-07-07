@@ -29,7 +29,7 @@ import java.util.Random;
 
 import l1j.server.Config;
 import l1j.server.server.ActionCodes;
-import l1j.server.server.datatables.DoorSpawnTable;
+import l1j.server.server.datatables.DoorTable;
 import l1j.server.server.datatables.ItemTable;
 import l1j.server.server.model.Instance.L1DoorInstance;
 import l1j.server.server.model.Instance.L1ItemInstance;
@@ -41,6 +41,7 @@ import l1j.server.server.serverpackets.S_DeathMatch;
 import l1j.server.server.serverpackets.S_Message_YN;
 import l1j.server.server.serverpackets.S_ServerMessage;
 import l1j.server.server.serverpackets.S_SystemMessage;
+import l1j.server.server.templates.L1DoorGfx;
 import l1j.server.server.utils.collections.Lists;
 
 public class L1DeathMatch {
@@ -73,7 +74,7 @@ public class L1DeathMatch {
 		return instance;
 	}
 
-	//private final L1DoorInstance _doorLeft;
+	private final L1DoorInstance _doorLeft;
 
 	private L1DeathMatch() {
 		if (Config.DEATH_MATCH_MIN_PLAYER < 2) {
@@ -81,10 +82,10 @@ public class L1DeathMatch {
 			orderEntMinPlayer = 10;
 		}
 		setMapId((short) 5153);
-	//	L1DoorGfx leftGfx = L1DoorGfx.findByGfxId(6692);
-	//	DoorSpawnTable.getInstance().createDoor(0, 6692,
-	//			new L1Location(32638, 32884, 5153), 0, 0);
-	}
+		L1DoorGfx leftGfx = L1DoorGfx.findByGfxId(6692); 
+		_doorLeft = DoorTable.getInstance().createDoor(0, leftGfx, 
+				new L1Location(32638, 32884, 5153), 0, 0); 
+		}
 
 	public void addPlayerList(L1PcInstance pc) {
 		if (!playerList.contains(pc)) {
@@ -578,9 +579,9 @@ public class L1DeathMatch {
 
 			try {
 				Thread.sleep(6 * 1000);
-				//_doorLeft.open();
-				//CloseTimer temp = new CloseTimer();
-				begin();
+				_doorLeft.open();
+				CloseTimer temp = new CloseTimer(_doorLeft);
+				temp.begin();
 				Thread.sleep(4 * 1000);// 50+10=60s
 			} catch (InterruptedException e) {
 				e.printStackTrace();

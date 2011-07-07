@@ -30,7 +30,7 @@ import l1j.server.server.controllers.CrackOfTimeController;
 import l1j.server.server.controllers.HomeTownTimeController;
 import l1j.server.server.controllers.WarTimeController;
 import l1j.server.server.datatables.CastleTable;
-import l1j.server.server.datatables.DoorSpawnTable;
+import l1j.server.server.datatables.DoorTable;
 import l1j.server.server.datatables.HouseTable;
 import l1j.server.server.datatables.InnKeyTable;
 import l1j.server.server.datatables.InnTable;
@@ -4036,7 +4036,7 @@ public class C_NPCAction extends ClientBasePacket {
 					L1DoorInstance door2 = null;
 					L1DoorInstance door3 = null;
 					L1DoorInstance door4 = null;
-					for (L1DoorInstance door : DoorSpawnTable.getInstance()
+					for (L1DoorInstance door : DoorTable.getInstance()
 							.getDoorList()) {
 						if (door.getKeeperId() == keeperId) {
 							if (door1 == null) {
@@ -4158,7 +4158,7 @@ public class C_NPCAction extends ClientBasePacket {
 					L1CastleLocation.ADEN_CASTLE_ID);
 		}
 
-		for (L1DoorInstance door : DoorSpawnTable.getInstance().getDoorList()) {
+		for (L1DoorInstance door : DoorTable.getInstance().getDoorList()) {
 			if (door.getKeeperId() == keeperId) {
 				if (isNowWar && door.getMaxHp() > 1) {
 				} else {
@@ -4217,7 +4217,7 @@ public class C_NPCAction extends ClientBasePacket {
 			int castleId = clan.getCastleId();
 			if (castleId != 0) {
 				if (!WarTimeController.getInstance().isNowWar(castleId)) {
-					for (L1DoorInstance door : DoorSpawnTable.getInstance()
+					for (L1DoorInstance door : DoorTable.getInstance()
 							.getDoorList()) {
 						if (L1CastleLocation.checkInWarArea(castleId, door)) {
 							door.repairGate();

@@ -24,7 +24,7 @@ import java.util.TimerTask;
 import java.util.Random;
 
 import l1j.server.Config;
-import l1j.server.server.datatables.DoorSpawnTable;
+import l1j.server.server.datatables.DoorTable;
 import l1j.server.server.datatables.ItemTable;
 import l1j.server.server.model.Instance.L1DoorInstance;
 import l1j.server.server.model.Instance.L1ItemInstance;
@@ -425,7 +425,7 @@ public class L1PolyRace {
 	}
 
 	private void setDoorClose(boolean isClose) {
-		L1DoorInstance[] list = DoorSpawnTable.getInstance().getDoorList();
+		L1DoorInstance[] list = DoorTable.getInstance().getDoorList();
 		for (L1DoorInstance door : list) {
 			if (door.getMapId() == 5143) {
 				if (isClose) {
