@@ -41,6 +41,7 @@ import l1j.server.server.encryptions.Opcodes;
 import l1j.server.server.model.Getback;
 import l1j.server.server.model.L1Trade;
 import l1j.server.server.model.L1World;
+import l1j.server.server.model.L1DeathMatch;
 import l1j.server.server.model.Instance.L1DollInstance;
 import l1j.server.server.model.Instance.L1FollowerInstance;
 import l1j.server.server.model.Instance.L1PcInstance;
@@ -509,6 +510,7 @@ public class ClientThread implements Runnable, PacketOutput {
 			follower.getMapId());
 			follower.deleteMe();
 		}
+		L1DeathMatch.getInstance().checkLeaveGame(pc);
 		CharBuffTable.DeleteBuff(pc);
 		CharBuffTable.SaveBuff(pc);
 		pc.clearSkillEffectTimer();

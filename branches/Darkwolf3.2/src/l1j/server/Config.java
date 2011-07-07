@@ -327,6 +327,9 @@ public final class Config {
     @Configure(file = ALTSETTINGS, key = "RaceMaxLap")
     public static int PET_RACE_MAX_LAP = 3;
     
+    @Configure(file = ALTSETTINGS, key = "DeathMatchMinPlayer")
+    public static int DEATH_MATCH_MIN_PLAYER = 1;
+    
 	@Configure(file = ALTSETTINGS, key = "MaxPT")
 	public static int MAX_PT = 8;
 

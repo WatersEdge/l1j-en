@@ -58,6 +58,7 @@ import l1j.server.server.model.L1Inventory;
 import l1j.server.server.model.L1Karma;
 import l1j.server.server.model.L1Magic;
 import l1j.server.server.model.L1Object;
+import l1j.server.server.model.L1DeathMatch;
 import l1j.server.server.model.L1Party;
 import l1j.server.server.model.L1PcDeleteTimer;
 import l1j.server.server.model.L1PcInventory;
@@ -1334,6 +1335,10 @@ if (player instanceof L1PcInstance) {
 
 } catch (Exception e) { _log.log(Level.SEVERE, e.getLocalizedMessage(),  e); }
 }
+
+            if (getMapId() == 5153) {
+                L1DeathMatch.getInstance().sendRemainder(L1PcInstance.this);
+             }
 			if (lastAttacker != L1PcInstance.this) {
 				if (getZoneType() != 0) {
 					L1PcInstance player = null;

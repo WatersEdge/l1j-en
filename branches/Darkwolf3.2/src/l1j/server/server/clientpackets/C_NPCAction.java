@@ -41,6 +41,8 @@ import l1j.server.server.datatables.PolyTable;
 import l1j.server.server.datatables.SkillsTable;
 import l1j.server.server.datatables.TownTable;
 import l1j.server.server.datatables.UBTable;
+import l1j.server.server.model.L1PolyRace;
+import l1j.server.server.model.L1DeathMatch;
 import l1j.server.server.model.L1CastleLocation;
 import l1j.server.server.model.L1Character;
 import l1j.server.server.model.L1Clan;
@@ -938,12 +940,14 @@ public class C_NPCAction extends ClientBasePacket {
             }
 		} else if (s.equalsIgnoreCase("ent")) {
 			int npcId = ((L1NpcInstance) obj).getNpcId();
-			if (npcId == 80085 || npcId == 80086 || npcId == 80087) {
+			if (npcId == 80085) {
 				htmlid = enterHauntedHouse(pc);
 			} else if (npcId == 80088) {
 				htmlid = enterPetMatch(pc, Integer.valueOf(s2));
             } else if (npcId == 80168) {
-                l1j.server.server.model.L1PolyRace.getInstance().enterGame(pc);
+                L1PolyRace.getInstance().enterGame(pc);
+            } else if (npcId == 80086 || npcId == 80087) {
+                L1DeathMatch.getInstance().enterGame(pc);
 			} else if (npcId == 50038 || npcId == 50042 || npcId == 50029
 					|| npcId == 50019 || npcId == 50062) {
 				htmlid = watchUb(pc, npcId);
@@ -982,7 +986,7 @@ public class C_NPCAction extends ClientBasePacket {
 			htmlid = enterUb(pc, ((L1NpcInstance) obj).getNpcId());
 		} else if (s.equalsIgnoreCase("info")) { 
 			int npcId = ((L1NpcInstance) obj).getNpcId();
-			if (npcId == 80085 || npcId == 80086 || npcId == 80087) {
+			if (npcId == 80085) {
 			} else {
 				htmlid = "colos2";
 			}
