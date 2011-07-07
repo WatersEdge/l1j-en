@@ -294,6 +294,9 @@ public final class Config {
 	public static int CREATE_CHANCE_HISTORY_BOOK = 50;
 
 	/** AltSettings control */
+	@Configure(file = ALTSETTINGS, key = "ShockStunTime")
+	public static int SHOCK_STUN_TIMER = 5;
+	
 	@Configure(file = ALTSETTINGS, key = "GlobalChatLevel")
 	public static int GLOBAL_CHAT_LEVEL = 30;
 

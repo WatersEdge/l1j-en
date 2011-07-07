@@ -695,6 +695,10 @@ public class L1SkillUse {
 			return false;
 		}
 
+		if (cha.hasSkillEffect(SHOCK_STUN) && (_skillId == SHOCK_STUN)) {
+			return false;
+		}
+		
 		if (cha.hasSkillEffect(EARTH_BIND) && _skillId == EARTH_BIND) {
 			return false; 
 		}
@@ -2075,10 +2079,12 @@ public class L1SkillUse {
 						npc.setParalysisTime(_skill.getBuffDuration() * 1000);
 					}
 				} else if (_skillId == SHOCK_STUN) {
-					int[] stunTimeArray = { 500, 1000, 1500, 2000, 2500, 3000 };
+					int[] stunTimeArray = { 1000, 1050, 1100, 1150, 1200, 1250,  2064,
+					1300, 1350, 1400, 1450, 1500, 1550, 1600, 1650,  2065,
+					1700, 1750, 1800, 1850, 1900, 1950, 2000 };
 					Random random = new Random();
 					int rnd = random.nextInt(stunTimeArray.length);
-					_shockStunDuration = stunTimeArray[rnd];
+					_shockStunDuration = stunTimeArray[rnd] * Config.SHOCK_STUN_TIMER;
 					if (cha instanceof L1PcInstance
 							&& cha.hasSkillEffect(SHOCK_STUN)) {
 						_shockStunDuration += cha
