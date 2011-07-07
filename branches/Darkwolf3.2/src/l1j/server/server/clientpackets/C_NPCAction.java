@@ -942,6 +942,8 @@ public class C_NPCAction extends ClientBasePacket {
 				htmlid = enterHauntedHouse(pc);
 			} else if (npcId == 80088) {
 				htmlid = enterPetMatch(pc, Integer.valueOf(s2));
+            } else if (npcId == 80168) {
+                l1j.server.server.model.L1PolyRace.getInstance().enterGame(pc);
 			} else if (npcId == 50038 || npcId == 50042 || npcId == 50029
 					|| npcId == 50019 || npcId == 50062) {
 				htmlid = watchUb(pc, npcId);

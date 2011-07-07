@@ -469,6 +469,9 @@ public class C_Attr extends ClientBasePacket {
 				}
 			}
 			break;
+		case 1256:
+            l1j.server.server.model.L1PolyRace.getInstance().requsetAttr(pc, readC());
+            break;
 		default:
 			break;
 		}

@@ -4117,6 +4117,50 @@ if (player instanceof L1PcInstance) {
 		_awakeSkillId = i;
 	}
 
+	 private int _lap = 1;
+
+     public void setLap(int i) {
+             _lap = i;
+     }
+
+     public int getLap() {
+             return _lap;
+     }
+
+     private int _lapCheck = 0;
+
+     public void setLapCheck(int i) {
+             _lapCheck = i;
+     }
+
+     public int getLapCheck() {
+             return _lapCheck;
+     }
+
+     public int getLapScore() {
+             return _lap * 29 + _lapCheck;
+     }
+
+     private boolean _order_list = false;
+
+     public boolean isInOrderList() {
+             return _order_list;
+     }
+
+     public void setInOrderList(boolean bool) {
+             _order_list = bool;
+     }
+
+     private int _basepoly = 0;
+
+     public void setBasePoly(int i) {
+             _basepoly = i;
+     }
+
+     public int getBasePoly() {
+             return _basepoly;
+     }
+
 	private boolean _isSummonMonster = false;
 
 	public void setSummonMonster(boolean SummonMonster) {

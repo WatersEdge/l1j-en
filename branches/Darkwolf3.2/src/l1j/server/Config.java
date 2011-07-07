@@ -321,6 +321,12 @@ public final class Config {
 	@Configure(file = ALTSETTINGS, key = "ClanAlliance")
 	public static boolean CLAN_ALLIANCE = true;
 
+	@Configure(file = ALTSETTINGS, key = "RaceMinPlayer")
+    public static int PET_RACE_MIN_PLAYER = 1;
+
+    @Configure(file = ALTSETTINGS, key = "RaceMaxLap")
+    public static int PET_RACE_MAX_LAP = 3;
+    
 	@Configure(file = ALTSETTINGS, key = "MaxPT")
 	public static int MAX_PT = 8;
 

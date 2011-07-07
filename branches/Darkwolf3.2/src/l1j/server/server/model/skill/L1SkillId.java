@@ -595,4 +595,5 @@ public class L1SkillId {
 
 	public static final int STATUS_CURSE_YAHEE = 1014;
 
+	public static final int STATUS_BRAVE2 = 20001;
 }

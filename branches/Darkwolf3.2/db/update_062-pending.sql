@@ -231,3 +231,7 @@ CREATE TABLE `inn_key` (
 -- ----------------------------
 -- Records of inn_key
 -- ----------------------------
+
+-- polyrace
+insert into spawnlist_npc values (1310454,'Dufo PolyRace',1,80168,32616,32778,0,0,4,0,4,0);
+INSERT INTO `npc` VALUES (80168, 'Dufo', '$5524', 'Polyrace', 'L1Merchant', 118, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'small', 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 14, 0, 1, 0);
