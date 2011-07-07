@@ -1287,7 +1287,7 @@ public class L1Character extends L1Object {
 		_chaLightSize = i;
 	}
 
-	private int _ownLightSize; // 
+	private int _ownLightSize;
 
 	public int getOwnLightSize() {
 		return _ownLightSize;
@@ -1297,4 +1297,71 @@ public class L1Character extends L1Object {
 		_ownLightSize = i;
 	}
 
+	// put here the npc spells that need tobe miss sometimes.
+	public boolean isAttackMiss(L1Character cha, int npcId) {
+        switch (npcId) {
+        case 45912:
+        case 45913:
+        case 45914:
+        case 45915:
+                if (!cha.hasSkillEffect(STATUS_HOLY_WATER)) {
+                        return true;
+                }
+                return false;
+        case 45916:
+                if (!cha.hasSkillEffect(STATUS_HOLY_MITHRIL_POWDER)) {
+                        return true;
+                }
+                return false;
+        case 45941:
+                if (!cha.hasSkillEffect(STATUS_HOLY_WATER_OF_EVA)) {
+                        return true;
+                }
+                return false;
+        case 45752:
+                if (!cha.hasSkillEffect(STATUS_CURSE_BARLOG)) {
+                        return true;
+                }
+                return false;
+        case 45753:
+                if (!cha.hasSkillEffect(STATUS_CURSE_BARLOG)) {
+                        return true;
+                }
+                return false;
+        case 45675:
+                if (!cha.hasSkillEffect(STATUS_CURSE_YAHEE)) {
+                        return true;
+                }
+                return false;
+        case 81082:
+                if (!cha.hasSkillEffect(STATUS_CURSE_YAHEE)) {
+                        return true;
+                }
+                return false;
+        case 45625:
+                if (!cha.hasSkillEffect(STATUS_CURSE_YAHEE)) {
+                        return true;
+                }
+                return false;
+        case 45674:
+                if (!cha.hasSkillEffect(STATUS_CURSE_YAHEE)) {
+                        return true;
+                }
+                return false;
+        case 45685:
+                if (!cha.hasSkillEffect(STATUS_CURSE_YAHEE)) {
+                        return true;
+                }
+                return false;
+        default:
+                if ((npcId >= 46068) && (npcId <= 46091)
+                                && (cha.getTempCharGfx() == 6035)) {
+                        return true;
+                } else if ((npcId >= 46092) && (npcId <= 46106)
+                                && (cha.getTempCharGfx() == 6034)) {
+                        return true;
+                }
+                return false;
+        }
+    }
 }

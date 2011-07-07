@@ -53,7 +53,7 @@ public class DoorTable {
 		for (L1DoorSpawn spawn : L1DoorSpawn.all()) {
 			L1Location loc = spawn.getLocation();
 			if (_doors.containsKey(loc)) {
-				_//log.log(Level.WARNING, String.format( ignore this
+				//_log.info(Level.WARNING, String.format(
 				//		"Duplicate door location: id = %d", spawn.getId()));
 				continue;
 			}
