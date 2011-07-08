@@ -295,7 +295,7 @@ public final class Config {
 
 	/** AltSettings control */
 	@Configure(file = ALTSETTINGS, key = "ShockStunTime")
-	public static int SHOCK_STUN_TIMER = 5;
+	public static int SHOCK_STUN_TIMER = 3;
 	
 	@Configure(file = ALTSETTINGS, key = "GlobalChatLevel")
 	public static int GLOBAL_CHAT_LEVEL = 30;
