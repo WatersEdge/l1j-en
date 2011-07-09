@@ -18,7 +18,6 @@
  */
 package l1j.server.server.model.Instance;
 
-//
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;

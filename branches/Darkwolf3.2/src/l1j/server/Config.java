@@ -333,7 +333,10 @@ public final class Config {
     @Configure(file = ALTSETTINGS, key = "DeathMatchMinPlayer")
     public static int DEATH_MATCH_MIN_PLAYER = 1;
     
-	@Configure(file = ALTSETTINGS, key = "MaxPT")
+    @Configure(file = ALTSETTINGS, key = "ShowNpcLevel")
+    public static boolean SHOW_NPC_LVL = true;
+  
+    @Configure(file = ALTSETTINGS, key = "MaxPT")
 	public static int MAX_PT = 8;
 
 	@Configure(file = ALTSETTINGS, key = "MaxChatPT")
