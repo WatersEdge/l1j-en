@@ -34,11 +34,9 @@ import static l1j.server.server.model.skill.L1SkillId.*;
 public class L1HauntedHouse {
 	private static final Logger _log = Logger.getLogger(L1HauntedHouse.class
 			.getName());
-
 	public static final int STATUS_NONE = 0;
 	public static final int STATUS_READY = 1;
 	public static final int STATUS_PLAYING = 2;
-
 	private final ArrayList<L1PcInstance> _members =
 			new ArrayList<L1PcInstance>();
 	private int _hauntedHouseStatus = STATUS_NONE;
@@ -144,6 +142,13 @@ public class L1HauntedHouse {
 		_members.clear();
 	}
 
+	public void checkLeaveGame(L1PcInstance pc) {
+		if (pc.getMapId() == 5140) {
+			removeMember(pc);
+			L1PolyMorph.undoPoly(pc);
+		}
+	}
+	
 	public boolean isMember(L1PcInstance pc) {
 		return _members.contains(pc);
 	}
@@ -180,9 +185,7 @@ public class L1HauntedHouse {
 		return _goalCount;
 	}
 
-
-
-public class L1HauntedHouseReadyTimer extends TimerTask {
+    public class L1HauntedHouseReadyTimer extends TimerTask {
 
 	public L1HauntedHouseReadyTimer() {
 	}
@@ -215,8 +218,6 @@ public class L1HauntedHouseTimer extends TimerTask {
 	public void begin() {
 		Timer timer = new Timer();
 		timer.schedule(this, 300000); 
-	}
-
-}
-
+	   }
+   }
 }
