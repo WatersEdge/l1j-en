@@ -564,7 +564,7 @@ public class C_Attr extends ClientBasePacket {
 			pc.sendPackets(new S_ServerMessage(327)); 
 			return;
 		}
-		L1Npc l1npc = NpcTable.getInstance().getTemplate(pet.getNpcId());
+		L1Npc l1npc = NpcTable.getInstance().getTemplate(pet.get_npcId());
 		
 		if (!(pet.getName().equalsIgnoreCase(l1npc.get_name())) ) {
 			pc.sendPackets(new S_ServerMessage(326)); 

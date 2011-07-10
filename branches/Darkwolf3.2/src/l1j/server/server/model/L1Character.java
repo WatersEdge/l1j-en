@@ -25,6 +25,8 @@ import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Logger;
 
+import l1j.server.server.model.Instance.L1PetInstance; 
+import l1j.server.server.model.Instance.L1SummonInstance;
 import l1j.server.server.model.Instance.L1DollInstance;
 import l1j.server.server.model.Instance.L1FollowerInstance;
 import l1j.server.server.model.Instance.L1ItemInstance;
@@ -46,7 +48,6 @@ import static l1j.server.server.model.skill.L1SkillId.*;
 // Referenced classes of package l1j.server.server.model:
 // L1Object, Die, L1PcInstance, L1MonsterInstance,
 // L1World, ActionFailed
-
 public class L1Character extends L1Object {
 
 	private static final long serialVersionUID = 1L;
@@ -146,6 +147,16 @@ public class L1Character extends L1Object {
 	public void setParalaysis(L1Paralysis p) {
 		_paralysis = p;
 	}
+
+	private int _food;
+
+    public int get_food() {
+            return _food;
+    }
+
+    public void set_food(int i) {
+            _food = i;
+    }
 
 	private int _innRoomNumber;
 	
@@ -501,7 +512,7 @@ public class L1Character extends L1Object {
 	public void removePet(L1NpcInstance npc) {
 		_petlist.remove(npc.getId());
 	}
-
+	
 	public Map<Integer, L1NpcInstance> getPetList() {
 		return _petlist;
 	}

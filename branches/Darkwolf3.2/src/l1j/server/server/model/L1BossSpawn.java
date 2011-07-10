@@ -142,7 +142,7 @@ public class L1BossSpawn extends L1Spawn {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("[MOB]npcid:" + getNpcId());
+		builder.append("[MOB]npcid:" + get_npcId());
 		builder.append(" name:" + getName());
 		builder.append("[Type]" + _cycle.getName());
 		builder.append("[The current cycle]");

@@ -648,6 +648,12 @@ public class L1Attack {
 		}
 		if (_targetPc.hasSkillEffect(EARTH_BIND)) {
 			_hitRate = 0;
+		} else if ((_npc instanceof L1PetInstance)
+				|| (_npc instanceof L1SummonInstance)) {//NONPVP
+			if ((_targetPc.getZoneType() == 1) || (_npc.getZoneType() == 1)
+					|| (_targetPc.checkNonPvP(_targetPc, _npc))) {
+				_hitRate = 0;
+			}
 		}
 
 		int rnd = _random.nextInt(100) + 1;
@@ -1112,11 +1118,13 @@ public class L1Attack {
 	private int calcNpcPcDamage() {
 		int lvl = _npc.getLevel();
 		double dmg = 0D;
-		dmg = _random.nextInt(lvl) + _npc.getStr() / 2 + 1;
-
 		if (_npc instanceof L1PetInstance) {
-			dmg += (lvl / 16); // Each additional pet is hit LV16
+			dmg = _random.nextInt(_npc.getNpcTemplate().get_level())
+			+ _npc.getStr() / 2 + 1; 
+			dmg += (lvl / 16);
 			dmg += ((L1PetInstance) _npc).getDamageByWeapon();
+		} else { 
+			dmg = _random.nextInt(lvl) + _npc.getStr() / 2 + 1;
 		}
 
 		dmg += _npc.getDmgup();
@@ -1695,10 +1703,8 @@ public class L1Attack {
 				actId = ActionCodes.ACTION_Attack;
 			}
 			if (getGfxId() > 0) {
-				_npc
-						.broadcastPacket(new S_UseAttackSkill(_target, _npc
-								.getId(), getGfxId(), _targetX, _targetY,
-								actId, 0));
+				_npc.broadcastPacket(new S_UseAttackSkill(_target, _npc
+				.getId(), getGfxId(), _targetX, _targetY, actId, 0));
 			} else {
 				_npc.broadcastPacket(new S_AttackMissPacket(_npc, _targetId,
 						actId));

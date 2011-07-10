@@ -141,7 +141,7 @@ public class C_Amount extends ClientBasePacket {
 			}
 		} else {
 			// Inn NPC
-			int npcId = npc.getNpcId();
+			int npcId = npc.get_npcId();
 			if (npcId == 70070 || npcId == 70019 || npcId == 70075
 					|| npcId == 70012 || npcId == 70031 || npcId == 70084
 					|| npcId == 70065 || npcId == 70054 || npcId == 70096) {

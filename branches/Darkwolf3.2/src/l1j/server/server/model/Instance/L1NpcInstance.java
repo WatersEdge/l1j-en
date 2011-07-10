@@ -611,12 +611,13 @@ public class L1NpcInstance extends L1Character {
 	}
 
 	public void pickupTargetItem(L1ItemInstance targetItem) {
+		int count = targetItem.getCount();
 		L1Inventory groundInventory = L1World.getInstance().getInventory(
 				targetItem.getX(), targetItem.getY(), targetItem.getMapId());
 		L1ItemInstance item = groundInventory.tradeItem(targetItem, targetItem
 				.getCount(), getInventory());
 		turnOnOffLight();
-		onGetItem(item);
+		onGetItem(item, count);
 		_targetItemList.remove(_targetItem);
 		_targetItem = null;
 		setSleepTime(1000);
@@ -1163,7 +1164,7 @@ public class L1NpcInstance extends L1Character {
 		return _npcTemplate;
 	}
 
-	public int getNpcId() {
+	public int get_npcId() {
 		return _npcTemplate.get_npcId();
 	}
 
@@ -1262,7 +1263,7 @@ public class L1NpcInstance extends L1Character {
 		}
 	}
 
-	public void onGetItem(L1ItemInstance item) {
+	public void onGetItem(L1ItemInstance item, int count) {
 		refineItem();
 		getInventory().shuffle();
 		if (getNpcTemplate().get_digestitem() > 0) {

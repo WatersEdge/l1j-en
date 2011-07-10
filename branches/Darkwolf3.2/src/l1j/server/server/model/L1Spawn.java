@@ -147,7 +147,7 @@ public class L1Spawn extends L1GameTimeAdapter {
 		return _locy;
 	}
 
-	public int getNpcId() {
+	public int get_npcId() {
 		return _npcid;
 	}
 

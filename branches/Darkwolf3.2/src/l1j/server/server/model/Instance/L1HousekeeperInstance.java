@@ -149,7 +149,7 @@ public class L1HousekeeperInstance extends L1NpcInstance {
                         return;
                 }
 
-                L1House house = HouseTable.getInstance().findByKeeperId(getNpcId());
+                L1House house = HouseTable.getInstance().findByKeeperId(get_npcId());
                 Calendar cal = house.getTaxDeadline();
                 cal.add(Calendar.DATE, Config.HOUSE_TAX_INTERVAL);
                 cal.set(Calendar.MINUTE, 0);
@@ -159,7 +159,7 @@ public class L1HousekeeperInstance extends L1NpcInstance {
         }
 
         public String[] makeHouseTaxStrings(L1PcInstance pc) {
-                L1House house = HouseTable.getInstance().findByKeeperId(getNpcId());
+                L1House house = HouseTable.getInstance().findByKeeperId(get_npcId());
                 Calendar cal = house.getTaxDeadline();
                 int month = cal.get(Calendar.MONTH) + 1;
                 int day = cal.get(Calendar.DATE);

@@ -2295,16 +2295,6 @@ if (player instanceof L1PcInstance) {
 		_banned = flag;
 	}
 
-	private int _food;
-
-	public int get_food() {
-		return _food;
-	}
-
-	public void set_food(int i) {
-		_food = i;
-	}
-
 	public L1EquipmentSlot getEquipSlot() {
 		return _equipSlot;
 	}
@@ -2832,6 +2822,18 @@ if (player instanceof L1PcInstance) {
 		}
 	}
 
+	private int _food;
+
+    @Override
+    public int get_food() {
+            return _food;
+    }
+
+    @Override
+    public void set_food(int i) {
+            _food = i;
+    }
+    
 	private int _damageReductionByArmor = 0; 
 
 	public int getDamageReductionByArmor() {

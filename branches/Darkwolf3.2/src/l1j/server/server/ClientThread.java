@@ -458,7 +458,7 @@ public class ClientThread implements Runnable, PacketOutput {
 			pc.setY(loc[1]);
 			pc.setMap((short) loc[2]);
 			pc.setCurrentHp(pc.getLevel());
-			pc.set_food(40);
+			pc.set_food(50);
 		}
 		if (pc.getTradeID() != 0) { 
 			L1Trade trade = new L1Trade();

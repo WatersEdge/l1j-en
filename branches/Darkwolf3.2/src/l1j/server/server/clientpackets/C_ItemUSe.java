@@ -1765,9 +1765,7 @@ public class C_ItemUSe extends ClientBasePacket {
 					if (partner_stat) {
 						boolean castle_area = L1CastleLocation
 								.checkInAllWarArea(
-								//
-										partner.getX(), partner.getY(), partner
-												.getMapId());
+								partner.getX(), partner.getY(), partner.getMapId());
 						if ((partner.getMapId() == 0 || partner.getMapId() == 4 || partner
 								.getMapId() == 304)
 								&& castle_area == false) {
@@ -1779,7 +1777,7 @@ public class C_ItemUSe extends ClientBasePacket {
 					} else {
 						pc.sendPackets(new S_ServerMessage(546));
 					}
-				} else if (itemId == 40555) { // Secret Room Key
+				} else if (itemId == 40555) {// Secret Room Key
 					if (pc.isKnight()
 							&& (pc.getX() >= 32806 &&
 							pc.getX() <= 32814)
@@ -1790,7 +1788,7 @@ public class C_ItemUSe extends ClientBasePacket {
 					} else {
 						pc.sendPackets(new S_ServerMessage(79));
 					}
-				} else if (itemId == 40417) {  // pi crystal
+				} else if (itemId == 40417) {// pi crystal
 					if ((pc.getX() >= 32665 &&
 					pc.getX() <= 32674)
 							&& (pc.getY() >= 32976 && pc.getY() <= 32985)
@@ -1822,12 +1820,12 @@ public class C_ItemUSe extends ClientBasePacket {
 						if (found) {
 							pc.sendPackets(new S_ServerMessage(79));
 						} else {
-							L1SpawnUtil.spawn(pc, 45300, 0, 0); // lS
+							L1SpawnUtil.spawn(pc, 45300, 0, 0);// lS
 						}
 					} else {
 						pc.sendPackets(new S_ServerMessage(79)); 
 					}
-				} else if (itemId == 40557) { //
+				} else if (itemId == 40557) {
 					if (pc.getX() == 32620 && pc.getY() == 32641
 							&& pc.getMapId() == 4) {
 						for (L1Object object : L1World.getInstance()
@@ -1842,9 +1840,9 @@ public class C_ItemUSe extends ClientBasePacket {
 						}
 						L1SpawnUtil.spawn(pc, 45883, 0, 300000);
 					} else {
-						pc.sendPackets(new S_ServerMessage(79)); //
+						pc.sendPackets(new S_ServerMessage(79));
 					}
-				} else if (itemId == 40563) { //
+				} else if (itemId == 40563) {
 					if (pc.getX() == 32730 && pc.getY() == 32426
 							&& pc.getMapId() == 4) {
 						for (L1Object object : L1World.getInstance()
@@ -1861,7 +1859,7 @@ public class C_ItemUSe extends ClientBasePacket {
 					} else {
 						pc.sendPackets(new S_ServerMessage(79));
 					}
-				} else if (itemId == 40561) { //
+				} else if (itemId == 40561) {
 					if (pc.getX() == 33046 && pc.getY() == 32806
 							&& pc.getMapId() == 4) {
 						for (L1Object object : L1World.getInstance()
@@ -1876,9 +1874,9 @@ public class C_ItemUSe extends ClientBasePacket {
 						}
 						L1SpawnUtil.spawn(pc, 45885, 0, 300000);
 					} else {
-						pc.sendPackets(new S_ServerMessage(79)); //
+						pc.sendPackets(new S_ServerMessage(79));
 					}
-				} else if (itemId == 40560) { //
+				} else if (itemId == 40560) {
 					if (pc.getX() == 32580 && pc.getY() == 33260
 							&& pc.getMapId() == 4) {
 						for (L1Object object : L1World.getInstance()
@@ -1893,9 +1891,9 @@ public class C_ItemUSe extends ClientBasePacket {
 						}
 						L1SpawnUtil.spawn(pc, 45886, 0, 300000);
 					} else {
-						pc.sendPackets(new S_ServerMessage(79)); //
+						pc.sendPackets(new S_ServerMessage(79));
 					}
-				} else if (itemId == 40562) { //
+				} else if (itemId == 40562) {
 					if (pc.getX() == 33447 && pc.getY() == 33476
 							&& pc.getMapId() == 4) {
 						for (L1Object object : L1World.getInstance()
@@ -1910,9 +1908,9 @@ public class C_ItemUSe extends ClientBasePacket {
 						}
 						L1SpawnUtil.spawn(pc, 45887, 0, 300000);
 					} else {
-						pc.sendPackets(new S_ServerMessage(79)); //
+						pc.sendPackets(new S_ServerMessage(79));
 					}
-				} else if (itemId == 40559) { //
+				} else if (itemId == 40559) {
 					if (pc.getX() == 34215 && pc.getY() == 33195
 							&& pc.getMapId() == 4) {
 						for (L1Object object : L1World.getInstance()
@@ -1927,9 +1925,9 @@ public class C_ItemUSe extends ClientBasePacket {
 						}
 						L1SpawnUtil.spawn(pc, 45888, 0, 300000);
 					} else {
-						pc.sendPackets(new S_ServerMessage(79)); //
+						pc.sendPackets(new S_ServerMessage(79));
 					}
-				} else if (itemId == 40558) { //
+				} else if (itemId == 40558) {
 					if (pc.getX() == 33513 && pc.getY() == 32890
 							&& pc.getMapId() == 4) {
 						for (L1Object object : L1World.getInstance()
@@ -5485,10 +5483,10 @@ public class C_ItemUSe extends ClientBasePacket {
 			L1MonsterInstance mob = (L1MonsterInstance) cha;
 			if (mob.getLevel() < 50) {
 				int npcId = mob.getNpcTemplate().get_npcId();
-				if (npcId != 45338 && npcId != 45370 && npcId != 45456 // 
-						&& npcId != 45464 && npcId != 45473 && npcId != 45488 // 
-						&& npcId != 45497 && npcId != 45516 && npcId != 45529 // 
-						&& npcId != 45458) { //
+				if (npcId != 45338 && npcId != 45370 && npcId != 45456
+						&& npcId != 45464 && npcId != 45473 && npcId != 45488
+						&& npcId != 45497 && npcId != 45516 && npcId != 45529
+						&& npcId != 45458) {
 					L1Skills skillTemp = SkillsTable.getInstance().getTemplate(
 							SHAPE_CHANGE);
 					L1PolyMorph.doPoly(mob, polyId,
@@ -5735,7 +5733,7 @@ public class C_ItemUSe extends ClientBasePacket {
 		L1Pet l1pet = PetTable.getInstance().getTemplate(itemObjectId);
 		if (l1pet != null) {
 			L1Npc npcTemp = NpcTable.getInstance().getTemplate(
-					l1pet.get_npcid());
+					l1pet.get_npcId());
 			L1PetInstance pet = new L1PetInstance(npcTemp, pc, l1pet);
 			pet.setPetcost(6);
 		}

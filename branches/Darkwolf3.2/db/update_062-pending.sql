@@ -384,3 +384,42 @@ INSERT INTO door_gfxs VALUES
 (6692, 'Death match', 0, 0, 1),
 (6694, 'Death match', 1, -1, 0),
 (7536, 'Hardin Quest', 0, 0, 0);
+
+-- pet food collum added + equipe
+ALTER TABLE pets ADD food int(2) NOT NULL DEFAULT 0 after lawful;
+ALTER TABLE pettypes ADD canUseEquipment tinyint(1) NOT NULL DEFAULT 0 after DefyMessageId;
+ALTER TABLE pettypes ADD EvolvItemId int(10) NOT NULL DEFAULT 40070 after MpUpMax;
+
+UPDATE pettypes SET canUseEquipment = 1 WHERE BaseNpcId = 45686;
+UPDATE pettypes SET canUseEquipment = 1 WHERE BaseNpcId = 45687; 
+UPDATE pettypes SET canUseEquipment = 1 WHERE BaseNpcId = 45688; 
+UPDATE pettypes SET canUseEquipment = 1 WHERE BaseNpcId = 45689; 
+UPDATE pettypes SET canUseEquipment = 1 WHERE BaseNpcId = 45690; 
+UPDATE pettypes SET canUseEquipment = 1 WHERE BaseNpcId = 45691; 
+UPDATE pettypes SET canUseEquipment = 1 WHERE BaseNpcId = 45692; 
+UPDATE pettypes SET canUseEquipment = 1 WHERE BaseNpcId = 45693; 
+UPDATE pettypes SET canUseEquipment = 1 WHERE BaseNpcId = 45694; 
+UPDATE pettypes SET canUseEquipment = 1 WHERE BaseNpcId = 45695; 
+UPDATE pettypes SET canUseEquipment = 1 WHERE BaseNpcId = 45696; 
+UPDATE pettypes SET canUseEquipment = 1 WHERE BaseNpcId = 45697; 
+UPDATE pettypes SET canUseEquipment = 1 WHERE BaseNpcId = 45710; 
+UPDATE pettypes SET canUseEquipment = 1 WHERE BaseNpcId = 45712; 
+UPDATE pettypes SET canUseEquipment = 1 WHERE BaseNpcId = 46043; 
+UPDATE pettypes SET canUseEquipment = 1 WHERE BaseNpcId = 46045; 
+UPDATE pettypes SET canUseEquipment = 1 WHERE BaseNpcId = 46046; 
+UPDATE pettypes SET canUseEquipment = 1 WHERE BaseNpcId = 91177; 
+UPDATE pettypes SET canUseEquipment = 1 WHERE BaseNpcId = 91176; 
+UPDATE pettypes SET canUseEquipment = 1 WHERE BaseNpcId = 91174;
+
+DELETE FROM npcaction WHERE npcid = 81200;
+INSERT INTO npcaction VALUES ('81200', 'bankoo1', 'bankoo1', '', '');
+
+update npc set nameid = 'Bankoo' where npcid = 81200;
+update npc set name = 'Bankoo' where npcid = 81200;
+update npc set name = 'Sveil' where npcid = 80141;
+update npc set name = 'Blacksmith Bahturu' where npcid = 80142;
+update npc set name = 'Azael' where npcid = 80143;
+update npc set name = 'Lark' where npcid = 80144;
+update npc set name = 'Charriere' where npcid = 80146;
+update npc set name = 'UnknownNpc' where npcid = 81243;
+update npc set name = 'UnknownNpc' where npcid = 81244;

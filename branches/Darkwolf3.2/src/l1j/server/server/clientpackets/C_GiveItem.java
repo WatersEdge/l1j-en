@@ -23,6 +23,7 @@ import java.util.Random;
 
 import l1j.server.server.ClientThread;
 import l1j.server.server.datatables.PetTypeTable;
+import l1j.server.server.datatables.PetItemTable;
 import l1j.server.server.model.L1Inventory;
 import l1j.server.server.model.L1Object;
 import l1j.server.server.model.L1PcInventory;
@@ -34,6 +35,7 @@ import l1j.server.server.model.Instance.L1PetInstance;
 import l1j.server.server.model.Instance.L1SummonInstance;
 import l1j.server.server.serverpackets.S_ItemName;
 import l1j.server.server.serverpackets.S_ServerMessage;
+import l1j.server.server.templates.L1PetItem;
 import l1j.server.server.templates.L1Npc;
 import l1j.server.server.templates.L1PetType;
 
@@ -106,7 +108,7 @@ public class C_GiveItem extends ClientBasePacket {
 		}
 		item = inv.tradeItem(item, count, targetInv);
 		
-		target.onGetItem(item);
+		target.onGetItem(item, count);
 		target.turnOnOffLight();
 		
 		pc.turnOnOffLight();
@@ -115,15 +117,36 @@ public class C_GiveItem extends ClientBasePacket {
 		if (petType == null || target.isDead()) {
 			return;
 		}
-
 		if (item.getItemId() == petType.getItemIdForTaming()) {
 			tamePet(pc, target);
 		}
-		
-		if (item.getItemId() == 40070 && petType.canEvolve()) {
+		if (!(target instanceof L1PetInstance)) { 
+			return; 
+		} 
+		L1PetInstance pet = (L1PetInstance) target;
+		if (item.getItemId() == petType.getEvolvItemId() && petType.canEvolve()) {
 			evolvePet(pc, target);
 		}
+		if (item.getItem().getType2() == 0) {
+			if ((item.getItem().getType() == 11) && (petType.canUseEquipment())) {
+				usePetWeaponArmor(target, item);
+			}
+		}
 	}
+
+	private void usePetWeaponArmor(L1NpcInstance target, L1ItemInstance item) {
+        if (!(target instanceof L1PetInstance)) {
+                return;
+        }
+        L1PetInstance pet = (L1PetInstance) target;
+        L1PetItem petItem = PetItemTable.getInstance().getTemplate(
+                        item.getItemId());
+        if (petItem.getUseType() == 1) {
+                pet.usePetWeapon(pet, item);
+        } else if (petItem.getUseType() == 0) {
+                pet.usePetArmor(pet, item);
+        }
+    }
 
 	private final static String receivableImpls[] = new String[] { "L1Npc", "L1Monster", "L1Guardian", "L1Teleporter", "L1Guard" }; 
 

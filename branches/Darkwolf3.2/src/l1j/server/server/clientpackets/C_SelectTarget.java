@@ -84,7 +84,7 @@ public class C_SelectTarget extends ClientBasePacket {
                         else if (target instanceof L1MonsterInstance) {
                                 L1MonsterInstance mob = (L1MonsterInstance) target;
                                 if (pet.getMaster().isAttackMiss(pet.getMaster(),
-                                                mob.getNpcId())) {
+                                                mob.get_npcId())) {
                                         if (pet.getMaster() instanceof L1PcInstance) {
                                                 L1PcInstance petMaster = (L1PcInstance) pet.getMaster();
                                                 petMaster.sendPackets(new S_ServerMessage(328));

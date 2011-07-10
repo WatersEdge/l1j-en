@@ -31,11 +31,13 @@ import l1j.server.server.controllers.HomeTownTimeController;
 import l1j.server.server.controllers.WarTimeController;
 import l1j.server.server.datatables.CastleTable;
 import l1j.server.server.datatables.DoorTable;
+import l1j.server.server.datatables.ExpTable;
 import l1j.server.server.datatables.HouseTable;
 import l1j.server.server.datatables.InnKeyTable;
 import l1j.server.server.datatables.InnTable;
 import l1j.server.server.datatables.ItemTable;
 import l1j.server.server.datatables.NpcActionTable;
+import l1j.server.server.datatables.PetTable;
 import l1j.server.server.datatables.NpcTable;
 import l1j.server.server.datatables.PolyTable;
 import l1j.server.server.datatables.SkillsTable;
@@ -71,6 +73,7 @@ import l1j.server.server.model.L1Inventory;
 import l1j.server.server.model.npc.L1NpcHtml;
 import l1j.server.server.model.npc.action.L1NpcAction;
 import l1j.server.server.model.skill.L1SkillUse;
+import l1j.server.server.serverpackets.S_SummonPack;
 import l1j.server.server.serverpackets.S_ApplyAuction;
 import l1j.server.server.serverpackets.S_AuctionBoardRead;
 import l1j.server.server.serverpackets.S_CharReset;
@@ -80,6 +83,7 @@ import l1j.server.server.serverpackets.S_Deposit;
 import l1j.server.server.serverpackets.S_Drawal;
 import l1j.server.server.serverpackets.S_HouseMap;
 import l1j.server.server.serverpackets.S_HowManyKey;
+import l1j.server.server.serverpackets.S_ItemName;
 import l1j.server.server.serverpackets.S_HPUpdate;
 import l1j.server.server.serverpackets.S_MPUpdate;
 import l1j.server.server.serverpackets.S_Message_YN;
@@ -147,7 +151,13 @@ public class C_NPCAction extends ClientBasePacket {
 		L1PcInstance target;
 		L1Object obj = L1World.getInstance().findObject(objid);
 		if (obj != null) {
-			if (obj instanceof L1NpcInstance) {
+			if (obj instanceof L1PetInstance) { 
+				L1PetInstance pet = (L1PetInstance) obj; 
+				pet.onFinalAction(pc, s); 
+			} else if (obj instanceof L1SummonInstance) { 
+				L1SummonInstance summon = (L1SummonInstance) obj; 
+				summon.onFinalAction(pc, s); 
+			} else if (obj instanceof L1NpcInstance) {
 				L1NpcInstance npc = (L1NpcInstance) obj;
 				int difflocx = Math.abs(pc.getX() - npc.getX());
 				int difflocy = Math.abs(pc.getY() - npc.getY());
@@ -664,12 +674,13 @@ public class C_NPCAction extends ClientBasePacket {
 				if (petObject instanceof L1PetInstance) { 
 					L1PetInstance pet = (L1PetInstance) petObject;
 					pet.save(); // fix for pet xp. do not remove
-					pet.collect();
+					pet.stopFoodTimer(pet);
+					pet.collect(false);
 					pc.getPetList().remove(pet.getId());
 					pet.deleteMe();
 				}
 			}
-			htmlid = "";
+			htmlid = ""; 
 		} else if (s.equalsIgnoreCase("withdrawnpc")) {
 			pc.sendPackets(new S_PetList(objid, pc));
 		} else if (s.equalsIgnoreCase("changename")) {
@@ -939,7 +950,7 @@ public class C_NPCAction extends ClientBasePacket {
                     }
             }
 		} else if (s.equalsIgnoreCase("ent")) {
-			int npcId = ((L1NpcInstance) obj).getNpcId();
+			int npcId = ((L1NpcInstance) obj).get_npcId();
 			if (npcId == 80085) {
 				htmlid = enterHauntedHouse(pc);
 			} else if (npcId == 80088) {
@@ -983,9 +994,9 @@ public class C_NPCAction extends ClientBasePacket {
 				htmlid = enterUb(pc, npcId);
 			}
 		} else if (s.equalsIgnoreCase("par")) { 
-			htmlid = enterUb(pc, ((L1NpcInstance) obj).getNpcId());
+			htmlid = enterUb(pc, ((L1NpcInstance) obj).get_npcId());
 		} else if (s.equalsIgnoreCase("info")) { 
-			int npcId = ((L1NpcInstance) obj).getNpcId();
+			int npcId = ((L1NpcInstance) obj).get_npcId();
 			if (npcId == 80085) {
 			} else {
 				htmlid = "colos2";
@@ -3699,7 +3710,11 @@ public class C_NPCAction extends ClientBasePacket {
 				failure_htmlid = "sharna5";
 			}
 		}
-
+		else if (((L1NpcInstance) obj).getNpcTemplate().get_npcId() == 70077
+	            || ((L1NpcInstance) obj).getNpcTemplate().get_npcId() == 81200) {
+	            SellOfPet(s, pc);
+	            htmlid = "";
+	    }
 		// else System.out.println("C_NpcAction: " + s);
 		if (htmlid != null && htmlid.equalsIgnoreCase("colos2")) {
 			htmldata = makeUbInfoStrings(((L1NpcInstance) obj).getNpcTemplate()
@@ -3852,11 +3867,11 @@ public class C_NPCAction extends ClientBasePacket {
 	private String enterPetMatch(L1PcInstance pc, int objid2) {
 		Object[] petlist = pc.getPetList().values().toArray();
 		if (petlist.length > 0) {
-			pc.sendPackets(new S_ServerMessage(1187)); //
+			pc.sendPackets(new S_ServerMessage(1187));
 			return "";
 		}
 		if (!L1PetMatch.getInstance().enterPetMatch(pc, objid2)) {
-			pc.sendPackets(new S_ServerMessage(1182)); //
+			pc.sendPackets(new S_ServerMessage(1182));
 		}
 		return "";
 	}
@@ -4524,6 +4539,85 @@ public class C_NPCAction extends ClientBasePacket {
 		}
 		return isUseItem;
 	}
+
+	/**
+     * @param s
+     * @param pc
+     */
+    private void SellOfPet(String s, L1PcInstance pc) {
+            int consumeItem = 0;
+            int consumeItemCount = 0;
+            int petNpcId = 0;
+            int petItemId = 0;
+            int upLv = 0;
+            int lvExp = 0;
+            String msg = "";
+            if (s.equalsIgnoreCase("buy 1")) {
+                    petNpcId = 45042;
+                    consumeItem = 40308;
+                    consumeItemCount = 50000;
+                    petItemId = 40314;
+                    upLv = 10;
+                    lvExp = ExpTable.getExpByLevel(upLv);
+                    msg = "You receive a petcollar";
+            } else if (s.equalsIgnoreCase("buy 2")) {
+                    petNpcId = 45034;
+                    consumeItem = 40308;
+                    consumeItemCount = 50000;
+                    petItemId = 40314;
+                    upLv = 10;
+                    lvExp = ExpTable.getExpByLevel(upLv);
+                    msg = "You receive a petcollar";
+            } else if (s.equalsIgnoreCase("buy 3")) {
+                    petNpcId = 45046;
+                    consumeItem = 40308;
+                    consumeItemCount = 50000;
+                    petItemId = 40314;
+                    upLv = 10;
+                    lvExp = ExpTable.getExpByLevel(upLv);
+                    msg = "You receive a petcollar";
+            } else if (s.equalsIgnoreCase("buy 4")) {
+                    petNpcId = 45047;
+                    consumeItem = 40308;
+                    consumeItemCount = 50000;
+                    petItemId = 40314;
+                    upLv = 10;
+                    lvExp = ExpTable.getExpByLevel(upLv);
+                    msg = "You receive a petcollar";
+            } else if (s.equalsIgnoreCase("buy 8")) {
+                    petNpcId = 97023;
+                    consumeItem = 50502;
+                    consumeItemCount = 1;
+                    petItemId = 40314;
+                    upLv = 5;
+                    lvExp = ExpTable.getExpByLevel(upLv);
+                    msg = "You receive a hachling";
+                    petNpcId = 97022;
+                    consumeItem = 50503;
+                    consumeItemCount = 1;
+                    petItemId = 40314;
+                    upLv = 5;
+                    lvExp = ExpTable.getExpByLevel(upLv);
+                    msg = "You receive a hachling";
+            }
+            if (petNpcId > 0) {
+                    if (!pc.getInventory().checkItem(consumeItem, consumeItemCount)) {
+                            pc.sendPackets(new S_ServerMessage(337, msg));
+                    } else if (pc.getInventory().getSize() > 180) {
+                            pc.sendPackets(new S_ServerMessage(263));
+                    } else if (pc.getInventory().checkItem(consumeItem,
+                                    consumeItemCount)) {
+                            pc.getInventory().consumeItem(consumeItem, consumeItemCount);
+                            L1PcInventory inv = pc.getInventory();
+                            L1ItemInstance petamu = inv.storeItem(petItemId, 1);
+                            if (petamu != null) {
+                                    PetTable.getInstance().buyNewPet(petNpcId,
+                                    petamu.getId() + 1, petamu.getId(), upLv, lvExp);
+                                    pc.sendPackets(new S_ItemName(petamu));
+                            }
+                    }
+            }
+    }
 
 	@Override
 	public String getType() {
