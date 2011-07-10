@@ -25,6 +25,7 @@ import l1j.server.server.encryptions.Opcodes;
 import l1j.server.server.datatables.PetItemTable;
 import l1j.server.server.model.Instance.L1ItemInstance;
 import l1j.server.server.model.Instance.L1PetInstance;
+import l1j.server.server.serverpackets.S_PetInventory;
 
 // Referenced classes of package l1j.server.server.serverpackets:
 // ServerBasePacket
@@ -40,26 +41,18 @@ public class S_PetInventory extends ServerBasePacket {
 		writeH(itemList.size());
 		writeC(0x0b);
 		for (Object itemObject : itemList) {
-			L1ItemInstance petItem = (L1ItemInstance) itemObject;
-			if (petItem == null) {
-				continue;
+			L1ItemInstance item = (L1ItemInstance) itemObject;
+			if (item != null) {
+				writeD(item.getId());
+				writeC(0x13);
+				writeH(item.get_gfxid());
+				writeC(item.getBless());
+				writeD(item.getCount());
+				writeC(item.isIdentified() ? 1 : 0);
+				writeS(item.getViewName());
 			}
-			writeD(petItem.getId());
-			writeC(0x02);
-			writeH(petItem.get_gfxid());
-			writeC(petItem.getBless());
-			writeD(petItem.getCount());
-
-			if (petItem.getItem().getType2() == 0
-				&& petItem.getItem().getType() == 11
-				&& petItem.isEquipped()) {
-				writeC(petItem.isIdentified() ? 3 : 2);
-			} else {
-				writeC(petItem.isIdentified() ? 1 : 0);
-			}
-			writeS(petItem.getViewName());
 		}
-		writeC(pet.getAc());
+		writeC(0x0a);
 	}
 
 	@Override

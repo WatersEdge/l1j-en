@@ -63,7 +63,7 @@ public class C_UsePetItem extends ClientBasePacket {
 					pet.getNpcTemplate().get_npcId());
 			if (petType != null) {
 				if (petType.getItemIdForTaming() != 0) {
-					pc.sendPackets(new S_ServerMessage(74, item.getLogName()));
+					pc.sendPackets(new S_ServerMessage(79, item.getLogName()));
 					return;
 				}
 			}
@@ -76,10 +76,10 @@ public class C_UsePetItem extends ClientBasePacket {
 				usePetArmor(pc, pet, item);
 				pc.sendPackets(new S_PetEquipment(data, pet, listNo));
 			} else {
-				pc.sendPackets(new S_ServerMessage(74, item.getLogName()));
+				pc.sendPackets(new S_ServerMessage(79, item.getLogName()));
 			}
 		} else {
-			pc.sendPackets(new S_ServerMessage(74, item.getLogName()));
+			pc.sendPackets(new S_ServerMessage(79, item.getLogName()));
 		}
 	}
 

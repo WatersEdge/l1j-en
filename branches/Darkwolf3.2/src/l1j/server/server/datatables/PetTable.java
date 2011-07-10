@@ -256,7 +256,7 @@ public class PetTable {
 		}
 	}
 
-	public L1Pet getTemplate(int itemObjId) {
-		return _pets.get(itemObjId);
+	public L1Pet getTemplate(int itemobjid) { 
+	  return _pets.get(new Integer(itemobjid));
 	}
 }
