@@ -485,6 +485,7 @@ public class ClientThread implements Runnable, PacketOutput {
 		for (Object petObject : petList) {
 			if (petObject instanceof L1PetInstance) {
 				L1PetInstance pet = (L1PetInstance) petObject;
+				pet.stopFoodTimer(pet);
 				pet.dropItem();
 				pc.getPetList().remove(pet.getId());
 				pet.deleteMe();
