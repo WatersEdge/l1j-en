@@ -37,4 +37,14 @@ class L1ElfClassFeature extends L1ClassFeature {
 	public int getMagicLevel(int playerLevel) {
 		return Math.min(6, playerLevel / 8);
 	}
+
+	@Override 
+	public int getMaxSpellLevel() { 
+		return 6; 
+	} 
+	
+	@Override 
+	public int getSpellLearningInterval() { 
+		return 8; 
+		}
 }

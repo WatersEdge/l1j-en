@@ -37,4 +37,14 @@ class L1WizardClassFeature extends L1ClassFeature {
 	public int getMagicLevel(int playerLevel) {
 		return Math.min(10, playerLevel / 4);
 	}
+
+	@Override 
+	public int getMaxSpellLevel() { 
+		return 10; 
+	} 
+	
+	@Override 
+	public int getSpellLearningInterval() { 
+		return 4; 
+	}
 }

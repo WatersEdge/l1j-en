@@ -16,35 +16,33 @@
  *
  * http://www.gnu.org/copyleft/gpl.html
  */
-package l1j.server.server.model.classes;
+package l1j.server.server.model;
 
-import l1j.server.Config;
+public class L1Alignment {
+	private final int _value;
 
-class L1DarkElfClassFeature extends L1ClassFeature {
-	@Override
-	public int getAcDefenseMax(int ac) {
-		if (Config.SOFT_AC)
-		{
-			return ac / 4;
-		}
-		else
-		{
-			return ac / 2; 
-		}
+	private L1Alignment(int value) {
+		_value = value;
 	}
 
-	@Override
-	public int getMagicLevel(int playerLevel) {
-		return Math.min(2, playerLevel / 12);
+	public static L1Alignment NEUTRAL = new L1Alignment(0);
+	public static L1Alignment LAWFUL = new L1Alignment(1);
+	public static L1Alignment CHAOTIC = new L1Alignment(2);
+
+	public static L1Alignment fromValue(int value) {
+		if (value == 0) {
+			return NEUTRAL;
+		}
+		if (value == 1) {
+			return LAWFUL;
+		}
+		if (value == 2) {
+			return CHAOTIC;
+		}
+		throw new IllegalArgumentException("value is invalid");
 	}
 
-	@Override 
-	public int getMaxSpellLevel() { 
-		return 2; 
-	} 
-	
-	@Override 
-	public int getSpellLearningInterval() { 
-		return 10; 
+	public int value() {
+		return _value;
 	}
 }

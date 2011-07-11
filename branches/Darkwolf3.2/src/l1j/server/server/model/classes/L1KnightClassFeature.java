@@ -28,4 +28,14 @@ class L1KnightClassFeature extends L1ClassFeature {
 	public int getMagicLevel(int playerLevel) {
 		return playerLevel / 50;
 	}
+
+	@Override 
+	public int getMaxSpellLevel() { 
+		return 1; 
+	} 
+	
+	@Override 
+	public int getSpellLearningInterval() { 
+		return 50; 
+	}
 }

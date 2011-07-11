@@ -37,4 +37,14 @@ class L1RoyalClassFeature extends L1ClassFeature {
 	public int getMagicLevel(int playerLevel) {
 		return Math.min(2, playerLevel / 10);
 	}
+
+	@Override 
+	public int getMaxSpellLevel() { 
+		return 2; 
+	} 
+	
+	@Override 
+	public int getSpellLearningInterval() { 
+		return 10; 
+	}
 }

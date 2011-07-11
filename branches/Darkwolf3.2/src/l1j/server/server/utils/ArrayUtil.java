@@ -16,35 +16,19 @@
  *
  * http://www.gnu.org/copyleft/gpl.html
  */
-package l1j.server.server.model.classes;
+package l1j.server.server.utils;
 
-import l1j.server.Config;
-
-class L1DarkElfClassFeature extends L1ClassFeature {
-	@Override
-	public int getAcDefenseMax(int ac) {
-		if (Config.SOFT_AC)
-		{
-			return ac / 4;
+public class ArrayUtil {
+	public static int indexOf(int[] array, int value) {
+		for (int i = 0; i < array.length; i++) {
+			if (value == array[i]) {
+				return i;
+			}
 		}
-		else
-		{
-			return ac / 2; 
-		}
+		return -1;
 	}
 
-	@Override
-	public int getMagicLevel(int playerLevel) {
-		return Math.min(2, playerLevel / 12);
-	}
-
-	@Override 
-	public int getMaxSpellLevel() { 
-		return 2; 
-	} 
-	
-	@Override 
-	public int getSpellLearningInterval() { 
-		return 10; 
+	public static boolean contains(int[] array, int value) {
+		return indexOf(array, value) != -1;
 	}
 }

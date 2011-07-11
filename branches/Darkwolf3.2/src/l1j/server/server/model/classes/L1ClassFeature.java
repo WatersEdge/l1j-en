@@ -54,6 +54,7 @@ public abstract class L1ClassFeature {
 	}
 
 	public abstract int getAcDefenseMax(int ac);
-
 	public abstract int getMagicLevel(int playerLevel);
+	public abstract int getMaxSpellLevel(); 
+	public abstract int getSpellLearningInterval(); 
 }
