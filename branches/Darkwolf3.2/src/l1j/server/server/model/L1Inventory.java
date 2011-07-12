@@ -33,6 +33,7 @@ import l1j.server.server.datatables.InnKeyTable;
 import l1j.server.server.datatables.ItemTable;
 import l1j.server.server.datatables.LetterTable;
 import l1j.server.server.datatables.PetTable;
+import l1j.server.server.model.L1World;
 import l1j.server.server.model.Instance.L1FurnitureInstance;
 import l1j.server.server.model.Instance.L1ItemInstance;
 import l1j.server.server.templates.L1Item;
@@ -121,7 +122,20 @@ public class L1Inventory extends L1Object {
 			return null;
 		}
 		L1Item temp = ItemTable.getInstance().getTemplate(id);
-
+		
+		if (temp == null) {
+			return null;
+		}
+	    
+		if (temp.isStackable()) {
+			L1ItemInstance item = new L1ItemInstance(temp, count);
+			if (findItemId(id) == null) {
+				item.setId(IdFactory.getInstance().nextId());
+				L1World.getInstance().storeObject(item);
+			}
+			return storeItem(item);
+		}
+		
 		if (id == 40312) {
 			L1ItemInstance item = new L1ItemInstance(temp, count);
 			if (findKeyId(id) == null) {
@@ -129,16 +143,8 @@ public class L1Inventory extends L1Object {
 				L1World.getInstance().storeObject(item);
 			}
 			return storeItem(item);
-		} else if (temp.isStackable()) {
-			L1ItemInstance item = new L1ItemInstance(temp, count);
-
-			if (findItemId(id) == null) {
-				item.setId(IdFactory.getInstance().nextId());
-				L1World.getInstance().storeObject(item);
-			}
-			return storeItem(item);
 		}
-
+		
 		L1ItemInstance result = null;
 		for (int i = 0; i < count; i++) {
 			L1ItemInstance item = new L1ItemInstance(temp, 1);
@@ -159,6 +165,8 @@ public class L1Inventory extends L1Object {
 			L1ItemInstance findItem = findItemId(itemId);
 			if (findItem != null) {
 				findItem.setCount(findItem.getCount() + item.getCount());
+				updateItem(findItem);
+				return findItem;
 			} else if (itemId == 40312) { 
 				findItem = findKeyId(itemId); 
 				updateItem(findItem);
