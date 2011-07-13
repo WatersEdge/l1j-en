@@ -325,13 +325,13 @@ public final class Config {
 	public static boolean CLAN_ALLIANCE = true;
 
 	@Configure(file = ALTSETTINGS, key = "RaceMinPlayer")
-    public static int PET_RACE_MIN_PLAYER = 1;
+    public static int PET_RACE_MIN_PLAYER = 2;
 
     @Configure(file = ALTSETTINGS, key = "RaceMaxLap")
     public static int PET_RACE_MAX_LAP = 3;
     
     @Configure(file = ALTSETTINGS, key = "DeathMatchMinPlayer")
-    public static int DEATH_MATCH_MIN_PLAYER = 1;
+    public static int DEATH_MATCH_MIN_PLAYER = 2;
     
     @Configure(file = ALTSETTINGS, key = "ShowNpcLevel")
     public static boolean SHOW_NPC_LVL = true;

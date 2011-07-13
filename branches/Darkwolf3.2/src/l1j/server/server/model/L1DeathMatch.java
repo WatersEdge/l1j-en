@@ -77,9 +77,9 @@ public class L1DeathMatch {
 	private final L1DoorInstance _doorLeft;
 
 	private L1DeathMatch() {
-		if (Config.DEATH_MATCH_MIN_PLAYER < 2) {
-			gameStartMinPlayer = 6;
-			orderEntMinPlayer = 10;
+		if (Config.DEATH_MATCH_MIN_PLAYER < 0) {
+			gameStartMinPlayer = 2;
+			orderEntMinPlayer = 1;
 		}
 		setMapId((short) 5153);
 		L1DoorGfx leftGfx = L1DoorGfx.findByGfxId(6692); 
