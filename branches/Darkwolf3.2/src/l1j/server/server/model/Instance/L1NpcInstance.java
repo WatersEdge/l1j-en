@@ -36,6 +36,7 @@ import l1j.server.server.GeneralThreadPool;
 import l1j.server.server.datatables.NPCTalkDataTable;
 import l1j.server.server.datatables.NpcChatTable;
 import l1j.server.server.datatables.NpcTable;
+import l1j.server.server.datatables.SprTable;
 import l1j.server.server.model.L1Attack;
 import l1j.server.server.model.L1Character;
 import l1j.server.server.model.L1GroundInventory;
@@ -2018,6 +2019,11 @@ public class L1NpcInstance extends L1Character {
 	public void setTempLawful(int i) {
 		_tempLawful = i;
 	}
+
+	public void npcSleepTime(int i, int type) {
+        setSleepTime(calcSleepTime(SprTable.getInstance()
+        .getSprSpeed(getTempCharGfx(), i), type));
+   }
 
 	protected int calcSleepTime(int sleepTime, int type) {
 		switch (getMoveSpeed()) {

@@ -6,7 +6,7 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
@@ -16,28 +16,27 @@
  *
  * http://www.gnu.org/copyleft/gpl.html
  */
-package l1j.server.server.utils.collections;
+package l1j.server.server.serverpackets;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import l1j.server.server.encryptions.Opcodes;
 
-import javolution.util.FastMap;
+public class S_SkillIconBloodstain extends ServerBasePacket {
+	private static final String S_SKILL_ICON_BLOODSTAIN = "[S] S_SkillIconBloodstain";
 
-public class Maps {
-	public static <K, V> Map<K, V> newMap() {
-		return new FastMap<K, V>();
+	public S_SkillIconBloodstain(int i, int j) {
+		writeC(Opcodes.S_OPCODE_PACKETBOX);
+		writeC(0x64);
+		writeC(i);
+		writeH(j);
 	}
 
-	public static <K, V> Map<K, V> newMap(Map<K, V> from) {
-		return new FastMap<K, V>(from);
+	@Override
+	public byte[] getContent() {
+		return getBytes();
 	}
 
-	public static <K, V> HashMap<K, V> newHashMap() {
-		return new HashMap<K, V>();
-	}
-
-	public static <K, V> ConcurrentHashMap<K, V> newConcurrentHashMap() {
-		return new ConcurrentHashMap<K, V>();
+	@Override
+	public String getType() {
+		return S_SKILL_ICON_BLOODSTAIN;
 	}
 }

@@ -83,6 +83,7 @@ public class Opcodes {
 	public static final int C_OPCODE_BOARDWRITE = 84;
 	public static final int C_OPCODE_GIVEITEM = 85;
 	public static final int C_OPCODE_BOARDBACK = 87;
+	public static final int C_OPCODE_SENDLOCATION = 87;
 	public static final int C_OPCODE_LOGINTOSERVER = 89;
 	public static final int C_OPCODE_CHATWHISPER = 92;
 	public static final int C_OPCODE_SKILLBUY = 93;

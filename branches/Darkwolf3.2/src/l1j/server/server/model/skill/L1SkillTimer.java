@@ -99,6 +99,16 @@ class L1SkillStop {
 				L1PcInstance pc = (L1PcInstance) cha;
 				pc.sendPackets(new S_SkillIconAura(116, 0));
 			}
+		} else if (skillId == STATUS_CURSE_YAHEE) {
+			if (cha instanceof L1PcInstance) {
+				L1PcInstance pc = (L1PcInstance) cha;
+				pc.sendPackets(new S_SkillIconAura(221, 0, 1));
+			} 
+		} else if (skillId == STATUS_CURSE_BARLOG) {
+			if (cha instanceof L1PcInstance) {
+				L1PcInstance pc = (L1PcInstance) cha;
+				pc.sendPackets(new S_SkillIconAura(221, 0, 2));
+			}
 		} else if (skillId == SHIELD) {
 			cha.addAc(2);
 			if (cha instanceof L1PcInstance) {

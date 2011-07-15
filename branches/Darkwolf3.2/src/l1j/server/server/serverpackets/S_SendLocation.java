@@ -16,28 +16,32 @@
  *
  * http://www.gnu.org/copyleft/gpl.html
  */
-package l1j.server.server.utils.collections;
+package l1j.server.server.serverpackets;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import l1j.server.server.encryptions.Opcodes;
 
-import javolution.util.FastMap;
+public class S_SendLocation extends ServerBasePacket {
 
-public class Maps {
-	public static <K, V> Map<K, V> newMap() {
-		return new FastMap<K, V>();
+	private static final String S_SEND_LOCATION = "[S] S_SendLocation";
+
+	public S_SendLocation(int type, String senderName, int mapId, 
+			int x, int y, int msgId) {
+		writeC(Opcodes.S_OPCODE_PACKETBOX);
+		writeC(0x6f);
+		writeS(senderName);
+		writeH(mapId);
+		writeH(x);
+		writeH(y);
+		writeC(msgId);
 	}
 
-	public static <K, V> Map<K, V> newMap(Map<K, V> from) {
-		return new FastMap<K, V>(from);
+	@Override
+	public byte[] getContent() {
+		return getBytes();
 	}
 
-	public static <K, V> HashMap<K, V> newHashMap() {
-		return new HashMap<K, V>();
-	}
-
-	public static <K, V> ConcurrentHashMap<K, V> newConcurrentHashMap() {
-		return new ConcurrentHashMap<K, V>();
+	@Override
+	public String getType() {
+		return S_SEND_LOCATION;
 	}
 }

@@ -6,7 +6,7 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
@@ -18,29 +18,38 @@
  */
 package l1j.server.server.serverpackets;
 
+import java.util.logging.Logger;
+
 import l1j.server.server.encryptions.Opcodes;
+import l1j.server.server.model.Instance.L1PcInstance;
 
-// Referenced classes of package l1j.server.server.serverpackets:
-// ServerBasePacket
-public class S_SkillIconAura extends ServerBasePacket {
+public class S_DragonGate extends ServerBasePacket {
+	private static final String S_DRAGON_GATE = "[S] S_DragonGate";
+	private static Logger _log = Logger.getLogger(S_DragonGate.class.getName());
 
-	public S_SkillIconAura(int i, int j) {
-		writeC(Opcodes.S_OPCODE_SKILLICONGFX);
-		writeC(0x16);
-		writeC(i);
-		writeH(j);
-	}
+	private byte[] _byte = null;
 
-	public S_SkillIconAura(int i, int j, int k) {
-		writeC(Opcodes.S_OPCODE_SKILLICONGFX);
-		writeC(0x16);
-		writeC(i);
-		writeH(j);
-		writeC(k);
+	public S_DragonGate(L1PcInstance pc ,boolean[] i) {
+		writeC(Opcodes.S_OPCODE_PACKETBOX);
+		writeC(0x66); // = 102
+		writeD(pc.getId());
+		writeC(i[0] ? 1 : 0);
+		writeC(i[1] ? 1 : 0);
+		writeC(i[2] ? 1 : 0);
+		writeC(i[3] ? 1 : 0);
 	}
 
 	@Override
 	public byte[] getContent() {
-		return getBytes();
+		if (_byte == null) {
+			_byte = getBytes();
+		}
+
+		return _byte;
+	}
+
+	@Override
+	public String getType() {
+		return S_DRAGON_GATE;
 	}
 }

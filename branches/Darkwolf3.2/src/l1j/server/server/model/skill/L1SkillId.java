@@ -596,4 +596,10 @@ public class L1SkillId {
 	public static final int STATUS_CURSE_YAHEE = 1014;
 
 	public static final int STATUS_BRAVE2 = 20001;
+	
+	public static final int EFFECT_BLOODSTAIN_OF_ANTHARAS = 4011;
+	
+	public static final int EFFECT_BLESS_OF_CRAY = 4056;
+
+	public static final int EFFECT_BLESS_OF_SAELL = 4057;
 }

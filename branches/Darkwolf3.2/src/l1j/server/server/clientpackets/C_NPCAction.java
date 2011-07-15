@@ -99,7 +99,7 @@ import l1j.server.server.serverpackets.S_ShopBuyList;
 import l1j.server.server.serverpackets.S_ShopSellList;
 import l1j.server.server.serverpackets.S_SkillHaste;
 import l1j.server.server.serverpackets.S_SkillIconGFX;
-import l1j.server.server.serverpackets.S_SkillIconBlessOfEva;
+import l1j.server.server.serverpackets.S_SkillIconAura;
 import l1j.server.server.serverpackets.S_SkillSound;
 import l1j.server.server.serverpackets.S_SystemMessage;
 import l1j.server.server.serverpackets.S_TaxRate;
@@ -1249,17 +1249,17 @@ public class C_NPCAction extends ClientBasePacket {
 		}
 		else if (((L1NpcInstance) obj).getNpcTemplate().get_npcId() == 80052) {
 			if (s.equalsIgnoreCase("a")) {
-				if (pc.hasSkillEffect(STATUS_CURSE_YAHEE)) {
-					pc.sendPackets(new S_ServerMessage(79)); //
-				} else {
-					pc.setSkillEffect(STATUS_CURSE_BARLOG, 1020 * 1000);
-					pc.sendPackets(new S_SkillIconBlessOfEva(pc.getId(), 1020));
-					pc.sendPackets(new S_SkillSound(pc.getId(), 750));
-					pc.broadcastPacket(new S_SkillSound(pc.getId(), 750));
-					pc.sendPackets(new S_ServerMessage(1127));
+				if (pc.hasSkillEffect(STATUS_CURSE_BARLOG)) {
+					pc.killSkillEffectTimer(STATUS_CURSE_BARLOG);
 				}
-			}
-		}
+				pc.sendPackets(new S_SkillSound(pc.getId(), 750));
+				pc.broadcastPacket(new S_SkillSound(pc.getId(), 750));
+				pc.sendPackets(new S_SkillIconAura(221, 1020, 2));
+				pc.setSkillEffect(STATUS_CURSE_BARLOG, 1020 * 1000);
+				pc.sendPackets(new S_ServerMessage(1127));
+				htmlid = "";
+			  }
+		   } 
 		else if (((L1NpcInstance) obj).getNpcTemplate().get_npcId() == 80053) {
 			if (s.equalsIgnoreCase("a")) {
 				int aliceMaterialId = 0;
@@ -1413,17 +1413,17 @@ public class C_NPCAction extends ClientBasePacket {
 		}
 		else if (((L1NpcInstance) obj).getNpcTemplate().get_npcId() == 80073) {
 			if (s.equalsIgnoreCase("a")) {
-				if (pc.hasSkillEffect(STATUS_CURSE_BARLOG)) {
-					pc.sendPackets(new S_ServerMessage(79)); //
-				} else {
-					pc.setSkillEffect(STATUS_CURSE_YAHEE, 1020 * 1000);
-					pc.sendPackets(new S_SkillIconBlessOfEva(pc.getId(), 1020));
-					pc.sendPackets(new S_SkillSound(pc.getId(), 750));
-					pc.broadcastPacket(new S_SkillSound(pc.getId(), 750));
-					pc.sendPackets(new S_ServerMessage(1127));
+				if (pc.hasSkillEffect(STATUS_CURSE_YAHEE)) {
+					pc.killSkillEffectTimer(STATUS_CURSE_YAHEE);
 				}
-			}
-		}
+				pc.sendPackets(new S_SkillSound(pc.getId(), 750));
+				pc.broadcastPacket(new S_SkillSound(pc.getId(), 750));
+				pc.sendPackets(new S_SkillIconAura(221, 1020, 1));
+				pc.setSkillEffect(STATUS_CURSE_YAHEE, 1020 * 1000);
+				pc.sendPackets(new S_ServerMessage(1127));
+				htmlid = "";
+			  }
+		   } 
 		else if (((L1NpcInstance) obj).getNpcTemplate().get_npcId() == 80072) {
 			String sEquals = null;
 			int karmaLevel = 0;
@@ -3715,6 +3715,45 @@ public class C_NPCAction extends ClientBasePacket {
 	            SellOfPet(s, pc);
 	            htmlid = "";
 	    }
+		else if (((L1NpcInstance) obj).getNpcTemplate().get_npcId() == 81277) {
+			int level = pc.getLevel();
+			char s1 = s.charAt(0);
+			if (s.equalsIgnoreCase("0")) {
+				if (level >= 30 && level <= 51) {
+					L1Teleport.teleport(pc, 32820, 32904, (short) 1002, 5, true);
+					htmlid = "";
+				} else {
+					htmlid = "dsecret3";
+				}
+			} else if (level >= 52) {
+				switch (s1) {
+					case '1':
+						L1Teleport.teleport(pc, 32993, 32716, (short) 1002, 5, true);
+						break;
+					case '2':
+						L1Teleport.teleport(pc, 32785, 32631, (short) 1002, 5, true);
+						break;
+					case '3':
+						L1Teleport.teleport(pc, 32806, 32790, (short) 1002, 5, true);
+						break;
+					case '4':
+						L1Teleport.teleport(pc, 32904, 32627, (short) 1002, 5, true);
+						break;
+					case '5':
+						L1Teleport.teleport(pc, 32685, 32631, (short) 1002, 5, true);
+						break;
+					case '6':
+						L1Teleport.teleport(pc, 32717, 32756, (short) 1002, 5, true);
+						break;
+					case '7':
+						L1Teleport.teleport(pc, 32986, 32630, (short) 1002, 5, true);
+						break;
+				}
+				htmlid = "";
+			} else {
+				htmlid = "dsecret3";
+			}
+		}
 		// else System.out.println("C_NpcAction: " + s);
 		if (htmlid != null && htmlid.equalsIgnoreCase("colos2")) {
 			htmldata = makeUbInfoStrings(((L1NpcInstance) obj).getNpcTemplate()

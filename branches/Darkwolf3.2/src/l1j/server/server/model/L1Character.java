@@ -1087,7 +1087,17 @@ public class L1Character extends L1Object {
 		_sp += i;
 	}
 
-	private boolean _isDead; //
+	private int _portalNumber = -1;
+	
+	public int getPortalNumber() {
+		return _portalNumber;
+	} 
+	
+	public void setPortalNumber(int portalNumber) {
+		_portalNumber = portalNumber;
+	}
+
+	private boolean _isDead;
 
 	public boolean isDead() {
 		return _isDead;
