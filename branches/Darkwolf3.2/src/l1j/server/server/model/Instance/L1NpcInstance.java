@@ -52,6 +52,8 @@ import l1j.server.server.model.L1Object;
 import l1j.server.server.model.L1Spawn;
 import l1j.server.server.model.L1World;
 import l1j.server.server.model.map.L1Map;
+import l1j.server.server.model.map.L1AStar;
+import l1j.server.server.model.map.L1Node;
 import l1j.server.server.model.map.L1WorldMap;
 import l1j.server.server.model.skill.L1SkillId;
 import l1j.server.server.model.skill.L1SkillUse;
@@ -103,10 +105,12 @@ public class L1NpcInstance extends L1Character {
 	public static int courceRange = 15;
 	private int _drainedMana = 0;
 	private boolean _rest = false;
-
-
+	
+	private int[][] _iPath = new int[50][2]; 
+	private L1AStar _aStar = new L1AStar(); 
+	private int iCurrentPath = 0;
+	
 	private int _randomMoveDistance = 0;
-
 	private int _randomMoveDirection = 0;
 
 	interface NpcAI {
@@ -1439,7 +1443,7 @@ public class L1NpcInstance extends L1Character {
 			dir = targetDirection(x, y);
 			dir = checkObject(getX(), getY(), getMapId(), dir);
 		} else { 
-			dir = _serchCource(x, y);
+			dir = AStarCource();
 			if (dir == -1) { 
 				dir = targetDirection(x, y);
 				if (!isExsistCharacterBetweenTarget(dir)) {
@@ -1451,10 +1455,10 @@ public class L1NpcInstance extends L1Character {
 	}
 
 	private boolean isExsistCharacterBetweenTarget(int dir) {
-		if (!(this instanceof L1MonsterInstance)) { //
+		if (!(this instanceof L1MonsterInstance)) {
 			return false;
 		}
-		if (_target == null) { //
+		if (_target == null) {
 			return false;
 		}
 
@@ -1496,7 +1500,7 @@ public class L1NpcInstance extends L1Character {
 						&& cha.getMapId() == getMapId()) {
 					if (object instanceof L1PcInstance) {
 						L1PcInstance pc = (L1PcInstance) object;
-						if (pc.isGhost()) { // 
+						if (pc.isGhost()) {
 							continue;
 						}
 					}
@@ -1517,8 +1521,6 @@ public class L1NpcInstance extends L1Character {
 		}
 		return dir;
 	}
-
-
 
 	public static int checkObject(int x, int y, short m, int d) { 
 
@@ -1590,8 +1592,6 @@ public class L1NpcInstance extends L1Character {
 		}
 		return -1;
 	}
-
-
 
 	private int _serchCource(int x, int y) 
 	{
@@ -1691,6 +1691,32 @@ public class L1NpcInstance extends L1Character {
 			locBace = null;
 		}
 		return -1;
+	}
+	
+	protected int AStarCource() {
+		int dir = -1;
+		if (_target != null) {
+		 _aStar.Reset();
+		 L1Node nodePath = _aStar.FindPath(this, _target);
+		 iCurrentPath = 0;
+		 while (nodePath != null) {
+			 _iPath[iCurrentPath][0] = nodePath.x;
+			 _iPath[iCurrentPath][1] = nodePath.y;
+			 iCurrentPath++;
+		 if (iCurrentPath >= 50) {
+		     nodePath = null;
+		     return -1;
+		     }
+		   nodePath = nodePath.prev;
+		  }
+		  nodePath = null;
+		  iCurrentPath -= 2;
+		if (iCurrentPath >= 0) {
+		  dir = targetDirection(_iPath[iCurrentPath][0],
+			  _iPath[iCurrentPath][1]);
+		     }
+		}
+		return dir;
 	}
 
 	private void _moveLocation(int[] ary, int d) {
