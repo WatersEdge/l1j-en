@@ -83,7 +83,7 @@ public class L1DeathMatch {
 		}
 		setMapId((short) 5153);
 		L1DoorGfx leftGfx = L1DoorGfx.findByGfxId(6692); 
-		_doorLeft = DoorTable.getInstance().createDoor(0, leftGfx, 
+		_doorLeft = DoorTable.getInstance().createDoor(0, leftGfx,
 				new L1Location(32638, 32884, 5153), 0, 0); 
 		}
 
