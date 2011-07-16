@@ -51,6 +51,9 @@
         <BossCycle Name="BanditLeader">
 		<Cycle Period="8h" Start="10m"/>
 	</BossCycle>
+	<BossCycle Name="DreadTomKid">
+		<Cycle Period="24h" Start="10m"/>
+	</BossCycle>
         <BossCycle Name="DarkElder">
 		<Cycle Period="24h" Start="10m"/>
 	</BossCycle>
