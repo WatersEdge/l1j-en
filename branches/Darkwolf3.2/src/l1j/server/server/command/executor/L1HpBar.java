@@ -53,7 +53,7 @@ public class L1HpBar implements L1CommandExecutor {
 				}
 			}
 		} else {
-			pc.sendPackets(new S_SystemMessage(cmdName + " on|off"));
+			pc.sendPackets(new S_SystemMessage(cmdName + " .hpbar on|off"));
 		}
 	}
 

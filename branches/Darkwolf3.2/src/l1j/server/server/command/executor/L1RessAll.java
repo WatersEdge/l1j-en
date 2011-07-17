@@ -18,34 +18,41 @@
  */
 package l1j.server.server.command.executor;
 
-import java.util.StringTokenizer;
-import java.util.logging.Logger;
-
 import l1j.server.server.model.L1World;
 import l1j.server.server.model.Instance.L1PcInstance;
+import l1j.server.server.serverpackets.S_Message_YN;
+import l1j.server.server.serverpackets.S_SkillSound;
 import l1j.server.server.serverpackets.S_SystemMessage;
-import l1j.server.server.serverpackets.S_Weather;
 
-public class L1ChangeWeather implements L1CommandExecutor {
-	private static Logger _log = Logger.getLogger(L1ChangeWeather.class
-			.getName());
-
-	private L1ChangeWeather() {
+public class L1RessAll implements L1CommandExecutor {
+	private L1RessAll() {
 	}
 
 	public static L1CommandExecutor getInstance() {
-		return new L1ChangeWeather();
+		return new L1RessAll();
 	}
 
 	@Override
 	public void execute(L1PcInstance pc, String cmdName, String arg) {
 		try {
-			StringTokenizer tok = new StringTokenizer(arg);
-			int weather = Integer.parseInt(tok.nextToken());
-			L1World.getInstance().setWeather(weather);
-			L1World.getInstance().broadcastPacketToAll(new S_Weather(weather));
+			int objid = pc.getId();
+			for (L1PcInstance tg : L1World.getInstance().getAllPlayers()) {
+				if (tg.getCurrentHp() == 0 && tg.isDead()) {
+					tg.sendPackets(new S_SystemMessage("Gm ressurect you"));
+					tg.broadcastPacket(new S_SkillSound(tg.getId(), 3944));
+					tg.sendPackets(new S_SkillSound(tg.getId(), 3944));
+					tg.setTempID(objid);
+					tg.sendPackets(new S_Message_YN(322, ""));
+				} else {
+					tg.sendPackets(new S_SystemMessage("Gm ressurect you"));
+					tg.broadcastPacket(new S_SkillSound(tg.getId(), 832));
+					tg.sendPackets(new S_SkillSound(tg.getId(), 832));
+					tg.setCurrentHp(tg.getMaxHp());
+					tg.setCurrentMp(tg.getMaxMp());
+				}
+			}
 		} catch (Exception e) {
-			pc.sendPackets(new S_SystemMessage(cmdName+ ".weather 0 = off [1~3] 16 [17~19] "));
+			pc.sendPackets(new S_SystemMessage(cmdName + " .ressall Failed"));
 		}
 	}
 }

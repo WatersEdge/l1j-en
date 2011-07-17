@@ -879,6 +879,12 @@ INSERT INTO `spawnlist_npc` VALUES ('1900086', 'blue fishgroup', '1', '81312', '
 INSERT INTO `spawnlist_npc` VALUES ('1900087', 'SeaHorse', '1', '81308', '32738', '32745', '5', '5', '0', '0', '63', '100');
 INSERT INTO `spawnlist_npc` VALUES ('1900088', 'SeaHorse', '1', '81308', '32739', '32729', '5', '5', '1', '0', '63', '100');
 
+-- some gmcommands
+INSERT INTO `commands` VALUES ('exprate', '200', 'L1ChangeExp');
+INSERT INTO `commands` VALUES ('droprate', '200', 'L1ChangeDrop');
+INSERT INTO `commands` VALUES ('ressall', '200', 'L1RessAll');
+INSERT INTO `commands` VALUES ('allbufftoall', '200', 'L1AllBuffToAll');
+
 --1835 santa orc
 --2271 aden walking guard sword
 --2289 aden wlking guard spear
