@@ -884,6 +884,7 @@ INSERT INTO `commands` VALUES ('exprate', '200', 'L1ChangeExp');
 INSERT INTO `commands` VALUES ('droprate', '200', 'L1ChangeDrop');
 INSERT INTO `commands` VALUES ('ressall', '200', 'L1RessAll');
 INSERT INTO `commands` VALUES ('allbufftoall', '200', 'L1AllBuffToAll');
+INSERT INTO `commands` VALUES ('shop', '200', 'L1AddItemShop');
 
 --1835 santa orc
 --2271 aden walking guard sword

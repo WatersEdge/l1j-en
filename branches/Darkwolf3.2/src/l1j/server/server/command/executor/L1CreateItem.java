@@ -104,7 +104,7 @@ public class L1CreateItem implements L1CommandExecutor {
 					}
 				}
 			} else {
-				pc.sendPackets(new S_SystemMessage(" something."));
+				pc.sendPackets(new S_SystemMessage("item not found."));
 			}
 		} catch (Exception e) {
 			_log.log(Level.SEVERE, e.getLocalizedMessage(), e);
