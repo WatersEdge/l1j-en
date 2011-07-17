@@ -1346,56 +1346,48 @@ public class L1NpcInstance extends L1Character {
 				ny = -1;
 				setHeading(1);
 				break;
-
 			case 2:
 				nx = 1;
 				ny = 0;
 				setHeading(2);
 				break;
-
 			case 3:
 				nx = 1;
 				ny = 1;
 				setHeading(3);
 				break;
-
 			case 4:
 				nx = 0;
 				ny = 1;
 				setHeading(4);
 				break;
-
 			case 5:
 				nx = -1;
 				ny = 1;
 				setHeading(5);
 				break;
-
 			case 6:
 				nx = -1;
 				ny = 0;
 				setHeading(6);
 				break;
-
 			case 7:
 				nx = -1;
 				ny = -1;
 				setHeading(7);
 				break;
-
 			case 0:
 				nx = 0;
 				ny = -1;
 				setHeading(0);
 				break;
-
 			default:
 				break;
 
 			}
 
 			getMap().setPassable(getLocation(), true);
-
+			checkObject(getX(), getY(), getMapId(), dir);
 			int nnx = getX() + nx;
 			int nny = getY() + ny;
 			setX(nnx);
@@ -1412,10 +1404,10 @@ public class L1NpcInstance extends L1Character {
 					if (getLocation().getLineDistance(
 							new Point(getHomeX(), getHomeY())) > getMovementDistance()) {
 						teleport(getHomeX(), getHomeY(), getHeading());
+						checkObject(getX(), getY(), getMapId(), dir);
 					}
 				}
 			}
-			//
 			if (getNpcTemplate().get_npcId() >= 45912
 					&& getNpcTemplate().get_npcId() <= 45916) {
 				if (getX() >= 32591 && getX() <= 32644
@@ -1446,6 +1438,7 @@ public class L1NpcInstance extends L1Character {
 			dir = AStarCource();
 			if (dir == -1) { 
 				dir = targetDirection(x, y);
+				dir = checkObject(getX(), getY(), getMapId(), dir);
 				if (!isExsistCharacterBetweenTarget(dir)) {
 					dir = checkObject(getX(), getY(), getMapId(), dir);
 				}
@@ -1470,23 +1463,31 @@ public class L1NpcInstance extends L1Character {
 		if (dir == 1) {
 			targetX = locX + 1;
 			targetY = locY - 1;
+			dir = checkObject(getX(), getY(), getMapId(), dir);
 		} else if (dir == 2) {
 			targetX = locX + 1;
+			dir = checkObject(getX(), getY(), getMapId(), dir);
 		} else if (dir == 3) {
 			targetX = locX + 1;
 			targetY = locY + 1;
+			dir = checkObject(getX(), getY(), getMapId(), dir);
 		} else if (dir == 4) {
 			targetY = locY + 1;
+			dir = checkObject(getX(), getY(), getMapId(), dir);
 		} else if (dir == 5) {
 			targetX = locX - 1;
 			targetY = locY + 1;
+			dir = checkObject(getX(), getY(), getMapId(), dir);
 		} else if (dir == 6) {
 			targetX = locX - 1;
+			dir = checkObject(getX(), getY(), getMapId(), dir);
 		} else if (dir == 7) {
 			targetX = locX - 1;
 			targetY = locY - 1;
+			dir = checkObject(getX(), getY(), getMapId(), dir);
 		} else if (dir == 0) {
 			targetY = locY - 1;
+			dir = checkObject(getX(), getY(), getMapId(), dir);
 		}
 
 		for (L1Object object : L1World.getInstance().getVisibleObjects(this,
@@ -1518,12 +1519,12 @@ public class L1NpcInstance extends L1Character {
 		dir += 4;
 		if (dir > 7) {
 			dir -= 8;
+			dir = checkObject(getX(), getY(), getMapId(), dir);
 		}
 		return dir;
 	}
 
-	public static int checkObject(int x, int y, short m, int d) { 
-
+	public static int checkObject(int x, int y, short m, int d) {
 		L1Map map = L1WorldMap.getInstance().getMap(m);
 		if (d == 1) {
 			if (map.isPassable(x, y, 1)) {

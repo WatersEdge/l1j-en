@@ -57,15 +57,21 @@ public class L1SummonInstance extends L1NpcInstance {
 
 	public boolean noTarget(int depth) {
 		if (_currentPetStatus == 3) { // If summon is in rest mode
+			if (getLocation().getTileLineDistance(_master.getLocation()) > 2) {
+				tagertClear();
 			return true;
+			}
 		} else if (_currentPetStatus == 4) {
-			if (_master != null
-					&& _master.getMapId() == getMapId()
-					&& getLocation().getTileLineDistance(_master.getLocation()) < 5) {
+			if (_master != null && _master.getMapId() == getMapId()
+					&& getLocation().getTileLineDistance(_master.getLocation()) < 35) {
+				setHate(_master, 1);
+				if (getLocation().getTileLineDistance(_master.getLocation()) > 1) {
+					tagertClear();
+				}
 				int dir = targetReverseDirection(_master.getX(), _master.getY());
 				dir = checkObject(getX(), getY(), getMapId(), dir);
 				setDirectionMove(dir);
-				setSleepTime(calcSleepTime(getPassispeed(), MOVE_SPEED));
+				//setSleepTime(calcSleepTime(getPassispeed(), MOVE_SPEED));
 			} else {
 				// If Summon owner is not avaliable or far away the summon goes to rest mode
 				_currentPetStatus = 3;
@@ -73,8 +79,12 @@ public class L1SummonInstance extends L1NpcInstance {
 			}
 		} else if (_currentPetStatus == 5) {
 			if (Math.abs(getHomeX() - getX()) > 1
-					|| Math.abs(getHomeY() - getY()) > 1) {
+					|| Math.abs(getHomeY() - getY()) > 2) {
 				int dir = moveDirection(getHomeX(), getHomeY());
+				setHate(_master, 1);
+				if (getLocation().getTileLineDistance(_master.getLocation()) > 1) {
+					tagertClear();
+				}
 				if (dir == -1) { // If the summon cant find a way to the owner
 						//Original code
 						/*setHomeX(getX());
@@ -83,7 +93,7 @@ public class L1SummonInstance extends L1NpcInstance {
 					try {
 						Thread.sleep(200);
 						// Prevent infinite recursion by max-bounding retry depth
-						if (depth > 80) {
+						if (depth > 120) {
 							setHomeX(getX());
 							setHomeY(getY());
 							return true;
@@ -97,18 +107,22 @@ public class L1SummonInstance extends L1NpcInstance {
 					}
 				} else {
 					setDirectionMove(dir);
-					setSleepTime(calcSleepTime(getPassispeed(), MOVE_SPEED));
+					//setSleepTime(calcSleepTime(getPassispeed(), MOVE_SPEED));
 				}
 			}
 		} else if (_master != null && _master.getMapId() == getMapId()) {
-			if (getLocation().getTileLineDistance(_master.getLocation()) > 2) {
+			if (getLocation().getTileLineDistance(_master.getLocation()) > 1) {
 				int dir = moveDirection(_master.getX(), _master.getY());
 				if (dir == -1) {
 					_currentPetStatus = 3;
 					return true;
 				} else {
+					setHate(_master, 1);
+					if (getLocation().getTileLineDistance(_master.getLocation()) > 1) {
+						tagertClear();
+					}
 					setDirectionMove(dir);
-					setSleepTime(calcSleepTime(getPassispeed(), MOVE_SPEED));
+					//setSleepTime(calcSleepTime(getPassispeed(), MOVE_SPEED));
 				}
 			}
 		} else {
