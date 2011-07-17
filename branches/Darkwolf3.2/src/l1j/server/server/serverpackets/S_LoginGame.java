@@ -18,48 +18,25 @@
  */
 package l1j.server.server.serverpackets;
 
-import l1j.server.server.encryptions.Opcodes;
+import static l1j.server.server.encryptions.Opcodes.S_OPCODE_UNKNOWN1;
 
-public class S_ServerVersion extends ServerBasePacket {
-	private static final String S_SERVER_VERSION = "[S] ServerVersion";
-
-	public S_ServerVersion() {
-		writeC(Opcodes.S_OPCODE_SERVERVERSION);
-		// Auth Check client Version
-		// 1 = Check
-		// 0 = no check
-		// > 1 no check
-		// type : boolean
+public class S_LoginGame extends ServerBasePacket
+{
+	public S_LoginGame()
+	{
+		writeC(S_OPCODE_UNKNOWN1);
+		writeC(0x03);
 		writeC(0x00);
-
-		// your server id, first id = 2
-		// id = 0, ????
-		// id = 1, ????
-		writeC(0x02);
-
-		writeD(0x000160c9); // server verion
-		writeD(0x0001606a); // cache verion
-		writeD(0x0000ee01); // auth verion
-		writeD(0x00013cdb); // npc verion
-		
-		writeD(0x49c466ec);
-
-		writeC(0x00); // unknown
-		writeC(0x00); // unknown
-
-		// Country
-		// 0.US 3.Taiwan 4.Janpan 5.China
-		//writeC(Config.CLIENT_LANGUAGE);
+		writeC(0xF7);
+		writeC(0xAD);
+		writeC(0x74);
 		writeC(0x00);
+		writeC(0xE5);
 	}
 
 	@Override
-	public byte[] getContent() {
+	public byte[] getContent()
+	{
 		return getBytes();
-	}
-
-	@Override
-	public String getType() {
-		return S_SERVER_VERSION;
 	}
 }

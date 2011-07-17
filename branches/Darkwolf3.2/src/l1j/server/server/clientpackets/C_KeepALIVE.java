@@ -21,7 +21,6 @@ import java.util.logging.Logger;
 
 import l1j.server.server.ClientThread;
 import l1j.server.server.model.Instance.L1PcInstance;
-import l1j.server.server.serverpackets.S_PingPacket;
 // Referenced classes of package l1j.server.server.clientpackets:
 // ClientBasePacket
 public class C_KeepALIVE extends ClientBasePacket {
@@ -30,9 +29,6 @@ public class C_KeepALIVE extends ClientBasePacket {
 
 	public C_KeepALIVE(byte decrypt[], ClientThread client) {
 		super(decrypt);
-    	
-	    L1PcInstance activeChar = client.getActiveChar();
-	    client.sendPacket(new S_PingPacket());
        // System.out.println("C_Keepalive Sended");
     }
 
