@@ -31,6 +31,7 @@ import l1j.server.server.controllers.NpcChatTimeController;
 import l1j.server.server.controllers.UbTimeController;
 import l1j.server.server.controllers.WarTimeController;
 import l1j.server.server.datatables.CastleTable;
+import l1j.server.server.datatables.CheckWarTime;
 import l1j.server.server.datatables.CharacterTable;
 import l1j.server.server.datatables.ChatLogTable;
 import l1j.server.server.datatables.ClanTable;
@@ -246,7 +247,8 @@ public GameServerThread() throws Exception {
 	PetTable.getInstance();
 	ClanTable.getInstance();
 	CastleTable.getInstance();
-	L1CastleLocation.setCastleTaxRate(); // This must be after the initial CastleTable 
+	L1CastleLocation.setCastleTaxRate(); // This must be after the initial CastleTable
+	CheckWarTime.getInstance();
 	GetBackRestartTable.getInstance();
 	DoorTable.initialize();
 	GeneralThreadPool.getInstance();

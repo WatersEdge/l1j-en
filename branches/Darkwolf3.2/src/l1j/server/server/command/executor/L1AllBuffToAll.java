@@ -92,8 +92,6 @@ public class L1AllBuffToAll implements L1CommandExecutor {
 					null, skill.getBuffDuration() * 1000,
 					L1SkillUse.TYPE_GMBUFF);
 				}
-				
-				targetpc.sendPackets(new S_ServerMessage("Buffed By GM"));
 			}
 		} catch (Exception e) {
 			pc.sendPackets(new S_SystemMessage(".allbuff"));
