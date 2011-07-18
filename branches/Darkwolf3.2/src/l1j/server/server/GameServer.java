@@ -31,6 +31,7 @@ import l1j.server.server.model.MpBugTest;
 import l1j.server.server.model.L1World;
 import l1j.server.server.model.Instance.L1PcInstance;
 import l1j.server.server.utils.SystemUtil;
+import l1j.server.server.utils.InfoUtil;
 
 public class GameServer extends Thread {
 	private ServerSocket _serverSocket;
@@ -83,7 +84,30 @@ public class GameServer extends Thread {
 		System.out.println("=================================================");
 		System.out.println("               L1J-En Server Starting");
 		System.out.println("=================================================");
+		// Time
+		System.out.println("System Information Time: " 
+				+ InfoUtil.getRealTime());
+		
+		// OS Infos
+		for(String line : InfoUtil.getOSInfo())
+			System.out.println(line);
+		
+		// CPU Infos
+		for(String line : InfoUtil.getCPUInfo())
+			System.out.println(line);
+		
+		// JRE Infos
+		for(String line : InfoUtil.getJREInfo())
+			System.out.println(line);
+		
+		// JVM Infos
+		for(String line : InfoUtil.getJVMInfo())
+			System.out.println(line);
 
+		// Memory Infos
+		for(String line : InfoUtil.getMemoryInfo())
+			System.out.println(line);
+		
 		_port = Config.GAME_SERVER_PORT;
 		if (!"*".equals(s)) {
 			InetAddress inetaddress = InetAddress.getByName(s);
