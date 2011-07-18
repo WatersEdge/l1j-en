@@ -68,6 +68,9 @@ public class PacketHandler {
 		case C_OPCODE_CHANGEHEADING:
 			new C_ChangeHeading(abyte0, _client);
 			break;
+		case C_OPCODE_CHANGEPASS:
+			new C_ChangePassword(abyte0, _client);
+			break;
 		case C_OPCODE_NPCACTION:
 			new C_NPCAction(abyte0, _client);
 			break;

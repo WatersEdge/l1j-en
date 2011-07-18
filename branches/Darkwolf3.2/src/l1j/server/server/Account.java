@@ -211,6 +211,29 @@ public class Account {
 		}
 	}
 
+	/**
+	 * @param password
+	 */
+	private void changePassword(String password) {
+		Connection con = null;
+		PreparedStatement pstm = null;
+
+		try {
+			con = L1DatabaseFactory.getInstance().getConnection();
+			pstm = con.prepareStatement("UPDATE accounts SET password=? WHERE login=?");
+			pstm.setString(1, password);
+			pstm.setString(2, _name);
+			pstm.execute();
+
+			_log.info("Rehashed password for " + _name + ".");
+		} catch (SQLException e) {
+			_log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+		} finally {
+			SQLUtil.close(pstm);
+			SQLUtil.close(con);
+		}
+	}
+	
 	public boolean validatePassword(final String rawPassword) {
 
 		if (_isValid) {

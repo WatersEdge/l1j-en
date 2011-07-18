@@ -150,6 +150,8 @@ public class Opcodes {
 	public static final int C_OPCODE_BOARDWRITE = 84;
 
 	public static final int C_OPCODE_GIVEITEM = 85;
+	
+	public static final int C_OPCODE_CHANGEPASS = 86;
 
 	public static final int C_OPCODE_BOARDBACK = 87;
 
