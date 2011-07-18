@@ -21,12 +21,16 @@ package l1j.server.server.model.map;
 
 import l1j.server.server.types.Point;
 
-public abstract class L1Map {
+public abstract class L1Map implements Cloneable {
 	private static L1NullMap _nullMap = new L1NullMap();
 
 	protected L1Map() {
 	}
-
+	
+	public abstract void setId(int mapId);
+	
+	public abstract int getBaseMapId();
+	
 	public abstract int getId();
 
 	public abstract int getX();
@@ -107,6 +111,15 @@ public abstract class L1Map {
 
 	public abstract String toString(Point pt);
 
+	@Override
+	public L1Map clone() {
+		try {
+			return (L1Map) super.clone();
+			} catch (CloneNotSupportedException e) {
+			throw new Error("CloneNotSupportedException was thrown");
+		}
+	}
+	
 	public boolean isNull() {
 		return false;
 	}
@@ -311,5 +324,19 @@ class L1NullMap extends L1Map {
 	@Override
 	public boolean isNull() {
 		return true;
+	}
+
+	@Override 
+	public L1NullMap clone() { 
+		return (L1NullMap) super.clone(); 
+	} 
+	
+	@Override 
+	public void setId(int mapId) { 
+	} 
+	
+	@Override 
+	public int getBaseMapId() { 
+		return 0; 
 	}
 }

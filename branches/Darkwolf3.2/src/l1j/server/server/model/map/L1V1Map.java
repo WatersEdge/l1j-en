@@ -25,42 +25,27 @@ import l1j.server.server.ActionCodes;
 import l1j.server.server.datatables.DoorTable;
 import l1j.server.server.model.Instance.L1DoorInstance;
 import l1j.server.server.types.Point;
+import l1j.server.server.utils.BinaryUtils;
 
 public class L1V1Map extends L1Map {
 	private static Logger _log = Logger.getLogger(L1Map.class.getName());
-
 	private int _mapId;
-
+	private int _baseMapId;
 	private int _worldTopLeftX;
-
 	private int _worldTopLeftY;
-
 	private int _worldBottomRightX;
-
 	private int _worldBottomRightY;
-
 	private byte _map[][];
-
 	private boolean _isUnderwater;
-
 	private boolean _isMarkable;
-
 	private boolean _isTeleportable;
-
 	private boolean _isEscapable;
-
 	private boolean _isUseResurrection;
-
 	private boolean _isUsePainwand;
-
 	private boolean _isEnabledDeathPenalty;
-
 	private boolean _isTakePets;
-
 	private boolean _isRecallPets;
-
 	private boolean _isUsableItem;
-
 	private boolean _isUsableSkill;
 	/* Map information to a front-page flag holder for a bit reluctantly. 
 	 * Readability is a large drop in child imitating not so good.
@@ -78,6 +63,7 @@ public class L1V1Map extends L1Map {
 			boolean usePainwand, boolean enabledDeathPenalty, boolean takePets,
 			boolean recallPets, boolean usableItem, boolean usableSkill) {
 		_mapId = mapId;
+		_baseMapId = mapId;
 		_map = map;
 		_worldTopLeftX = worldTopLeftX;
 		_worldTopLeftY = worldTopLeftY;
@@ -100,24 +86,31 @@ public class L1V1Map extends L1Map {
 
 	public L1V1Map(L1V1Map map) {
 		_mapId = map._mapId;
-
+		_baseMapId = map._mapId;
 		_map = new byte[map._map.length][];
 		for (int i = 0; i < map._map.length; i++) {
 			_map[i] = map._map[i].clone();
 		}
-
 		_worldTopLeftX = map._worldTopLeftX;
 		_worldTopLeftY = map._worldTopLeftY;
 		_worldBottomRightX = map._worldBottomRightX;
 		_worldBottomRightY = map._worldBottomRightY;
-
+	}
+	
+	@Override
+	public L1V1Map clone() {
+		L1V1Map result = (L1V1Map) super.clone();
+		result._map = new byte[_map.length][];
+		for (int i = 0; i < _map.length; i++) {
+			result._map[i] = _map[i].clone();
+		}
+		return result;
 	}
 
 	private int accessTile(int x, int y) {
 		if (!isInMap(x, y)) {
 			return 0;
 		}
-
 		return _map[x - _worldTopLeftX][y - _worldTopLeftY];
 	}
 
@@ -197,8 +190,14 @@ public class L1V1Map extends L1Map {
 
 	@Override
 	public boolean isPassable(int x, int y) {
-		return isPassable(x, y - 1, 4) || isPassable(x + 1, y, 6)
-				|| isPassable(x, y + 1, 0) || isPassable(x - 1, y, 2);
+		 int tile = accessOriginalTile(x, y); 
+		 if (tile == 1 || tile == 9 || tile == 65 || tile == 69 || tile == 73) { 
+			 return false; 
+		 } 
+		 if (0 != (tile & BITFLAG_IS_IMPASSABLE)) {
+				return false;
+		 }
+		 return true; 
 	}
 
 	@Override
@@ -231,10 +230,17 @@ public class L1V1Map extends L1Map {
 			return false;
 		}
 
-		if ((tile2 & BITFLAG_IS_IMPASSABLE) == BITFLAG_IS_IMPASSABLE) {
+		if (tile2 == 1 || tile2 == 9 || tile2 == 65 || tile2 == 69 || tile2 == 73) { 
+			return false; 
+		} 
+		if (0 != (tile2 & BITFLAG_IS_IMPASSABLE)) { 
+			return false;
+        }
+		if (isExistDoor(x, y & tile2)) {
+			setTile(x, y, (short) (accessTile(x, y) | BITFLAG_IS_IMPASSABLE));
 			return false;
 		}
-
+		
 		if (heading == 0) {
 			return (tile1 & 0x02) == 0x02;
 		} else if (heading == 1) {
@@ -256,8 +262,7 @@ public class L1V1Map extends L1Map {
 			int tile3 = accessTile(x - 1, y);
 			return (tile3 & 0x02) == 0x02;
 		}
-
-		return false;
+		return true;
 	}
 
 	@Override
@@ -367,8 +372,14 @@ public class L1V1Map extends L1Map {
 		} else {
 			return false;
 		}
-
-		if (isExistDoor(newX, newY)) {
+		if (tile2 == 1 || tile2 == 9 || tile2 == 65 || tile2 == 69 || tile2 == 73) { 
+			return false; 
+		} 
+		if (0 != (tile2 & BITFLAG_IS_IMPASSABLE)) { 
+			return false;
+        }
+		if (isExistDoor(x, y & tile2)) {
+			setTile(x, y, (short) (accessTile(x, y) | BITFLAG_IS_IMPASSABLE));
 			return false;
 		}
 
@@ -393,8 +404,7 @@ public class L1V1Map extends L1Map {
 			int tile3 = accessTile(x - 1, y);
 			return (tile3 & 0x08) == 0x08;
 		}
-
-		return false;
+		return (tile2 != 1); 
 	}
 
 	@Override
@@ -465,25 +475,28 @@ public class L1V1Map extends L1Map {
 			if (door.getOpenStatus() == ActionCodes.ACTION_Open) {
 				continue;
 			}
+			if (door.getOpenStatus() == ActionCodes.ACTION_Close) {
+				return false;
+			}
 			if (door.isDead()) {
 				continue;
 			}
 			int leftEdgeLocation = door.getLeftEdgeLocation();
 			int rightEdgeLocation = door.getRightEdgeLocation();
 			int size = rightEdgeLocation - leftEdgeLocation;
-			if (size == 0) { // 
+			if (size == 0) {
 				if (x == door.getX() && y == door.getY()) {
 					return true;
 				}
-			} else { // 
-				if (door.getDirection() == 0) { // 
+			} else {
+				if (door.getDirection() == 0) {
 					for (int doorX = leftEdgeLocation;
 							doorX <= rightEdgeLocation; doorX++) {
 						if (x == doorX && y == door.getY()) {
 							return true;
 						}
 					}
-				} else { // 
+				} else {
 					for (int doorY = leftEdgeLocation;
 							doorY <= rightEdgeLocation; doorY++) {
 						if (x == door.getX() && y == doorY) {
@@ -498,6 +511,17 @@ public class L1V1Map extends L1Map {
 
 	@Override
 	public String toString(Point pt) {
-		return "" + getOriginalTile(pt.getX(), pt.getY());
+		int tile = accessOriginalTile(pt.getX(), pt.getY());
+		return "" + tile + " " + BinaryUtils.byteToBinaryString((byte) tile);
 	}
+
+	@Override 
+	public void setId(int mapId){ 
+		_mapId=mapId;
+	}
+	
+	@Override
+    public int getBaseMapId() {
+         return _baseMapId;
+     }
 }

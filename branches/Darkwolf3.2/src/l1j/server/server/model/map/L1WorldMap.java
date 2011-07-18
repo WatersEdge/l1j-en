@@ -65,4 +65,18 @@ public class L1WorldMap {
 		}
 		return map;
 	}
+
+	/**
+	 * @param map
+	 */
+	public synchronized void addMap(L1Map map){
+		_maps.put(map.getId(), map);
+	}
+
+	/**
+	 * @param mapId
+	 */
+	public synchronized void removeMap(int mapId){
+		_maps.remove(mapId);
+	}
 }

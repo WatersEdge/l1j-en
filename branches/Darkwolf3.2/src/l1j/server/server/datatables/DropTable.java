@@ -182,7 +182,7 @@ public class DropTable {
 			}
 
 			randomChance = random.nextInt(0xf4240) + 1;
-			double rateOfMapId = MapsTable.getInstance().getDropRate(npc.getMapId());
+			double rateOfMapId = MapsTable.getInstance().getDropRate(npc.getMap().getBaseMapId());
 			double rateOfItem = DropItemTable.getInstance().getDropRate(itemId);
 			if (droprate == 0 || drop.getChance() * droprate * rateOfMapId * rateOfItem < randomChance) {
 				continue;
