@@ -40,6 +40,7 @@ public class C_Disconnect extends ClientBasePacket {
 				pc.sendPackets(new S_Disconnect());
 				pc.logout();
 				client.setActiveChar(null);
+				ClientThread.quitGame(pc);
 			}
 		} else {
 			_log.fine("Disconnect Request From Account : " + client.getAccountName());

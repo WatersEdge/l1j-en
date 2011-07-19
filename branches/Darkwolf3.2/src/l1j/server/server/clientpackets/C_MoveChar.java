@@ -26,6 +26,7 @@ import l1j.server.server.ClientThread;
 import l1j.server.server.model.AcceleratorChecker;
 import l1j.server.server.model.Dungeon;
 import l1j.server.server.model.DungeonRandom;
+import l1j.server.server.model.L1Teleport;
 import l1j.server.server.model.Instance.L1PcInstance;
 import l1j.server.server.model.skill.L1SkillId;
 import l1j.server.server.model.L1Location;
@@ -60,7 +61,9 @@ public class C_MoveChar extends ClientBasePacket {
 		if (pc.isTeleport()) { 
 			return;
 		}
-
+		if (pc.isDead()) {
+			return;
+		}
 		if (Config.CHECK_MOVE_INTERVAL) {
 			int result;
 			result = pc.getAcceleratorChecker().checkInterval(
@@ -87,7 +90,17 @@ public class C_MoveChar extends ClientBasePacket {
 		if (DungeonRandom.getInstance().dg(locx, locy, pc.getMap().getId(), pc)) { 
 			return;
 		}
-
+		if ((pc.getMapId() == 68 || pc.getMapId() == 85|| pc.getMapId() == 86|| pc.getMapId() == 69)&& pc.getLevel() >= 13) {
+			switch(pc.getMapId()){
+			case 69: case 86:
+				L1Teleport.teleport(pc, 33080, 33392, (short)4, (byte)5, true);
+				return;
+			
+			case 68: case 85:
+				L1Teleport.teleport(pc, 32580, 32931, (short)0, (byte)5, true);
+				return;
+			}
+		}
 		// Esc bug fix. Don't remove.
 		L1Location oldLoc = pc.getLocation();
 		if ((oldLoc.getX() + 10 < locx) || (oldLoc.getX() - 10 > locx) || 

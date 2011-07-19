@@ -460,6 +460,12 @@ public final class Config {
 	public static int MONSTERPOTIONINTUSE = 13;
 
 	/** CharSettings control */
+	@Configure(file = CHARSETTINGS, key = "MaxAbility")
+	public static int MAX_ABILITY = 25;
+	
+	@Configure(file = CHARSETTINGS, key = "MaxAbility2")
+	public static int MAX_ABILITY2 = 25;
+	
 	@Configure(file = CHARSETTINGS, key = "PrinceMaxHP")
 	public static int PRINCE_MAX_HP;
 
