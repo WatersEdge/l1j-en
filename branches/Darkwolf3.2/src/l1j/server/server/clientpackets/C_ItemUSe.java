@@ -1793,6 +1793,35 @@ public class C_ItemUSe extends ClientBasePacket {
 							&& pc.getMapId() == 440) {
 						short mapid = 430;
 						L1Teleport.teleport(pc, 32922, 32812, mapid, 5, true);
+					} else { 
+						pc.sendPackets(new S_ServerMessage(79)); 
+					    } 
+					} 
+				else if (itemId == 49202) { 
+					if ((pc.getMapId() != 2004) && (pc.getQuest().get_step(L1Quest.QUEST_LEVEL50) > 1 )) { 
+						short mapid = 2004; 
+						L1Teleport.teleport(pc, 32723, 32834, mapid, 5, true); 
+						pc.getInventory().removeItem(l1iteminstance, 1); 
+					} else { 
+						pc.sendPackets(new S_ServerMessage(79)); 
+						} 
+					} 
+				else if (itemId == 49178) { 
+					if ((pc.isIllusionist()) && (pc.getMapId() == 2004) 
+							&& (pc.getQuest().get_step(L1Quest.QUEST_LEVEL50) > 1 )) { 
+						short mapid = 1000; 
+						L1Teleport.teleport(pc, 32772, 32812, mapid, 5, true); 
+						pc.getInventory().removeItem(l1iteminstance, 1); 
+					} else { 
+						pc.sendPackets(new S_ServerMessage(79)); 
+						} 
+					} 
+				else if (itemId == 49216) { 
+					if ((pc.isDragonKnight()) && (pc.getMapId() == 2004) 
+							&& (pc.getQuest().get_step(L1Quest.QUEST_LEVEL50) > 1 )) { 
+						short mapid = 1001; 
+						L1Teleport.teleport(pc, 32817, 32832, mapid, 5, true); 
+						pc.getInventory().removeItem(l1iteminstance, 1);
 					} else {
 						pc.sendPackets(new S_ServerMessage(79));
 					}
