@@ -1003,7 +1003,8 @@ CREATE TABLE `logclanwarehousein` (
   `ItemCountDiff` int(11) DEFAULT NULL,
   `ItemCount` int(11) DEFAULT NULL,
   `InCount` int(11) DEFAULT NULL,
-  `CountDiff` int(11) DEFAULT NULL
+  `CountDiff` int(11) DEFAULT NULL,
+  PRIMARY KEY  (`CharId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -1026,7 +1027,8 @@ CREATE TABLE `logclanwarehouseOut` (
   `ItemCountDiff` int(11) DEFAULT NULL,
   `ItemCount` int(11) DEFAULT NULL,
   `InCount` int(11) DEFAULT NULL,
-  `CountDiff` int(11) DEFAULT NULL
+  `CountDiff` int(11) DEFAULT NULL,
+  PRIMARY KEY  (`CharId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -1038,7 +1040,8 @@ CREATE TABLE `LogDeleteChar` (
   `Ip` varchar(255) DEFAULT NULL,
   `Account` varchar(255) DEFAULT NULL,
   `CharId` int(11) DEFAULT NULL,
-  `CharName` varchar(255) DEFAULT NULL
+  `CharName` varchar(255) DEFAULT NULL,
+  PRIMARY KEY  (`CharId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -1055,7 +1058,8 @@ CREATE TABLE `LogDeleteItem` (
   `ItemName` varchar(255) DEFAULT NULL,
   `EnchantLevel` int(11) DEFAULT NULL,
   `ItemCount` int(11) DEFAULT NULL,
-  `CountDiff` int(11) DEFAULT NULL
+  `CountDiff` int(11) DEFAULT NULL,
+  PRIMARY KEY  (`CharId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -1075,7 +1079,8 @@ CREATE TABLE `LogDropItem` (
   `AfterInven` int(11) DEFAULT NULL,
   `BeforeGround` int(11) DEFAULT NULL,
   `AfterGround` int(11) DEFAULT NULL,
-  `DropCount` int(11) DEFAULT NULL
+  `DropCount` int(11) DEFAULT NULL,
+  PRIMARY KEY  (`CharId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 		
 -- ----------------------------
@@ -1098,7 +1103,8 @@ CREATE TABLE `LogElfWareHouseIn` (
   `ItemCountDiff` int(11) DEFAULT NULL,
   `ItemCount` int(11) DEFAULT NULL,
   `InCount` int(11) DEFAULT NULL,
-  `CountDiff` int(11) DEFAULT NULL
+  `CountDiff` int(11) DEFAULT NULL,
+  PRIMARY KEY  (`CharId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -1121,7 +1127,8 @@ CREATE TABLE `LogElfWareHouseOut` (
   `ItemCountDiff` int(11) DEFAULT NULL,
   `ItemCount` int(11) DEFAULT NULL,
   `InCount` int(11) DEFAULT NULL,
-  `CountDiff` int(11) DEFAULT NULL
+  `CountDiff` int(11) DEFAULT NULL,
+  PRIMARY KEY  (`CharId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -1137,7 +1144,8 @@ CREATE TABLE `LogEnchantFail` (
   `ObjectId` int(11) DEFAULT NULL,
   `ItemName` varchar(255) DEFAULT NULL,
   `EnchantLevel` int(11) DEFAULT NULL,
-  `ItemCount` int(11) DEFAULT NULL
+  `ItemCount` int(11) DEFAULT NULL,
+  PRIMARY KEY  (`CharId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -1156,7 +1164,8 @@ CREATE TABLE `LogEnchantSuccess` (
   `EnchantBefore` int(11) DEFAULT NULL,
   `EnchantAfter` int(11) DEFAULT NULL,
   `EnchantDiff` int(11) DEFAULT NULL,
-  `EnchantNum` int(11) DEFAULT NULL
+  `EnchantNum` int(11) DEFAULT NULL,
+  PRIMARY KEY  (`CharId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -1176,7 +1185,8 @@ CREATE TABLE `LogPickUpItem` (
   `AfterInven` int(11) DEFAULT NULL,
   `BeforeGround` int(11) DEFAULT NULL,
   `AfterGround` int(11) DEFAULT NULL,
-  `PickupCount` int(11) DEFAULT NULL
+  `PickupCount` int(11) DEFAULT NULL,
+  PRIMARY KEY  (`CharId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -1200,7 +1210,8 @@ CREATE TABLE `LogPrivateShopBuy` (
   `ItemBefore` int(11) DEFAULT NULL,
   `ItemAfter` int(11) DEFAULT NULL,
   `ItemDiff` int(11) DEFAULT NULL,
-  `BuyCount` int(11) DEFAULT NULL
+  `BuyCount` int(11) DEFAULT NULL,
+  PRIMARY KEY  (`CharId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -1224,7 +1235,8 @@ CREATE TABLE `LogPrivateShopSell` (
   `ItemBefore` int(11) DEFAULT NULL,
   `ItemAfter` int(11) DEFAULT NULL,
   `ItemDiff` int(11) DEFAULT NULL,
-  `SellCount` int(11) DEFAULT NULL
+  `SellCount` int(11) DEFAULT NULL,
+  PRIMARY KEY  (`CharId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -1244,7 +1256,8 @@ CREATE TABLE `LogShopBuy` (
   `AdenaBefore` int(11) DEFAULT NULL,
   `AdenaAfter` int(11) DEFAULT NULL,
   `AdenaDiff` int(11) DEFAULT NULL,
-  `BuyPrice` int(11) DEFAULT NULL
+  `BuyPrice` int(11) DEFAULT NULL,
+  PRIMARY KEY  (`CharId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -1264,7 +1277,8 @@ CREATE TABLE `LogShopSell` (
   `AdenaBefore` int(11) DEFAULT NULL,
   `AdenaAfter` int(11) DEFAULT NULL,
   `AdenaDiff` int(11) DEFAULT NULL,
-  `SellPrice` int(11) DEFAULT NULL
+  `SellPrice` int(11) DEFAULT NULL,
+  PRIMARY KEY  (`CharId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -1276,7 +1290,8 @@ CREATE TABLE `LogSpeedHack` (
   `Ip` varchar(255) DEFAULT NULL,
   `Account` varchar(255) DEFAULT NULL,
   `CharId` int(11) DEFAULT NULL,
-  `CharName` varchar(255) DEFAULT NULL
+  `CharName` varchar(255) DEFAULT NULL,
+  PRIMARY KEY  (`CharId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 	
 -- ----------------------------
@@ -1306,7 +1321,8 @@ CREATE TABLE `LogStatusUp` (
   `BonusStats` int(11) DEFAULT NULL,
   `AllStats` int(11) DEFAULT NULL,
   `DiffSc` int(11) DEFAULT NULL,
-  `DiffSr` int(11) DEFAULT NULL
+  `DiffSr` int(11) DEFAULT NULL,
+  PRIMARY KEY  (`CharId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -1330,7 +1346,8 @@ CREATE TABLE `LogTradeAddItem` (
   `ItemBefore` int(11) DEFAULT NULL,
   `ItemAfter` int(11) DEFAULT NULL,
   `ItemDiff` int(11) DEFAULT NULL,
-  `TradeCount` int(11) DEFAULT NULL
+  `TradeCount` int(11) DEFAULT NULL,
+  PRIMARY KEY  (`CharId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -1350,7 +1367,8 @@ CREATE TABLE `LogTradeBugItem` (
   `ObjectId` int(11) DEFAULT NULL,
   `ItemName` varchar(255) DEFAULT NULL,
   `EnchantLevel` int(11) DEFAULT NULL,
-  `ItemCount` int(11) DEFAULT NULL
+  `ItemCount` int(11) DEFAULT NULL,
+  PRIMARY KEY  (`CharId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -1375,7 +1393,8 @@ CREATE TABLE `LogTradeComplete` (
   `ItemBeforeInven` int(11) DEFAULT NULL,
   `ItemAfter` int(11) DEFAULT NULL,
   `ItemDiff` int(11) DEFAULT NULL,
-  `TradeCount` int(11) DEFAULT NULL
+  `TradeCount` int(11) DEFAULT NULL,
+  PRIMARY KEY  (`CharId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -1396,7 +1415,8 @@ CREATE TABLE `LogWareHouseIn` (
   `ItemCountDiff` int(11) DEFAULT NULL,
   `ItemCount` int(11) DEFAULT NULL,
   `InCount` int(11) DEFAULT NULL,
-  `CountDiff` int(11) DEFAULT NULL
+  `CountDiff` int(11) DEFAULT NULL,
+  PRIMARY KEY  (`CharId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -1417,7 +1437,20 @@ CREATE TABLE `LogWareHouseOut` (
   `ItemCountDiff` int(11) DEFAULT NULL,
   `ItemCount` int(11) DEFAULT NULL,
   `OutCount` int(11) DEFAULT NULL,
-  `CountDiff` int(11) DEFAULT NULL
+  `CountDiff` int(11) DEFAULT NULL,
+  PRIMARY KEY  (`ObjectId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for `BotReport`
+-- ----------------------------
+DROP TABLE IF EXISTS `BotReport`;
+CREATE TABLE `BotReport` (
+  `id` int(11) NOT NULL,
+  `date` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `charname` varchar(45) DEFAULT NULL,
+  `ip` varchar(20) DEFAULT NULL,
+  PRIMARY KEY  (`charname`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --1835 santa orc
