@@ -20,6 +20,7 @@ package l1j.server.server.clientpackets;
 
 import java.util.logging.Logger;
 
+import l1j.server.server.hackdetections.LogPickUpItem;
 import l1j.server.server.ActionCodes;
 import l1j.server.server.ClientThread;
 import l1j.server.server.model.L1Inventory;
@@ -90,12 +91,16 @@ public class C_PickUpItem extends ClientBasePacket {
 					return;
 				}
 			}
-
+			int before_inven = 0;
+			int after_ground = 0;
+			int after_inven = 0;
+			int brfore_ground = groundInventory.getItem(objectId).getCount();
 			if (pc.getInventory().checkAddItem(item, pickupCount) == L1Inventory.OK) {
 				if (item.getX() != 0 && item.getY() != 0) { 
 					groundInventory.tradeItem(item, pickupCount, pc.getInventory());
 					pc.turnOnOffLight();
-
+					LogPickUpItem lpui = new LogPickUpItem();
+					lpui.storeLogPickUpItem(pc, item, before_inven, after_inven, brfore_ground, after_ground, (int)pickupCount);
 					pc.sendPackets(new S_AttackPacket(pc, objectId, ActionCodes.ACTION_Pickup));
 					if (!pc.isGmInvis()) {
 						pc.broadcastPacket(new S_AttackPacket(pc, objectId, ActionCodes.ACTION_Pickup));

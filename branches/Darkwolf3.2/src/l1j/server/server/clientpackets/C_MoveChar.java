@@ -22,6 +22,7 @@ import static l1j.server.server.model.Instance.L1PcInstance.REGENSTATE_MOVE;
 import java.util.logging.Logger;
 
 import l1j.server.Config;
+import l1j.server.server.hackdetections.LogSpeedHack;
 import l1j.server.server.ClientThread;
 import l1j.server.server.model.AcceleratorChecker;
 import l1j.server.server.model.Dungeon;
@@ -69,6 +70,8 @@ public class C_MoveChar extends ClientBasePacket {
 			result = pc.getAcceleratorChecker().checkInterval(
 					AcceleratorChecker.ACT_TYPE.MOVE);
 			if (result == AcceleratorChecker.R_DISCONNECTED) {
+				LogSpeedHack lsh = new LogSpeedHack();
+				lsh.storeLogSpeedHack(pc);
 				return;
 			}
 		}

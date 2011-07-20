@@ -20,10 +20,12 @@ package l1j.server.server.clientpackets;
 
 import java.util.logging.Logger;
 
+import l1j.server.server.hackdetections.LogTradeBugItem;
 import l1j.server.server.ClientThread;
 import l1j.server.server.model.L1Inventory;
 import l1j.server.server.model.L1Trade;
 import l1j.server.server.model.L1World;
+import l1j.server.server.model.L1CheckPcItem;
 import l1j.server.server.model.Instance.L1ItemInstance;
 import l1j.server.server.model.Instance.L1PcInstance;
 import l1j.server.server.model.Instance.L1PetInstance;
@@ -41,7 +43,8 @@ public class C_TradeAddItem extends ClientBasePacket {
 		int itemid = readD();
 		int itemcount = readD();
 		L1PcInstance pc = client.getActiveChar();
-		
+		L1PcInstance target = (L1PcInstance) L1World.getInstance().findObject(
+				pc.getTradeID());
 		//TRICIDTODO: set configurable autoban
 		if (itemcount < 0)
 		{
@@ -50,7 +53,13 @@ public class C_TradeAddItem extends ClientBasePacket {
 		}
 		L1Trade trade = new L1Trade();
 		L1ItemInstance item = pc.getInventory().getItem(itemid);
-		
+		L1CheckPcItem checkPcItem = new L1CheckPcItem();
+		boolean isCheat = checkPcItem.checkPcItem(item, pc);
+		if (isCheat) {
+			LogTradeBugItem ltbi = new LogTradeBugItem();
+			ltbi.storeLogTradeBugItem(pc, target, item);
+			return;
+		}
 		if (!item.getItem().isTradable()) {
 			pc.sendPackets(new S_ServerMessage(210, item.getItem().getName()));
 			return;
@@ -83,6 +92,11 @@ public class C_TradeAddItem extends ClientBasePacket {
 		if (tradingPartner.getInventory().checkAddItem(item, itemcount) != L1Inventory.OK) {
 			tradingPartner.sendPackets(new S_ServerMessage(270));
 			pc.sendPackets(new S_ServerMessage(271));
+			return;
+		}
+		if (isCheat) {
+			LogTradeBugItem ltbi = new LogTradeBugItem();
+			ltbi.storeLogTradeBugItem(tradingPartner, pc, item);
 			return;
 		}
 		trade.TradeAddItem(pc, itemid, itemcount);

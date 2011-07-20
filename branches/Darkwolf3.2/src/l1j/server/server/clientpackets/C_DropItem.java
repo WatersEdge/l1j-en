@@ -20,8 +20,10 @@ package l1j.server.server.clientpackets;
 
 import java.util.logging.Logger;
 
+import l1j.server.server.hackdetections.LogDropItem;
 import l1j.server.server.ClientThread;
 import l1j.server.server.model.L1World;
+import l1j.server.server.model.L1Inventory;
 import l1j.server.server.model.Instance.L1DollInstance;
 import l1j.server.server.model.Instance.L1ItemInstance;
 import l1j.server.server.model.Instance.L1PcInstance;
@@ -101,6 +103,35 @@ public class C_DropItem extends ClientBasePacket {
 			}
 			pc.getInventory().tradeItem(item, count, L1World.getInstance().getInventory(x, y, pc.getMapId()));
 			pc.turnOnOffLight();
+			
+			L1Inventory groundInventory = L1World.getInstance().getInventory(x, y, pc.getMapId());
+			L1ItemInstance gditem = groundInventory.getItem(objectId);
+			
+			int before_inven = pc.getInventory().getItem(objectId).getCount();
+			int brfore_ground = 0;
+			
+			if (item.isStackable()) {
+				brfore_ground = groundInventory.countItems(item.getItem().getItemId());
+			} else {
+				if (gditem != null) {
+					brfore_ground = gditem.getCount();
+				}
+			}
+			pc.getInventory().tradeItem(item, count, L1World.getInstance().getInventory(x, y, pc.getMapId()));
+			pc.turnOnOffLight();
+			L1ItemInstance pcitem = pc.getInventory().getItem(objectId);
+			int after_inven = 0;
+			if (pcitem != null) {
+				after_inven = pcitem.getCount();
+			}
+			int after_ground = 0;
+			if (item.isStackable()) {
+				after_ground = groundInventory.countItems(item.getItem().getItemId());
+			} else {
+				after_ground = groundInventory.getItem(objectId).getCount();
+			}
+			LogDropItem ldi = new LogDropItem();
+			ldi.storeLogDropItem(pc, item, before_inven, after_inven, brfore_ground, after_ground, count);
 		}
 	}
 
