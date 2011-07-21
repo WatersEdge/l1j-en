@@ -45,9 +45,9 @@ public class LogDwarfOut {
 			Date time = new Date();
 			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			String fm = formatter.format(time.getTime());
-			pstm.setString(1, fm);
+			pstm.setString(3, fm);
 			pstm.setString(2, pc.getNetConnection().getIp());
-			pstm.setString(3, pc.getAccountName());
+			pstm.setString(1, pc.getAccountName());
 			pstm.setInt(4, pc.getId());
 			pstm.setString(5, pc.getName());
 			pstm.setInt(6, item.getId());

@@ -43,7 +43,6 @@ public class C_ReportPlayer extends ClientBasePacket {
 	public C_ReportPlayer(byte abyte0[], ClientThread clientthread) throws Exception {
 		super(abyte0);
 		L1PcInstance pc = clientthread.getActiveChar();
-		L1Object obj = L1World.getInstance().findObject(objid);
 		
 		Connection con = null;
 		PreparedStatement pstm = null;
