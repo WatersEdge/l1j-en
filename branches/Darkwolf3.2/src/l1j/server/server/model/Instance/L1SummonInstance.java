@@ -71,7 +71,7 @@ public class L1SummonInstance extends L1NpcInstance {
 				int dir = targetReverseDirection(_master.getX(), _master.getY());
 				dir = checkObject(getX(), getY(), getMapId(), dir);
 				setDirectionMove(dir);
-				//setSleepTime(calcSleepTime(getPassispeed(), MOVE_SPEED));
+				setSleepTime(calcSleepTime(getPassispeed(), MOVE_SPEED));
 			} else {
 				// If Summon owner is not avaliable or far away the summon goes to rest mode
 				_currentPetStatus = 3;
@@ -107,7 +107,7 @@ public class L1SummonInstance extends L1NpcInstance {
 					}
 				} else {
 					setDirectionMove(dir);
-					//setSleepTime(calcSleepTime(getPassispeed(), MOVE_SPEED));
+					setSleepTime(calcSleepTime(getPassispeed(), MOVE_SPEED));
 				}
 			}
 		} else if (_master != null && _master.getMapId() == getMapId()) {
@@ -122,7 +122,7 @@ public class L1SummonInstance extends L1NpcInstance {
 						tagertClear();
 					}
 					setDirectionMove(dir);
-					//setSleepTime(calcSleepTime(getPassispeed(), MOVE_SPEED));
+					setSleepTime(calcSleepTime(getPassispeed(), MOVE_SPEED));
 				}
 			}
 		} else {

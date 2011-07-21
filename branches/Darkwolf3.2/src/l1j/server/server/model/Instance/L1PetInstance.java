@@ -78,7 +78,7 @@ public class L1PetInstance extends L1NpcInstance {
 				int dir = targetReverseDirection(_petMaster.getX(), _petMaster.getY());
 				dir = checkObject(getX(), getY(), getMapId(), dir);
 				setDirectionMove(dir);
-				//setSleepTime(calcSleepTime(getPassispeed(), MOVE_SPEED));
+				setSleepTime(calcSleepTime(getPassispeed(), MOVE_SPEED));
 			} else { 
 				_currentPetStatus = 3;
 				return true;
@@ -114,7 +114,7 @@ public class L1PetInstance extends L1NpcInstance {
 					}
 				} else {
 					setDirectionMove(dir);
-					//setSleepTime(calcSleepTime(getPassispeed(), MOVE_SPEED));
+					setSleepTime(calcSleepTime(getPassispeed(), MOVE_SPEED));
 				}
 			}
 		} else if (_currentPetStatus == 7) { 
@@ -135,7 +135,7 @@ public class L1PetInstance extends L1NpcInstance {
 				return true;
 			}
 			setDirectionMove(dir);
-			//setSleepTime(calcSleepTime(getPassispeed(), MOVE_SPEED));
+			setSleepTime(calcSleepTime(getPassispeed(), MOVE_SPEED));
 		} else if (_petMaster != null && _petMaster.getMapId() == getMapId()) { 
 			if (getLocation().getTileLineDistance(_petMaster.getLocation()) > 1) {
 				int dir = moveDirection(_petMaster.getX(), _petMaster.getY());
@@ -148,7 +148,7 @@ public class L1PetInstance extends L1NpcInstance {
 					return true;
 				}
 				setDirectionMove(dir);
-				//setSleepTime(calcSleepTime(getPassispeed(), MOVE_SPEED));
+				setSleepTime(calcSleepTime(getPassispeed(), MOVE_SPEED));
 			}
 		} else {
 			_currentPetStatus = 3;
