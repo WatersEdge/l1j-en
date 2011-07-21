@@ -1442,6 +1442,9 @@ INSERT INTO `mobskill` VALUES ('45086', '0', 'Degenerated Beholder', null, '2', 
 INSERT INTO `skills` VALUES ('12002', 'Floating Eye Attack', '0', '0', '10', '0', '0', '0', '0', '0', 'attack', '3', '50', '5', '5', '0', '0', '0', '64', '0', '2', '0', '0', '0', '0', '19', '0', '0', '0', '0', '0');
 INSERT INTO `skills` VALUES ('12003', 'Beholder Attack', '0', '0', '10', '0', '0', '0', '0', '0', 'attack', '3', '50', '5', '5', '0', '0', '0', '64', '0', '2', '0', '0', '0', '0', '19', '0', '0', '0', '0', '0');
 
+-- temp fix because many monsters out out of all maps.
+update spawnlist set randomx = 0, randomy = 0;
+
 --1835 santa orc
 --2271 aden walking guard sword
 --2289 aden wlking guard spear
