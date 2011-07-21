@@ -27,6 +27,7 @@ import l1j.server.server.ClientThread;
 import l1j.server.server.model.AcceleratorChecker;
 import l1j.server.server.model.Dungeon;
 import l1j.server.server.model.DungeonRandom;
+import l1j.server.server.model.L1Location;
 import l1j.server.server.model.L1Teleport;
 import l1j.server.server.model.Instance.L1PcInstance;
 import l1j.server.server.model.skill.L1SkillId;
@@ -105,11 +106,12 @@ public class C_MoveChar extends ClientBasePacket {
 			}
 		}
 		// Esc bug fix. Don't remove.
-		L1Location oldLoc = pc.getLocation();
-		if ((oldLoc.getX() + 10 < locx) || (oldLoc.getX() - 10 > locx) || 
-				(oldLoc.getY() + 10 < locy) || (oldLoc.getX() - 10 > locx))
-		{
-			return;
+		L1Location oldLoc = pc.getLocation(); 
+		if ((oldLoc.getX() + 10 < locx) 
+			|| (oldLoc.getX() - 10 > locx) 
+			|| (oldLoc.getY() + 10 < locy) 
+			|| (oldLoc.getY() - 10 > locx)) { 
+			return; 
 		}
 		pc.getLocation().set(locx, locy);
 		pc.setHeading(heading);
