@@ -1054,8 +1054,7 @@ CREATE TABLE `LogDeleteItem` (
   `ObjectId` int(11) DEFAULT NULL,
   `ItemName` varchar(255) DEFAULT NULL,
   `EnchantLevel` int(11) DEFAULT NULL,
-  `ItemCount` int(11) DEFAULT NULL,
-  `CountDiff` int(11) DEFAULT NULL
+  `ItemCount` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -1075,7 +1074,7 @@ CREATE TABLE `LogDropItem` (
   `AfterInven` int(11) DEFAULT NULL,
   `BeforeGround` int(11) DEFAULT NULL,
   `AfterGround` int(11) DEFAULT NULL,
-  `DropCount` int(11) DEFAULT NULL
+  `Count` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 		
 -- ----------------------------

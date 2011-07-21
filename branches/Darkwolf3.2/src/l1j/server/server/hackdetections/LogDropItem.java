@@ -35,7 +35,7 @@ public class LogDropItem {
 	private static Logger _log = Logger.getLogger(LogDropItem.class.getName());
 
 	public void storeLogDropItem(L1PcInstance pc, L1ItemInstance item, int before_inven,
-			int after_inven, int before_ground, int after_ground, int dropcount) {
+			int after_inven, int before_ground, int after_ground, int count) {
 		Connection con = null;
 		PreparedStatement pstm = null;
 		try {
@@ -57,7 +57,7 @@ public class LogDropItem {
 			pstm.setInt(10, after_inven);
 			pstm.setInt(11, before_ground);
 			pstm.setInt(12, after_ground);
-			pstm.setInt(13, dropcount);
+			pstm.setInt(13, count);
 			pstm.execute();
 		} catch (SQLException e) {
 			_log.log(Level.SEVERE, e.getLocalizedMessage(), e);
