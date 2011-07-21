@@ -1169,7 +1169,22 @@ public class L1SkillUse {
 			_getBuffDuration = _shockStunDuration;
 		}
 
-		if (_skillId == CURSE_POISON) { // 
+		if (_skillId == CURSE_POISON) {
+			return;
+		}
+		if (_skillId == BEHOLDER_STONE) {
+			return;
+		}
+		if (_skillId == COCKATRICE_STONE) {
+			return;
+		}
+		if (_skillId == BASLISK_STONE) {
+			return;
+		}
+		if (_skillId == MEDUSA_STONE) {
+			return;
+		}
+		if (_skillId == FLOATINGEYE_STONE) {
 			return;
 		}
 		if (_skillId == CURSE_PARALYZE
@@ -1179,7 +1194,8 @@ public class L1SkillUse {
 		if (_skillId == SHAPE_CHANGE) { // 
 			return;
 		}
-		if (!(cha instanceof L1PcInstance) && (_skillId == CURSE_BLIND || _skillId == DARKNESS || _skillId == DARK_BLIND)) { // BCM: fix darkness exploit
+		if (!(cha instanceof L1PcInstance) && (_skillId == CURSE_BLIND 
+				|| _skillId == DARKNESS || _skillId == DARK_BLIND)) { // BCM: fix darkness exploit
 			return;
 		}
 		if (_skillId == BLESSED_ARMOR || _skillId == HOLY_WEAPON 
@@ -2016,7 +2032,9 @@ public class L1SkillUse {
 				} else if (_skillId == CURSE_POISON) {
 					L1DamagePoison.doInfection(_user, cha, 3000, 5);
 				} else if (_skillId == CURSE_PARALYZE
-						|| _skillId == CURSE_PARALYZE2) {
+						|| _skillId == CURSE_PARALYZE2 || _skillId == BEHOLDER_STONE 
+						|| _skillId == COCKATRICE_STONE || _skillId == BASLISK_STONE 
+						|| _skillId == MEDUSA_STONE || _skillId == FLOATINGEYE_STONE) {
 					if (!cha.hasSkillEffect(EARTH_BIND)
 							&& !cha.hasSkillEffect(ICE_LANCE)
 							&& !cha.hasSkillEffect(FREEZING_BLIZZARD)

@@ -1453,6 +1453,18 @@ CREATE TABLE `BotReport` (
   PRIMARY KEY  (`charname`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+
+-- stone effect spell fixes.
+INSERT INTO `mobskill` VALUES ('45760', '0', 'Floating Eye', null, '2', '50', '0', '0', '-3', '0', '0', '3', '0', '0', '60', '12002', '0', '18', '0', '0', '0', '0');
+INSERT INTO `mobskill` VALUES ('45068', '0', 'Floating Eye', null, '2', '50', '0', '0', '-3', '0', '0', '3', '0', '0', '60', '12002', '0', '18', '0', '0', '0', '0');
+INSERT INTO `mobskill` VALUES ('45349', '0', 'Beholder', null, '2', '50', '0', '0', '-3', '0', '0', '3', '0', '0', '60', '12003', '0', '18', '0', '0', '0', '0');
+INSERT INTO `mobskill` VALUES ('45406', '0', 'Wicked Beholder', null, '2', '50', '0', '0', '-3', '0', '0', '3', '0', '0', '60', '12003', '0', '18', '0', '0', '0', '0');
+INSERT INTO `mobskill` VALUES ('45423', '0', 'Subterranean Beholder', null, '2', '50', '0', '0', '-3', '0', '0', '3', '0', '0', '60', '12003', '0', '18', '0', '0', '0', '0');
+INSERT INTO `mobskill` VALUES ('45086', '0', 'Degenerated Beholder', null, '2', '50', '0', '0', '-3', '0', '0', '3', '0', '0', '60', '12003', '0', '18', '0', '0', '0', '0');
+
+INSERT INTO `skills` VALUES ('12002', 'Floating Eye Attack', '0', '0', '10', '0', '0', '0', '0', '0', 'attack', '3', '50', '5', '5', '0', '0', '0', '64', '0', '2', '0', '0', '0', '0', '19', '0', '0', '0', '0', '0');
+INSERT INTO `skills` VALUES ('12003', 'Beholder Attack', '0', '0', '10', '0', '0', '0', '0', '0', 'attack', '3', '50', '5', '5', '0', '0', '0', '64', '0', '2', '0', '0', '0', '0', '19', '0', '0', '0', '0', '0');
+
 --1835 santa orc
 --2271 aden walking guard sword
 --2289 aden wlking guard spear

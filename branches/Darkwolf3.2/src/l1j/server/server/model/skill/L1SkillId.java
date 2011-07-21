@@ -602,4 +602,14 @@ public class L1SkillId {
 	public static final int EFFECT_BLESS_OF_CRAY = 4056;
 
 	public static final int EFFECT_BLESS_OF_SAELL = 4057;
+	
+	public static final int COCKATRICE_STONE = 12001;
+	
+	public static final int BASLISK_STONE = 10015;
+	
+	public static final int MEDUSA_STONE = 10011;
+	
+	public static final int FLOATINGEYE_STONE = 12002;
+	
+	public static final int BEHOLDER_STONE = 12003;
 }
