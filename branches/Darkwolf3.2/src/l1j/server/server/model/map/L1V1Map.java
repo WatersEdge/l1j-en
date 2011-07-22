@@ -109,7 +109,7 @@ public class L1V1Map extends L1Map {
 
 	private int accessTile(int x, int y) {
 		if (!isInMap(x, y)) {
-			return 0;
+			return 15;
 		}
 		return _map[x - _worldTopLeftX][y - _worldTopLeftY];
 	}
@@ -156,10 +156,7 @@ public class L1V1Map extends L1Map {
 
 	@Override
 	public int getTile(int x, int y) {
-		short tile = _map[x - _worldTopLeftX][y - _worldTopLeftY];
-		if (0 != (tile & BITFLAG_IS_IMPASSABLE)) {
-			return 300;
-		}
+		short tile2 = _map[x - _worldTopLeftX][y - _worldTopLeftY];
 		return accessOriginalTile(x, y);
 	}
 
@@ -191,13 +188,13 @@ public class L1V1Map extends L1Map {
 	@Override
 	public boolean isPassable(int x, int y) {
 		 int tile = accessOriginalTile(x, y); 
-		 if (tile == 1 || tile == 9 || tile == 65 || tile == 69 || tile == 73) { 
-			 return false; 
+		 if (tile == 15) { 
+			 return true; 
 		 } 
-		 if (0 != (tile & BITFLAG_IS_IMPASSABLE)) {
-				return false;
-		 }
-		 return true; 
+		if ((tile & BITFLAG_IS_IMPASSABLE) == BITFLAG_IS_IMPASSABLE) { 
+			return false; 
+		}
+        return true;
 	}
 
 	@Override
@@ -229,18 +226,15 @@ public class L1V1Map extends L1Map {
 		} else {
 			return false;
 		}
-
-		if (tile2 == 1 || tile2 == 9 || tile2 == 65 || tile2 == 69 || tile2 == 73) { 
-			return false; 
-		} 
-		if (0 != (tile2 & BITFLAG_IS_IMPASSABLE)) { 
-			return false;
+        if (tile1 == 15 || tile1 == 10 || tile1 == 20 || tile1 == 8) {
+	        return true;
         }
-		if (isExistDoor(x, y & tile2)) {
-			setTile(x, y, (short) (accessTile(x, y) | BITFLAG_IS_IMPASSABLE));
-			return false;
+		if (tile2 == 0 || tile1 == 12 || tile1 == 13 || tile1 == 8) {
+			return false; 
 		}
-		
+		if ((tile2 & BITFLAG_IS_IMPASSABLE) == BITFLAG_IS_IMPASSABLE) { 
+			return false; 
+		}
 		if (heading == 0) {
 			return (tile1 & 0x02) == 0x02;
 		} else if (heading == 1) {
@@ -262,7 +256,7 @@ public class L1V1Map extends L1Map {
 			int tile3 = accessTile(x - 1, y);
 			return (tile3 & 0x02) == 0x02;
 		}
-		return true;
+		return false;
 	}
 
 	@Override
@@ -288,7 +282,7 @@ public class L1V1Map extends L1Map {
 	public boolean isSafetyZone(int x, int y) {
 		int tile = accessOriginalTile(x, y);
 
-		return (tile & 0x30) == 0x10;
+		return tile == 10;
 	}
 
 	@Override
@@ -300,7 +294,7 @@ public class L1V1Map extends L1Map {
 	public boolean isCombatZone(int x, int y) {
 		int tile = accessOriginalTile(x, y);
 
-		return (tile & 0x30) == 0x20;
+		return tile == 20;
 	}
 
 	@Override
@@ -311,7 +305,7 @@ public class L1V1Map extends L1Map {
 	@Override
 	public boolean isNormalZone(int x, int y) {
 		int tile = accessOriginalTile(x, y);
-		return (tile & 0x30) == 0x00;
+		return tile == 15 || tile == 0;
 	}
 
 	@Override
@@ -372,17 +366,9 @@ public class L1V1Map extends L1Map {
 		} else {
 			return false;
 		}
-		if (tile2 == 1 || tile2 == 9 || tile2 == 65 || tile2 == 69 || tile2 == 73) { 
+		if ((tile2 & BITFLAG_IS_IMPASSABLE) == BITFLAG_IS_IMPASSABLE) { 
 			return false; 
-		} 
-		if (0 != (tile2 & BITFLAG_IS_IMPASSABLE)) { 
-			return false;
-        }
-		if (isExistDoor(x, y & tile2)) {
-			setTile(x, y, (short) (accessTile(x, y) | BITFLAG_IS_IMPASSABLE));
-			return false;
 		}
-
 		if (heading == 0) {
 			return (tile1 & 0x08) == 0x08;
 		} else if (heading == 1) {
@@ -404,7 +390,7 @@ public class L1V1Map extends L1Map {
 			int tile3 = accessTile(x - 1, y);
 			return (tile3 & 0x08) == 0x08;
 		}
-		return (tile2 != 1); 
+		return false; 
 	}
 
 	@Override
@@ -478,6 +464,10 @@ public class L1V1Map extends L1Map {
 			if (door.getOpenStatus() == ActionCodes.ACTION_Close) {
 				return false;
 			}
+			if (door.getOpenStatus() == ActionCodes.ACTION_Close) {
+			    setTile(x, y, (short) (accessTile(x, y) | BITFLAG_IS_IMPASSABLE));
+				return false; 
+		    }
 			if (door.isDead()) {
 				continue;
 			}

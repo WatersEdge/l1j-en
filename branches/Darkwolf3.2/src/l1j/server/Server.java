@@ -28,7 +28,6 @@ import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 import l1j.server.Config;
-import l1j.server.server.hackdetections.BackUpLog;
 import l1j.server.server.GameServer;
 import l1j.server.telnet.TelnetServer;
 /**
@@ -41,7 +40,6 @@ public class Server {
 	public static void main(final String[] args) throws Exception {
 		File logFolder = new File("log");
 		logFolder.mkdir();
-		BackUpLog.backup();
 		try {
 			InputStream is = new BufferedInputStream(new FileInputStream(LOG_PROP));
 			LogManager.getLogManager().readConfiguration(is);
