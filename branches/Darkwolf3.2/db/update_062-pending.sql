@@ -1457,7 +1457,6 @@ INSERT INTO `mapids` VALUES ('5153', 'Death Match', '32576', '32703', '32832', '
 -- night table
 ALTER TABLE `mapids` ADD `night` tinyint(1) unsigned NOT NULL DEFAULT 0 AFTER underwater;
 update mapids set night = 1 where mapid = 701;
-update mapids set night = 1 where mapid = 4;
 
 --1835 santa orc
 --2271 aden walking guard sword
