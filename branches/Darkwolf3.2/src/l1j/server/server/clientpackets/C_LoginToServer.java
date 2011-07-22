@@ -172,7 +172,8 @@ public class C_LoginToServer extends ClientBasePacket {
 		S_OwnCharStatus s_owncharstatus = new S_OwnCharStatus(pc);
 		pc.sendPackets(s_owncharstatus);
 
-		S_MapID s_mapid = new S_MapID(pc.getMap().getBaseMapId(), pc.getMap().isUnderwater());
+		S_MapID s_mapid = new S_MapID(pc.getMap().getBaseMapId(), 
+		pc.getMap().isNight(), pc.getMap().isUnderwater());
 		pc.sendPackets(s_mapid);
 
 		S_OwnCharPack s_owncharpack = new S_OwnCharPack(pc);

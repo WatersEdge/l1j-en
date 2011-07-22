@@ -83,7 +83,8 @@ public class Teleportation {
 		L1World.getInstance().moveVisibleObject(pc, mapId);
 		pc.setLocation(x, y, mapId);
 		pc.setHeading(head);
-		S_MapID s_mapid = new S_MapID(pc.getMap().getBaseMapId(), pc.getMap().isUnderwater());
+		S_MapID s_mapid = new S_MapID(pc.getMap().getBaseMapId(), 
+	    pc.getMap().isNight(), pc.getMap().isUnderwater());
 		pc.sendPackets(s_mapid);
 		
 		if (pc.isReserveGhost()) { 

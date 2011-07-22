@@ -457,7 +457,8 @@ public class L1DragonSlayer {
 		pc.setX(loc[0]);
 		pc.setY(loc[1]);
 		pc.setMap((short) loc[2]);
-		pc.sendPackets(new S_MapID(pc.getMapId(), pc.getMap().isUnderwater()));
+		pc.sendPackets(new S_MapID(pc.getMapId(), 
+		pc.getMap().isNight(), pc.getMap().isUnderwater()));
 		pc.broadcastPacket(new S_OtherCharPacks(pc));
 		pc.sendPackets(new S_OwnCharPack(pc));
 		pc.sendPackets(new S_CharVisualUpdate(pc));

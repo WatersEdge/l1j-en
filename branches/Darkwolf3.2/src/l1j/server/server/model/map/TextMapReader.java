@@ -108,6 +108,7 @@ public class TextMapReader extends MapReader {
 			if (mapId == id) {
 				L1V1Map map = new L1V1Map((short) mapId, this.read(mapId, xSize, ySize), 
 						info[MAPINFO_START_X], info[MAPINFO_START_Y],
+				MapsTable.getInstance().isNight(mapId),
 				MapsTable.getInstance().isUnderwater(mapId),
 				MapsTable.getInstance().isMarkable(mapId),
 				MapsTable.getInstance().isTeleportable(mapId),
@@ -141,6 +142,7 @@ public class TextMapReader extends MapReader {
 			try {
 				L1V1Map map = new L1V1Map((short) mapId, this.read(mapId, xSize, ySize), 
 						info[MAPINFO_START_X], info[MAPINFO_START_Y],
+				MapsTable.getInstance().isNight(mapId),
 				MapsTable.getInstance().isUnderwater(mapId),
 				MapsTable.getInstance().isMarkable(mapId),
 				MapsTable.getInstance().isTeleportable(mapId),

@@ -83,6 +83,8 @@ public abstract class L1Map implements Cloneable {
 
 	public abstract boolean isUnderwater();
 
+	public abstract boolean isNight();
+	
 	public abstract boolean isMarkable();
 
 	public abstract boolean isTeleportable();
@@ -257,6 +259,11 @@ class L1NullMap extends L1Map {
 		return false;
 	}
 
+	@Override
+	public boolean isNight() {
+		return false;
+	}
+	
 	@Override
 	public boolean isMarkable() {
 		return false;

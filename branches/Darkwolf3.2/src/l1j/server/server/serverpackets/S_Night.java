@@ -22,20 +22,23 @@ import l1j.server.server.encryptions.Opcodes;
 
 // Referenced classes of package l1j.server.server.serverpackets:
 // ServerBasePacket
-public class S_MapID extends ServerBasePacket {
-
-	public S_MapID(int mapid, boolean isUnderwater, boolean isNight) {
-		writeC(Opcodes.S_OPCODE_MAPID);
-		writeH(mapid);
-		writeC(isUnderwater ? 1 : 0);
-		writeC(0);
-		writeH(isNight ? 1 : 0);
-		writeC(0);
-		writeD(0);
+public class S_Night extends ServerBasePacket {
+	private static final String S_Night = "[S] S_Night";
+	
+	int type = 2;
+	public S_Night(int playerobjecId) {
+		writeC(Opcodes.S_OPCODE_NIGHT);
+		writeD(playerobjecId);
+		writeC(type);
 	}
 
 	@Override
 	public byte[] getContent() {
 		return getBytes();
+	}
+
+	@Override
+	public String getType() {
+		return "[S] S_Night";
 	}
 }
