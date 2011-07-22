@@ -889,6 +889,7 @@ INSERT INTO `commands` VALUES ('siege', '200', 'L1WarStart');
 INSERT INTO `commands` VALUES ('remove_instancemap', '200', 'L1RemoveInstanceMap');
 INSERT INTO `commands` VALUES ('add_instancemap', '200', 'L1AddInstanceMap');
 INSERT INTO `commands` VALUES ('reload', '200', 'L1Reload');
+INSERT INTO `commands` VALUES ('tile', '200', 'L1Tile');
 
 -- ----------------------------
 -- Table structure for checkwartime
