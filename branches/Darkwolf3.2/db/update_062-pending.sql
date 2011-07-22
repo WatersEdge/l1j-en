@@ -1446,6 +1446,9 @@ INSERT INTO `skills` VALUES ('12003', 'Beholder Attack', '0', '0', '10', '0', '0
 -- temp fix because many monsters out out of all maps.
 update spawnlist set randomx = 0, randomy = 0;
 
+-- pvp deathmatch fix for not using skills and items.
+INSERT INTO `mapids` VALUES ('5153', 'Death Match', '32576', '32703', '32832', '32959', '0', '0', '0', '0', '0', '0', '1', '1', '1', '1', '1', '1', '1', '1');
+
 --1835 santa orc
 --2271 aden walking guard sword
 --2289 aden wlking guard spear
