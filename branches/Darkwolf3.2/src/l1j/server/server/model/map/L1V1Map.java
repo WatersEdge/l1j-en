@@ -111,8 +111,9 @@ public class L1V1Map extends L1Map {
 
 	private int accessTile(int x, int y) {
 		if (!isInMap(x, y)) {
-			return 15;
+			return 0;
 		}
+
 		return _map[x - _worldTopLeftX][y - _worldTopLeftY];
 	}
 
@@ -158,7 +159,10 @@ public class L1V1Map extends L1Map {
 
 	@Override
 	public int getTile(int x, int y) {
-		short tile2 = _map[x - _worldTopLeftX][y - _worldTopLeftY];
+		short tile = _map[x - _worldTopLeftX][y - _worldTopLeftY];
+		if (0 != (tile & BITFLAG_IS_IMPASSABLE)) {
+			return 300;
+		}
 		return accessOriginalTile(x, y);
 	}
 
@@ -189,14 +193,8 @@ public class L1V1Map extends L1Map {
 
 	@Override
 	public boolean isPassable(int x, int y) {
-		 int tile = accessOriginalTile(x, y); 
-		 if (tile == 15) { 
-			 return true; 
-		 } 
-		if ((tile & BITFLAG_IS_IMPASSABLE) == BITFLAG_IS_IMPASSABLE) { 
-			return false; 
-		}
-        return true;
+		return isPassable(x, y - 1, 4) || isPassable(x + 1, y, 6)
+				|| isPassable(x, y + 1, 0) || isPassable(x - 1, y, 2);
 	}
 
 	@Override
@@ -228,15 +226,11 @@ public class L1V1Map extends L1Map {
 		} else {
 			return false;
 		}
-        if (tile1 == 15 || tile1 == 10 || tile1 == 20 || tile1 == 8) {
-	        return true;
-        }
-		if (tile2 == 0 || tile1 == 12 || tile1 == 13 || tile1 == 8) {
-			return false; 
+
+		if ((tile2 & BITFLAG_IS_IMPASSABLE) == BITFLAG_IS_IMPASSABLE) {
+			return false;
 		}
-		if ((tile2 & BITFLAG_IS_IMPASSABLE) == BITFLAG_IS_IMPASSABLE) { 
-			return false; 
-		}
+
 		if (heading == 0) {
 			return (tile1 & 0x02) == 0x02;
 		} else if (heading == 1) {
@@ -368,9 +362,11 @@ public class L1V1Map extends L1Map {
 		} else {
 			return false;
 		}
-		if ((tile2 & BITFLAG_IS_IMPASSABLE) == BITFLAG_IS_IMPASSABLE) { 
-			return false; 
+
+		if (isExistDoor(newX, newY)) {
+			return false;
 		}
+
 		if (heading == 0) {
 			return (tile1 & 0x08) == 0x08;
 		} else if (heading == 1) {
@@ -392,7 +388,8 @@ public class L1V1Map extends L1Map {
 			int tile3 = accessTile(x - 1, y);
 			return (tile3 & 0x08) == 0x08;
 		}
-		return false; 
+
+		return false;
 	}
 
 	@Override

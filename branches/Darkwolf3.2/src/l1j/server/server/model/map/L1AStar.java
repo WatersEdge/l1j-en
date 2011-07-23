@@ -25,18 +25,25 @@ import l1j.server.server.model.map.L1WorldMap;
 
 public class L1AStar {
 	private L1Node	OpenNode, ClosedNode;
-	private static final int LIMIT_LOOP = 150;
-	private static final int HEADING_TABLE_X[] = { 0, 1, 1, 1, 0, -1, -1, -1 };
-	private static final int HEADING_TABLE_Y[] = { -1, -1, 0, 1, 1, 1, 0, -1 };
+	private static final int LIMIT_LOOP = 1000;
 	
 	public L1AStar() {
 		OpenNode = null;
 		ClosedNode = null;
 	}
 	
-	public void Reset() {
-		OpenNode = null;
-		ClosedNode = null;
+	public void ResetPath() {
+		L1Node tmp;
+		while( OpenNode != null ) {
+			tmp = OpenNode.next;
+			OpenNode = null;
+			OpenNode = tmp;
+		}
+		while( ClosedNode != null ) {
+			tmp = ClosedNode.next;
+			ClosedNode = null;
+			ClosedNode = tmp;
+		}
 	}
 	
 	public L1Node FindPath(L1NpcInstance npc, L1Character target) {
@@ -45,6 +52,8 @@ public class L1AStar {
 	
 	public L1Node FindPath(L1NpcInstance npc, int tx, int ty, int mapId) {
 		L1Node	src, best = null;
+		int	count = 0;
+		
 		src = new L1Node();
 		src.g = 0;
 		src.h = (tx - npc.getX()) * (tx - npc.getX()) + (ty - npc.getY()) * (ty - npc.getY());
@@ -53,7 +62,7 @@ public class L1AStar {
 		src.y = npc.getY();
 		OpenNode = src;
 		
-		for (int i = 0; i < LIMIT_LOOP; i++ ) {
+		while (count < LIMIT_LOOP) {
 			if ( OpenNode == null ) {
 				return best;
 			}
@@ -67,29 +76,71 @@ public class L1AStar {
 			if (Math.max(Math.abs(tx - best.x), Math.abs(ty - best.y)) == 1) {
 				return best;
 			}
-			if( MakeChild(npc, best, tx, ty, npc.getMapId()) == 0 && i == 0 ) {
+			if( MakeChild(best, tx, ty, npc.getMapId()) == 0 && count == 0 ) {
 				return null;
 			}
+			count++;
 		}
 		return best;
 	}
 	
-	public char MakeChild(L1NpcInstance npc, L1Node node, int tx, int ty, short m) {
+	public char IsMove(int x, int y, short mapid) {
+		L1Map map = L1WorldMap.getInstance().getMap(mapid);
+		if ( map.isPassable(x, y) == false ) {
+			return 0;
+		}
+		
+		return 1;
+	}
+
+	public char MakeChild(L1Node node, int tx, int ty, short m) {
 		int		x, y;
 		char	flag = 0;
+		char	cc[] = {0, 0, 0, 0, 0, 0, 0, 0};
 		
 		x = node.x;
 		y = node.y;
-		L1Map map = L1WorldMap.getInstance().getMap(npc.getMapId());	
-		
-		for(int i=0 ; i<8 ; ++i){
-				int nx = x + HEADING_TABLE_X[i];
-				int ny = y + HEADING_TABLE_Y[i];
-				if(map.isPassable(x, y, i)){
-					MakeChildSub(node, nx, ny, tx, ty);
-					flag = 1;
-				}
+		cc[0] = IsMove(x  , y+1, m);
+		cc[1] = IsMove(x-1, y+1, m);
+		cc[2] = IsMove(x-1, y  , m);
+		cc[3] = IsMove(x-1, y-1, m);
+		cc[4] = IsMove(x  , y-1, m);
+		cc[5] = IsMove(x+1, y-1, m);
+		cc[6] = IsMove(x+1, y  , m);
+		cc[7] = IsMove(x+1, y+1, m);
+		if ( cc[2] == 1 ) {
+			MakeChildSub(node, x-1, y, tx, ty);
+			flag = 1;
 		}
+		if ( cc[6] == 1 ) {
+			MakeChildSub(node, x+1, y, tx, ty);
+			flag = 1;
+		}
+		if ( cc[4] == 1 ) {
+			MakeChildSub(node, x, y-1, tx, ty);
+			flag = 1;
+		}
+		if ( cc[0] == 1 ) {
+			MakeChildSub(node, x, y+1, tx, ty);
+			flag = 1;
+		}
+		if ( cc[7] == 1 && cc[6] == 1 && cc[0] == 1 ) {
+			MakeChildSub(node, x+1, y+1, tx, ty);
+			flag = 1;
+		}
+		if ( cc[3] == 1 && cc[2] == 1 && cc[4] == 1 ) {
+			MakeChildSub(node, x-1, y-1, tx, ty);
+			flag = 1;
+		}
+		if ( cc[5] == 1 && cc[4] == 1 && cc[6] == 1 ) {
+			MakeChildSub(node, x+1, y-1, tx, ty);
+			flag = 1;
+		}
+		if ( cc[1] == 1 && cc[0] == 1 && cc[2] == 1 ){
+			MakeChildSub(node, x-1, y+1, tx, ty);
+			flag = 1;
+		}
+
 		return flag;
 	}
 	
@@ -125,6 +176,7 @@ public class L1AStar {
 		}
 		else {
 			child = new L1Node();
+
 			child.prev = node;
 			child.g = g;
 			child.h = (x-tx)*(x-tx) + (y-ty)*(y-ty);
@@ -142,7 +194,7 @@ public class L1AStar {
 			}
 		}
 	}
-	
+
 	public L1Node IsOpen(int x, int y) {
 		L1Node tmp = OpenNode;
 		while ( tmp != null ) {

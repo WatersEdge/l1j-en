@@ -106,10 +106,15 @@ public class L1NpcInstance extends L1Character {
 	private int _drainedMana = 0;
 	private boolean _rest = false;
 	
-	private int[][] _iPath = new int[50][2]; 
-	private L1AStar _aStar = new L1AStar(); 
-	private int iCurrentPath = 0;
-	
+	// AStar
+	private L1AStar pfAStar;
+	private L1Node nodePath;
+	private int iPath[][];
+	private int iCurrentPath;
+	private int iMaxPath;
+	private int iMonsterX, iMonsterY;
+	public static double astarRange = 50;
+
 	private int _randomMoveDistance = 0;
 	private int _randomMoveDirection = 0;
 
@@ -425,9 +430,11 @@ public class L1NpcInstance extends L1Character {
 					if (dir == -1) {
 						tagertClear();
 					} else {
-						setDirectionMove(dir);
-						setSleepTime(calcSleepTime(getPassispeed(),
-								MOVE_SPEED));
+						if (onAStar(target, true)) {
+							onAStar(target, false);
+						} else {
+							randomWalk();
+						}
 					}
 				} else {
 					tagertClear();
@@ -1427,24 +1434,15 @@ public class L1NpcInstance extends L1Character {
 	
 	public int moveDirection(int x, int y, double d) { 
 		int dir = 0;
-		if (hasSkillEffect(40) == true && d >= 2D) { 
+		if (hasSkillEffect(40) == true && d >= 2D)
+		{
 			return -1;
-		} else if (d > 30D) { 
+		} else if (d > astarRange)
+		{
 			return -1;
-		} else if (d > courceRange) { 
-			dir = targetDirection(x, y);
-			dir = checkObject(getX(), getY(), getMapId(), dir);
-		} else { 
-			dir = AStarCource();
-			if (dir == -1) { 
-				dir = targetDirection(x, y);
-				dir = checkObject(getX(), getY(), getMapId(), dir);
-				if (!isExsistCharacterBetweenTarget(dir)) {
-					dir = checkObject(getX(), getY(), getMapId(), dir);
-				}
-			}
 		}
-		return dir;
+
+		return targetDirection(x, y);
 	}
 
 	private boolean isExsistCharacterBetweenTarget(int dir) {
@@ -1692,32 +1690,6 @@ public class L1NpcInstance extends L1Character {
 			locBace = null;
 		}
 		return -1;
-	}
-	
-	protected int AStarCource() {
-		int dir = -1;
-		if (_target != null) {
-		 _aStar.Reset();
-		 L1Node nodePath = _aStar.FindPath(this, _target);
-		 iCurrentPath = 0;
-		 while (nodePath != null) {
-			 _iPath[iCurrentPath][0] = nodePath.x;
-			 _iPath[iCurrentPath][1] = nodePath.y;
-			 iCurrentPath++;
-		 if (iCurrentPath >= 50) {
-		     nodePath = null;
-		     return -1;
-		     }
-		   nodePath = nodePath.prev;
-		  }
-		  nodePath = null;
-		  iCurrentPath -= 2;
-		if (iCurrentPath >= 0) {
-		  dir = targetDirection(_iPath[iCurrentPath][0],
-			  _iPath[iCurrentPath][1]);
-		     }
-		}
-		return dir;
 	}
 
 	private void _moveLocation(int[] ary, int d) {
@@ -2177,8 +2149,6 @@ public class L1NpcInstance extends L1Character {
 		}
 		super.resurrect(hp);
 
-		//
-		//
 		L1SkillUse skill = new L1SkillUse();
 		skill.handleCommands(null, CANCELLATION, getId(), getX(),
 				getY(), null, 0, L1SkillUse.TYPE_LOGIN, this);
@@ -2281,4 +2251,73 @@ public class L1NpcInstance extends L1Character {
 		}
 	}
 
+	public boolean onAStar(L1Character target, boolean check) {
+		return onAStar(target.getX(), target.getY(), target.getMapId(), check);
+	}
+	
+	public boolean onAStar(int tx, int ty, int mapId, boolean check) {
+		pfAStar = new L1AStar();
+		iPath = new int[300][2];
+
+		nodePath = pfAStar.FindPath(this, tx, ty, mapId);
+
+		iCurrentPath = 0;
+
+		while ( nodePath != null ) {
+			iPath[iCurrentPath][0] = nodePath.x;
+			iPath[iCurrentPath][1] = nodePath.y;
+			iCurrentPath++;
+			nodePath = nodePath.prev;
+		}
+		
+		iMaxPath = iCurrentPath;
+
+		int tile = Math.max(Math.abs(iPath[0][0] - tx), Math.abs(iPath[0][1] - ty));
+		if (tile < 3) {
+			if (check) {
+				return true;
+			} else {
+				iMonsterX = iPath[iCurrentPath-2][0];
+				iMonsterY = iPath[iCurrentPath-2][1];
+				if (getX() < iMonsterX && getY() > iMonsterY) {
+					setHeading(1);
+				} else if (getX() < iMonsterX && getY() == iMonsterY) {
+					setHeading(2);
+				} else if (getX() < iMonsterX && getY() < iMonsterY) {
+					setHeading(3);
+				} else if (getX() == iMonsterX && getY() < iMonsterY) {
+					setHeading(4);
+				} else if (getX() > iMonsterX && getY() < iMonsterY) {
+					setHeading(5);
+				} else if (getX() > iMonsterX && getY() == iMonsterY) {
+					setHeading(6);
+				} else if (getX() > iMonsterX && getY() > iMonsterY) {
+					setHeading(7);
+				} else if (getX() == iMonsterX && getY() > iMonsterY) {
+					setHeading(0);
+				}
+				getMap().setPassable(getLocation(), true);
+				setX(iMonsterX);
+				setY(iMonsterY);
+				getMap().setPassable(getLocation(), false);
+				broadcastPacket(new S_MoveCharPacket(this));
+				setSleepTime(calcSleepTime(getPassispeed(), MOVE_SPEED));
+				pfAStar.ResetPath();
+			}
+		}
+		else {
+			tagertClear();
+			return false;
+		}
+		return true;
+	}
+	
+	private void randomWalk() {
+		tagertClear();
+		int dir = checkObject(getX(), getY(), getMapId(), _random.nextInt(20));
+		if (dir != -1) {
+			setDirectionMove(dir);
+			setSleepTime(calcSleepTime(getPassispeed(), MOVE_SPEED));
+		}
+	}
 }
