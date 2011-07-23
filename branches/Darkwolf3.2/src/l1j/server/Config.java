@@ -42,10 +42,10 @@ public final class Config {
 
 	/** Thread pools size */
 	@Configure(file = SERVER, key = "GeneralThreadPoolType")
-	public static int THREAD_P_TYPE_GENERAL = 0;
+	public static int THREAD_P_TYPE_GENERAL = 20;
 
 	@Configure(file = SERVER, key = "GeneralThreadPoolSize")
-	public static int THREAD_P_SIZE_GENERAL = 0;
+	public static int THREAD_P_SIZE_GENERAL = 20;
 
 	public static int THREAD_P_EFFECTS;
 	
@@ -83,7 +83,7 @@ public final class Config {
 	public static boolean HOSTNAME_LOOKUPS = false;
 
 	@Configure(file = SERVER, key = "AutomaticKick")
-	public static int AUTOMATIC_KICK = 10;
+	public static int AUTOMATIC_KICK = 0;
 
 	@Configure(file = SERVER, key = "AutoCreateAccounts")
 	public static boolean AUTO_CREATE_ACCOUNTS = true;

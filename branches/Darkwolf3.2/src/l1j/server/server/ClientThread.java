@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.Queue;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -108,18 +109,33 @@ public class ClientThread implements Runnable, PacketOutput {
 	public ClientThread(Socket socket) throws IOException {
 		_csocket = socket;
 		_in = socket.getInputStream();
-		_out = new BufferedOutputStream(socket.getOutputStream());
+		_out = socket.getOutputStream(); 
 		_ip = socket.getInetAddress().getHostAddress();
 		_handler = new PacketHandler(this);
-
+	    
+		if (!socket.getKeepAlive()) {
+	        socket.setKeepAlive(true);
+	       // System.out.println("ClientThread_Keepalive Sended");
+	       // System.out.println("SO_KEEPALIVE is enabled. " + socket.getKeepAlive());
+	     }
+		
 		if (Config.HOSTNAME_LOOKUPS) {
 			_hostname = socket.getInetAddress().getHostName();
 		} else {
 			_hostname = _ip;
 		}
 	}
+	
 	public String getIp() {
 		return _ip;
+	}
+
+	public void setKeepAlive(boolean on) throws SocketException {
+		_csocket.setKeepAlive(on);
+	}
+	
+	public boolean getKeepAlive() throws SocketException {
+		return _csocket.getKeepAlive();
 	}
 
 	public String getHostname() {

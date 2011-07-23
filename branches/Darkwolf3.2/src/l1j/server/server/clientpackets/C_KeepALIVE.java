@@ -18,6 +18,7 @@
 package l1j.server.server.clientpackets;
 
 import java.util.logging.Logger;
+import java.net.SocketException;
 
 import l1j.server.server.ClientThread;
 import l1j.server.server.model.Instance.L1PcInstance;
@@ -27,8 +28,9 @@ public class C_KeepALIVE extends ClientBasePacket {
 	private static Logger _log = Logger.getLogger(C_KeepALIVE.class.getName());
 	private static final String C_KEEP_ALIVE = "[C] C_KeepALIVE";
 
-	public C_KeepALIVE(byte decrypt[], ClientThread client) {
+	public C_KeepALIVE(byte decrypt[], ClientThread client) throws Exception {
 		super(decrypt);
+		client.getKeepAlive();
        // System.out.println("C_Keepalive Sended");
     }
 
