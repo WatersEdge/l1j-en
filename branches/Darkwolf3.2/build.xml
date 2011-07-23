@@ -30,9 +30,12 @@
 
     <path id="classpath">
         <fileset dir="${lib.dir}">
-            <include name="c3p0-0.9.1.2.jar" />
             <include name="javolution.jar" />
-            <include name="mysql-connector-java-5.1.16-bin.jar" />
+            <include name="mysql-connector-java-5.1.17-bin.jar" />
+        	<include name="bonecp-0.7.1.jar" /> 
+        	<include name="guava-r09.jar" /> 
+        	<include name="slf4j-api-1.6.1.jar" /> 
+        	<include name="slf4j-simple-1.6.1.jar" /> 
         </fileset>
     </path>
 

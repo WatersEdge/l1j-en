@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="lib/c3p0-0.9.1.2.jar"/>
+    <classpathentry kind="lib" path="lib/bonecp-0.7.1.jar" /> 
+    <classpathentry kind="lib" path="lib/guava-r09.jar" /> 
+    <classpathentry kind="lib" path="lib/slf4j-api-1.6.1.jar" /> 
+    <classpathentry kind="lib" path="lib/slf4j-simple-1.6.1.jar" /> 
 	<classpathentry kind="lib" path="lib/javolution.jar"/>
 	<classpathentry kind="lib" path="lib/mina-core-2.0.4.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="lib/mysql-connector-java-5.1.16-bin.jar"/>
+	<classpathentry kind="lib" path="lib/mysql-connector-java-5.1.17-bin.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

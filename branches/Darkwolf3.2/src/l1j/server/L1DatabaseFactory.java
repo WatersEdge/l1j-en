@@ -20,61 +20,255 @@ package l1j.server;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.jolbox.bonecp.BoneCPDataSource;
+
+import l1j.server.L1DatabaseFactory;
+import l1j.server.server.GeneralThreadPool;
 import l1j.server.server.utils.LeakCheckedConnection;
 
-import com.mchange.v2.c3p0.ComboPooledDataSource;
-
-public class L1DatabaseFactory {
-	
+public class L1DatabaseFactory
+{
+	static Logger _log = Logger.getLogger(L1DatabaseFactory.class.getName());
 	private static L1DatabaseFactory _instance;
-	private ComboPooledDataSource _source;
-	private static Logger _log = Logger.getLogger(L1DatabaseFactory.class.getName());
+	
+	public static enum ProviderType
+	{
+		MySql, MsSql
+	}
+	
+	// =========================================================
+	// Data Field
+	private static ScheduledExecutorService _executor;
+	private ProviderType _providerType;
+	private BoneCPDataSource _source;
 	private static String _driver;
 	private static String _url;
 	private static String _user;
 	private static String _password;
-
-	public static void setDatabaseSettings(final String driver, final String url, final String user, final String password) {
+    private static int _maxdatabaseconnections;
+    
+	public static void setDatabaseSettings(final String driver, final String url, 
+			final int maxdatabaseconnections, final String user, final String password) {
 		_driver = driver;
 		_url = url;
 		_user = user;
 		_password = password;
+		_maxdatabaseconnections = maxdatabaseconnections;
 	}
-
-	public L1DatabaseFactory() throws SQLException {
-		try {
-			// DatabaseFactory
-			_source = new ComboPooledDataSource();
-			_source.setDriverClass(_driver);
-			_source.setJdbcUrl(_url);
-			_source.setUser(_user);
-			_source.setPassword(_password);
+	
+	// =========================================================
+	// Constructor
+	public L1DatabaseFactory()
+	{
+		//_log.info("Initializing BoneCP [ version: databaseDriver -> " + Config.DATABASE_DRIVER + ", jdbcUrl -> " 
+		//		+ Config.DATABASE_URL + ", maxConnectionsPerPartition -> " + Config.DATABASE_MAX_CONNECTIONS 
+		//		+ ", username -> " + Config.DATABASE_LOGIN + ", password -> " + Config.DATABASE_PASSWORD + " ]");
+		try
+		{
+			_source = new BoneCPDataSource();
+			_source.getConfig().setDefaultAutoCommit(true);
+			
+			_source.getConfig().setPoolAvailabilityThreshold(10);
+			_source.getConfig().setMinConnectionsPerPartition(10);
+			_source.getConfig().setMaxConnectionsPerPartition(Config.DATABASE_MAX_CONNECTIONS);
+			
+			_source.setPartitionCount(3);
+			
+			_source.setAcquireRetryAttempts(0); // try to obtain connections indefinitely (0 = never quit)
+			_source.setAcquireRetryDelayInMs(500); // 500 miliseconds wait before try to acquire connection again
+			
+			// if pool is exhausted
+			_source.setAcquireIncrement(5); // if pool is exhausted, get 5 more connections at a time
+			// cause there is a "long" delay on acquire connection
+			// so taking more than one connection at once will make connection pooling
+			// more effective.
+			
+			_source.setConnectionTimeoutInMs(0);
+			
+			// testing OnCheckin used with IdleConnectionTestPeriod is faster than testing on checkout
+			
+			_source.setIdleConnectionTestPeriodInMinutes(1); // test idle connection every 60 sec
+			_source.setIdleMaxAgeInSeconds(1800);
+			
+			_source.setTransactionRecoveryEnabled(true);
+			
+			_source.setDriverClass(Config.DATABASE_DRIVER);
+			_source.setJdbcUrl(Config.DATABASE_URL);
+			_source.setUsername(Config.DATABASE_LOGIN);
+			_source.setPassword(Config.DATABASE_PASSWORD);
+			
 			/* Test the connection */
 			_source.getConnection().close();
-		} catch (SQLException x) {
-			_log.fine("Database Connection FAILED");
-			// rethrow the exception
-			throw x;
-		} catch (Exception e) {
-			_log.fine("Database Connection FAILED");
-			throw new SQLException("could not init DB connection:" + e);
+			
+			if (Config.DEBUG)
+				_log.fine("Database Connection Working");
+			
+			if (Config.DATABASE_DRIVER.toLowerCase().contains("microsoft"))
+				_providerType = ProviderType.MsSql;
+			else
+				_providerType = ProviderType.MySql;
+		}
+		catch (Exception e)
+		{
+			if (Config.DEBUG)
+				_log.fine("Database Connection FAILED");
+			throw new Error("L1DatabaseFactory: Failed to init database connections: " + e.getMessage(), e);
 		}
 	}
-
+	
+	// =========================================================
+	// Method - Public
+	public final String prepQuerySelect(String[] fields, String tableName, String whereClause, boolean returnOnlyTopRecord)
+	{
+		String msSqlTop1 = "";
+		String mySqlTop1 = "";
+		if (returnOnlyTopRecord)
+		{
+			if (getProviderType() == ProviderType.MsSql)
+				msSqlTop1 = " Top 1 ";
+			if (getProviderType() == ProviderType.MySql)
+				mySqlTop1 = " Limit 1 ";
+		}
+		String query = "SELECT " + msSqlTop1 + safetyString(fields) + " FROM " + tableName + " WHERE " + whereClause + mySqlTop1;
+		return query;
+	}
+	
 	public void shutdown() {
-		try {
+		try
+		{
 			_source.close();
-		} catch (Exception e) {
-			_log.log(Level.INFO, "", e);
-		}
-		try {
 			_source = null;
-		} catch (Exception e) {
-			_log.log(Level.INFO, "", e);
 		}
+		catch (Exception e)
+		{
+			_log.log(Level.WARNING, e.getMessage(), e);
+		}
+	}
+	
+	public final String safetyString(String... whatToCheck) {
+		// NOTE: Use brace as a safty precaution just incase name is a reserved word
+		final char braceLeft;
+		final char braceRight;
+		
+		if (getProviderType() == ProviderType.MsSql)
+		{
+			braceLeft = '[';
+			braceRight = ']';
+		}
+		else
+		{
+			braceLeft = '`';
+			braceRight = '`';
+		}
+		
+		int length = 0;
+		
+		for (String word : whatToCheck)
+		{
+			length += word.length() + 4;
+		}
+		
+		final StringBuilder sbResult = new StringBuilder(length);
+		
+		for (String word : whatToCheck)
+		{
+			if (sbResult.length() > 0)
+			{
+				sbResult.append(", ");
+			}
+			
+			sbResult.append(braceLeft);
+			sbResult.append(word);
+			sbResult.append(braceRight);
+		}
+		
+		return sbResult.toString();
+	}
+	
+	public Connection getConnection() {
+		Connection con = null;
+		
+		while (con == null)
+		{
+			try
+			{
+				con = _source.getConnection();
+			}
+			catch (SQLException e)
+			{
+				_log.log(Level.WARNING, "L1DatabaseFactory: getConnection() failed, trying again " + e.getMessage(), e);
+			}
+		}
+		return Config.DETECT_DB_RESOURCE_LEAKS ? LeakCheckedConnection.create(con) : con;
+	}
+
+	private static class ConnectionCloser implements Runnable {
+		private Connection c;
+		private RuntimeException exp;
+		
+		public ConnectionCloser(Connection con, RuntimeException e)
+		{
+			c = con;
+			exp = e;
+		}
+
+		@Override
+		public void run()
+		{
+			try
+			{
+				if (!c.isClosed())
+				{
+					_log.log(Level.WARNING, "Unclosed connection! Trace: " + exp.getStackTrace()[1], exp);
+				}
+			}
+			catch (SQLException e)
+			{
+				_log.log(Level.WARNING, "", e);
+			}
+			
+		}
+	}
+	
+	public static void close(Connection con) {
+		if (con == null)
+			return;
+		
+		try
+		{
+			con.close();
+		}
+		catch (SQLException e)
+		{
+			_log.log(Level.WARNING, "Failed to close database connection!", e);
+		}
+	}
+	
+	private static ScheduledExecutorService getExecutor() {
+		if (_executor == null)
+		{
+			synchronized (L1DatabaseFactory.class)
+			{
+				if (_executor == null)
+					_executor = Executors.newSingleThreadScheduledExecutor();
+			}
+		}
+		return _executor;
+	}
+	
+	public int getBusyConnectionCount() {
+		return _source.getTotalLeased();
+	}
+	
+	public final ProviderType getProviderType()
+	{
+		return _providerType;
 	}
 
 	public static L1DatabaseFactory getInstance() throws SQLException {
@@ -82,18 +276,5 @@ public class L1DatabaseFactory {
 			_instance = new L1DatabaseFactory();
 		}
 		return _instance;
-	}
-
-
-	public Connection getConnection() {
-		Connection con = null;
-		while (con == null) {
-			try {
-				con = _source.getConnection();
-			} catch (SQLException e) {
-				_log.warning("L1DatabaseFactory: getConnection() failed, trying again " + e);
-			}
-		}
-		return Config.DETECT_DB_RESOURCE_LEAKS ? LeakCheckedConnection.create(con) : con;
 	}
 }

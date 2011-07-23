@@ -59,16 +59,19 @@ public final class Config {
 	public static int GAME_SERVER_PORT = 2000;
 
 	@Configure(file = SERVER, key = "Driver")
-	public static String DB_DRIVER = "com.mysql.jdbc.Driver";
+	public static String DATABASE_DRIVER = "com.mysql.jdbc.Driver";
 
 	@Configure(file = SERVER, key = "URL")
-	public static String DB_URL = "jdbc:mysql://localhost/l1jdb?useUnicode=true&characterEncoding=UTF8";
+	public static String DATABASE_URL = "jdbc:mysql://localhost/l1jdb?useUnicode=true&characterEncoding=UTF8";
 
+	@Configure(file = SERVER, key = "MaximumDbConnections")
+	public static int DATABASE_MAX_CONNECTIONS = 10;
+	
 	@Configure(file = SERVER, key = "Login")
-	public static String DB_LOGIN = "root";
+	public static String DATABASE_LOGIN = "root";
 
 	@Configure(file = SERVER, key = "Password")
-	public static String DB_PASSWORD = "";
+	public static String DATABASE_PASSWORD = "";
 
 	@Configure(file = SERVER, key = "PasswordSalt")
 	public static String PASSWORD_SALT = "lineage";
