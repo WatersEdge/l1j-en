@@ -261,7 +261,7 @@ public class L1Shop {
 		    if (!inv.consumeItem(L1ItemId.ADENA, _totalPrice)) {
 			   throw new IllegalStateException("shop exploit detected");
 			}
-			if (_npcId == 70068 || _npcId == 70020) {
+			if (_npcId == 70068 || _npcId == 70020 || _npcId == 70056) {
 				item.setIdentified(false);
 				Random random = new Random();
 				int chance = random.nextInt(100) + 1;
