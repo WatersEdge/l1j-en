@@ -1458,6 +1458,19 @@ INSERT INTO `mapids` VALUES ('5153', 'Death Match', '32576', '32703', '32832', '
 ALTER TABLE `mapids` ADD `night` tinyint(1) unsigned NOT NULL DEFAULT 0 AFTER underwater;
 update mapids set night = 1 where mapid = 701;
 
+
+-- npc Jode at gypsy town fix.
+INSERT INTO `shop` VALUES ('70056', Jode, '37', null, '1', '80000', '0', '-1', null);
+INSERT INTO `shop` VALUES ('70056', Jode, '148', null, '2', '88000', '0', '-1', null);
+INSERT INTO `shop` VALUES ('70056', Jode, '100041', null, '3', '95000', '0', '-1', null);
+INSERT INTO `shop` VALUES ('70056', Jode, '100102', null, '4', '85000', '0', '-1', null);
+INSERT INTO `shop` VALUES ('70056', Jode, '142', null, '5', '83000', '0', '-1', null);
+INSERT INTO `shop` VALUES ('70056', Jode, '100025', null, '6', '77000', '0', '-1', null);
+INSERT INTO `shop` VALUES ('70056', Jode, '20101', null, '7', '84000', '0', '-1', null);
+INSERT INTO `shop` VALUES ('70056', Jode, '20154', null, '8', '98000', '0', '-1', null);
+INSERT INTO `shop` VALUES ('70056', Jode, '20229', null, '9', '78000', '0', '-1', null);
+INSERT INTO `shop` VALUES ('70056', Jode, '20036', null, '10', '69000', '0', '-1', null);
+
 --1835 santa orc
 --2271 aden walking guard sword
 --2289 aden wlking guard spear
