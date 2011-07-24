@@ -19,23 +19,51 @@
 package l1j.server.server.model;
 
 import java.util.Timer;
-
+import l1j.server.server.model.Instance.L1NpcInstance;
 /**
  * The NPC is scheduled TimerTask natural recovery for the class Timer
  * 
  */
 public class L1NpcRegenerationTimer extends Timer {
-
+	private static L1NpcInstance _npc;
 	private static L1NpcRegenerationTimer _instance = null;
-
-	private L1NpcRegenerationTimer() {
+	
+	public L1NpcRegenerationTimer(L1NpcInstance npc) {
+		_npc = npc;
 	}
 
+	public void run() {
+		try {
+			if (_npc.isDead()) {
+				return;
+			}
+			regenMp();
+			regenHp();
+		} catch (Throwable e) {
+			// _log.log(Level.WARNING, e.getLocalizedMessage(), e);
+		}
+	}
+
+	public void regenMp() {
+		int newMp = _npc.getCurrentMp() + 15;
+		if (newMp < 0) {
+			newMp = 0;
+		}
+		_npc.setCurrentMp(newMp);
+	}
+
+	public void regenHp() {
+		int newHp = _npc.getCurrentHp() + 25;
+		if (newHp < 0) {
+			newHp = 0;
+		}
+		_npc.setCurrentMp(newHp);
+	}
+	
 	public static L1NpcRegenerationTimer getInstance() {
 		if (_instance == null) {
-			_instance = new L1NpcRegenerationTimer();
+			_instance = new L1NpcRegenerationTimer(_npc);
 		}
 		return _instance;
 	}
-
 }
