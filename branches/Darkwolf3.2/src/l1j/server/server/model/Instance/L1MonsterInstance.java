@@ -280,16 +280,6 @@ public class L1MonsterInstance extends L1NpcInstance {
 				}
 			}
 		}
-
-	public int getZoneType() {
-		if (getMap().isSafetyZone(getLocation())) {
-			return -1;
-		} else if (getMap().isCombatZone(getLocation())) {
-			return -1;
-		} else { 
-			return -1;
-		}
-	}
 	
 	@Override
 	public void onAction(L1PcInstance pc) {

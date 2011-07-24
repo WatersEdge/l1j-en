@@ -855,6 +855,7 @@ public class L1PcInstance extends L1Character {
 
 	@Override
 	public void onAction(L1PcInstance attacker) {
+		L1MonsterInstance targetmon = null;
 		if (attacker == null) {
 			return;
 		}
@@ -866,7 +867,16 @@ public class L1PcInstance extends L1Character {
 			attack_mortion.action();
 			return;
 		}
-
+		// fix for attacking monsters in zones.
+		if (getZoneType() == 1 || getZoneType() == 0 ||
+				targetmon.getZoneType() == 1 || targetmon.getZoneType() == 0) {
+				L1Attack attack = new L1Attack(targetmon, this);
+				attack.calcDamage();
+				attack.calcStaffOfMana();
+				attack.addPcPoisonAttack(attacker, this);
+				attack.addChaserAttack();
+				return;
+		}
 		if (checkNonPvP(this, attacker) == true) {
 			L1Attack attack_mortion = new L1Attack(attacker, this);
 			attack_mortion.action();
