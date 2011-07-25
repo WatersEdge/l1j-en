@@ -1828,6 +1828,17 @@ update npc set Mprinterval = 10000 where npcid = 45685;
 update npc set hpr = 350 where npcid = 45685;
 update npc set mpr = 200 where npcid = 45685;
 
+-- giants and imp elder rock throwing skill fix.
+DELETE FROM mobskill WHERE mobid = 45295;
+INSERT INTO `mobskill` VALUES ('45295', '0', 'Giant', null, '2', '50', '0', '0', '-3', '0', '0', '30', '0', '0', '60', '12004', '0', '18', '2507', '0', '0', '0');
+INSERT INTO `mobskill` VALUES ('45318', '0', 'Giant', null, '2', '50', '0', '0', '-3', '0', '0', '30', '0', '0', '60', '12004', '0', '18', '2507', '0', '0', '0');
+INSERT INTO `mobskill` VALUES ('45337', '0', 'Giant', null, '2', '50', '0', '0', '-3', '0', '0', '30', '0', '0', '60', '12004', '0', '18', '2507', '0', '0', '0');
+INSERT INTO `mobskill` VALUES ('45064', '0', 'Imp Elder', null, '2', '50', '0', '0', '-3', '0', '0', '30', '0', '0', '60', '12005', '0', '18', '2507', '0', '0', '0');
+INSERT INTO `mobskill` VALUES ('45099', '0', 'Imp Elder', null, '2', '50', '0', '0', '-3', '0', '0', '30', '0', '0', '60', '12005', '0', '18', '2507', '0', '0', '0');
+INSERT INTO `mobskill` VALUES ('45168', '0', 'Imp Elder', null, '2', '50', '0', '0', '-3', '0', '0', '30', '0', '0', '60', '12005', '0', '18', '2507', '0', '0', '0');
+INSERT INTO `skills` VALUES ('12004', 'Gaint Rock Throw', '0', '0', '10', '0', '0', '0', '0', '0', 'attack', '3', '30', '5', '5', '0', '0', '0', '64', '0', '30', '0', '0', '0', '0', '18', '2510', '2507', '0', '0', '0');
+INSERT INTO `skills` VALUES ('12005', 'Imp Rock Throw', '0', '0', '10', '0', '0', '0', '0', '0', 'attack', '3', '12', '5', '5', '0', '0', '0', '64', '0', '30', '0', '0', '0', '0', '18', '2510', '2507', '0', '0', '0');
+
 --1835 santa orc
 --2271 aden walking guard sword
 --2289 aden wlking guard spear
