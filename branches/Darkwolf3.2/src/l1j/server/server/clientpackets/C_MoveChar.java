@@ -63,9 +63,7 @@ public class C_MoveChar extends ClientBasePacket {
 		if (pc.isTeleport()) { 
 			return;
 		}
-		if (pc.isDead()) {
-			return;
-		}
+
 		if (Config.CHECK_MOVE_INTERVAL) {
 			int result;
 			result = pc.getAcceleratorChecker().checkInterval(
@@ -94,8 +92,10 @@ public class C_MoveChar extends ClientBasePacket {
 		if (DungeonRandom.getInstance().dg(locx, locy, pc.getMap().getId(), pc)) { 
 			return;
 		}
-		if ((pc.getMapId() == 68 || pc.getMapId() == 85|| pc.getMapId() == 86|| pc.getMapId() == 69)&& pc.getLevel() >= 13) {
-			switch(pc.getMapId()){
+		if ((pc.getMapId() == 68 || pc.getMapId() == 85 
+				|| pc.getMapId() == 86 
+				|| pc.getMapId() == 69) && pc.getLevel() >= 13) {
+			switch (pc.getMapId()){
 			case 69: case 86:
 				L1Teleport.teleport(pc, 33080, 33392, (short)4, (byte)5, true);
 				return;
