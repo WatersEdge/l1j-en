@@ -22,7 +22,9 @@ import java.util.Random;
 import java.util.logging.Logger;
 
 import l1j.server.server.ClientThread;
+import l1j.server.server.datatables.CharBuffTable;
 import l1j.server.server.model.L1World;
+import l1j.server.server.model.Instance.L1DollInstance;
 import l1j.server.server.model.Instance.L1PcInstance;
 import l1j.server.server.serverpackets.S_PacketBox;
 
@@ -35,19 +37,40 @@ public class C_NewCharSelect extends ClientBasePacket {
 		super(decrypt);
 		
 		L1PcInstance pc = client.getActiveChar();
-
-		if (pc.isDead()) {
-			return;
-		}
+		
 		restartdelay(500,500);
+		
 		client.sendPacket(new S_PacketBox(S_PacketBox.LOGOUT)); // 2.70C->3.0
 		client.CharReStart(true);
-		
+
 		if (client.getActiveChar() != null) {
 			_log.fine("Disconnect from: " + pc.getName());
 			ClientThread.quitGame(pc);
 			synchronized (pc) {
 				pc.logout();
+				if (pc.isInParty()) {
+					pc.getParty().leaveMember(pc);
+				}
+
+				if (pc.isInChatParty()) {
+					pc.getChatParty().leaveMember(pc);
+				}
+				Object[] dollList = pc.getDollList().values().toArray();
+				for (Object dollObject : dollList) {
+					L1DollInstance doll = (L1DollInstance) dollObject;
+					doll.deleteDoll();
+				}
+				try {
+					pc.save();
+					pc.saveInventory();
+				} catch (Exception e) {
+				}
+				pc.stopHpRegeneration();
+				pc.stopMpRegeneration();
+				pc.removeAllKnownObjects();
+				pc.setNetConnection(null);
+				pc.setPacketOutput(null);
+				CharBuffTable.SaveBuff(pc);
 				client.setActiveChar(null);
 			}
 		} else {

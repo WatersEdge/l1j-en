@@ -1839,6 +1839,15 @@ INSERT INTO `mobskill` VALUES ('45168', '0', 'Imp Elder', null, '2', '50', '0', 
 INSERT INTO `skills` VALUES ('12004', 'Gaint Rock Throw', '0', '0', '10', '0', '0', '0', '0', '0', 'attack', '3', '30', '5', '5', '0', '0', '0', '64', '0', '30', '0', '0', '0', '0', '18', '2510', '2507', '0', '0', '0');
 INSERT INTO `skills` VALUES ('12005', 'Imp Rock Throw', '0', '0', '10', '0', '0', '0', '0', '0', 'attack', '3', '12', '5', '5', '0', '0', '0', '64', '0', '30', '0', '0', '0', '0', '18', '2510', '2507', '0', '0', '0');
 
+-- charbufftable corrected.
+DROP TABLE IF EXISTS `character_buff`;
+CREATE TABLE `character_buff` (
+  `char_obj_id` int(10) NOT NULL DEFAULT '0',
+  `skill_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `remaining_time` int(10) NOT NULL DEFAULT '0',
+  `poly_id` int(10) DEFAULT '0'
+) ENGINE=MyISAM DEFAULT CHARSET=utf8
+
 --1835 santa orc
 --2271 aden walking guard sword
 --2289 aden wlking guard spear

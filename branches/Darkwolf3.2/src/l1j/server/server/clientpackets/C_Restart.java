@@ -45,8 +45,9 @@ public class C_Restart extends ClientBasePacket {
 
 	public C_Restart(byte abyte0[], ClientThread clientthread) throws Exception {
 		super(abyte0);
-		L1PcInstance pc = clientthread.getActiveChar();
 		
+		L1PcInstance pc = clientthread.getActiveChar();
+
 		int[] loc;
 		
 		if (pc.getHellTime() > 0) {
