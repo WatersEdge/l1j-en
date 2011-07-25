@@ -64,18 +64,14 @@ public class L1PetInstance extends L1NpcInstance {
 
 	public boolean noTarget(int depth) {
 		if (_currentPetStatus == 3) { // If pet is in rest mode
-			if (getLocation().getTileLineDistance(_petMaster.getLocation()) > 1) {
-				tagertClear();
-				return true;
-			}
+			return true;
 		} else if (_currentPetStatus == 4) { 
-			if (_petMaster != null && _petMaster.getMapId() == getMapId()
-					&& getLocation().getTileLineDistance(_petMaster.getLocation()) < 35) {
-				setHate(_master, 1);
-				if (getLocation().getTileLineDistance(_petMaster.getLocation()) > 1) {
-					tagertClear();
-				}
-				int dir = targetReverseDirection(_petMaster.getX(), _petMaster.getY());
+			if (_petMaster != null
+					&& _petMaster.getMapId() == getMapId()
+					&& getLocation().getTileLineDistance(
+							_petMaster.getLocation()) < 5) {
+				int dir = targetReverseDirection(_petMaster.getX(), _petMaster
+						.getY());
 				dir = checkObject(getX(), getY(), getMapId(), dir);
 				setDirectionMove(dir);
 				setSleepTime(calcSleepTime(getPassispeed(), MOVE_SPEED));
@@ -85,12 +81,8 @@ public class L1PetInstance extends L1NpcInstance {
 			}
 		} else if (_currentPetStatus == 5) { 
 			if (Math.abs(getHomeX() - getX()) > 1
-					|| Math.abs(getHomeY() - getY()) > 2) {
+					|| Math.abs(getHomeY() - getY()) > 1) {
 				int dir = moveDirection(getHomeX(), getHomeY());
-				setHate(_master, 1);
-				if (getLocation().getTileLineDistance(_petMaster.getLocation()) > 1) {
-					tagertClear();
-				}
 				if (dir == -1) { // If the pet cant find a way to the owner
 						//Original code
 						/*setHomeX(getX());
@@ -118,12 +110,10 @@ public class L1PetInstance extends L1NpcInstance {
 				}
 			}
 		} else if (_currentPetStatus == 7) { 
-			if (_petMaster != null && _petMaster.getMapId() == getMapId()
-					&& getLocation().getTileLineDistance(_petMaster.getLocation()) <= 1) {
-				setHate(_master, 1);
-				if (getLocation().getTileLineDistance(_petMaster.getLocation()) > 1) {
-					tagertClear();
-				}
+			if (_petMaster != null
+					&& _petMaster.getMapId() == getMapId()
+					&& getLocation().getTileLineDistance(
+							_petMaster.getLocation()) <= 1) {
 				_currentPetStatus = 3;
 				return true;
 			}
@@ -137,12 +127,8 @@ public class L1PetInstance extends L1NpcInstance {
 			setDirectionMove(dir);
 			setSleepTime(calcSleepTime(getPassispeed(), MOVE_SPEED));
 		} else if (_petMaster != null && _petMaster.getMapId() == getMapId()) { 
-			if (getLocation().getTileLineDistance(_petMaster.getLocation()) > 1) {
+			if (getLocation().getTileLineDistance(_petMaster.getLocation()) > 2) {
 				int dir = moveDirection(_petMaster.getX(), _petMaster.getY());
-				setHate(_master, 1);
-				if (getLocation().getTileLineDistance(_petMaster.getLocation()) > 1) {
-					tagertClear();
-				}
 				if (dir == -1) {
 					_currentPetStatus = 3;
 					return true;
