@@ -110,7 +110,7 @@ public class C_MoveChar extends ClientBasePacket {
 		if ((oldLoc.getX() + 10 < locx) 
 			|| (oldLoc.getX() - 10 > locx) 
 			|| (oldLoc.getY() + 10 < locy) 
-			|| (oldLoc.getY() - 10 > locx)) { 
+			|| (oldLoc.getX() - 10 > locx)) { 
 			return; 
 		}
 		pc.getLocation().set(locx, locy);

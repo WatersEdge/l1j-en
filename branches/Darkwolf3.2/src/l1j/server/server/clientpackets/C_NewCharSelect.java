@@ -47,7 +47,6 @@ public class C_NewCharSelect extends ClientBasePacket {
 			_log.fine("Disconnect from: " + pc.getName());
 			ClientThread.quitGame(pc);
 			synchronized (pc) {
-				ClientThread.quitGame(pc);
 				pc.logout();
 				client.setActiveChar(null);
 			}
