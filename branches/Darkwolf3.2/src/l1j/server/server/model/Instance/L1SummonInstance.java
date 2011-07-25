@@ -93,7 +93,7 @@ public class L1SummonInstance extends L1NpcInstance {
 					try {
 						Thread.sleep(200);
 						// Prevent infinite recursion by max-bounding retry depth
-						if (depth > 120) {
+						if (depth > 80) {
 							setHomeX(getX());
 							setHomeY(getY());
 							return true;

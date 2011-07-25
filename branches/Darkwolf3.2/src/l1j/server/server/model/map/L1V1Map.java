@@ -468,10 +468,6 @@ public class L1V1Map extends L1Map {
 			if (door.getOpenStatus() == ActionCodes.ACTION_Close) {
 				return false;
 			}
-			if (door.getOpenStatus() == ActionCodes.ACTION_Close) {
-			    setTile(x, y, (short) (accessTile(x, y) | BITFLAG_IS_IMPASSABLE));
-				return false; 
-		    }
 			if (door.isDead()) {
 				continue;
 			}

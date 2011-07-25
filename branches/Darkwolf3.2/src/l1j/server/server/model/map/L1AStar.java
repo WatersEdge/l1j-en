@@ -89,14 +89,23 @@ public class L1AStar {
 		if ( map.isPassable(x, y) == false ) {
 			return 0;
 		}
-		
 		return 1;
 	}
 
 	public char MakeChild(L1Node node, int tx, int ty, short m) {
 		int		x, y;
 		char	flag = 0;
-		char	cc[] = {0, 0, 0, 0, 0, 0, 0, 0};
+		char	cc[] = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 
+		0, 0, 1, 0, 0, 0, 0, 0, 1, 
+		1, 1, 1, 1, 0, 1, 1, 0, 1, 
+		1, 1, 1, 1, 1, 1, 1, 0, 0, 
+		1, 0, 0, 0, 0, 1, 0, 0, 0, 
+		1, 1, 1, 1, 0, 1, 1, 1, 1, 
+		1, 1, 1, 1, 0, 1, 0, 0, 1, 
+		1, 1, 1, 1, 0, 1, 0, 0, 1, 
+		1, 1, 1, 1, 0, 1, 0, 0, 1, 
+		1, 1, 1, 1, 0, 1, 0, 0, 0, 
+		1, 1, 1, 1, 0, 1, 1, 1, 1 };
 		
 		x = node.x;
 		y = node.y;

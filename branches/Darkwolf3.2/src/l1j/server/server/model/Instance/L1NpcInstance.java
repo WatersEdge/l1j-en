@@ -1441,7 +1441,6 @@ public class L1NpcInstance extends L1Character {
 		{
 			return -1;
 		}
-
 		return targetDirection(x, y);
 	}
 
