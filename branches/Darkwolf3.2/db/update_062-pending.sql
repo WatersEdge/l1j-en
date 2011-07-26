@@ -1839,6 +1839,117 @@ INSERT INTO `mobskill` VALUES ('45168', '0', 'Imp Elder', null, '2', '50', '0', 
 INSERT INTO `skills` VALUES ('12004', 'Gaint Rock Throw', '0', '0', '10', '0', '0', '0', '0', '0', 'attack', '3', '30', '5', '5', '0', '0', '0', '64', '0', '30', '0', '0', '0', '0', '18', '2510', '2507', '0', '0', '0');
 INSERT INTO `skills` VALUES ('12005', 'Imp Rock Throw', '0', '0', '10', '0', '0', '0', '0', '0', 'attack', '3', '12', '5', '5', '0', '0', '0', '64', '0', '30', '0', '0', '0', '0', '18', '2510', '2507', '0', '0', '0');
 
+-- magicdolls fixed.
+DROP TABLE IF EXISTS `MagicDoll`;
+CREATE TABLE `MagicDoll` (
+  `item_id` int(10) unsigned NOT NULL,
+  `note` varchar(45) CHARACTER SET utf8 DEFAULT '',
+  `doll_id` int(10) NOT NULL,
+  `ac` tinyint(2) NOT NULL DEFAULT '0',
+  `hpr` tinyint(2) NOT NULL DEFAULT '0',
+  `hpr_time` tinyint(2) NOT NULL DEFAULT '0',
+  `mpr` tinyint(2) NOT NULL DEFAULT '0',
+  `mpr_time` tinyint(2) NOT NULL DEFAULT '0',
+  `hit` tinyint(2) NOT NULL DEFAULT '0',
+  `dmg` tinyint(2) NOT NULL DEFAULT '0',
+  `dmg_chance` tinyint(2) NOT NULL DEFAULT '0',
+  `bow_hit` tinyint(2) NOT NULL DEFAULT '0',
+  `bow_dmg` tinyint(2) NOT NULL DEFAULT '0',
+  `dmg_reduction` tinyint(2) NOT NULL DEFAULT '0',
+  `dmg_reduction_chance` tinyint(2) NOT NULL DEFAULT '0',
+  `dmg_evasion_chance` tinyint(2) NOT NULL DEFAULT '0',
+  `weight_reduction` tinyint(2) NOT NULL DEFAULT '0',
+  `regist_stun` tinyint(2) NOT NULL DEFAULT '0',
+  `regist_stone` tinyint(2) NOT NULL DEFAULT '0',
+  `regist_sleep` tinyint(2) NOT NULL DEFAULT '0',
+  `regist_freeze` tinyint(2) NOT NULL DEFAULT '0',
+  `regist_sustain` tinyint(2) NOT NULL DEFAULT '0',
+  `regist_blind` tinyint(2) NOT NULL DEFAULT '0',
+  `make_itemid` int(10) NOT NULL DEFAULT '0',
+  `effect` tinyint(2) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`item_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of MagicDoll
+-- ----------------------------
+INSERT INTO `MagicDoll` VALUES ('41248', 'bugbear', '80106', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0', '0', '0', '0');
+INSERT INTO `MagicDoll` VALUES ('41249', 'Succubus', '80107', '0', '0', '0', '15', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0');
+INSERT INTO `MagicDoll` VALUES ('41250', 'Werewolf', '80108', '0', '0', '0', '0', '0', '0', '15', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0');
+INSERT INTO `MagicDoll` VALUES ('47105', 'Sea Dancer', '92109', '0', '40', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0');
+INSERT INTO `MagicDoll` VALUES ('47106', 'Ramia', '92103', '0', '0', '0', '4', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1');
+INSERT INTO `MagicDoll` VALUES ('47107', 'Yeti', '92102', '-3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '7', '0', '0', '0', '0');
+INSERT INTO `MagicDoll` VALUES ('47108', 'Spartoi', '92104', '0', '0', '0', '0', '0', '0', '0', '0', '1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0');
+INSERT INTO `MagicDoll` VALUES ('47109', 'Cockatrice', '92106', '0', '0', '0', '0', '0', '0', '2', '0', '0', '0', '0', '0', '0', '0', '10', '0', '0', '0', '0', '0', '0', '0');
+INSERT INTO `MagicDoll` VALUES ('47110', 'Male Hatchling', '92110', '0', '0', '0', '5', '0', '0', '0', '0', '0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0', '0', '47114', '0');
+INSERT INTO `MagicDoll` VALUES ('47111', 'FeMale Hatchling', '92111', '0', '0', '0', '5', '0', '0', '0', '0', '0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0', '0', '47114', '0');
+INSERT INTO `MagicDoll` VALUES ('47112', 'Evolved Male Hatchling', '92112', '0', '0', '0', '5', '0', '0', '0', '0', '0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0', '0', '47114', '0');
+INSERT INTO `MagicDoll` VALUES ('47113', 'Evolved FeMale Hatchling', '92113', '0', '0', '0', '5', '0', '0', '0', '0', '0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0', '0', '47114', '0');
+INSERT INTO `MagicDoll` VALUES ('49037', 'Elder', '80129', '0', '0', '0', '15', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0');
+INSERT INTO `MagicDoll` VALUES ('49038', 'Crustancean', '80130', '0', '0', '0', '0', '0', '0', '15', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0');
+INSERT INTO `MagicDoll` VALUES ('49039', 'StoneGolem', '80131', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '15', '4', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0');
+
+DELETE FROM npc where npcid = 41248;
+DELETE FROM npc where npcid = 41249;
+DELETE FROM npc where npcid = 41250;
+DELETE FROM npc where npcid = 49037;
+DELETE FROM npc where npcid = 49038;
+DELETE FROM npc where npcid = 49039;
+DELETE FROM npc where npcid = 47105;
+DELETE FROM npc where npcid = 47106;
+DELETE FROM npc where npcid = 47107;
+DELETE FROM npc where npcid = 47108;
+DELETE FROM npc where npcid = 47109;
+DELETE FROM npc where npcid = 47110;
+DELETE FROM npc where npcid = 47111;
+DELETE FROM npc where npcid = 47112;
+DELETE FROM npc where npcid = 47113;
+
+INSERT INTO `npc` VALUES ('92109', 'Sea Dancer Magic Doll', '$5886', '', 'L1Doll', '6477', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '0', '0', 'small', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '', '0', '-1', '-1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '-1', '0', '0', '0', '0', '0');
+INSERT INTO `npc` VALUES ('92102', 'Yeti Magic Doll', '$6416', '', 'L1Doll', '6480', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '0', '0', 'small', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '', '0', '-1', '-1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '-1', '0', '0', '0', '0', '0');
+INSERT INTO `npc` VALUES ('92103', 'Ramia Magic Doll', '$7450', '', 'L1Doll', '6483', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '0', '0', 'small', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '', '0', '-1', '-1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '-1', '0', '0', '0', '0', '0');
+INSERT INTO `npc` VALUES ('92104', 'Spartoi Magic Doll', '$7510', '', 'L1Doll', '7047', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '0', '0', 'small', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '', '0', '-1', '-1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '-1', '0', '0', '0', '0', '0');
+INSERT INTO `npc` VALUES ('92106', 'Cockatrice Magic Doll', '$5886', '', 'L1Doll', '7257', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '0', '0', 'small', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '', '0', '-1', '-1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '-1', '0', '0', '0', '0', '0');
+INSERT INTO `npc` VALUES ('92110', 'Male Hatchling Magic Doll', '$7901', '', 'L1Doll', '7662', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '0', '0', 'small', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '', '0', '-1', '-1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '-1', '0', '0', '0', '0', '0');
+INSERT INTO `npc` VALUES ('92111', 'FeMale Hatchling Magic Doll', '$7901', '', 'L1Doll', '7661', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '0', '0', 'small', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '', '0', '-1', '-1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '-1', '0', '0', '0', '0', '0');
+INSERT INTO `npc` VALUES ('92112', 'Evolved Male Hatchling Magic Doll', '$7902', '', 'L1Doll', '7659', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '0', '0', 'small', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '', '0', '-1', '-1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '-1', '0', '0', '0', '0', '0');
+INSERT INTO `npc` VALUES ('92113', 'Evolved FeMale Hatchling Magic Doll', '$7902', '', 'L1Doll', '7660', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '0', '0', 'small', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '', '0', '-1', '-1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '-1', '0', '0', '0', '0', '0');
+INSERT INTO `npc` VALUES ('80129', 'Elder Magic Doll', '$5886', '', 'L1Doll', '6443', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '0', '0', 'small', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '', '0', '-1', '-1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '-1', '0', '0', '0', '0', '0');
+INSERT INTO `npc` VALUES ('80130', 'Crustancean Magic Doll', '$5886', '', 'L1Doll', '6449', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '0', '0', 'small', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '', '0', '-1', '-1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '-1', '0', '0', '0', '0', '0');
+INSERT INTO `npc` VALUES ('80131', 'StoneGolem Magic Doll', '$5886', '', 'L1Doll', '6452', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '0', '0', 'small', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '', '0', '-1', '-1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '-1', '0', '0', '0', '0', '0');
+
+DELETE FROM etcitem where item_id = 41248;
+DELETE FROM etcitem where item_id = 41249;
+DELETE FROM etcitem where item_id = 41250;
+DELETE FROM etcitem where item_id = 49037;
+DELETE FROM etcitem where item_id = 49038;
+DELETE FROM etcitem where item_id = 49039;
+DELETE FROM etcitem where item_id = 47105;
+DELETE FROM etcitem where item_id = 47106;
+DELETE FROM etcitem where item_id = 47107;
+DELETE FROM etcitem where item_id = 47108;
+DELETE FROM etcitem where item_id = 47109;
+DELETE FROM etcitem where item_id = 47110;
+DELETE FROM etcitem where item_id = 47111;
+DELETE FROM etcitem where item_id = 47112;
+DELETE FROM etcitem where item_id = 47113;
+
+INSERT INTO `etcitem` VALUES ('41248', 'Magic Doll: Bugbear', '$5226', '$5226', 'magic_doll', 'normal', 'wood', '12000', '2589', '6174', '2545', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '1', '0', '2000', '0', '0', '1');
+INSERT INTO `etcitem` VALUES ('41249', 'Magic Doll: Succubus', '$5227', '$5227', 'magic_doll', 'normal', 'wood', '12000', '2590', '6174', '2546', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '1', '0', '2000', '0', '0', '1');
+INSERT INTO `etcitem` VALUES ('41250', 'Magic Doll: Werewolf', '$5225', '$5225', 'magic_doll', 'normal', 'wood', '12000', '2591', '6174', '2772', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '1', '0', '2000', '0', '0', '1');
+INSERT INTO `etcitem` VALUES ('49037', 'Magic Doll: Elder', '$5417', '$5417', 'magic_doll', 'normal', 'wood', '12000', '2703', '3963', '2545', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '1', '1', '0', '2000', '0', '0', '1');
+INSERT INTO `etcitem` VALUES ('49038', 'Magic Doll: Crustancean', '$5418', '$5418', 'magic_doll', 'normal', 'wood', '12000', '2705', '3963', '2546', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '1', '1', '0', '2000', '0', '0', '1');
+INSERT INTO `etcitem` VALUES ('49039', 'Magic Doll: Stone Golem', '$5419', '$5419', 'magic_doll', 'normal', 'wood', '12000', '2704', '3963', '2772', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '1', '1', '0', '2000', '0', '0', '1');
+INSERT INTO `etcitem` VALUES ('47105', 'Magic Doll: Sea Dancer', '$5826', '$5826', 'magic_doll', 'normal', 'wood', '1000', '3070', '6174', '2929', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '1', '1', '1', '8', '2000', '0', '0', '1');
+INSERT INTO `etcitem` VALUES ('47106', 'Magic Doll: Ramia', '$7449', '$7449', 'magic_doll', 'normal', 'wood', '1000', '3217', '6174', '2930', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '1', '1', '8', '2000', '0', '0', '1');
+INSERT INTO `etcitem` VALUES ('47107', 'Magic Doll: Yeti', '$7448', '$7448', 'magic_doll', 'normal', 'wood', '1000', '3218', '6174', '2931', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '1', '1', '8', '2000', '0', '0', '1');
+INSERT INTO `etcitem` VALUES ('47108', 'Magic Doll: Spartoi', '$7511', '$7511', 'magic_doll', 'normal', 'wood', '1000', '3337', '6174', '3333', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '1', '1', '8', '2000', '0', '0', '1');
+INSERT INTO `etcitem` VALUES ('47109', 'Magic Doll: Cockatrice', '$7400', '$7400', 'magic_doll', 'normal', 'wood', '1000', '3496', '6174', '4049', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '1', '1', '8', '2000', '0', '0', '1');
+INSERT INTO `etcitem` VALUES ('47110', 'Magic Doll: Male Hatchling', '$8410', '$8410', 'magic_doll', 'normal', 'glass', '1000', '3636', '6174', '4133', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '1', '1', '1', '8', '2000', '0', '0', '1');
+INSERT INTO `etcitem` VALUES ('47111', 'Magic Doll: FeMale Hatchling', '$8411', '$8411', 'magic_doll', 'normal', 'glass', '1000', '3669', '6174', '4134', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '1', '1', '1', '8', '2000', '0', '0', '1');
+INSERT INTO `etcitem` VALUES ('47112', 'Magic Doll: Evolved Male Hatchling', '$8412', '$8412', 'magic_doll', 'normal', 'glass', '1000', '3636', '6174', '4135', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '1', '1', '1', '8', '2000', '0', '0', '1');
+INSERT INTO `etcitem` VALUES ('47113', 'Magic Doll: Evolved FeMale Hatchling', '$8413', '$8413', 'magic_doll', 'normal', 'glass', '1000', '3669', '6174', '4136', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '1', '1', '1', '8', '2000', '0', '0', '1');
+
 --1835 santa orc
 --2271 aden walking guard sword
 --2289 aden wlking guard spear

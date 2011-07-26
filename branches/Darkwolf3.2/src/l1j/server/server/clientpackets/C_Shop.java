@@ -23,6 +23,7 @@ import java.util.logging.Logger;
 
 import l1j.server.server.ActionCodes;
 import l1j.server.server.ClientThread;
+import l1j.server.server.model.Instance.L1DollInstance;
 import l1j.server.server.model.Instance.L1ItemInstance;
 import l1j.server.server.model.Instance.L1PcInstance;
 import l1j.server.server.model.Instance.L1PetInstance;
@@ -129,6 +130,17 @@ public class C_Shop extends ClientBasePacket {
 						if (checkItem.getId() == pet.getItemObjId()) {
 							tradable = false;
 							pc.sendPackets(new S_ServerMessage(166, checkItem.getItem().getName(), "Ready"));
+							break;
+						}
+					}
+				}
+				Object[] dollList = pc.getDollList().values().toArray();
+				for (Object dollObject : dollList) {
+					if (dollObject instanceof L1DollInstance) {
+						L1DollInstance doll = (L1DollInstance) dollObject;
+						if (doll.getItemObjId() == checkItem.getId()) {
+							tradable = false;
+							pc.sendPackets(new S_ServerMessage(1181));
 							break;
 						}
 					}

@@ -18,33 +18,52 @@
  */
 package l1j.server.server.model.Instance;
 
+import java.util.Map;
 import java.util.Arrays;
 import java.util.concurrent.ScheduledFuture;
 import java.util.logging.Logger;
-import java.util.Random;
 
+import l1j.server.server.ActionCodes;
 import l1j.server.server.GeneralThreadPool;
 import l1j.server.server.encryptions.IdFactory;
+import l1j.server.server.datatables.SprTable;
+import l1j.server.server.model.L1Character;
 import l1j.server.server.model.L1World;
 import l1j.server.server.model.Instance.L1PcInstance;
+import l1j.server.server.serverpackets.S_DoActionGFX;
 import l1j.server.server.serverpackets.S_DollPack;
+import l1j.server.server.serverpackets.S_OwnCharStatus;
+import l1j.server.server.serverpackets.S_SkillIconGFX;
 import l1j.server.server.serverpackets.S_SkillSound;
 import l1j.server.server.templates.L1Npc;
+import l1j.server.server.templates.L1MagicDoll;
+import l1j.server.server.utils.RandomArrayList;
 
 public class L1DollInstance extends L1NpcInstance {
 	private static Logger _log = Logger.getLogger(L1DollInstance.class.getName());
 	private static final long serialVersionUID = 1L;
 	public static final int DOLLTYPE_BUGBEAR = 0;
 	public static final int DOLLTYPE_SUCCUBUS = 1;
-	public static final int DOLLTYPE_WAREWOLF = 2;
-	public static final int DOLLTYPE_ELDER = 3;
-	public static final int DOLLTYPE_CRUSTANCEAN = 4;
-	public static final int DOLLTYPE_GOLEM = 5;
-	public static final int DOLL_TIME = 1800000;
+    public static final int DOLLTYPE_WEREWOLF = 2; 
+    public static final int DOLLTYPE_ELDER = 3; 
+    public static final int DOLLTYPE_CRUSTANCEAN = 4; 
+    public static final int DOLLTYPE_GOLEM = 5; 
+    public static final int DOLLTYPE_SEADANCER = 6; 
+    public static final int DOLLTYPE_RAMIA = 7; 
+    public static final int DOLLTYPE_YETI = 8; 
+    public static final int DOLLTYPE_COCKATRICE = 9; 
+    public static final int DOLLTYPE_SPARTOI = 10; 
+    public static final int DOLLTYPE_MALEHATCHLING = 11; 
+    public static final int DOLLTYPE_FEMALEHATCHLING = 12; 
+    public static final int DOLLTYPE_EVOLVED_MALEHATCHLING = 13; 
+    public static final int DOLLTYPE_EVOLVED_FEMALEHATCHLING = 14;
+    public static final int DOLL_TIME = 1800000;
 	private ScheduledFuture<?> _dollFuture;
-	private static Random _random = new Random();
 	private int _dollType;
 	private int _itemObjId;
+	private int run;
+	private int _itemId;
+	private boolean _isDelete = false;
 
 	public boolean noTarget(int depth) {
 		if (_master.isDead()) {
@@ -90,8 +109,8 @@ public class L1DollInstance extends L1NpcInstance {
 				new DollTimer(), DOLL_TIME);
 
 		setMaster(master);
-		setX(master.getX() + _random.nextInt(5) - 2);
-		setY(master.getY() + _random.nextInt(5) - 2);
+		setX(master.getX() + RandomArrayList.nextInt(5) - 2);
+		setY(master.getY() + RandomArrayList.nextInt(5) - 2);
 		setMap(master.getMapId());
 		setHeading(5);
 		setLightSize(template.getLightSize());
@@ -104,27 +123,43 @@ public class L1DollInstance extends L1NpcInstance {
 		if (!isAiRunning()) {
 			startAI();
 		}
+		if (L1MagicDoll.isItemMake(_master)) { 
+			((L1PcInstance) _master).stopItemMakeByDoll(); 
+		}
+		if (isHpRegeneration()) {
+			master.startMpRegenerationByDoll();
+		}
 		if (isMpRegeneration()) {
 			master.startMpRegenerationByDoll();
 		}
 	}
 
 	public void deleteDoll() {
+		broadcastPacket(new S_SkillSound(getId(), 5936));
+		if (_master != null && _isDelete) {
+			L1PcInstance pc = (L1PcInstance) _master;
+			pc.sendPackets(new S_SkillIconGFX(56, 0));
+			pc.sendPackets(new S_OwnCharStatus(pc));
+		}
 		if (isMpRegeneration()) {
 			((L1PcInstance) _master).stopMpRegenerationByDoll();
+		}
+		if (isHpRegeneration()) {
+			((L1PcInstance) _master).stopHpRegenerationByDoll();
 		}
 		_master.getDollList().remove(getId());
 		deleteMe();
 	}
 
+
 	@Override
 	public void onPerceive(L1PcInstance perceivedFrom) {
-		if (perceivedFrom.getMapId() > 10000 
-				&& perceivedFrom.getInnKeyId() != _master.getInnKeyId()) { 
-			return; 
+		if (perceivedFrom.getMapId() > 10000
+				&& perceivedFrom.getInnKeyId() != _master.getInnKeyId()) {
+			return;
 		}
 		perceivedFrom.addKnownObject(this);
-		perceivedFrom.sendPackets(new S_DollPack(this, perceivedFrom));
+		perceivedFrom.sendPackets(new S_DollPack(this));
 	}
 
 	@Override
@@ -160,20 +195,26 @@ public class L1DollInstance extends L1NpcInstance {
 		_itemObjId = i;
 	}
 
+	public int getItemId() {
+		return _itemId;
+	}
+
+	public void setItemId(int i) {
+		_itemId = i;
+	}
+
 	public int getDamageByDoll() {
 		int damage = 0;
 		int dollType = getDollType();
-		if (dollType == DOLLTYPE_WAREWOLF || dollType == DOLLTYPE_CRUSTANCEAN) {
-			int chance = _random.nextInt(100) + 1;
+		if (dollType == DOLLTYPE_WEREWOLF || dollType == DOLLTYPE_CRUSTANCEAN) {
+			int chance = RandomArrayList.nextInt(100) + 1;
 			if (chance <= 3) {
 				damage = 15;
 				if (_master instanceof L1PcInstance) {
 					L1PcInstance pc = (L1PcInstance) _master;
-					pc.sendPackets(new S_SkillSound(_master.getId(),
-							6319));
+					pc.sendPackets(new S_SkillSound(_master.getId(), 6319));
 				}
-				_master.broadcastPacket(new S_SkillSound(_master
-						.getId(), 6319));
+				_master.broadcastPacket(new S_SkillSound(_master.getId(), 6319));
 			}
 		}
 		return damage;
@@ -186,6 +227,113 @@ public class L1DollInstance extends L1NpcInstance {
 			isMpRegeneration = true;
 		}
 		return isMpRegeneration;
+	}
+
+	public static int getMpByDoll(L1Character _master) {
+		int s = 0;
+		s += getTypeCountByDoll(_master.getDollList(), DOLLTYPE_SUCCUBUS) * 15
+				+ getTypeCountByDoll(_master.getDollList(), DOLLTYPE_ELDER)
+				* 15;
+		return s;
+	}
+
+	private static int getTypeCountByDoll(Map<Integer, L1DollInstance> dolls,
+			int type) {
+		int s = 0;
+		for (Object obj : dolls.values().toArray()) {
+			if (((L1DollInstance) obj).getDollType() == type) {
+				s++;
+			}
+		}
+		return s;
+	}
+
+	public boolean isMpRegeneration() {
+		boolean isHpRegeneration = false;
+		if (getDollType() == DOLLTYPE_SEADANCER) {
+			isHpRegeneration = true;
+		}
+		return isHpRegeneration;
+	}
+
+	public static int getMprByDoll(L1Character _master) {
+		int s = 0;
+		s += (getTypeCountByDoll(_master.getDollList(),
+				DOLLTYPE_MALEHATCHLING) 
+				* 10 + (getTypeCountByDoll(_master.getDollList(),
+						DOLLTYPE_EVOLVED_MALEHATCHLING) + getTypeCountByDoll(
+						_master.getDollList(), DOLLTYPE_EVOLVED_FEMALEHATCHLING))
+				* 5 + getTypeCountByDoll(_master.getDollList(),
+				DOLLTYPE_RAMIA) * 4);
+		return s;
+	}
+	
+	public boolean isItemMake() {
+		boolean isItemMake = false;
+		if (getDollType() == DOLLTYPE_MALEHATCHLING
+				|| getDollType() == DOLLTYPE_FEMALEHATCHLING
+				|| getDollType() == DOLLTYPE_EVOLVED_MALEHATCHLING
+				|| getDollType() == DOLLTYPE_EVOLVED_FEMALEHATCHLING) {
+			isItemMake = true;
+		}
+		return isItemMake;
+	}
+
+	public int getDamageEvasionByDoll() {
+		int damageEvasion = 0;
+		if (getDollType() == DOLLTYPE_SPARTOI) {
+			int chance = RandomArrayList.nextInt(100) + 1;
+			if (chance <= 4) {
+				damageEvasion = 1;
+				if (_master instanceof L1PcInstance) {
+					L1PcInstance pc = (L1PcInstance) _master;
+					pc.sendPackets(new S_SkillSound(_master.getId(), 6320));
+				}
+				_master.broadcastPacket(new S_SkillSound(_master.getId(), 6320));
+			}
+		}
+		return damageEvasion;
+	}
+
+	public int getPoisonByDoll() {
+		int damagePoison = 0;
+		if (getDollType() == DOLLTYPE_RAMIA) {
+			int chance = RandomArrayList.nextInt(100) + 1;
+			if (chance <= 10) {
+				damagePoison = 1;
+			}
+		}
+		return damagePoison;
+	}
+
+	public static int getBowHitAddByDoll(L1Character _master) {
+		int s = 0;
+		s += getTypeCountByDoll(_master.getDollList(), DOLLTYPE_COCKATRICE);
+		return s;
+	}
+
+	public static int getBowDamageByDoll(L1Character _master) {
+		int s = 0;
+		s += getTypeCountByDoll(_master.getDollList(), DOLLTYPE_COCKATRICE);
+		return s;
+	}
+
+	public static int getAcByDoll(L1Character _master) {
+		int s = 0;
+		s -= ((getTypeCountByDoll(_master.getDollList(), DOLLTYPE_YETI)) * 3);
+		return s;
+	}
+
+	public static int getRegistFreezeByDoll(L1PcInstance _master) {
+		int s = 0;
+		s += ((getTypeCountByDoll(_master.getDollList(), DOLLTYPE_YETI)) * 7);
+		return s;
+	}
+
+	public static int getHprByDoll(L1Character _master) {
+		int s = 0;
+		s += getTypeCountByDoll(_master.getDollList(), DOLLTYPE_MALEHATCHLING) * 20;
+		return s;
 	}
 
 	public int getWeightReductionByDoll() {
@@ -201,11 +349,30 @@ public class L1DollInstance extends L1NpcInstance {
 		int damageReduction = 0;
 		int dollType = getDollType();
 		if (dollType == DOLLTYPE_GOLEM) {
-			int chance = _random.nextInt(100) + 1;
+			int chance = RandomArrayList.nextInt(100) + 1;
 			if (chance <= 4) {
 				damageReduction = 15;
 			}
 		}
 		return damageReduction;
 	}
+
+    private void dollAction() {
+	run = RandomArrayList.nextInt(100) + 1;
+	if (run <= 10) {
+		if (run <= 5) {
+			broadcastPacket(new S_DoActionGFX(getId(),
+					ActionCodes.ACTION_Think));
+			setSleepTime(calcSleepTime(
+					SprTable.getInstance().getSprSpeed(getTempCharGfx(),
+							ActionCodes.ACTION_Think), MOVE_SPEED)); // 66
+		} else {
+			broadcastPacket(new S_DoActionGFX(getId(),
+					ActionCodes.ACTION_Aggress));
+			setSleepTime(calcSleepTime(
+					SprTable.getInstance().getSprSpeed(getTempCharGfx(),
+							ActionCodes.ACTION_Aggress), MOVE_SPEED)); // 67
+		}
+	}
+}
 }

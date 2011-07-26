@@ -108,12 +108,12 @@ public class C_UseSkill extends ClientBasePacket {
 		}
 
 		if (pc.hasSkillEffect(ABSOLUTE_BARRIER)) { 
-			pc.killSkillEffectTimer(ABSOLUTE_BARRIER);
-			pc.startHpRegeneration();
-			pc.startMpRegeneration();
-			pc.startMpRegenerationByDoll();
+			pc.removeSkillEffect(ABSOLUTE_BARRIER); 
+		} 
+		
+		if (pc.hasSkillEffect(MEDITATION)) { 
+			pc.removeSkillEffect(MEDITATION); 
 		}
-		pc.killSkillEffectTimer(MEDITATION);
 
 		try {
 			if (skillId == CALL_CLAN || skillId == RUN_CLAN) { 

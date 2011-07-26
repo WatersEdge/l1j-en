@@ -21,6 +21,16 @@ package l1j.server.server.utils;
 public class RandomArrayList {
 	private static int listint = 0;
 	private static double[] ArrayDouble = new double[32767];
+	private static final int _max = Short.MAX_VALUE;
+	private static int _idx = 0;
+
+	private static double[] _value = new double[_max + 1];
+
+	static {
+		for (_idx = 0; _idx < _max + 1; _idx++) {
+			_value[_idx] = (Math.random() + Math.random() + Math.random() + Math.random() + Math.random()) % 1.0;
+		}
+	}
 
 	public static void setArrayList() {
 		for (listint = 0; listint < 32767; listint++) {
@@ -34,6 +44,20 @@ public class RandomArrayList {
         else
                 return listint = 0;
     }
+    
+	public static int nextInt(int n) {
+		_idx = _idx & _max;
+		return (int) (_value[_idx++] * n);
+	}
+	
+	public static int nextInt(int n, int offset) {
+		_idx = _idx & _max;
+		return offset + (int) (_value[_idx++] * n);
+	}
+
+	public static byte nextByte() {
+		return (byte)nextInt(256);
+	}
 
     public static void getByte(byte[] arr) {
         for(int i = 0; i < arr.length; i++)
@@ -85,5 +109,14 @@ public class RandomArrayList {
 	}
 	public static int getInc(double rang, int increase) {
 		return getInt(rang) + increase;
+	}
+
+	public static boolean nextBoolean() {
+		return (nextInt(2) == 1);
+	}
+	
+	public static long nextLong() {
+		long l = nextInt(Integer.MAX_VALUE) << 32 + nextInt(Integer.MAX_VALUE);
+		return l;
 	}
 }

@@ -102,12 +102,12 @@ public class C_Attack extends ClientBasePacket {
 		}
 
 		if (pc.hasSkillEffect(ABSOLUTE_BARRIER)) { 
-			pc.killSkillEffectTimer(ABSOLUTE_BARRIER);
-			pc.startHpRegeneration();
-			pc.startMpRegeneration();
-			pc.startMpRegenerationByDoll();
+			pc.removeSkillEffect(ABSOLUTE_BARRIER); 
+		} 
+		
+		if (pc.hasSkillEffect(MEDITATION)) { 
+			pc.removeSkillEffect(MEDITATION); 
 		}
-		pc.killSkillEffectTimer(MEDITATION);
 
 		pc.delInvis(); 
 

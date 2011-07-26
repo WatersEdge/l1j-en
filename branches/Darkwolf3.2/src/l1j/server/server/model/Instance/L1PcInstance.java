@@ -44,6 +44,8 @@ import l1j.server.server.datatables.CharacterTable;
 import l1j.server.server.datatables.ExpTable;
 import l1j.server.server.datatables.ItemTable;
 import l1j.server.server.model.HpRegeneration;
+import l1j.server.server.model.HpRegenerationByDoll;
+import l1j.server.server.model.ItemMakeByDoll;
 import l1j.server.server.model.AcceleratorChecker;
 import l1j.server.server.model.L1Attack;
 import l1j.server.server.model.L1CastleLocation;
@@ -106,6 +108,7 @@ import l1j.server.server.serverpackets.S_SystemMessage;
 import l1j.server.server.serverpackets.ServerBasePacket;
 import l1j.server.server.templates.L1BookMark;
 import l1j.server.server.templates.L1Item;
+import l1j.server.server.templates.L1MagicDoll;
 import l1j.server.server.templates.L1PrivateShopBuyList;
 import l1j.server.server.templates.L1PrivateShopSellList;
 import static l1j.server.server.model.skill.L1SkillId.*;
@@ -123,7 +126,7 @@ public class L1PcInstance extends L1Character {
 	private short _trueHpr = 0;
 
 	public short getHpr() {
-		return _hpr;
+		return (short) (_hpr + L1MagicDoll.getHprByDoll(this));
 	}
 
 	public void addHpr(int i) {
@@ -135,7 +138,7 @@ public class L1PcInstance extends L1Character {
 	private short _trueMpr = 0;
 
 	public short getMpr() {
-		return _mpr;
+		return (short) (_mpr + L1MagicDoll.getMprByDoll(this));
 	}
 
 	public void addMpr(int i) {
@@ -186,20 +189,23 @@ public class L1PcInstance extends L1Character {
 	}
 
 	public void startMpRegenerationByDoll() {
-		final int INTERVAL_BY_DOLL = 60000;
+		final int INTERVAL_BY_DOLL = 64000;
 		boolean isExistMprDoll = false;
-		Object[] dollList = getDollList().values().toArray();
-		for (Object dollObject : dollList) {
-			L1DollInstance doll = (L1DollInstance) dollObject;
-			if (doll.isMpRegeneration()) {
-				isExistMprDoll = true;
-			}
+		if (L1MagicDoll.isMpRegeneration(this)) {
+			isExistMprDoll = true;
 		}
 		if (!_mpRegenActiveByDoll && isExistMprDoll) {
 			_mpRegenByDoll = new MpRegenerationByDoll(this);
-			_regenTimer.scheduleAtFixedRate(_mpRegenByDoll, INTERVAL_BY_DOLL,
-					INTERVAL_BY_DOLL);
+			_regenTimer.scheduleAtFixedRate(_mpRegenByDoll, INTERVAL_BY_DOLL, INTERVAL_BY_DOLL);
 			_mpRegenActiveByDoll = true;
+		}
+	}
+
+	public void stopMpRegenerationByDoll() {
+		if (_mpRegenActiveByDoll) {
+			_mpRegenByDoll.cancel();
+			_mpRegenByDoll = null;
+			_mpRegenActiveByDoll = false;
 		}
 	}
 
@@ -221,11 +227,47 @@ public class L1PcInstance extends L1Character {
 		}
 	}
 
-	public void stopMpRegenerationByDoll() {
-		if (_mpRegenActiveByDoll) {
-			_mpRegenByDoll.cancel();
-			_mpRegenByDoll = null;
-			_mpRegenActiveByDoll = false;
+	public void startItemMakeByDoll() {
+		final int INTERVAL_BY_DOLL = 240000;
+		boolean isExistItemMakeDoll = false;
+		if (L1MagicDoll.isItemMake(this)) {
+			isExistItemMakeDoll = true;
+		}
+		if (!_ItemMakeActiveByDoll && isExistItemMakeDoll) {
+			_itemMakeByDoll = new ItemMakeByDoll(this);
+			_regenTimer.scheduleAtFixedRate(_itemMakeByDoll, INTERVAL_BY_DOLL,
+					INTERVAL_BY_DOLL);
+			_ItemMakeActiveByDoll = true;
+		}
+	}
+
+	public void stopItemMakeByDoll() {
+		if (_ItemMakeActiveByDoll) {
+			_itemMakeByDoll.cancel();
+			_itemMakeByDoll = null;
+			_ItemMakeActiveByDoll = false;
+		}
+	}
+
+	public void startHpRegenerationByDoll() {
+		final int INTERVAL_BY_DOLL = 64000;
+		boolean isExistHprDoll = false;
+		if (L1MagicDoll.isHpRegeneration(this)) {
+			isExistHprDoll = true;
+		}
+		if (!_hpRegenActiveByDoll && isExistHprDoll) {
+			_hpRegenByDoll = new HpRegenerationByDoll(this);
+			_regenTimer.scheduleAtFixedRate(_hpRegenByDoll, INTERVAL_BY_DOLL,
+					INTERVAL_BY_DOLL);
+			_hpRegenActiveByDoll = true;
+		}
+	}
+
+	public void stopHpRegenerationByDoll() {
+		if (_hpRegenActiveByDoll) {
+			_hpRegenByDoll.cancel();
+			_hpRegenByDoll = null;
+			_hpRegenActiveByDoll = false;
 		}
 	}
 
@@ -1818,6 +1860,10 @@ if (player instanceof L1PcInstance) {
 	private boolean _mpRegenActiveByDoll;
 	private boolean _mpReductionActiveByAwake;
 	private boolean _hpRegenActive;
+	private boolean _hpRegenActiveByDoll;
+	private HpRegenerationByDoll _hpRegenByDoll;
+	private boolean _ItemMakeActiveByDoll;
+	private ItemMakeByDoll _itemMakeByDoll;
 	private L1EquipmentSlot _equipSlot;
 	private L1PcDeleteTimer _pcDeleteTimer;
 
@@ -2343,21 +2389,16 @@ if (player instanceof L1PcInstance) {
 		weightReductionByArmor /= 100;
 
 		double weightReductionByDoll = 0;
-		Object[] dollList = getDollList().values().toArray();
-		for (Object dollObject : dollList) {
-			L1DollInstance doll = (L1DollInstance) dollObject;
-			weightReductionByDoll += doll.getWeightReductionByDoll();
-		}
+		weightReductionByDoll += L1MagicDoll.getWeightReductionByDoll(this);
 		weightReductionByDoll /= 100;
 
 		int weightReductionByMagic = 0;
-		if (hasSkillEffect(DECREASE_WEIGHT)) { 
+		if (hasSkillEffect(DECREASE_WEIGHT)) {
 			weightReductionByMagic = 180;
 		}
 
 		double originalWeightReduction = 0;
-		originalWeightReduction += 0.04 * (getOriginalStrWeightReduction()
-				+ getOriginalConWeightReduction());
+		originalWeightReduction += 0.04 * (getOriginalStrWeightReduction() + getOriginalConWeightReduction());
 
 		double weightReduction = 1 + weightReductionByArmor
 				+ weightReductionByDoll + originalWeightReduction;

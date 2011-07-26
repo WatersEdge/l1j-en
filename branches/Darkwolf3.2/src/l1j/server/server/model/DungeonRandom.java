@@ -128,9 +128,10 @@ public class DungeonRandom {
 			int newY = newDungeonRandom._newY[rnd];
 			int heading = newDungeonRandom._heading;
 			pc.setSkillEffect(ABSOLUTE_BARRIER, 2000);
-			pc.stopHpRegeneration();
-			pc.stopMpRegeneration();
-			pc.stopMpRegenerationByDoll();
+            pc.stopHpRegeneration();
+            pc.stopMpRegeneration();
+            pc.stopHpRegenerationByDoll();
+            pc.stopMpRegenerationByDoll();
 			L1Teleport.teleport(pc, newX, newY, newMap, heading, true);
 			return true;
 		}

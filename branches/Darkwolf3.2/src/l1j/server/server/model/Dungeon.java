@@ -293,9 +293,10 @@ public class Dungeon {
 			if (teleportable) {
 				// 2 seconds of invincibility
 				pc.setSkillEffect(L1SkillId.ABSOLUTE_BARRIER, 2000);
-				pc.stopHpRegeneration();
-				pc.stopMpRegeneration();
-				pc.stopMpRegenerationByDoll();
+                pc.stopHpRegeneration();
+                pc.stopMpRegeneration();
+                pc.stopHpRegenerationByDoll();
+                pc.stopMpRegenerationByDoll();
 				L1Teleport.teleport(pc, newX, newY, newMap, heading, false);
 				return true;
 			}

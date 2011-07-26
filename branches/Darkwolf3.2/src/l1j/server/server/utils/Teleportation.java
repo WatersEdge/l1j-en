@@ -138,7 +138,7 @@ public class Teleportation {
 					int nx = loc.getX();
 					int ny = loc.getY();
 					teleport(doll, nx, ny, mapId, head);
-					pc.sendPackets(new S_DollPack(doll, pc));
+					pc.sendPackets(new S_DollPack(doll));
 
 					for (L1PcInstance visiblePc : L1World.getInstance()
 							.getVisiblePlayer(doll)) {
@@ -152,7 +152,7 @@ public class Teleportation {
 					int nx = loc.getX();
 					int ny = loc.getY();
 					teleport(doll, nx, ny, mapId, head);
-					pc.sendPackets(new S_DollPack(doll, pc));
+					pc.sendPackets(new S_DollPack(doll));
 
 					for (L1PcInstance visiblePc : L1World.getInstance()
 							.getVisiblePlayer(doll)) {

@@ -34,6 +34,7 @@ import l1j.server.server.datatables.CastleTable;
 import l1j.server.server.datatables.CheckWarTime;
 import l1j.server.server.datatables.CharacterTable;
 import l1j.server.server.datatables.ChatLogTable;
+import l1j.server.server.datatables.MagicDollTable;
 import l1j.server.server.datatables.ClanTable;
 import l1j.server.server.datatables.DoorTable;
 import l1j.server.server.datatables.DropItemTable;
@@ -255,6 +256,7 @@ public GameServerThread() throws Exception {
 	L1NpcRegenerationTimer.getInstance();
 	ChatLogTable.getInstance();
 	WeaponSkillTable.getInstance();
+	MagicDollTable.getInstance();
 	NpcActionTable.load();
 	GMCommandsConfig.load();
 	Getback.loadGetBack();

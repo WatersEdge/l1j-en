@@ -2619,17 +2619,21 @@ public class C_ItemUSe extends ClientBasePacket {
 						return;
 					}
 					pc.setCurrentMp(pc.getCurrentMp() - 10);
-					// pc.sendPackets(new S_CantMove()); 
 					L1Teleport.teleport(pc, spellsc_x, spellsc_y,
 							pc.getMapId(), pc.getHeading(), true,
 							L1Teleport.CHANGE_POSITION);
-				} else if (itemId == 41293 || itemId == 41294) { //
+				} else if (itemId == 41293 || itemId == 41294) {
 					startFishing(pc, itemId, fishX, fishY);
 				} else if (itemId == 41245) {
 					useResolvent(pc, l1iteminstance1, l1iteminstance);
 				} else if (itemId == 41248 || itemId == 41249
 						|| itemId == 41250 || itemId == 49037
-						|| itemId == 49038 || itemId == 49039) {
+						|| itemId == 49038 || itemId == 49039
+						|| itemId == 47105 || itemId == 47106
+						|| itemId == 47107 || itemId == 47108
+						|| itemId == 47109 || itemId == 47110
+						|| itemId == 47111 || itemId == 47112
+						|| itemId == 47113) {
 					useMagicDoll(pc, itemId, itemObjid);
 				} else if (itemId >= 41255 && itemId <= 41259) {
 					if (cookStatus == 0) {
@@ -4528,7 +4532,7 @@ public class C_ItemUSe extends ClientBasePacket {
 				} else if (fishY > pc.getY() + rodLength
 						|| fishY < pc.getY() - rodLength) {
 					pc.sendPackets(new S_ServerMessage(1138));
-				} else if (pc.getInventory().consumeItem(41295, 1)) { //
+				} else if (pc.getInventory().consumeItem(41295, 1)) {
 					pc.sendPackets(new S_Fishing(pc.getId(),
 							ActionCodes.ACTION_Fishing, fishX, fishY));
 					pc.broadcastPacket(new S_Fishing(pc.getId(),
@@ -4628,7 +4632,7 @@ public class C_ItemUSe extends ClientBasePacket {
 				dollType = L1DollInstance.DOLLTYPE_SUCCUBUS;
 			} else if (itemId == 41250) {
 				npcId = 80108;
-				dollType = L1DollInstance.DOLLTYPE_WAREWOLF;
+				dollType = L1DollInstance.DOLLTYPE_WEREWOLF;
 			} else if (itemId == 49037) {
 				npcId = 80129;
 				dollType = L1DollInstance.DOLLTYPE_ELDER;
@@ -4638,7 +4642,34 @@ public class C_ItemUSe extends ClientBasePacket {
 			} else if (itemId == 49039) {
 				npcId = 80131;
 				dollType = L1DollInstance.DOLLTYPE_GOLEM;
-			}
+		    } else if (itemId == 47105) {
+			    npcId = 92109;
+			   dollType = L1DollInstance.DOLLTYPE_SEADANCER;
+	        } else if (itemId == 47106) {
+		        npcId = 92103;
+		        dollType = L1DollInstance.DOLLTYPE_RAMIA;
+	        } else if (itemId == 47107) {
+		        npcId = 92102;
+		        dollType = L1DollInstance.DOLLTYPE_YETI;
+	        } else if (itemId == 47109) {
+		        npcId = 92106;
+		        dollType = L1DollInstance.DOLLTYPE_COCKATRICE;
+	        } else if (itemId == 47108) {
+		        npcId = 92104;
+		        dollType = L1DollInstance.DOLLTYPE_SPARTOI;
+	        } else if (itemId == 47110) {
+		        npcId = 92110;
+		        dollType = L1DollInstance.DOLLTYPE_MALEHATCHLING;
+	        } else if (itemId == 47111) {
+		        npcId = 92111;
+		        dollType = L1DollInstance.DOLLTYPE_FEMALEHATCHLING;
+	        } else if (itemId == 47112) {
+		        npcId = 92112;
+		        dollType = L1DollInstance.DOLLTYPE_EVOLVED_MALEHATCHLING;
+	        } else if (itemId == 47113) {
+		        npcId = 92113;
+		        dollType = L1DollInstance.DOLLTYPE_EVOLVED_FEMALEHATCHLING;
+	        }
 			L1Npc template = NpcTable.getInstance().getTemplate(npcId);
 			doll = new L1DollInstance(template, pc, dollType, itemObjectId);
 			pc.sendPackets(new S_SkillSound(doll.getId(), 5935));

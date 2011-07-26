@@ -43,6 +43,7 @@ import l1j.server.server.serverpackets.S_Poison;
 import l1j.server.server.serverpackets.ServerBasePacket;
 import l1j.server.server.types.Point;
 import l1j.server.server.utils.IntRange;
+import l1j.server.server.templates.L1MagicDoll;
 import static l1j.server.server.model.skill.L1SkillId.*;
 
 // Referenced classes of package l1j.server.server.model:
@@ -866,13 +867,12 @@ public class L1Character extends L1Object {
 		_addAttrKind = i;
 	}
 
-	// 
 	private int _registStun = 0;
 	private int _trueRegistStun = 0;
 
 	public int getRegistStun() {
-		return _registStun;
-	} // 
+		return (_registStun + L1MagicDoll.getRegistStunByDoll(this));
+	}
 
 	public void addRegistStun(int i) {
 		_trueRegistStun += i;
@@ -889,7 +889,7 @@ public class L1Character extends L1Object {
 	private int _trueRegistStone = 0;
 
 	public int getRegistStone() {
-		return _registStone;
+		return (_registStone + L1MagicDoll.getRegistStoneByDoll(this));
 	} 
 
 	public void addRegistStone(int i) {
@@ -907,7 +907,7 @@ public class L1Character extends L1Object {
 	private int _trueRegistSleep = 0;
 
 	public int getRegistSleep() {
-		return _registSleep;
+		return (_registSleep + L1MagicDoll.getRegistSleepByDoll(this));
 	} 
 
 	public void addRegistSleep(int i) {
@@ -925,7 +925,7 @@ public class L1Character extends L1Object {
 	private int _trueRegistFreeze = 0;
 
 	public int getRegistFreeze() {
-		return _registFreeze;
+		return (_registFreeze + L1MagicDoll.getRegistFreezeByDoll(this));
 	} 
 
 	public void add_regist_freeze(int i) {
@@ -939,13 +939,12 @@ public class L1Character extends L1Object {
 		}
 	}
 
-	// 
 	private int _registSustain = 0;
 	private int _trueRegistSustain = 0;
 
 	public int getRegistSustain() {
-		return _registSustain;
-	} //
+		return (_registSustain + L1MagicDoll.getRegistSustainByDoll(this));
+	}
 
 	public void addRegistSustain(int i) {
 		_trueRegistSustain += i;
@@ -958,13 +957,12 @@ public class L1Character extends L1Object {
 		}
 	}
 
-	// 
 	private int _registBlind = 0;
 	private int _trueRegistBlind = 0;
 
 	public int getRegistBlind() {
-		return _registBlind;
-	} //
+		return (_registBlind + L1MagicDoll.getRegistBlindByDoll(this));
+	}
 
 	public void addRegistBlind(int i) {
 		_trueRegistBlind += i;
@@ -977,8 +975,8 @@ public class L1Character extends L1Object {
 		}
 	}
 
-	private int _dmgup = 0; //
-	private int _trueDmgup = 0; //
+	private int _dmgup = 0;
+	private int _trueDmgup = 0;
 
 	public int getDmgup() {
 		return _dmgup;
@@ -1017,7 +1015,7 @@ public class L1Character extends L1Object {
 	private int _trueHitup = 0; 
 
 	public int getHitup() {
-		return _hitup;
+		return (_hitup + L1MagicDoll.getHitAddByDoll(this));  
 	} 
 
 	public void addHitup(int i) {
@@ -1035,7 +1033,7 @@ public class L1Character extends L1Object {
 	private int _trueBowHitup = 0; 
 
 	public int getBowHitup() {
-		return _bowHitup;
+		return (_bowHitup + L1MagicDoll.getBowHitAddByDoll(this)); 
 	} 
 
 	public void addBowHitup(int i) {
@@ -1316,6 +1314,36 @@ public class L1Character extends L1Object {
 
 	public void setOwnLightSize(int i) {
 		_ownLightSize = i;
+	}
+
+	private byte _dodge = 0;
+
+	public byte getDodge() {
+		return _dodge;
+	}
+
+	public void addDodge(byte i) {
+		_dodge += i;
+		if (_dodge >= 10) {
+			_dodge = 10;
+		} else if (_dodge <= 0){
+			_dodge = 0;
+		}
+	}
+
+	private byte _nDodge = 0;
+
+	public byte getNdodge() {
+		return _nDodge;
+	}
+
+	public void addNdodge(byte i) {
+		_nDodge += i;
+		if (_nDodge >= 10) {
+			_nDodge = 10;
+		} else if (_nDodge <= 0){
+			_nDodge = 0;
+		}
 	}
 
 	// put here the npc spells that need tobe miss sometimes.
