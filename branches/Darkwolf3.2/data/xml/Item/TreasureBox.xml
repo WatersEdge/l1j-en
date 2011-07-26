@@ -675,6 +675,14 @@
 		<Item ItemId="49037" Count="1" Chance="16.6" />
 		<Item ItemId="49038" Count="1" Chance="16.6" />
 		<Item ItemId="49039" Count="1" Chance="17" />
+		<Item ItemId="47106" Count="1" Chance="14" />
+		<Item ItemId="47107" Count="1" Chance="14" />
+		<Item ItemId="47108" Count="1" Chance="14" />
+		<Item ItemId="47109" Count="1" Chance="14" />
+		<Item ItemId="47110" Count="1" Chance="12" />
+		<Item ItemId="47111" Count="1" Chance="12" />
+		<Item ItemId="47112" Count="1" Chance="8" />
+		<Item ItemId="47113" Count="1" Chance="8" />
 	</TreasureBox>
 	<!-- -->
 	<TreasureBox Type="RANDOM" ItemId="41355">
