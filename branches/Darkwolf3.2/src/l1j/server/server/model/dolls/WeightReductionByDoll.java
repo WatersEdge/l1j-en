@@ -22,10 +22,7 @@ import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import l1j.server.server.datatables.ItemTable;
-import l1j.server.server.model.Instance.L1ItemInstance;
 import l1j.server.server.model.Instance.L1PcInstance;
-import l1j.server.server.serverpackets.S_ServerMessage;
 import l1j.server.server.templates.L1MagicDoll;
 
 public class WeightReductionByDoll extends TimerTask {
@@ -51,5 +48,10 @@ public class WeightReductionByDoll extends TimerTask {
 	}
 
 	public void weight() {
-	}
+		int weight = _pc.getWeightReduction() + L1MagicDoll.getWeightReductionByDoll(_pc);
+		if (weight < 0) {
+			weight = 0;
+		}
+		//_pc.setWeightReduction(weight);
+	    }
 }

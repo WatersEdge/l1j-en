@@ -123,17 +123,13 @@ public class C_Result extends ClientBasePacket {
 						}
 					}
 				}
-				Object[] dolllist = pc.getDollList().values().toArray();
-				for (Object dollObject : dolllist) {
-					if (dollObject instanceof L1DollInstance) {
-						L1DollInstance doll = (L1DollInstance) dollObject;
-						if (item.getId() == doll.getItemObjId()) {
-							tradable = false;
-							pc.sendPackets(new S_ServerMessage(1181));
-							break;
-						}
-					}
-				}
+				for (L1DollInstance doll : pc.getDollList().values()) {
+                    if (item.getId() == doll.getItemObjId()) {
+                            tradable = false;
+                            pc.sendPackets(new S_ServerMessage(1181));
+                            break;
+                    }
+                }
 				if (pc.getDwarfInventory().checkAddItemToWarehouse(item, count, L1Inventory.WAREHOUSE_TYPE_PERSONAL) == L1Inventory.SIZE_OVER) {
 					pc.sendPackets(new S_ServerMessage(75));
 					break;
@@ -210,17 +206,13 @@ public class C_Result extends ClientBasePacket {
 								}
 							}
 						}
-						Object[] dolllist = pc.getDollList().values().toArray();
-						for (Object dollObject : dolllist) {
-							if (dollObject instanceof L1DollInstance) {
-								L1DollInstance doll = (L1DollInstance) dollObject;
-								if (item.getId() == doll.getItemObjId()) {
-									tradable = false;
-									pc.sendPackets(new S_ServerMessage(1181));
-									break;
-								}
-							}
-						}
+						for (L1DollInstance doll : pc.getDollList().values()) {
+                            if (item.getId() == doll.getItemObjId()) {
+                                    tradable = false;
+                                    pc.sendPackets(new S_ServerMessage(1181));
+                                    break;
+                            }
+                        }
 						if (clan.getDwarfForClanInventory().checkAddItemToWarehouse(item, count, L1Inventory.WAREHOUSE_TYPE_CLAN) == L1Inventory.SIZE_OVER) {
 							pc.sendPackets(new S_ServerMessage(75));
 							break;

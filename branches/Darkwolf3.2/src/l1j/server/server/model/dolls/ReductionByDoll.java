@@ -22,10 +22,7 @@ import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import l1j.server.server.datatables.ItemTable;
-import l1j.server.server.model.Instance.L1ItemInstance;
 import l1j.server.server.model.Instance.L1PcInstance;
-import l1j.server.server.serverpackets.S_ServerMessage;
 import l1j.server.server.templates.L1MagicDoll;
 
 public class ReductionByDoll extends TimerTask {
@@ -51,5 +48,11 @@ public class ReductionByDoll extends TimerTask {
 	}
 
 	public void reduction() {
-	}
+		L1MagicDoll.getDamageReductionByDoll(_pc);
+		//int reduction = _pc.getCurrentReduction() + L1MagicDoll.getDamageReductionByDoll(_pc);
+		//if (reduction < 15) {
+		//	reduction = 0;
+		//}
+		//_pc.setCurrentReduction(reduction);
+	    }
 }

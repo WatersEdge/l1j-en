@@ -51,5 +51,14 @@ public class RegistFreezeByDoll extends TimerTask {
 	}
 
 	public void freeze() {
-	}
+		//_pc.getCurrentHp() + L1MagicDoll.getRegistFreezeByDoll(_pc);
+		//pc.sendPackets(new S_OwnCharStatus(pc));
+		//pc.sendPackets(new S_OwnCharAttrDef(pc));
+		//int freeze = _pc.get_regist_freeze() + L1MagicDoll.getRegistFreezeByDoll(_pc);
+		//if (freeze < 7) {
+		//	freeze = 0;
+		//}
+		//_pc.set_regist_freeze(freeze);
+		L1MagicDoll.getRegistFreezeByDoll(_pc);
+	    }
 }

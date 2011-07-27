@@ -669,16 +669,16 @@
 	</TreasureBox>
 	<!-- Doll-child by magic bag -->
 	<TreasureBox Type="RANDOM" ItemId="41247">
-		<Item ItemId="41248" Count="1" Chance="16.6" />
-		<Item ItemId="41249" Count="1" Chance="16.6" />
-		<Item ItemId="41250" Count="1" Chance="16.6" />
-		<Item ItemId="49037" Count="1" Chance="16.6" />
-		<Item ItemId="49038" Count="1" Chance="16.6" />
+		<Item ItemId="41248" Count="1" Chance="16" />
+		<Item ItemId="41249" Count="1" Chance="8" />
+		<Item ItemId="41250" Count="1" Chance="13" />
+		<Item ItemId="49037" Count="1" Chance="12" />
+		<Item ItemId="49038" Count="1" Chance="14" />
 		<Item ItemId="49039" Count="1" Chance="17" />
-		<Item ItemId="47106" Count="1" Chance="16.6" />
-		<Item ItemId="47107" Count="1" Chance="16.6" />
-		<Item ItemId="47108" Count="1" Chance="16.6" />
-		<Item ItemId="47109" Count="1" Chance="16.6" />
+		<Item ItemId="47106" Count="1" Chance="14" />
+		<Item ItemId="47107" Count="1" Chance="10" />
+		<Item ItemId="47108" Count="1" Chance="11" />
+		<Item ItemId="47109" Count="1" Chance="9" />
 	</TreasureBox>
 	<!-- -->
 	<TreasureBox Type="RANDOM" ItemId="41355">

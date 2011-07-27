@@ -448,6 +448,7 @@ class L1SkillStop {
 				L1PcInstance pc = (L1PcInstance) cha;
 				pc.startHpRegeneration();
 				pc.startMpRegeneration();
+				pc.startHpRegenerationByDoll();
 				pc.startMpRegenerationByDoll();
 			}
 		} else if (skillId == WIND_SHACKLE) { 

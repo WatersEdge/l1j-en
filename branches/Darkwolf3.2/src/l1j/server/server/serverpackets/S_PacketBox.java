@@ -147,6 +147,9 @@ public class S_PacketBox extends ServerBasePacket {
 
 	//Fishing
 	public static final int FISHING = 55;
+    
+	// Dolls
+	public static final int ICON_MAGIC_DOLL = 56;
 
 	public S_PacketBox(int subCode) {
 		writeC(Opcodes.S_OPCODE_PACKETBOX);
@@ -248,10 +251,22 @@ public class S_PacketBox extends ServerBasePacket {
 			writeD(type);
 			writeD(time);
 			break;
-		default:
-			break;
-		}
-	}
+		case ICON_MAGIC_DOLL:
+            if (type == 32) {
+                    writeH(time);
+                    writeC(type);
+                    writeC(12);
+            } else {
+                    writeH(time);
+                    writeC(0);
+                    writeC(0);
+            }
+            break;
+    default:
+            break;
+}
+}
+
 
 	public S_PacketBox(int subCode, String name) {
 		writeC(Opcodes.S_OPCODE_PACKETBOX);

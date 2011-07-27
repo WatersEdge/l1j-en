@@ -196,7 +196,7 @@ public class L1PcInstance extends L1Character {
 	}
 
 	public void startMpRegenerationByDoll() {
-		final int INTERVAL_BY_DOLL = 64000;
+		final int INTERVAL_BY_DOLL = 60000;
 		boolean isExistMprDoll = false;
 		if (L1MagicDoll.isMpRegeneration(this)) {
 			isExistMprDoll = true;
@@ -235,7 +235,7 @@ public class L1PcInstance extends L1Character {
 	}
 
 	public void startItemMakeByDoll() {
-		final int INTERVAL_BY_DOLL = 240000;
+		final int INTERVAL_BY_DOLL = 50;
 		boolean isExistItemMakeDoll = false;
 		if (L1MagicDoll.isItemMake(this)) {
 			isExistItemMakeDoll = true;
@@ -256,8 +256,22 @@ public class L1PcInstance extends L1Character {
 		}
 	}
 
+	public void startAcByDoll() {
+		final int INTERVAL_BY_DOLL = 0;
+		boolean isExistAcDoll = false;
+		if (L1MagicDoll.isAc(this)) {
+			isExistAcDoll = true;
+		}
+		if (!_AcByDoll && isExistAcDoll) {
+			_AcActiveByDoll = new AcByDoll(this);
+			_regenTimer.scheduleAtFixedRate(_AcActiveByDoll, INTERVAL_BY_DOLL,
+				INTERVAL_BY_DOLL);
+			_AcByDoll = true;
+		}
+	}
+	
 	public void stopAcByDoll() {
-		if (_AcActiveByDoll != null) {
+		if (_AcByDoll) {
 			_AcActiveByDoll.cancel();
 			_AcActiveByDoll = null;
 			_AcByDoll = false;
@@ -265,7 +279,7 @@ public class L1PcInstance extends L1Character {
 	}
 	
 	public void stopRegistFreezeByDoll() {
-		if (_RegistFreezeByDoll != null) {
+		if (_RegistFreezeActiveByDoll) {
 			_RegistFreezeByDoll.cancel();
 			_RegistFreezeByDoll = null;
 			_RegistFreezeActiveByDoll = false;
@@ -273,7 +287,7 @@ public class L1PcInstance extends L1Character {
 	}
 	
 	public void stopDamageByDoll() {
-		if (_DamageByDoll != null) {
+		if (_DamageActiveByDoll) {
 			_DamageByDoll.cancel();
 			_DamageByDoll = null;
 			_DamageActiveByDoll = false;
@@ -281,7 +295,7 @@ public class L1PcInstance extends L1Character {
 	}
 	
 	public void stopDamageReductionByDoll() {
-		if (_ReductionByDoll != null) {
+		if (_ReductionActiveByDoll) {
 			_ReductionByDoll.cancel();
 			_ReductionByDoll = null;
 			_ReductionActiveByDoll = false;
@@ -289,7 +303,7 @@ public class L1PcInstance extends L1Character {
 	}
 	
 	public void stopDamageEvasionByDoll() {
-		if (_EvasionByDoll != null) {
+		if (_EvasionActiveByDoll) {
 			_EvasionByDoll.cancel();
 			_EvasionByDoll = null;
 			_EvasionActiveByDoll = false;
@@ -297,7 +311,7 @@ public class L1PcInstance extends L1Character {
 	}
 	
 	public void stopBowHitAddByDoll() {
-		if (_BowHitAddByDoll != null) {
+		if (_BowHitAddActiveByDoll) {
 			_BowHitAddByDoll.cancel();
 			_BowHitAddByDoll = null;
 			_BowHitAddActiveByDoll = false;
@@ -305,15 +319,29 @@ public class L1PcInstance extends L1Character {
 	}
 	
 	public void stopBowDamageByDoll() {
-		if (_DamageByDoll != null) {
+		if (_DamageActiveByDoll) {
 			_DamageByDoll.cancel();
 			_DamageByDoll = null;
 			_DamageActiveByDoll = false;
 		}
 	}
 	
+	public void startWeightReductionByDoll() {
+		final int INTERVAL_BY_DOLL = 0;
+		boolean isExistWeightDoll = false;
+		if (L1MagicDoll.isWeightReduction(this)) {
+			isExistWeightDoll = true;
+		}
+		if (!_AcByDoll && isExistWeightDoll) {
+			_WeightReductionByDoll = new WeightReductionByDoll(this);
+			_regenTimer.scheduleAtFixedRate(_WeightReductionByDoll, INTERVAL_BY_DOLL,
+				INTERVAL_BY_DOLL);
+			_WeightReductionActiveByDoll = true;
+		}
+	}
+	
 	public void stopWeightReductionByDoll() {
-		if (_WeightReductionByDoll != null) {
+		if (_WeightReductionActiveByDoll) {
 			_WeightReductionByDoll.cancel();
 			_WeightReductionByDoll = null;
 			_WeightReductionActiveByDoll = false;
@@ -321,7 +349,7 @@ public class L1PcInstance extends L1Character {
 	}
 	
 	public void startHpRegenerationByDoll() {
-		final int INTERVAL_BY_DOLL = 64000;
+		final int INTERVAL_BY_DOLL = 60000;
 		boolean isExistHprDoll = false;
 		if (L1MagicDoll.isHpRegeneration(this)) {
 			isExistHprDoll = true;

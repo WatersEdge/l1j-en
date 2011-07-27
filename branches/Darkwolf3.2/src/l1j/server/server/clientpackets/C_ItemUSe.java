@@ -43,6 +43,7 @@ import l1j.server.server.datatables.PetTable;
 import l1j.server.server.datatables.PolyTable;
 import l1j.server.server.datatables.ResolventTable;
 import l1j.server.server.datatables.SkillsTable;
+import l1j.server.server.datatables.MagicDollTable;
 import l1j.server.server.model.Getback;
 import l1j.server.server.model.L1CastleLocation;
 import l1j.server.server.model.L1SpellBook;
@@ -110,6 +111,7 @@ import l1j.server.server.templates.L1Item;
 import l1j.server.server.templates.L1Npc;
 import l1j.server.server.templates.L1Pet;
 import l1j.server.server.templates.L1Skills;
+import l1j.server.server.templates.L1MagicDoll;
 import l1j.server.server.utils.L1SpawnUtil;
 import static l1j.server.server.model.skill.L1SkillId.*;
 
@@ -4268,6 +4270,7 @@ public class C_ItemUSe extends ClientBasePacket {
 			pc.killSkillEffectTimer(ABSOLUTE_BARRIER);
 			pc.startHpRegeneration();
 			pc.startMpRegeneration();
+			pc.startHpRegenerationByDoll();
 			pc.startMpRegenerationByDoll();
 		}
 	}
@@ -4598,80 +4601,7 @@ public class C_ItemUSe extends ClientBasePacket {
 		pc.getInventory().removeItem(item, 1);
 		pc.getInventory().removeItem(resolvent, 1);
 	}
-
-	private void useMagicDoll(L1PcInstance pc, int itemId, int itemObjectId) {
-		boolean isAppear = true;
-		L1DollInstance doll = null;
-		Object[] dollList = pc.getDollList().values().toArray();
-		for (Object dollObject : dollList) {
-			doll = (L1DollInstance) dollObject;
-			if (doll.getItemObjId() == itemObjectId) {
-				isAppear = false;
-				break;
-			}
-		}
-
-		if (isAppear) {
-			if (!pc.getInventory().checkItem(41246, 50)) {
-				pc.sendPackets(new S_ServerMessage(337, "$5240"));
-				return;
-			}
-			if (dollList.length >= Config.MAX_DOLL_COUNT) {
-				pc.sendPackets(new S_ServerMessage(319));
-				return;
-			}
-			int npcId = 0;
-			int dollType = 0;
-			if (itemId == 41248) {
-				npcId = 80106;
-				dollType = L1DollInstance.DOLLTYPE_BUGBEAR;
-			} else if (itemId == 41249) {
-				npcId = 80107;
-				dollType = L1DollInstance.DOLLTYPE_SUCCUBUS;
-			} else if (itemId == 41250) {
-				npcId = 80108;
-				dollType = L1DollInstance.DOLLTYPE_WEREWOLF;
-			} else if (itemId == 49037) {
-				npcId = 80129;
-				dollType = L1DollInstance.DOLLTYPE_ELDER;
-			} else if (itemId == 49038) {
-				npcId = 80130;
-				dollType = L1DollInstance.DOLLTYPE_CRUSTANCEAN;
-			} else if (itemId == 49039) {
-				npcId = 80131;
-				dollType = L1DollInstance.DOLLTYPE_GOLEM;
-		    } else if (itemId == 47105) {
-			    npcId = 92109;
-			   dollType = L1DollInstance.DOLLTYPE_SEADANCER;
-	        } else if (itemId == 47106) {
-		        npcId = 92103;
-		        dollType = L1DollInstance.DOLLTYPE_RAMIA;
-	        } else if (itemId == 47107) {
-		        npcId = 92102;
-		        dollType = L1DollInstance.DOLLTYPE_YETI;
-	        } else if (itemId == 47109) {
-		        npcId = 92106;
-		        dollType = L1DollInstance.DOLLTYPE_COCKATRICE;
-	        } else if (itemId == 47108) {
-		        npcId = 92104;
-		        dollType = L1DollInstance.DOLLTYPE_SPARTOI;
-	        }
-			L1Npc template = NpcTable.getInstance().getTemplate(npcId);
-			doll = new L1DollInstance(template, pc, dollType, itemObjectId);
-			pc.sendPackets(new S_SkillSound(doll.getId(), 5935));
-			pc.broadcastPacket(new S_SkillSound(doll.getId(), 5935));
-			pc.sendPackets(new S_SkillIconGFX(56, 1800));
-			pc.sendPackets(new S_OwnCharStatus(pc));
-			pc.getInventory().consumeItem(41246, 50);
-		} else {
-			pc.sendPackets(new S_SkillSound(doll.getId(), 5936));
-			pc.broadcastPacket(new S_SkillSound(doll.getId(), 5936));
-			doll.deleteDoll();
-			pc.sendPackets(new S_SkillIconGFX(56, 0));
-			pc.sendPackets(new S_OwnCharStatus(pc));
-		}
-	}
-
+	
 	private void makeCooking(L1PcInstance pc, int cookNo) {
 		boolean isNearFire = false;
 		for (L1Object obj : L1World.getInstance().getVisibleObjects(pc, 3)) {
@@ -5296,5 +5226,47 @@ public class C_ItemUSe extends ClientBasePacket {
 	@Override
 	public String getType() {
 		return C_ITEM_USE;
+	}
+
+	private void useMagicDoll(L1PcInstance pc, int itemId, int itemObjectId) {
+		L1MagicDoll magic_doll = MagicDollTable.getInstance().getTemplate((itemId));
+		if (magic_doll != null) {
+			boolean isAppear = true;
+			L1DollInstance doll = null;
+
+			for (L1DollInstance curdoll : pc.getDollList().values()) {
+				doll = curdoll;
+				if (doll.getItemObjId() == itemObjectId) {
+					isAppear = false;
+					break;
+				}
+			}
+
+			if (isAppear) {
+				if (!pc.getInventory().checkItem(41246, 50)) {
+					pc.sendPackets(new S_ServerMessage(337, "$5240"));
+					return;
+				}
+				if (pc.getDollList().size() >= Config.MAX_DOLL_COUNT) {
+					pc.sendPackets(new S_ServerMessage(79));
+					return;
+				}
+				int npcId = magic_doll.getDollId();
+
+				L1Npc template = NpcTable.getInstance().getTemplate(npcId);
+				doll = new L1DollInstance(template, pc, itemId, itemObjectId);
+				pc.sendPackets(new S_SkillSound(doll.getId(), 5935));
+				pc.broadcastPacket(new S_SkillSound(doll.getId(), 5935));
+				pc.sendPackets(new S_SkillIconGFX(56, 1800));
+				pc.sendPackets(new S_OwnCharStatus(pc));
+				pc.getInventory().consumeItem(41246, 50);
+			} else {
+				pc.sendPackets(new S_SkillSound(doll.getId(), 5936));
+				pc.broadcastPacket(new S_SkillSound(doll.getId(), 5936));
+				doll.deleteDoll();
+				pc.sendPackets(new S_SkillIconGFX(56, 0));
+				pc.sendPackets(new S_OwnCharStatus(pc));
+			}
+		}
 	}
 }

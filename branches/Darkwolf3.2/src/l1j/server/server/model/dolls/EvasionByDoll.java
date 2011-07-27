@@ -22,10 +22,7 @@ import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import l1j.server.server.datatables.ItemTable;
-import l1j.server.server.model.Instance.L1ItemInstance;
 import l1j.server.server.model.Instance.L1PcInstance;
-import l1j.server.server.serverpackets.S_ServerMessage;
 import l1j.server.server.templates.L1MagicDoll;
 
 public class EvasionByDoll extends TimerTask {
@@ -51,5 +48,11 @@ public class EvasionByDoll extends TimerTask {
 	}
 
 	public void evasion() {
-	}
+		L1MagicDoll.getDamageEvasionByDoll(_pc);
+		//int evasion = _pc.getCurrentEvasion() + L1MagicDoll.getEvasionByDoll(_pc);
+		//if (evasion < 1) {
+		//	evasion = 0;
+		//}
+		//_pc.setCurrentAc(evasion);
+	    }
 }

@@ -22,10 +22,7 @@ import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import l1j.server.server.datatables.ItemTable;
-import l1j.server.server.model.Instance.L1ItemInstance;
 import l1j.server.server.model.Instance.L1PcInstance;
-import l1j.server.server.serverpackets.S_ServerMessage;
 import l1j.server.server.templates.L1MagicDoll;
 
 public class DamageByDoll extends TimerTask {
@@ -51,5 +48,15 @@ public class DamageByDoll extends TimerTask {
 	}
 
 	public void damage() {
-	}
+		//_pc.getCurrentHp() + L1MagicDoll.getDamageByDoll(_pc);
+		L1MagicDoll.getDamageAddByDoll(_pc);
+		_pc.addDmgup(15);
+		//pc.sendPackets(new S_OwnCharStatus(pc));
+		//pc.sendPackets(new S_OwnCharAttrDef(pc));
+		//int dmg = _pc.getDamage() + L1MagicDoll.getDamageByDoll(_pc);
+		//if (dmg < 15) {
+		//	dmg = 0;
+		//}
+		//_pc.setCurrentDamage(dmg);
+	    }
 }

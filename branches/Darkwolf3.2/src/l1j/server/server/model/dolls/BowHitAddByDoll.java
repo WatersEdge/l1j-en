@@ -22,10 +22,7 @@ import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import l1j.server.server.datatables.ItemTable;
-import l1j.server.server.model.Instance.L1ItemInstance;
 import l1j.server.server.model.Instance.L1PcInstance;
-import l1j.server.server.serverpackets.S_ServerMessage;
 import l1j.server.server.templates.L1MagicDoll;
 
 public class BowHitAddByDoll extends TimerTask {
@@ -51,5 +48,14 @@ public class BowHitAddByDoll extends TimerTask {
 	}
 
 	public void bow() {
-	}
+		L1MagicDoll.getBowHitAddByDoll(_pc);
+		_pc.addHitup(5);
+		//pc.sendPackets(new S_OwnCharStatus(pc));
+		//pc.sendPackets(new S_OwnCharAttrDef(pc));
+		//int reduction = _pc.getCurrentBowHit() + L1MagicDoll.getBowHitAddByDoll(_pc);
+		//if (reduction < 15) {
+		//	reduction = 0;
+		//}
+		//_pc.setCurrentBowHit(reduction);
+	    }
 }

@@ -673,8 +673,8 @@ public class L1Character extends L1Object {
 		setMaxMp(_trueMaxMp + i);
 	}
 
-	private int _ac = 0; // 
-	private int _trueAc = 0; // 
+	private int _ac = 0;
+	private int _trueAc = 0;
 
 	public int getAc() {
 		return _ac;

@@ -22,10 +22,7 @@ import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import l1j.server.server.datatables.ItemTable;
-import l1j.server.server.model.Instance.L1ItemInstance;
 import l1j.server.server.model.Instance.L1PcInstance;
-import l1j.server.server.serverpackets.S_ServerMessage;
 import l1j.server.server.templates.L1MagicDoll;
 
 public class AcByDoll extends TimerTask {
@@ -51,5 +48,10 @@ public class AcByDoll extends TimerTask {
 	}
 
 	public void ac() {
-	}
-}
+			int newAc = _pc.getAc() + L1MagicDoll.getAcByDoll(_pc);
+			if (newAc < 0) { // this part needs to set the current ac of your char back but it doesnt do it yet.
+				newAc = 0;
+			}
+			_pc.setAc(newAc);
+		    }
+   }
