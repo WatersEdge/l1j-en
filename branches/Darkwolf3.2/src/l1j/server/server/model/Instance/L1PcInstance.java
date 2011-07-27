@@ -44,8 +44,6 @@ import l1j.server.server.datatables.CharacterTable;
 import l1j.server.server.datatables.ExpTable;
 import l1j.server.server.datatables.ItemTable;
 import l1j.server.server.model.HpRegeneration;
-import l1j.server.server.model.HpRegenerationByDoll;
-import l1j.server.server.model.ItemMakeByDoll;
 import l1j.server.server.model.AcceleratorChecker;
 import l1j.server.server.model.L1Attack;
 import l1j.server.server.model.L1CastleLocation;
@@ -72,7 +70,16 @@ import l1j.server.server.model.L1War;
 import l1j.server.server.model.L1World;
 import l1j.server.server.model.MpReductionByAwake;
 import l1j.server.server.model.MpRegeneration;
-import l1j.server.server.model.MpRegenerationByDoll;
+import l1j.server.server.model.dolls.MpRegenerationByDoll;
+import l1j.server.server.model.dolls.HpRegenerationByDoll;
+import l1j.server.server.model.dolls.ItemMakeByDoll;
+import l1j.server.server.model.dolls.AcByDoll;
+import l1j.server.server.model.dolls.BowHitAddByDoll;
+import l1j.server.server.model.dolls.DamageByDoll;
+import l1j.server.server.model.dolls.EvasionByDoll;
+import l1j.server.server.model.dolls.ReductionByDoll;
+import l1j.server.server.model.dolls.RegistFreezeByDoll;
+import l1j.server.server.model.dolls.WeightReductionByDoll;
 import l1j.server.server.model.classes.L1ClassFeature;
 import l1j.server.server.model.classes.L1ClassId;
 import l1j.server.server.model.gametime.L1GameTimeCarrier;
@@ -249,6 +256,70 @@ public class L1PcInstance extends L1Character {
 		}
 	}
 
+	public void stopAcByDoll() {
+		if (_AcActiveByDoll != null) {
+			_AcActiveByDoll.cancel();
+			_AcActiveByDoll = null;
+			_AcByDoll = false;
+		}
+	}
+	
+	public void stopRegistFreezeByDoll() {
+		if (_RegistFreezeByDoll != null) {
+			_RegistFreezeByDoll.cancel();
+			_RegistFreezeByDoll = null;
+			_RegistFreezeActiveByDoll = false;
+		}
+	}
+	
+	public void stopDamageByDoll() {
+		if (_DamageByDoll != null) {
+			_DamageByDoll.cancel();
+			_DamageByDoll = null;
+			_DamageActiveByDoll = false;
+		}
+	}
+	
+	public void stopDamageReductionByDoll() {
+		if (_ReductionByDoll != null) {
+			_ReductionByDoll.cancel();
+			_ReductionByDoll = null;
+			_ReductionActiveByDoll = false;
+		}
+	}
+	
+	public void stopDamageEvasionByDoll() {
+		if (_EvasionByDoll != null) {
+			_EvasionByDoll.cancel();
+			_EvasionByDoll = null;
+			_EvasionActiveByDoll = false;
+		}
+	}
+	
+	public void stopBowHitAddByDoll() {
+		if (_BowHitAddByDoll != null) {
+			_BowHitAddByDoll.cancel();
+			_BowHitAddByDoll = null;
+			_BowHitAddActiveByDoll = false;
+		}
+	}
+	
+	public void stopBowDamageByDoll() {
+		if (_DamageByDoll != null) {
+			_DamageByDoll.cancel();
+			_DamageByDoll = null;
+			_DamageActiveByDoll = false;
+		}
+	}
+	
+	public void stopWeightReductionByDoll() {
+		if (_WeightReductionByDoll != null) {
+			_WeightReductionByDoll.cancel();
+			_WeightReductionByDoll = null;
+			_WeightReductionActiveByDoll = false;
+		}
+	}
+	
 	public void startHpRegenerationByDoll() {
 		final int INTERVAL_BY_DOLL = 64000;
 		boolean isExistHprDoll = false;
@@ -1864,6 +1935,21 @@ if (player instanceof L1PcInstance) {
 	private HpRegenerationByDoll _hpRegenByDoll;
 	private boolean _ItemMakeActiveByDoll;
 	private ItemMakeByDoll _itemMakeByDoll;
+	private boolean _AcByDoll;
+	private AcByDoll _AcActiveByDoll;
+	private boolean _RegistFreezeActiveByDoll;
+	private RegistFreezeByDoll _RegistFreezeByDoll;
+	private boolean _DamageActiveByDoll;
+	private DamageByDoll _DamageByDoll;
+	private boolean _ReductionActiveByDoll;
+	private ReductionByDoll _ReductionByDoll;
+	private boolean _EvasionActiveByDoll;
+	private EvasionByDoll _EvasionByDoll;
+	private boolean _BowHitAddActiveByDoll;
+	private BowHitAddByDoll _BowHitAddByDoll;
+	private boolean _WeightReductionActiveByDoll;
+	private WeightReductionByDoll _WeightReductionByDoll;
+	
 	private L1EquipmentSlot _equipSlot;
 	private L1PcDeleteTimer _pcDeleteTimer;
 

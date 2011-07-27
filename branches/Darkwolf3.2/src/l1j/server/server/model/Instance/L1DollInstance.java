@@ -53,10 +53,6 @@ public class L1DollInstance extends L1NpcInstance {
     public static final int DOLLTYPE_YETI = 8; 
     public static final int DOLLTYPE_COCKATRICE = 9; 
     public static final int DOLLTYPE_SPARTOI = 10; 
-    public static final int DOLLTYPE_MALEHATCHLING = 11; 
-    public static final int DOLLTYPE_FEMALEHATCHLING = 12; 
-    public static final int DOLLTYPE_EVOLVED_MALEHATCHLING = 13; 
-    public static final int DOLLTYPE_EVOLVED_FEMALEHATCHLING = 14;
     public static final int DOLL_TIME = 1800000;
 	private ScheduledFuture<?> _dollFuture;
 	private int _dollType;
@@ -123,14 +119,35 @@ public class L1DollInstance extends L1NpcInstance {
 		if (!isAiRunning()) {
 			startAI();
 		}
-		if (L1MagicDoll.isItemMake(_master)) { 
-			((L1PcInstance) _master).stopItemMakeByDoll(); 
+	/*	if (isAcByDoll()) {
+			master.getAcByDoll(); //yeti
 		}
+		if (isRegistFreezeByDoll()) {
+			master.getRegistFreezeByDoll(); //yeti
+		}
+		if (isDamageByDoll()) {
+			master.getDamageByDoll(); //crustacean // werewolf
+		}
+		if (isDamageReductionByDoll()) {
+			master.getDamageReductionByDoll(); // golem
+		}
+		if (isDamageEvasionByDoll()) {
+			master.getDamageEvasionByDoll(); // spartoi
+		}
+		if (isBowHitAddByDoll()) {
+			master.getBowDamageByDoll(); //cockatrice
+		}
+		if (isBowDamageByDoll()) { 
+			master.getBowDamageByDoll(); //cockatrice 
+		}
+		if (isWeightReductionByDoll()) {
+			master.getWeightReductionByDoll(); // bugbear
+		}*/
 		if (isHpRegeneration()) {
-			master.startMpRegenerationByDoll();
+			master.startHpRegenerationByDoll(); // ramia // seadancer
 		}
 		if (isMpRegeneration()) {
-			master.startMpRegenerationByDoll();
+			master.startMpRegenerationByDoll(); // elder // succubus
 		}
 	}
 
@@ -140,6 +157,33 @@ public class L1DollInstance extends L1NpcInstance {
 			L1PcInstance pc = (L1PcInstance) _master;
 			pc.sendPackets(new S_SkillIconGFX(56, 0));
 			pc.sendPackets(new S_OwnCharStatus(pc));
+		}
+		if (L1MagicDoll.isAc(_master)) { 
+			((L1PcInstance) _master).stopAcByDoll(); 
+		}
+		if (L1MagicDoll.isRegistFreeze(_master)) { 
+			((L1PcInstance) _master).stopRegistFreezeByDoll(); 
+		}
+		if (L1MagicDoll.isDamage(_master)) { 
+			((L1PcInstance) _master).stopDamageByDoll(); 
+		}
+		if (L1MagicDoll.isDamageReduction(_master)) { 
+			((L1PcInstance) _master).stopDamageReductionByDoll(); 
+		}
+		if (L1MagicDoll.isDamageEvasion(_master)) { 
+			((L1PcInstance) _master).stopDamageEvasionByDoll(); 
+		}
+		if (L1MagicDoll.isBowHit(_master)) { 
+			((L1PcInstance) _master).stopBowHitAddByDoll(); 
+		}
+		if (L1MagicDoll.isBowDamage(_master)) { 
+			((L1PcInstance) _master).stopBowDamageByDoll(); 
+		}
+		if (L1MagicDoll.isWeightReduction(_master)) { 
+			((L1PcInstance) _master).stopWeightReductionByDoll(); 
+		}	
+		if (L1MagicDoll.isItemMake(_master)) { 
+			((L1PcInstance) _master).stopItemMakeByDoll(); 
 		}
 		if (isMpRegeneration()) {
 			((L1PcInstance) _master).stopMpRegenerationByDoll();
@@ -203,6 +247,55 @@ public class L1DollInstance extends L1NpcInstance {
 		_itemId = i;
 	}
 
+	public static int isAcByDoll(L1Character _master) {
+		int s = 0;
+		s += getTypeCountByDoll(_master.getDollList(), DOLLTYPE_YETI) * 3;
+		return s;
+	}
+	
+	public static int isRegistFreezeByDoll(L1Character _master) {
+		int s = 0;
+		s += getTypeCountByDoll(_master.getDollList(), DOLLTYPE_YETI) * 7;
+		return s;
+	}
+	
+	public static int isDamageByDoll(L1Character _master) {
+		int s = 0;
+		s += getTypeCountByDoll(_master.getDollList(), DOLLTYPE_WEREWOLF) * 15 
+		+ getTypeCountByDoll(_master.getDollList(), DOLLTYPE_CRUSTANCEAN) * 15;
+		return s;
+	}
+	
+	public static int isDamageReductionByDoll(L1Character _master) {
+		int s = 0;
+		s += getTypeCountByDoll(_master.getDollList(), DOLLTYPE_GOLEM) * 15;
+		return s;
+	}
+	
+	public static int isDamageEvasionByDoll(L1Character _master) {
+		int s = 0;
+		s += getTypeCountByDoll(_master.getDollList(), DOLLTYPE_SPARTOI) * 1;
+		return s;
+	}
+	
+	public static int isBowHitAddByDoll(L1Character _master) {
+		int s = 0;
+		s += getTypeCountByDoll(_master.getDollList(), DOLLTYPE_COCKATRICE) * 1;
+		return s;
+	}
+	
+	public static int isBowDamageByDoll(L1Character _master) {
+		int s = 0;
+		s += getTypeCountByDoll(_master.getDollList(), DOLLTYPE_COCKATRICE) * 1;
+		return s;
+	}
+	
+	public static int isWeightReductionByDoll(L1Character _master) {
+		int s = 0;
+		s += getTypeCountByDoll(_master.getDollList(), DOLLTYPE_BUGBEAR) * 20;
+		return s;
+	}
+	
 	public int getDamageByDoll() {
 		int damage = 0;
 		int dollType = getDollType();
@@ -220,10 +313,30 @@ public class L1DollInstance extends L1NpcInstance {
 		return damage;
 	}
 
+	public boolean isHpRegeneration() {
+		boolean isHpRegeneration = false;
+		int dollType = getDollType();
+		if (dollType == DOLLTYPE_RAMIA  
+				|| dollType == DOLLTYPE_SEADANCER) {
+			isHpRegeneration = true;
+		}
+		return isHpRegeneration;
+	}
+
+	public static int getHpByDoll(L1Character _master) {
+		int s = 0;
+		s += getTypeCountByDoll(_master.getDollList(), DOLLTYPE_RAMIA) * 40
+				+ getTypeCountByDoll(_master.getDollList(), DOLLTYPE_SEADANCER)
+				* 40;
+		return s;
+	}
+	
 	public boolean isMpRegeneration() {
 		boolean isMpRegeneration = false;
 		int dollType = getDollType();
-		if (dollType == DOLLTYPE_SUCCUBUS || dollType == DOLLTYPE_ELDER) {
+		if (dollType == DOLLTYPE_SUCCUBUS  
+				|| dollType == DOLLTYPE_ELDER  
+				|| dollType == DOLLTYPE_SEADANCER) {
 			isMpRegeneration = true;
 		}
 		return isMpRegeneration;
@@ -231,7 +344,7 @@ public class L1DollInstance extends L1NpcInstance {
 
 	public static int getMpByDoll(L1Character _master) {
 		int s = 0;
-		s += getTypeCountByDoll(_master.getDollList(), DOLLTYPE_SUCCUBUS) * 15
+		s += getTypeCountByDoll(_master.getDollList(), DOLLTYPE_SEADANCER) * 15
 				+ getTypeCountByDoll(_master.getDollList(), DOLLTYPE_ELDER)
 				* 15;
 		return s;
@@ -246,37 +359,6 @@ public class L1DollInstance extends L1NpcInstance {
 			}
 		}
 		return s;
-	}
-
-	public boolean isMpRegeneration() {
-		boolean isHpRegeneration = false;
-		if (getDollType() == DOLLTYPE_SEADANCER) {
-			isHpRegeneration = true;
-		}
-		return isHpRegeneration;
-	}
-
-	public static int getMprByDoll(L1Character _master) {
-		int s = 0;
-		s += (getTypeCountByDoll(_master.getDollList(),
-				DOLLTYPE_MALEHATCHLING) 
-				* 10 + (getTypeCountByDoll(_master.getDollList(),
-						DOLLTYPE_EVOLVED_MALEHATCHLING) + getTypeCountByDoll(
-						_master.getDollList(), DOLLTYPE_EVOLVED_FEMALEHATCHLING))
-				* 5 + getTypeCountByDoll(_master.getDollList(),
-				DOLLTYPE_RAMIA) * 4);
-		return s;
-	}
-	
-	public boolean isItemMake() {
-		boolean isItemMake = false;
-		if (getDollType() == DOLLTYPE_MALEHATCHLING
-				|| getDollType() == DOLLTYPE_FEMALEHATCHLING
-				|| getDollType() == DOLLTYPE_EVOLVED_MALEHATCHLING
-				|| getDollType() == DOLLTYPE_EVOLVED_FEMALEHATCHLING) {
-			isItemMake = true;
-		}
-		return isItemMake;
 	}
 
 	public int getDamageEvasionByDoll() {
@@ -308,13 +390,13 @@ public class L1DollInstance extends L1NpcInstance {
 
 	public static int getBowHitAddByDoll(L1Character _master) {
 		int s = 0;
-		s += getTypeCountByDoll(_master.getDollList(), DOLLTYPE_COCKATRICE);
+		s += getTypeCountByDoll(_master.getDollList(), DOLLTYPE_COCKATRICE * 1);
 		return s;
 	}
 
 	public static int getBowDamageByDoll(L1Character _master) {
 		int s = 0;
-		s += getTypeCountByDoll(_master.getDollList(), DOLLTYPE_COCKATRICE);
+		s += getTypeCountByDoll(_master.getDollList(), DOLLTYPE_COCKATRICE * 1);
 		return s;
 	}
 
@@ -327,12 +409,6 @@ public class L1DollInstance extends L1NpcInstance {
 	public static int getRegistFreezeByDoll(L1PcInstance _master) {
 		int s = 0;
 		s += ((getTypeCountByDoll(_master.getDollList(), DOLLTYPE_YETI)) * 7);
-		return s;
-	}
-
-	public static int getHprByDoll(L1Character _master) {
-		int s = 0;
-		s += getTypeCountByDoll(_master.getDollList(), DOLLTYPE_MALEHATCHLING) * 20;
 		return s;
 	}
 
