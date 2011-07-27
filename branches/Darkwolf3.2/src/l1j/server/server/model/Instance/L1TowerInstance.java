@@ -87,14 +87,13 @@ public class L1TowerInstance extends L1NpcInstance {
 
 		if (_castle_id > 0 && WarTimeController.getInstance().isNowWar(_castle_id)) { 
 			if (_castle_id == L1CastleLocation.ADEN_CASTLE_ID && !isSubTower() ||
-					_castle_id == L1CastleLocation.OT_CASTLE_ID && !isSubTower2() ||
-					_castle_id == L1CastleLocation.WW_CASTLE_ID && !isSubTower2() ||
-					_castle_id == L1CastleLocation.GIRAN_CASTLE_ID && !isSubTower2() ||
-					_castle_id == L1CastleLocation.HEINE_CASTLE_ID && !isSubTower2() ||
-					_castle_id == L1CastleLocation.DOWA_CASTLE_ID && !isSubTower2() ||
-					_castle_id == L1CastleLocation.DIAD_CASTLE_ID && !isSubTower2() ||
-					_castle_id == L1CastleLocation.KENT_CASTLE_ID
-					&& !isSubTower2()) {
+					_castle_id == L1CastleLocation.OT_CASTLE_ID && !isSubTower() ||
+					_castle_id == L1CastleLocation.WW_CASTLE_ID && !isSubTower() ||
+					_castle_id == L1CastleLocation.GIRAN_CASTLE_ID && !isSubTower() ||
+					_castle_id == L1CastleLocation.HEINE_CASTLE_ID && !isSubTower() ||
+					_castle_id == L1CastleLocation.DOWA_CASTLE_ID && !isSubTower() ||
+					_castle_id == L1CastleLocation.DIAD_CASTLE_ID && !isSubTower() ||
+					_castle_id == L1CastleLocation.KENT_CASTLE_ID && !isSubTower()) {
 				int subTowerDeadCount = 0;
 				for (L1Object l1object : L1World.getInstance().getObject()) {
 					if (l1object instanceof L1TowerInstance) {
@@ -239,12 +238,11 @@ public class L1TowerInstance extends L1NpcInstance {
 		removeAllKnownObjects();
 	}
 	
-	public boolean isSubTower2() {
-		return false;
-	}
-	
 	public boolean isSubTower() {
-		return (getNpcTemplate().get_npcId() == 81190
+		return (getNpcTemplate().get_npcId() == 81189
+				|| getNpcTemplate().get_npcId() == 80090
+				|| getNpcTemplate().get_npcId() == 81111
+				|| getNpcTemplate().get_npcId() == 81190
 				|| getNpcTemplate().get_npcId() == 81191
 				|| getNpcTemplate().get_npcId() == 81192
 				|| getNpcTemplate().get_npcId() == 81193);
