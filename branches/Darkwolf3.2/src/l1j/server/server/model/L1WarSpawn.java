@@ -47,8 +47,30 @@ public class L1WarSpawn {
 
 	public void SpawnTower(int castleId) {
 		int npcId = 81111;
+		int npcId2 = 81189;
 		if (castleId == L1CastleLocation.ADEN_CASTLE_ID) {
-			npcId = 81189;
+			npcId2 = 81189;
+	    }
+	    if (castleId == L1CastleLocation.OT_CASTLE_ID) {
+	    	npcId = 81111;
+	    }
+		if (castleId == L1CastleLocation.WW_CASTLE_ID) {
+			npcId = 81111;
+		}
+		if (castleId == L1CastleLocation.GIRAN_CASTLE_ID) {
+			npcId = 81111;
+		}
+		if (castleId == L1CastleLocation.HEINE_CASTLE_ID) {
+			npcId = 81111;
+		}
+		if (castleId == L1CastleLocation.DOWA_CASTLE_ID) {
+			npcId = 81111;
+		}
+		if (castleId == L1CastleLocation.DIAD_CASTLE_ID) {
+			npcId = 81111;
+		}
+		if (castleId == L1CastleLocation.KENT_CASTLE_ID) {
+			npcId = 81111;
 		}
 		L1Npc l1npc = NpcTable.getInstance().getTemplate(npcId);
 		int[] loc = new int[3];
@@ -56,6 +78,28 @@ public class L1WarSpawn {
 		SpawnWarObject(l1npc, loc[0], loc[1], (short) (loc[2]));
 		if (castleId == L1CastleLocation.ADEN_CASTLE_ID) {
 			spawnSubTower();
+			SpawnCrown(castleId);
+		}
+	    if (castleId == L1CastleLocation.OT_CASTLE_ID) {
+	    	SpawnCrown(castleId);
+	    }
+		if (castleId == L1CastleLocation.WW_CASTLE_ID) {
+			SpawnCrown(castleId);
+		}
+		if (castleId == L1CastleLocation.GIRAN_CASTLE_ID) {
+			SpawnCrown(castleId);
+		}
+		if (castleId == L1CastleLocation.HEINE_CASTLE_ID) {
+			SpawnCrown(castleId);
+		}
+		if (castleId == L1CastleLocation.DOWA_CASTLE_ID) {
+			SpawnCrown(castleId);
+		}
+		if (castleId == L1CastleLocation.DIAD_CASTLE_ID) {
+			SpawnCrown(castleId);
+		}
+		if (castleId == L1CastleLocation.KENT_CASTLE_ID) {
+			SpawnCrown(castleId);
 		}
 	}
 

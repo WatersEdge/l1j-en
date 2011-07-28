@@ -107,7 +107,6 @@ public class CachedMapReader extends MapReader {
 		}
 		in.close();
 		L1V1Map map = new L1V1Map(id, tiles, xLoc, yLoc,
-		MapsTable.getInstance().isNight(mapId),
 		MapsTable.getInstance().isUnderwater(mapId),
 		MapsTable.getInstance().isMarkable(mapId),
 		MapsTable.getInstance().isTeleportable(mapId),

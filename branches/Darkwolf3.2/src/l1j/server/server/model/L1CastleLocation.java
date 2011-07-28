@@ -176,19 +176,19 @@ public class L1CastleLocation {
 
 	private static final short ADEN_INNER_CASTLE_MAP = 300;
 
-	private static final int ADEN_SUB_TOWER1_X = 34057; //
+	private static final int ADEN_SUB_TOWER1_X = 34057;
 
 	private static final int ADEN_SUB_TOWER1_Y = 33291;
 
-	private static final int ADEN_SUB_TOWER2_X = 34123; //
+	private static final int ADEN_SUB_TOWER2_X = 34123;
 
 	private static final int ADEN_SUB_TOWER2_Y = 33291;
 
-	private static final int ADEN_SUB_TOWER3_X = 34057; //
+	private static final int ADEN_SUB_TOWER3_X = 34057;
 
 	private static final int ADEN_SUB_TOWER3_Y = 33230;
 
-	private static final int ADEN_SUB_TOWER4_X = 34123; //
+	private static final int ADEN_SUB_TOWER4_X = 34123;
 
 	private static final int ADEN_SUB_TOWER4_Y = 33230;
 
@@ -576,5 +576,4 @@ public class L1CastleLocation {
 		}
 		return result;
 	}
-
 }

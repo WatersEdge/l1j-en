@@ -42,8 +42,8 @@ import l1j.server.server.serverpackets.S_ServerMessage;
 import l1j.server.server.serverpackets.S_SkillSound;
 import l1j.server.server.serverpackets.S_UseArrowSkill;
 import l1j.server.server.serverpackets.S_UseAttackSkill;
-import l1j.server.server.types.Point;
 import l1j.server.server.templates.L1MagicDoll;
+import l1j.server.server.types.Point;
 import static l1j.server.server.model.skill.L1SkillId.*;
 
 public class L1Attack {
@@ -528,10 +528,6 @@ public class L1Attack {
 		if (_weaponType2 == 17) {
 			_hitRate = 100;
 		}
-		
-		else if (L1MagicDoll.getDamageEvasionByDoll(_targetPc) > 0) {
-			_hitRate = 0;
-		}
 
 		int npcId = _targetNpc.getNpcTemplate().get_npcId();
 		if (npcId >= 45912 && npcId <= 45915 
@@ -654,16 +650,11 @@ public class L1Attack {
 		if (_targetPc.hasSkillEffect(EARTH_BIND)) {
 			_hitRate = 0;
 		} else if ((_npc instanceof L1PetInstance)
-				|| (_npc instanceof L1DollInstance)
 				|| (_npc instanceof L1SummonInstance)) {//NONPVP
 			if ((_targetPc.getZoneType() == 1) || (_npc.getZoneType() == 1)
 					|| (_targetPc.checkNonPvP(_targetPc, _npc))) {
 				_hitRate = 0;
 			}
-		}
-
-		else if (L1MagicDoll.getDamageEvasionByDoll(_targetPc) > 0) {
-			_hitRate = 0;
 		}
 
 		int rnd = _random.nextInt(100) + 1;
@@ -850,7 +841,11 @@ public class L1Attack {
 			dmg += _pc.getBowDmgModifierByArmor();
 		}
 		if (_weaponType != 20 && _weaponType != 62) {
-			dmg -= L1MagicDoll.getDamageReductionByDoll(_targetPc);
+			Object[] dollList = _pc.getDollList().values().toArray();
+			for (Object dollObject : dollList) {
+				L1DollInstance doll = (L1DollInstance) dollObject;
+				dmg += L1MagicDoll.getDamageReductionByDoll(_targetPc);
+			}
 		}
 
 		if (_pc.hasSkillEffect(COOKING_2_0_N)
@@ -871,8 +866,11 @@ public class L1Attack {
 		}
 		dmg -= _targetPc.getDamageReductionByArmor();
 		
-		dmg -= L1MagicDoll.getDamageReductionByDoll(_targetPc);
-
+		Object[] targetDollList = _targetPc.getDollList().values().toArray();
+		for (Object dollObject : targetDollList) {
+			L1DollInstance doll = (L1DollInstance) dollObject;
+			dmg -= L1MagicDoll.getDamageReductionByDoll(_targetPc);
+		}
 
 		if (_targetPc.hasSkillEffect(COOKING_1_0_S)
 				|| _targetPc.hasSkillEffect(COOKING_1_1_S)
@@ -1058,7 +1056,11 @@ public class L1Attack {
 			dmg += _pc.getBowDmgModifierByArmor();
 		}
 		if (_weaponType != 20 && _weaponType != 62) {
-			dmg -= L1MagicDoll.getDamageReductionByDoll(_targetPc);
+			Object[] dollList = _pc.getDollList().values().toArray();
+			for (Object dollObject : dollList) {
+				L1DollInstance doll = (L1DollInstance) dollObject;
+				dmg += L1MagicDoll.getDamageReductionByDoll(_targetPc);
+			}
 		}
 
 		if (_pc.hasSkillEffect(COOKING_2_0_N)
@@ -1141,7 +1143,11 @@ public class L1Attack {
 
 		dmg -= _targetPc.getDamageReductionByArmor(); 
 
-		dmg -= L1MagicDoll.getDamageReductionByDoll(_targetPc);
+		Object[] targetDollList = _targetPc.getDollList().values().toArray();
+		for (Object dollObject : targetDollList) {
+			L1DollInstance doll = (L1DollInstance) dollObject;
+			dmg -= L1MagicDoll.getDamageReductionByDoll(_targetPc);
+		}
 
 		if (_targetPc.hasSkillEffect(COOKING_1_0_S)
 				|| _targetPc.hasSkillEffect(COOKING_1_1_S)
@@ -1391,9 +1397,6 @@ public class L1Attack {
 				if (_npc.getNpcTemplate().get_poisonatk() == 1) { // normal poison
 					// Damage period of 5 seconds 3
 					L1DamagePoison.doInfection(attacker, target, 3000, 5);
-					if (L1MagicDoll.getEffectByDoll(attacker, (byte) 1) == 1) {
-						L1DamagePoison.doInfection(attacker, target, 3000, 5);
-					}
 				} else if (_npc.getNpcTemplate().get_poisonatk() == 2) { // Silence poison
 					L1SilencePoison.doInfection(target);
 				} else if (_npc.getNpcTemplate().get_poisonatk() == 4) { // Paralytic poison

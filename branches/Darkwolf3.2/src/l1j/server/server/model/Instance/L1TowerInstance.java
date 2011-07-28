@@ -46,54 +46,87 @@ public class L1TowerInstance extends L1NpcInstance {
 
 	private L1Character _lastattacker;
 	private int _castle_id;
-	private int _crackStatus;
 
 	@Override
-	public void onPerceive(L1PcInstance perceivedFrom) {
-		perceivedFrom.addKnownObject(this);
-		perceivedFrom.sendPackets(new S_NPCPack(this));
-	}
+	public void onAction(L1PcInstance pc) {
+		if (getMaxHp() == 0) {
+			return;
+		}
 
-	@Override
-	public void onAction(L1PcInstance player) {
 		if (getCurrentHp() > 0 && !isDead()) {
-			L1Attack attack = new L1Attack(player, this);
+			L1Attack attack = new L1Attack(pc, this);
 			if (attack.calcHit()) {
 				attack.calcDamage();
-				attack.addPcPoisonAttack(player, this);
+				attack.addPcPoisonAttack(pc, this);
 				attack.addChaserAttack();
 			}
 			attack.action();
 			attack.commit();
 		}
 	}
-
+	
 	@Override
-	public void receiveDamage(L1Character attacker, int damage) { 
+	public void onPerceive(L1PcInstance perceivedFrom) {
+		perceivedFrom.addKnownObject(this);
+		perceivedFrom.sendPackets(new S_NPCPack(this));
+	}
+	
+	int _crackStatus;
+	
+	@Override
+	public void receiveDamage(L1Character attacker, int damage) {
 		if (_castle_id == 0) { 
-			if (isSubTower()) {
-				_castle_id = L1CastleLocation.ADEN_CASTLE_ID;
-				_castle_id = L1CastleLocation.OT_CASTLE_ID;
-				_castle_id = L1CastleLocation.WW_CASTLE_ID;
-				_castle_id = L1CastleLocation.GIRAN_CASTLE_ID;
-				_castle_id = L1CastleLocation.HEINE_CASTLE_ID;
-				_castle_id = L1CastleLocation.DOWA_CASTLE_ID;
-				_castle_id = L1CastleLocation.DIAD_CASTLE_ID;
-				_castle_id = L1CastleLocation.KENT_CASTLE_ID;
-			} else {
-				_castle_id = L1CastleLocation.getCastleId(getX(), getY(), getMapId());
-			}
+		if (isTower()) {
+			_castle_id = L1CastleLocation.OT_CASTLE_ID;
+			_castle_id = L1CastleLocation.WW_CASTLE_ID;
+			_castle_id = L1CastleLocation.GIRAN_CASTLE_ID;
+			_castle_id = L1CastleLocation.HEINE_CASTLE_ID;
+			_castle_id = L1CastleLocation.DOWA_CASTLE_ID;
+			_castle_id = L1CastleLocation.DIAD_CASTLE_ID;
+			_castle_id = L1CastleLocation.KENT_CASTLE_ID;
+		} else {
+			_castle_id = L1CastleLocation.getCastleId(getX(), getY(), getMapId());
 		}
-
-		if (_castle_id > 0 && WarTimeController.getInstance().isNowWar(_castle_id)) { 
-			if (_castle_id == L1CastleLocation.ADEN_CASTLE_ID && !isSubTower() ||
-					_castle_id == L1CastleLocation.OT_CASTLE_ID && !isSubTower() ||
-					_castle_id == L1CastleLocation.WW_CASTLE_ID && !isSubTower() ||
-					_castle_id == L1CastleLocation.GIRAN_CASTLE_ID && !isSubTower() ||
-					_castle_id == L1CastleLocation.HEINE_CASTLE_ID && !isSubTower() ||
-					_castle_id == L1CastleLocation.DOWA_CASTLE_ID && !isSubTower() ||
-					_castle_id == L1CastleLocation.DIAD_CASTLE_ID && !isSubTower() ||
-					_castle_id == L1CastleLocation.KENT_CASTLE_ID && !isSubTower()) {
+	}
+	if (_castle_id > 0 && WarTimeController.getInstance().isNowWar(_castle_id)) {
+		if (_castle_id == L1CastleLocation.OT_CASTLE_ID && !isTower() ||
+				_castle_id == L1CastleLocation.WW_CASTLE_ID && !isTower() ||
+				_castle_id == L1CastleLocation.GIRAN_CASTLE_ID && !isTower() ||
+				_castle_id == L1CastleLocation.HEINE_CASTLE_ID && !isTower() ||
+				_castle_id == L1CastleLocation.DOWA_CASTLE_ID && !isTower() ||
+				_castle_id == L1CastleLocation.DIAD_CASTLE_ID && !isTower() ||
+				_castle_id == L1CastleLocation.KENT_CASTLE_ID && !isTower()) {
+				int TowerDeadCount = 0;
+				for (L1Object l1object : L1World.getInstance().getObject()) {
+					if (l1object instanceof L1TowerInstance) {
+						L1TowerInstance tower = (L1TowerInstance) l1object;
+						if (tower.isTower() && tower.isDead()) {
+							TowerDeadCount++;
+							if (TowerDeadCount == 1) {
+								break;
+							}
+						}
+					}
+				}
+				if (TowerDeadCount < 1) {
+					return;
+				}
+			}
+		if (isTower()) {
+			_castle_id = L1CastleLocation.OT_CASTLE_ID;
+			_castle_id = L1CastleLocation.WW_CASTLE_ID;
+			_castle_id = L1CastleLocation.GIRAN_CASTLE_ID;
+			_castle_id = L1CastleLocation.HEINE_CASTLE_ID;
+			_castle_id = L1CastleLocation.DOWA_CASTLE_ID;
+			_castle_id = L1CastleLocation.DIAD_CASTLE_ID;
+			_castle_id = L1CastleLocation.KENT_CASTLE_ID;
+		} else {
+			_castle_id = L1CastleLocation.getCastleId(getX(), getY(), getMapId());
+		}
+	}
+	  if (_castle_id == 0) { 
+		if (_castle_id > 0 && WarTimeController.getInstance().isNowWar(_castle_id)) {
+			if (_castle_id == L1CastleLocation.ADEN_CASTLE_ID && !isSubTower()) {
 				int subTowerDeadCount = 0;
 				for (L1Object l1object : L1World.getInstance().getObject()) {
 					if (l1object instanceof L1TowerInstance) {
@@ -110,7 +143,12 @@ public class L1TowerInstance extends L1NpcInstance {
 					return;
 				}
 			}
-
+			if (isSubTower()) {
+				_castle_id = L1CastleLocation.ADEN_CASTLE_ID;
+			} else {
+				_castle_id = L1CastleLocation.getCastleId(getX(), getY(), getMapId());
+			}
+		}
 			L1PcInstance pc = null;
 			if (attacker instanceof L1PcInstance) {
 				pc = (L1PcInstance) attacker;
@@ -141,7 +179,7 @@ public class L1TowerInstance extends L1NpcInstance {
 			if (existDefenseClan == true && isProclamation == false) {
 				return;
 			}
-
+			
 			if (getCurrentHp() > 0 && !isDead()) {
 				int newHp = getCurrentHp() - damage;
 				if (newHp <= 0 && !isDead()) {
@@ -153,7 +191,28 @@ public class L1TowerInstance extends L1NpcInstance {
 					Death death = new Death();
 					GeneralThreadPool.getInstance().execute(death);
 				}
+				
 				if (newHp > 0) {
+					setCurrentHp(newHp);
+				int newStatus = 0;
+				if ((getMaxHp() * 1 / 4) > getCurrentHp()) {
+					newStatus = ActionCodes.ACTION_TowerCrack3;
+					setStatus(ActionCodes.ACTION_TowerCrack1);
+				} else if ((getMaxHp() * 2 / 4) > getCurrentHp()) {
+					newStatus = ActionCodes.ACTION_TowerCrack2;
+					setStatus(ActionCodes.ACTION_TowerCrack1);
+				} else if ((getMaxHp() * 3 / 4) > getCurrentHp()) {
+					newStatus = ActionCodes.ACTION_TowerCrack1;
+					setStatus(ActionCodes.ACTION_TowerCrack1);
+				}
+				if (getStatus() == newStatus) {
+					return;
+				}
+				setStatus(newStatus);
+				broadcastPacket(new S_DoActionGFX(getId(), newStatus));
+			   }
+
+				/*if (newHp > 0) {
 					setCurrentHp(newHp);
 					if ((getMaxHp() * 1 / 4) > getCurrentHp()) {
 						if (_crackStatus != 3) {
@@ -175,8 +234,8 @@ public class L1TowerInstance extends L1NpcInstance {
 									ActionCodes.ACTION_TowerCrack1));
 							setStatus(ActionCodes.ACTION_TowerCrack1);
 							_crackStatus = 1;
-						}
-					}
+						}}
+					}*/
 				}
 			} else if (!isDead()) { 
 				setDead(true);
@@ -186,8 +245,7 @@ public class L1TowerInstance extends L1NpcInstance {
 				GeneralThreadPool.getInstance().execute(death);
 			}
 		}
-	}
-
+	
 	@Override
 	public void setCurrentHp(int i) {
 		int currentHp = i;
@@ -238,13 +296,15 @@ public class L1TowerInstance extends L1NpcInstance {
 		removeAllKnownObjects();
 	}
 	
+	public boolean isTower() {
+		return (getNpcTemplate().get_npcId() == 81111);
+	}
+	
 	public boolean isSubTower() {
 		return (getNpcTemplate().get_npcId() == 81189
-				|| getNpcTemplate().get_npcId() == 80090
-				|| getNpcTemplate().get_npcId() == 81111
-				|| getNpcTemplate().get_npcId() == 81190
-				|| getNpcTemplate().get_npcId() == 81191
-				|| getNpcTemplate().get_npcId() == 81192
-				|| getNpcTemplate().get_npcId() == 81193);
+		|| getNpcTemplate().get_npcId() == 81190
+		|| getNpcTemplate().get_npcId() == 81191
+		|| getNpcTemplate().get_npcId() == 81192
+		|| getNpcTemplate().get_npcId() == 81193);
 	}
 }

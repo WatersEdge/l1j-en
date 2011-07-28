@@ -355,8 +355,6 @@ public class Opcodes {
 	public static final int S_OPCODE_MAPID = 73;
 
 	public static final int S_OPCODE_UNDERWATER = 73;
-	
-	public static final int S_OPCODE_NIGHT = 73;
 
 	public static final int S_OPCODE_DELETEINVENTORYITEM = 75;
 

@@ -36,7 +36,6 @@ public class L1V1Map extends L1Map {
 	private int _worldBottomRightX;
 	private int _worldBottomRightY;
 	private byte _map[][];
-	private boolean _isNight;
 	private boolean _isUnderwater;
 	private boolean _isMarkable;
 	private boolean _isTeleportable;
@@ -59,7 +58,7 @@ public class L1V1Map extends L1Map {
 	}
 
 	public L1V1Map(int mapId, byte map[][], int worldTopLeftX,
-			int worldTopLeftY, boolean underwater, boolean night, boolean markable,
+			int worldTopLeftY, boolean underwater, boolean markable,
 			boolean teleportable, boolean escapable, boolean useResurrection,
 			boolean usePainwand, boolean enabledDeathPenalty, boolean takePets,
 			boolean recallPets, boolean usableItem, boolean usableSkill) {
@@ -72,7 +71,6 @@ public class L1V1Map extends L1Map {
 		_worldBottomRightX = worldTopLeftX + map.length - 1;
 		_worldBottomRightY = worldTopLeftY + map[0].length - 1;
 
-		_isNight = night;
 		_isUnderwater = underwater;
 		_isMarkable = markable;
 		_isTeleportable = teleportable;
@@ -395,11 +393,6 @@ public class L1V1Map extends L1Map {
 	@Override
 	public boolean isUnderwater() {
 		return _isUnderwater;
-	}
-
-	@Override
-	public boolean isNight() {
-		return _isNight;
 	}
 	
 	@Override

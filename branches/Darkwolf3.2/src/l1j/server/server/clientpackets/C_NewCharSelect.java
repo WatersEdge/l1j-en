@@ -70,7 +70,6 @@ public class C_NewCharSelect extends ClientBasePacket {
 				pc.removeAllKnownObjects();
 				pc.setNetConnection(null);
 				pc.setPacketOutput(null);
-				CharBuffTable.SaveBuff(pc);
 				client.setActiveChar(null);
 			}
 		} else {

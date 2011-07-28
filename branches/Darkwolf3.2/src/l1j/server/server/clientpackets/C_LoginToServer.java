@@ -53,11 +53,6 @@ import l1j.server.server.serverpackets.S_MapID;
 import l1j.server.server.serverpackets.S_OwnCharPack;
 import l1j.server.server.serverpackets.S_OwnCharStatus;
 import l1j.server.server.serverpackets.S_SPMR;
-import l1j.server.server.serverpackets.S_Strup;
-import l1j.server.server.serverpackets.S_Dexup;
-import l1j.server.server.serverpackets.S_HPUpdate;
-import l1j.server.server.serverpackets.S_MPUpdate;
-import l1j.server.server.serverpackets.S_SkillIconShield;
 import l1j.server.server.serverpackets.S_ServerMessage;
 import l1j.server.server.serverpackets.S_SkillBrave;
 import l1j.server.server.serverpackets.S_SkillHaste;
@@ -178,7 +173,7 @@ public class C_LoginToServer extends ClientBasePacket {
 		pc.sendPackets(s_owncharstatus);
 
 		S_MapID s_mapid = new S_MapID(pc.getMap().getBaseMapId(), 
-		pc.getMap().isNight(), pc.getMap().isUnderwater());
+		pc.getMap().isUnderwater());
 		pc.sendPackets(s_mapid);
 
 		S_OwnCharPack s_owncharpack = new S_OwnCharPack(pc);
@@ -511,68 +506,6 @@ public class C_LoginToServer extends ClientBasePacket {
 					pc.broadcastPacket(new S_SkillHaste(pc.getId(), 1, 0));
 					pc.setMoveSpeed(1);
 					pc.setSkillEffect(skillid, remaining_time * 1000);
-				} else if (skillid == GREATER_HASTE) { 
-					pc.sendPackets(new S_SkillHaste(pc.getId(), 1, remaining_time));
-					pc.broadcastPacket(new S_SkillHaste(pc.getId(), 1, 0));
-					pc.setMoveSpeed(1);
-					pc.setSkillEffect(skillid, remaining_time * 1000);	
-				} else if (skillid == HOLY_WALK) { 
-					pc.sendPackets(new S_SkillBrave(pc.getId(), 0, remaining_time));
-					pc.broadcastPacket(new S_SkillBrave(pc.getId(), 1, 0));
-					pc.setMoveSpeed(1);
-					pc.setSkillEffect(skillid, remaining_time * 1000);
-				} else if (skillid == MOVING_ACCELERATION) { 
-					pc.sendPackets(new S_SkillBrave(pc.getId(), 0, remaining_time));
-					pc.broadcastPacket(new S_SkillBrave(pc.getId(), 1, 0));
-					pc.setBraveSpeed(4);
-					pc.setSkillEffect(skillid, remaining_time * 1000);
-				} else if (skillid == STATUS_RIBRAVE) { 
-					pc.sendPackets(new S_SkillBrave(pc.getId(), 0, remaining_time));
-					pc.broadcastPacket(new S_SkillBrave(pc.getId(), 1, 0));
-					pc.setBraveSpeed(1);
-					pc.setSkillEffect(skillid, remaining_time * 1000);
-				} else if (skillid == BLOODLUST) { 
-					pc.sendPackets(new S_SkillBrave(pc.getId(), 0, remaining_time));
-					pc.broadcastPacket(new S_SkillBrave(pc.getId(), 1, 0));
-					pc.setBraveSpeed(1);
-					pc.setSkillEffect(skillid, remaining_time * 1000);
-				} else if (skillid == SHIELD) { 
-					pc.sendPackets(new S_SkillIconShield(pc.getId(), remaining_time));
-					pc.broadcastPacket(new S_SkillIconShield(pc.getId(), 1));
-					pc.addAc(-2);
-					pc.setSkillEffect(skillid, remaining_time * 1000);	
-				} else if (skillid == LIGHT) { 
-					pc.sendPackets(new S_SkillBrave(pc.getId(), 0, remaining_time));
-					pc.broadcastPacket(new S_SkillBrave(pc.getId(), 1, 0));
-					pc.turnOnOffLight();
-					pc.setSkillEffect(skillid, remaining_time * 1000);
-				} else if (skillid == PHYSICAL_ENCHANT_DEX) { 
-					//pc.sendPackets(new S_Dexup(pc.getId(), 0, remaining_time));
-					//pc.broadcastPacket(new S_Dexup(pc.getId(), 1));
-					pc.addDex((byte) 5);
-					pc.setSkillEffect(skillid, remaining_time * 1000);
-				} else if (skillid == PHYSICAL_ENCHANT_STR) { 
-					//pc.sendPackets(new S_Strup(pc.getId(), 5, remaining_time));
-					//pc.broadcastPacket(new S_Strup(pc.getId(), 1, 0));
-					pc.addStr((byte) 5);
-					pc.setSkillEffect(skillid, remaining_time * 1000);		
-				} else if (skillid == HOLY_WALK) { 
-					pc.sendPackets(new S_SkillBrave(pc.getId(), 0, remaining_time));
-					pc.broadcastPacket(new S_SkillBrave(pc.getId(), 1, 0));
-					pc.setBraveSpeed(4);
-					pc.setSkillEffect(skillid, remaining_time * 1000);	
-				} else if (skillid == ADVANCE_SPIRIT) { 
-					pc.sendPackets(new S_HPUpdate(pc.getId(), remaining_time));
-					pc.broadcastPacket(new S_HPUpdate(pc.getId(), 1));
-					pc.sendPackets(new S_MPUpdate(pc.getId(), remaining_time));
-					pc.broadcastPacket(new S_MPUpdate(pc.getId(), 1));
-					pc.setAdvenHp(pc.getBaseMaxHp() / 5);
-					pc.setAdvenMp(pc.getBaseMaxMp() / 5);
-					pc.addMaxHp(pc.getAdvenHp());
-					pc.addMaxMp(pc.getAdvenMp());
-					pc.setSkillEffect(skillid, remaining_time * 1000);		
-					
-					
 				} else if (skillid == STATUS_BLUE_POTION) { 
 					pc.sendPackets(new S_SkillIconGFX(34, remaining_time));
 					pc.setSkillEffect(skillid, remaining_time * 1000);

@@ -1446,18 +1446,8 @@ INSERT INTO `skills` VALUES ('12003', 'Beholder Attack', '0', '0', '10', '0', '0
 -- temp fix because many monsters out out of all maps.
 update spawnlist set randomx = 0, randomy = 0;
 
--- night table
-ALTER TABLE `mapids` ADD `night` tinyint(1) unsigned NOT NULL DEFAULT 0 AFTER underwater;
-update mapids set night = 1 where mapid = 701;
-update mapids set night = 1 where mapid = 4;
-
 -- pvp deathmatch fix for not using skills and items.
-INSERT INTO `mapids` VALUES ('5153', 'Death Match', '32576', '32703', '32832', '32959', '0', '0', '0', '0', '0', '0', '1', '1', '1', '1', '1', '1', '1', '1');
-
--- night table
-ALTER TABLE `mapids` ADD `night` tinyint(1) unsigned NOT NULL DEFAULT 0 AFTER underwater;
-update mapids set night = 1 where mapid = 701;
-
+INSERT INTO `mapids` VALUES ('5153', 'Death Match', '32576', '32703', '32832', '32959', '0', '0', '0', '0', '0', '1', '1', '1', '1', '1', '1', '1', '1');
 
 -- npc Jode at gypsy town fix.
 INSERT INTO `shop` VALUES ('70056', null, '37', null, '1', '80000', '0', '-1', null);
@@ -1939,6 +1929,36 @@ INSERT INTO `npc` VALUES ('92110', 'Male Hatchling Magic Doll', '$7901', '', 'L1
 INSERT INTO `npc` VALUES ('92111', 'FeMale Hatchling Magic Doll', '$7901', '', 'L1Monster', '7661', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '0', '0', 'small', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '', '0', '-1', '-1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '-1', '0', '0', '0', '0', '0');
 INSERT INTO `npc` VALUES ('92112', 'Evolved Male Hatchling Magic Doll', '$7902', '', 'L1Monster', '7659', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '0', '0', 'small', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '', '0', '-1', '-1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '-1', '0', '0', '0', '0', '0');
 INSERT INTO `npc` VALUES ('92113', 'Evolved FeMale Hatchling Magic Doll', '$7902', '', 'L1Monster', '7660', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '0', '0', 'small', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '', '0', '-1', '-1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '-1', '0', '0', '0', '0', '0');
+
+-- wrong name on npctable---
+update npc set name = Lakuki where npcid = 80090;
+update npc set hp = 9000 where npcid = 80090;
+update npc set lvl = 65 where npcid = 80090;
+
+-- some siege fixes.
+update checkwartime set isActive = 1;
+
+update spawnlist_door set hp = 99999;
+update spawnlist_door set hp = 10000 where id = 2000;
+update spawnlist_door set hp = 10000 where id = 2001;
+update spawnlist_door set hp = 10000 where id = 2002;
+update spawnlist_door set hp = 10000 where id = 2010;
+update spawnlist_door set hp = 10000 where id = 2020;
+update spawnlist_door set hp = 10000 where id = 2021;
+update spawnlist_door set hp = 10000 where id = 2022;
+update spawnlist_door set hp = 10000 where id = 2030;
+update spawnlist_door set hp = 10000 where id = 2031;
+update spawnlist_door set hp = 10000 where id = 2032;
+update spawnlist_door set hp = 10000 where id = 2033;
+update spawnlist_door set hp = 10000 where id = 2034;
+update spawnlist_door set hp = 10000 where id = 2035;
+update spawnlist_door set hp = 10000 where id = 2040;
+update spawnlist_door set hp = 10000 where id = 2041;
+update spawnlist_door set hp = 10000 where id = 2042;
+update spawnlist_door set hp = 10000 where id = 2050;
+update spawnlist_door set hp = 10000 where id = 2051;
+update spawnlist_door set hp = 10000 where id = 2052;
+update spawnlist_door set hp = 10000 where id = 2060;
 
 --1835 santa orc
 --2271 aden walking guard sword

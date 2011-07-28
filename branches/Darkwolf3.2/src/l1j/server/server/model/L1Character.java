@@ -1015,7 +1015,7 @@ public class L1Character extends L1Object {
 	private int _trueHitup = 0; 
 
 	public int getHitup() {
-		return (_hitup + L1MagicDoll.getHitAddByDoll(this));  
+		return _hitup + L1MagicDoll.getHitAddByDoll(this);  
 	} 
 
 	public void addHitup(int i) {
@@ -1033,7 +1033,7 @@ public class L1Character extends L1Object {
 	private int _trueBowHitup = 0; 
 
 	public int getBowHitup() {
-		return (_bowHitup + L1MagicDoll.getBowHitAddByDoll(this)); 
+		return _bowHitup + L1MagicDoll.getBowHitAddByDoll(this); 
 	} 
 
 	public void addBowHitup(int i) {
@@ -1314,36 +1314,6 @@ public class L1Character extends L1Object {
 
 	public void setOwnLightSize(int i) {
 		_ownLightSize = i;
-	}
-
-	private byte _dodge = 0;
-
-	public byte getDodge() {
-		return _dodge;
-	}
-
-	public void addDodge(byte i) {
-		_dodge += i;
-		if (_dodge >= 10) {
-			_dodge = 10;
-		} else if (_dodge <= 0){
-			_dodge = 0;
-		}
-	}
-
-	private byte _nDodge = 0;
-
-	public byte getNdodge() {
-		return _nDodge;
-	}
-
-	public void addNdodge(byte i) {
-		_nDodge += i;
-		if (_nDodge >= 10) {
-			_nDodge = 10;
-		} else if (_nDodge <= 0){
-			_nDodge = 0;
-		}
 	}
 
 	// put here the npc spells that need tobe miss sometimes.

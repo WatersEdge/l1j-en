@@ -69,7 +69,7 @@ public class C_Restart extends ClientBasePacket {
 		pc.setY(loc[1]);
 		pc.setMap((short) loc[2]);
 		pc.sendPackets(new S_MapID(pc.getMap().getBaseMapId(), 
-		pc.getMap().isUnderwater(), pc.getMap().isUnderwater()));
+		pc.getMap().isUnderwater()));
 		pc.broadcastPacket(new S_OtherCharPacks(pc));
 		pc.sendPackets(new S_OwnCharPack(pc));
 		pc.sendPackets(new S_CharVisualUpdate(pc));
