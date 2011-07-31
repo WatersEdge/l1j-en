@@ -1459,9 +1459,16 @@ INSERT INTO `shop` VALUES ('70056', null, '20229', null, '9', '78000', '0', '-1'
 INSERT INTO `shop` VALUES ('70056', null, '20036', null, '10', '69000', '0', '-1', null);
 
 -- mp hpr interval fixes
+
+-- standard hp mp interval.
+update npc set hprinterval = 3000;
+update npc set hpr = 12;
+update npc set mprinterval = 2000;
+update npc set mpr = 8;
+
 -- normal monsters --
-update npc set hprinterval = 2 where npcid = 45005;
-update npc set hpr = 2000 where npcid = 45005;
+update npc set hprinterval = 2000 where npcid = 45005;
+update npc set hpr = 2 where npcid = 45005;
 update npc set hprinterval = 2000 where npcid = 45006;
 update npc set hpr = 2 where npcid = 45006;
 update npc set hprinterval = 2000 where npcid = 45008;
@@ -1876,6 +1883,9 @@ update npc set hprinterval = 3000 where npcid = 45224;
 update npc set hpr = 12 where npcid = 45224;
 update npc set mprinterval = 2000 where npcid = 45224;
 update npc set mpr = 10 where npcid = 45224;
+
+
+-- Bosses --
 
 -- 4 dragons --
 update npc set hprinterval = 30000 where npcid = 45681;
