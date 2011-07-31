@@ -1443,9 +1443,6 @@ INSERT INTO `mobskill` VALUES ('45086', '0', 'Degenerated Beholder', null, '2', 
 INSERT INTO `skills` VALUES ('12002', 'Floating Eye Attack', '0', '0', '10', '0', '0', '0', '0', '0', 'attack', '3', '50', '5', '5', '0', '0', '0', '64', '0', '2', '0', '0', '0', '0', '19', '0', '0', '0', '0', '0');
 INSERT INTO `skills` VALUES ('12003', 'Beholder Attack', '0', '0', '10', '0', '0', '0', '0', '0', 'attack', '3', '50', '5', '5', '0', '0', '0', '64', '0', '2', '0', '0', '0', '0', '19', '0', '0', '0', '0', '0');
 
--- temp fix because many monsters out out of all maps.
-update spawnlist set randomx = 0, randomy = 0;
-
 -- pvp deathmatch fix for not using skills and items.
 INSERT INTO `mapids` VALUES ('5153', 'Death Match', '32576', '32703', '32832', '32959', '0', '0', '0', '0', '0', '1', '1', '1', '1', '1', '1', '1', '1');
 
@@ -1462,11 +1459,6 @@ INSERT INTO `shop` VALUES ('70056', null, '20229', null, '9', '78000', '0', '-1'
 INSERT INTO `shop` VALUES ('70056', null, '20036', null, '10', '69000', '0', '-1', null);
 
 -- mp hpr interval fixes
-update npc set hprinterval = 3000;
-update npc set Mprinterval = 2000;
-update npc set hpr = 16;
-update npc set mpr = 12;
-
 -- normal monsters --
 update npc set hprinterval = 2 where npcid = 45005;
 update npc set hpr = 2000 where npcid = 45005;
@@ -1680,6 +1672,210 @@ update npc set hprinterval = 3000 where npcid = 45111;
 update npc set Mprinterval = 2000 where npcid = 45111;
 update npc set hpr = 14 where npcid = 45111;
 update npc set mpr = 6 where npcid = 45111;
+update npc set hprinterval = 3000 where npcid = 45112;
+update npc set Mprinterval = 2000 where npcid = 45112;
+update npc set hpr = 15 where npcid = 45112;
+update npc set mpr = 7 where npcid = 45112;
+update npc set hprinterval = 3000 where npcid = 45113;
+update npc set hpr = 14 where npcid = 45113;
+update npc set hprinterval = 3000 where npcid = 45114;
+update npc set hpr = 12 where npcid = 45114;
+update npc set hprinterval = 3000 where npcid = 45115;
+update npc set hpr = 12 where npcid = 45115;
+update npc set hprinterval = 3000 where npcid = 45116;
+update npc set hpr = 14 where npcid = 45116;
+update npc set hprinterval = 3000 where npcid = 45117;
+update npc set hpr = 12 where npcid = 45117;
+update npc set hprinterval = 3000 where npcid = 45118;
+update npc set hpr = 12 where npcid = 45118;
+update npc set hprinterval = 3000 where npcid = 45119;
+update npc set hpr = 13 where npcid = 45119;
+update npc set Mprinterval = 2000 where npcid = 45119;
+update npc set mpr = 7 where npcid = 45119;
+update npc set hprinterval = 3000 where npcid = 45121;
+update npc set hpr = 13 where npcid = 45121;
+update npc set Mprinterval = 2000 where npcid = 45121;
+update npc set mpr = 7 where npcid = 45121;
+update npc set hprinterval = 3000 where npcid = 45122;
+update npc set hpr = 14 where npcid = 45122;
+update npc set hprinterval = 3000 where npcid = 45123;
+update npc set hpr = 14 where npcid = 45123;
+update npc set hprinterval = 3000 where npcid = 45124;
+update npc set hpr = 14 where npcid = 45124;
+update npc set hprinterval = 3000 where npcid = 45125;
+update npc set hpr = 12 where npcid = 45125;
+update npc set hprinterval = 3000 where npcid = 45126;
+update npc set hpr = 18 where npcid = 45126;
+update npc set hprinterval = 3000 where npcid = 45127;
+update npc set hpr = 12 where npcid = 45127;
+update npc set hprinterval = 3000 where npcid = 45128;
+update npc set hpr = 10 where npcid = 45128;
+update npc set hprinterval = 3000 where npcid = 45129;
+update npc set hpr = 14 where npcid = 45129;
+update npc set hprinterval = 3000 where npcid = 45130;
+update npc set hpr = 13 where npcid = 45130;
+update npc set hprinterval = 3000 where npcid = 45131;
+update npc set hpr = 13 where npcid = 45131;
+update npc set hprinterval = 3000 where npcid = 45133;
+update npc set hpr = 13 where npcid = 45133;
+update npc set hprinterval = 3000 where npcid = 45134;
+update npc set hpr = 18 where npcid = 45134;
+update npc set hprinterval = 3000 where npcid = 45135;
+update npc set hpr = 13 where npcid = 45135;
+update npc set hprinterval = 3000 where npcid = 45136;
+update npc set hpr = 16 where npcid = 45136;
+update npc set hprinterval = 3000 where npcid = 45137;
+update npc set hpr = 16 where npcid = 45137;
+update npc set hprinterval = 3000 where npcid = 45138;
+update npc set hpr = 15 where npcid = 45138;
+update npc set hprinterval = 3000 where npcid = 45139;
+update npc set hpr = 20 where npcid = 45139;
+update npc set hprinterval = 3000 where npcid = 45140;
+update npc set hpr = 12 where npcid = 45140;
+update npc set hprinterval = 3000 where npcid = 45141;
+update npc set hpr = 16 where npcid = 45141;
+update npc set Mprinterval = 2000 where npcid = 45141;
+update npc set mpr = 8 where npcid = 45141;
+update npc set hprinterval = 3000 where npcid = 45142;
+update npc set hpr = 15 where npcid = 45142;
+update npc set hprinterval = 3000 where npcid = 45143;
+update npc set hpr = 14 where npcid = 45143;
+update npc set hprinterval = 3000 where npcid = 45144;
+update npc set hpr = 13 where npcid = 45144;
+update npc set hprinterval = 3000 where npcid = 45145;
+update npc set hpr = 13 where npcid = 45145;
+update npc set hprinterval = 3000 where npcid = 45147;
+update npc set hpr = 24 where npcid = 45147;
+update npc set hprinterval = 3000 where npcid = 45148;
+update npc set hpr = 24 where npcid = 45148;
+update npc set hprinterval = 3000 where npcid = 45149;
+update npc set hpr = 17 where npcid = 45149;
+update npc set hprinterval = 3000 where npcid = 45150;
+update npc set hpr = 12 where npcid = 45150;
+update npc set hprinterval = 3000 where npcid = 45151;
+update npc set hpr = 13 where npcid = 45151;
+update npc set hprinterval = 3000 where npcid = 45152;
+update npc set hpr = 13 where npcid = 45152;
+update npc set hprinterval = 3000 where npcid = 45153;
+update npc set hpr = 13 where npcid = 45153;
+update npc set hprinterval = 3000 where npcid = 45154;
+update npc set hpr = 10 where npcid = 45154;
+update npc set hprinterval = 3000 where npcid = 45155;
+update npc set hpr = 10 where npcid = 45155;
+update npc set hprinterval = 3000 where npcid = 45156;
+update npc set hpr = 19 where npcid = 45156;
+update npc set hprinterval = 3000 where npcid = 45157;
+update npc set hpr = 17 where npcid = 45157;
+update npc set hprinterval = 3000 where npcid = 45158;
+update npc set hpr = 22 where npcid = 45158;
+update npc set hprinterval = 3000 where npcid = 45159;
+update npc set hpr = 14 where npcid = 45159;
+update npc set hprinterval = 3000 where npcid = 45160;
+update npc set hpr = 20 where npcid = 45160;
+update npc set hprinterval = 3000 where npcid = 45161;
+update npc set hpr = 17 where npcid = 45161;
+update npc set hprinterval = 3000 where npcid = 45162;
+update npc set hpr = 16 where npcid = 45162;
+update npc set hprinterval = 3000 where npcid = 45163;
+update npc set hpr = 19 where npcid = 45163;
+update npc set hprinterval = 3000 where npcid = 45164;
+update npc set hpr = 22 where npcid = 45164;
+update npc set hprinterval = 3000 where npcid = 45165;
+update npc set hpr = 18 where npcid = 45165;
+update npc set hprinterval = 3000 where npcid = 45166;
+update npc set hpr = 28 where npcid = 45166;
+update npc set hprinterval = 3000 where npcid = 45167;
+update npc set hpr = 30 where npcid = 45167;
+update npc set hprinterval = 3000 where npcid = 45168;
+update npc set hpr = 12 where npcid = 45168;
+update npc set Mprinterval = 2000 where npcid = 45168;
+update npc set mpr = 8 where npcid = 45168;
+update npc set hprinterval = 3000 where npcid = 45169;
+update npc set hpr = 16 where npcid = 45169;
+update npc set hprinterval = 3000 where npcid = 45170;
+update npc set hpr = 17 where npcid = 45170;
+update npc set hprinterval = 3000 where npcid = 45171;
+update npc set hpr = 16 where npcid = 45171;
+update npc set hprinterval = 3000 where npcid = 45172;
+update npc set hpr = 18 where npcid = 45172;
+update npc set hprinterval = 3000 where npcid = 45173;
+update npc set hpr = 15 where npcid = 45173;
+update npc set hprinterval = 3000 where npcid = 45174;
+update npc set hpr = 14 where npcid = 45174;
+update npc set hprinterval = 3000 where npcid = 45175;
+update npc set hpr = 35 where npcid = 45175;
+update npc set hprinterval = 3000 where npcid = 45179;
+update npc set hpr = 22 where npcid = 45179;
+update npc set hprinterval = 3000 where npcid = 45181;
+update npc set hpr = 12 where npcid = 45181;
+update npc set hprinterval = 3000 where npcid = 45182;
+update npc set hpr = 20 where npcid = 45182;
+update npc set hprinterval = 3000 where npcid = 45183;
+update npc set hpr = 18 where npcid = 45183;
+update npc set hprinterval = 3000 where npcid = 45184;
+update npc set hpr = 18 where npcid = 45184;
+update npc set hprinterval = 3000 where npcid = 45186;
+update npc set hpr = 22 where npcid = 45186;
+update npc set hprinterval = 3000 where npcid = 45187;
+update npc set hpr = 16 where npcid = 45187;
+update npc set hprinterval = 3000 where npcid = 45188;
+update npc set hpr = 14 where npcid = 45188;
+update npc set hprinterval = 3000 where npcid = 45189;
+update npc set hpr = 21 where npcid = 45189;
+update npc set mprinterval = 2000 where npcid = 45189;
+update npc set mpr = 8 where npcid = 45189;
+update npc set hprinterval = 3000 where npcid = 45190;
+update npc set hpr = 12 where npcid = 45190;
+update npc set hprinterval = 3000 where npcid = 45191;
+update npc set hpr = 13 where npcid = 45191;
+update npc set hprinterval = 3000 where npcid = 45192;
+update npc set hpr = 12 where npcid = 45192;
+update npc set hprinterval = 3000 where npcid = 45194;
+update npc set hpr = 35 where npcid = 45194;
+update npc set hprinterval = 3000 where npcid = 45195;
+update npc set hpr = 14 where npcid = 45195;
+update npc set hprinterval = 3000 where npcid = 45196;
+update npc set hpr = 12 where npcid = 45196;
+update npc set hprinterval = 3000 where npcid = 45197;
+update npc set hpr = 18 where npcid = 45197;
+update npc set mprinterval = 2000 where npcid = 45197;
+update npc set mpr = 8 where npcid = 45197;
+update npc set hprinterval = 3000 where npcid = 45198;
+update npc set hpr = 10 where npcid = 45198;
+update npc set hprinterval = 3000 where npcid = 45199;
+update npc set hpr = 14 where npcid = 45199;
+update npc set hprinterval = 3000 where npcid = 45203;
+update npc set hpr = 28 where npcid = 45203;
+update npc set hprinterval = 3000 where npcid = 45206;
+update npc set hpr = 16 where npcid = 45206;
+update npc set hprinterval = 3000 where npcid = 45207;
+update npc set hpr = 18 where npcid = 45207;
+update npc set hprinterval = 3000 where npcid = 45208;
+update npc set hpr = 18 where npcid = 45208;
+update npc set hprinterval = 3000 where npcid = 45215;
+update npc set hpr = 20 where npcid = 45215;
+update npc set mprinterval = 2000 where npcid = 45215;
+update npc set mpr = 12 where npcid = 45215;
+update npc set hprinterval = 3000 where npcid = 45216;
+update npc set hpr = 12 where npcid = 45216;
+update npc set hprinterval = 3000 where npcid = 45217;
+update npc set hpr = 13 where npcid = 45217;
+update npc set hprinterval = 3000 where npcid = 60562;
+update npc set hpr = 60 where npcid = 60562;
+update npc set mprinterval = 2000 where npcid = 60562;
+update npc set mpr = 15 where npcid = 60562;
+update npc set hprinterval = 3000 where npcid = 45220;
+update npc set hpr = 28 where npcid = 45220;
+update npc set hprinterval = 3000 where npcid = 45221;
+update npc set hpr = 12 where npcid = 45221;
+update npc set hprinterval = 3000 where npcid = 45222;
+update npc set hpr = 18 where npcid = 45222;
+update npc set hprinterval = 3000 where npcid = 45223;
+update npc set hpr = 20 where npcid = 45223;
+update npc set hprinterval = 3000 where npcid = 45224;
+update npc set hpr = 12 where npcid = 45224;
+update npc set mprinterval = 2000 where npcid = 45224;
+update npc set mpr = 10 where npcid = 45224;
 
 -- 4 dragons --
 update npc set hprinterval = 30000 where npcid = 45681;
@@ -1924,7 +2120,7 @@ INSERT INTO `etcitem` VALUES ('47111', 'Magic Doll: FeMale Hatchling', '$8411', 
 INSERT INTO `etcitem` VALUES ('47112', 'Magic Doll: Evolved Male Hatchling', '$8412', '$8412', 'magic_doll', 'normal', 'glass', '1000', '3636', '6174', '4135', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '1', '1', '1', '8', '2000', '0', '0', '1');
 INSERT INTO `etcitem` VALUES ('47113', 'Magic Doll: Evolved FeMale Hatchling', '$8413', '$8413', 'magic_doll', 'normal', 'glass', '1000', '3669', '6174', '4136', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '1', '1', '1', '8', '2000', '0', '0', '1');
 
--- hatchling need to fix the egg icon so you received it when exchange it with bankoo.
+-- hatchling need to fix the egg icon.
 INSERT INTO `npc` VALUES ('92110', 'Male Hatchling Magic Doll', '$7901', '', 'L1Monster', '7662', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '0', '0', 'small', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '', '0', '-1', '-1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '-1', '0', '0', '0', '0', '0');
 INSERT INTO `npc` VALUES ('92111', 'FeMale Hatchling Magic Doll', '$7901', '', 'L1Monster', '7661', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '0', '0', 'small', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '', '0', '-1', '-1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '-1', '0', '0', '0', '0', '0');
 INSERT INTO `npc` VALUES ('92112', 'Evolved Male Hatchling Magic Doll', '$7902', '', 'L1Monster', '7659', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '0', '0', 'small', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '', '0', '-1', '-1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '-1', '0', '0', '0', '0', '0');
@@ -1935,10 +2131,7 @@ update npc set name = Lakuki where npcid = 80090;
 update npc set hp = 9000 where npcid = 80090;
 update npc set lvl = 65 where npcid = 80090;
 
--- some siege fixes.
-update checkwartime set isActive = 1;
-
-update spawnlist_door set hp = 99999;
+-- these castle doors had no hp.
 update spawnlist_door set hp = 10000 where id = 2000;
 update spawnlist_door set hp = 10000 where id = 2001;
 update spawnlist_door set hp = 10000 where id = 2002;
@@ -1963,6 +2156,6 @@ update spawnlist_door set hp = 10000 where id = 2060;
 --1835 santa orc
 --2271 aden walking guard sword
 --2289 aden wlking guard spear
---2295 walking adena guard bow.
+--2295 walking aden guard bow.
 --2314 walking aden lady pink with amberella
 --2429 aden walking npc man whiteblue trouser
