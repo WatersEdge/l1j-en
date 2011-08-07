@@ -343,7 +343,7 @@ public class C_ItemUSe extends ClientBasePacket {
 					}
 				}
 				int weaponId = l1iteminstance1.getItem().getItemId();
-				if (weaponId == 36 || weaponId == 183 || weaponId >= 250
+				if (weaponId == 183 || weaponId >= 250
 						&& weaponId <= 255) { 
 					if (itemId == 40128) { 
 					} else {
@@ -352,7 +352,7 @@ public class C_ItemUSe extends ClientBasePacket {
 					}
 				}
 				if (itemId == 40128) {
-					if (weaponId == 36 || weaponId == 183 || weaponId >= 250
+					if (weaponId == 183 || weaponId >= 250
 							&& weaponId <= 255) { 
 					} else {
 						pc.sendPackets(new S_ServerMessage(79)); 
@@ -5594,7 +5594,7 @@ public class C_ItemUSe extends ClientBasePacket {
 			}
 		}
 
-		if (isTeleport) {
+		if (isTeleport || Config.USE_TOI_CHARM_ANYWHERE) {
 			L1Teleport.teleport(pc, item.getItem().get_locx(), item.getItem()
 					.get_locy(), item.getItem().get_mapid(), 5, true);
 		} else {
