@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <project name="l1j-en" default="all" basedir=".">
     <description>
         This script will build the L1J server.
@@ -32,28 +32,44 @@
         <fileset dir="${lib.dir}">
             <include name="javolution.jar" />
             <include name="mysql-connector-java-5.1.17-bin.jar" />
+        	<include name="bonecp-0.7.1.jar" />
+        	<include name="guava-r09.jar" />
         	<include name="mina-core-2.0.4.jar" />
-        	<include name="bonecp-0.7.1.jar" /> 
-        	<include name="guava-r09.jar" /> 
-        	<include name="slf4j-api-1.6.1.jar" /> 
-        	<include name="slf4j-simple-1.6.1.jar" /> 
+        	<include name="slf4j-api-1.6.1.jar" />
+        	<include name="slf4j-simple-1.6.1.jar" />
         </fileset>
     </path>
 
-    <!-- Set DefaultTarget -->
-    <target name="all" depends="clean,compile,jar,clean2" />
+	<target name="all" depends="compile,jar,init,clean" />
+	
+	<target name="checkAntVersion" description="Check if Ant 1.8.2 is present">
+	     <fail message="Ant 1.8.2 is required. But your version is ${ant.version}">
+	           <condition>
+	               <not>
+	                  <contains string="${ant.version}" substring="1.8.2" />
+	               </not>
+	          </condition>
+	     </fail>
+	</target>
+
+	<target name="checkJavaVersion" description="Checks if Java JDK 7 is present">
+	      <available classname="java.lang.AutoCloseable" property="JDK7.present" />
+	      <fail unless="JDK7.present" message="Java JDK 7 is required." />
+	</target>
 
     <!-- clean Target -->
-    <target name="clean">
-        <delete dir="${build.dir}" />
-    </target>
+	<target name="clean" description="Remove the output directories">
+		<delete dir="${build.dir}" />
+	</target>
+	
+	<target name="init" depends="clean, checkAntVersion, checkJavaVersion" description="Create the output directories.">
+	    <mkdir dir="${build.dir}" />
+	</target>
 
     <!-- Compile Target -->
-    <target name="compile">
+    <target name="compile" depends="version" description="Compile the source.">
         <mkdir dir="${build.dir}" />
-        <javac destdir="${build.dir}"
-               optimize="${compile.optimize}"
-               encoding="UTF8">
+        	<javac destdir="${build.dir}" compiler="javac1.7" debug="true" debuglevel="lines,vars,source" includeantruntime="false" source="1.7" target="1.7">
             <src path="${src.dir}" />
             <classpath refid="classpath" />
         </javac>
@@ -64,9 +80,27 @@
         <jar manifest="${src.dir}/META-INF/MANIFEST.MF" basedir="${build.dir}" jarfile="${jarfile}" />
     </target>
 
-    <!-- clean Target -->
-    <target name="clean2">
-        <delete dir="${build.dir}" />
-    </target>
-
+	<target name="version" depends="init" description="Create l1j-version.properties file">
+		<tstamp>
+			<format property="build.tstamp" pattern="yyyyMMdd_HHmm" />
+		</tstamp>
+		<exec dir="." executable="svnversion" outputproperty="l1j.revision">
+			<arg line="-n ." />
+		</exec>
+		<concat destfile="config/l1j-version.properties">
+			version=${l1j.revision}
+			builddate=${build.tstamp}
+			detailed info:
+		</concat>
+		<concat destfile="config/l1j-version.properties" append="true">
+			<filelist dir="${src}/../.svn/" files="entries" />
+			<filterchain>
+				<prefixlines prefix="          " />
+				<headfilter lines="8" skip="4" />
+				<tokenfilter>
+					<ignoreblank />
+				</tokenfilter>
+			</filterchain>
+		</concat>
+	</target>
 </project>
