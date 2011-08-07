@@ -32,6 +32,7 @@
         <fileset dir="${lib.dir}">
             <include name="javolution.jar" />
             <include name="mysql-connector-java-5.1.17-bin.jar" />
+        	<include name="mina-core-2.0.4.jar" />
         	<include name="bonecp-0.7.1.jar" /> 
         	<include name="guava-r09.jar" /> 
         	<include name="slf4j-api-1.6.1.jar" /> 
