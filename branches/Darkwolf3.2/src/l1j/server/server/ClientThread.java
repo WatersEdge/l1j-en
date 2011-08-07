@@ -27,10 +27,13 @@ import java.net.SocketException;
 import java.util.Queue;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.StringTokenizer;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import org.apache.mina.core.session.IoSession;
 
 import l1j.server.Config;
 import l1j.server.server.controllers.LoginController;
@@ -191,6 +194,9 @@ public class ClientThread implements Runnable, PacketOutput {
 		}
 	}
 
+	//anti ddos
+	IoSession session;
+	
 	@Override
 	public void run() {
 		_log.info("(" + _hostname + ") Login detected");
@@ -238,7 +244,15 @@ public class ClientThread implements Runnable, PacketOutput {
 				// _log.finest("[C]\n" + new
 				// ByteArrayUtil(data).dumpToString());
 				int opcode = data[0] & 0xFF;
-
+				
+				//anti ddos
+				StringTokenizer st = new StringTokenizer(session.toString(), ":");
+				st.nextToken();
+				String ip = st.nextToken();
+				if(st.nextToken().startsWith("0")){
+					_csocket.close();
+				}
+				
 				if (opcode == Opcodes.C_OPCODE_COMMONCLICK || 
 						opcode == Opcodes.C_OPCODE_CHANGECHAR) {
 					_loginStatus = 1;
