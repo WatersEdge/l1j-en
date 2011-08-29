@@ -49,7 +49,9 @@ If using the provided Ant build, this will by default generate output in the for
 
 Log into your database instance and execute the base database installation script, l1jdb_mX.sql (where X is the current milestone build number). The base database creation script is the latest complete database from the time of the last milestone build. To convert this to the latest L1J-En database, you should then apply any update scripts to this milestone. The update currently being worked on will have a "-pending" appended to its filename. This means the queries within this update are still in progress and have not yet been finalized. Developers will try to keep additions to this as stable as possible, but it is only until after this update has been released that these are considered finished. You can tell that an update has finished when a new pending update is created. It may be the case that some server code change depends on a pending update change. If you've updated to a repository in this state, you can either apply the pending updates, or use an older revision. If a genuine error occurs, you can fix it yourself or let us know by submitting an issue with the file, line number, error returned, and the sequence of scripts executed up to that point. 
 
-With these tasks complete, you can now create a directory for your server to execute from and copy over the startup script, the build .jar file, and the config, data, maps, and lib subdirectories to it. If you plan to do development on the server, you'll want a separate execution folder for the server, separate from your local copy of the repository.
+With these tasks complete, you can now create a directory for your server to execute from and copy over the startup script, the build .jar file, and the config, data, maps, and lib subdirectories to it. The maps.tar.bz2 file in /maps needs to be unpacked within /maps, too. 
+
+If you plan to do development on the server, you'll want a separate execution folder for the server, separate from your local copy of the repository.
 
 == Configuration ==
 
