@@ -38,7 +38,6 @@ public final class MapsTable {
 		public int endY = 0;
 		public double monster_amount = 1;
 		public double dropRate = 1;
-		public boolean isNight = false;
 		public boolean isUnderwater = false;
 		public boolean markable = false;
 		public boolean teleportable = false;
@@ -87,7 +86,6 @@ public final class MapsTable {
 				data.endY = rs.getInt("endY");
 				data.monster_amount = rs.getDouble("monster_amount");
 				data.dropRate = rs.getDouble("drop_rate");
-				data.isNight = rs.getBoolean("night");
 				data.isUnderwater = rs.getBoolean("underwater");
 				data.markable = rs.getBoolean("markable");
 				data.teleportable = rs.getBoolean("teleportable");
@@ -227,22 +225,6 @@ public final class MapsTable {
 			return false;
 		}
 		return _maps.get(mapId).isUnderwater;
-	}
-
-	/**
-	 * Map of Night (dungeons) is going to be returned.
-	 * 
-	 * @param mapId
-	 *            Map examine the map ID
-	 * 
-	 * @return if is night true
-	 */
-	public boolean isNight(int mapId) {
-		MapData map = _maps.get(mapId);
-		if (map == null) {
-			return false;
-		}
-		return _maps.get(mapId).isNight;
 	}
 	
 	/**

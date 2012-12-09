@@ -1,6 +1,2 @@
-Welcome to the L1J-En Lineage server emulator (the project formerly known as LinDC).
-
-Thanks for using L1J-En. Please report any bugs on the L1J-En project site at:
-
-http://code.google.com/p/l1j-en
+Welcome to the L1 Tikal Lineage Server Emulator (By Darkwolf).
 

@@ -30,7 +30,7 @@ public class C_KeepALIVE extends ClientBasePacket {
 
 	public C_KeepALIVE(byte decrypt[], ClientThread client) throws Exception {
 		super(decrypt);
-		client.getKeepAlive();
+		//client.getKeepAlive();
        // System.out.println("C_Keepalive Sended");
     }
 

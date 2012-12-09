@@ -246,12 +246,12 @@ public class ClientThread implements Runnable, PacketOutput {
 				int opcode = data[0] & 0xFF;
 				
 				//anti ddos
-				StringTokenizer st = new StringTokenizer(session.toString(), ":");
-				st.nextToken();
-				String ip = st.nextToken();
-				if(st.nextToken().startsWith("0")){
-					_csocket.close();
-				}
+				//StringTokenizer st = new StringTokenizer(session.toString(), ":");
+				//st.nextToken();
+				//String ip = st.nextToken();
+				//if(st.nextToken().startsWith("0")){
+				//	_csocket.close();
+				//}
 				
 				if (opcode == Opcodes.C_OPCODE_COMMONCLICK || 
 						opcode == Opcodes.C_OPCODE_CHANGECHAR) {

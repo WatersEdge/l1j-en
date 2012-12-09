@@ -2,8 +2,10 @@
 
 -- IMPORTANT: THIS UPDATE IS NOT YET FINISHED, DONT USE!
 
--- Queries that are pending an update should be placed here. This allows them
--- to be verified as working together. Once complete, the -pending suffix will
+-- Queries that are pending an update should be placed here. 
+-- This allows them
+-- to be verified as working together. Once complete, the 
+-- pending suffix will
 -- be removed.
 
 -- Address issue 143.
@@ -14,7 +16,8 @@ update droplist set chance = 9000 where mobid = 45075 and itemid = 40074;
 update droplist set chance = 9000 where mobid = 45074 and itemid = 40087;
 update droplist set chance = 9000 where mobid = 45076 and itemid = 40087;
 update droplist set chance = 7500 where mobid = 45086 and itemid = 240087;
--- mental note.  our live is updated to anything above this point as of 6/23/11
+-- mental note.  our live is updated to anything above this 
+-- point as of 6/23/11
 
 -- some missing npcs added. -- stats needs to be checked.
 INSERT INTO `npc` VALUES ('71255', 'Baell Zaer', 'Baell Zaer', 'Baell Zaer', 'L1Monster', '1612', '20', '120', '40', '10', '0', '0', '0', '0', '0', '5', '401', '-15', 'small', '0', '0', '0', '640', '880', '0', '0', '0', '0', '0', '0', '0', '0', '0', '', '0', '-1', '-1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '-1', '0', '0', '0', '0', '0');
@@ -35,7 +38,8 @@ INSERT INTO `npc` VALUES ('71269', 'SilentCavern Zombie', '$57', '$57', 'L1Monst
 INSERT INTO `npc` VALUES ('71270', 'SilentCavern Orc', '$0', '$0', 'L1Monster', '56', '2', '6', '4', '10', '6', '12', '1', '6', '10', '0', '5', '0', 'small', '3', '0', '0', '640', '1160', '0', '0', '0', '0', '0', '0', '0', '0', '0', 'orc', '1', '-1', '-1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '-1', '0', '0', '0', '0', '0');
 INSERT INTO `npc` VALUES ('71271', 'Kugas', 'Kugas', 'Kugas', 'L1Monster', '1202', '8', '110', '15', '0', '0', '0', '0', '0', '0', '0', '122', '-15', 'small', '1', '0', '0', '640', '1160', '0', '0', '0', '0', '0', '0', '0', '0', '0', '', '0', '-1', '-1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '-1', '0', '0', '0', '0', '0');
 
--- mini boss spawns added. the chats of this bosses i dont know anymore. (tricid can you check for drops?)
+-- mini boss spawns added. the chats of this bosses i dont know 
+-- anymore. (tricid can you check for drops?)
 INSERT INTO `spawnlist_boss` VALUES ('206', 'Cronos', 'Cronos', '1', '71256', '0', '32744', '32996', '0', '0', '0', '0', '0', '0', '5', '69', '1', '0', '0', '0', '100');
 INSERT INTO `spawnlist_boss` VALUES ('207', 'Kugas', 'Kugas', '1', '71271', '0', '32744', '32996', '0', '0', '0', '0', '0', '0', '5', '69', '1', '0', '0', '0', '100');
 INSERT INTO `spawnlist_boss` VALUES ('208', 'Elazer', 'Elazer', '1', '71257', '0', '32663', '32654', '0', '0', '0', '0', '0', '0', '5', '68', '1', '0', '0', '0', '100');

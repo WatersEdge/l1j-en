@@ -41,35 +41,20 @@
     </path>
 
 	<target name="all" depends="compile,jar,init,clean" />
-	
-	<target name="checkAntVersion" description="Check if Ant 1.8.2 is present">
-	     <fail message="Ant 1.8.2 is required. But your version is ${ant.version}">
-	           <condition>
-	               <not>
-	                  <contains string="${ant.version}" substring="1.8.2" />
-	               </not>
-	          </condition>
-	     </fail>
-	</target>
-
-	<target name="checkJavaVersion" description="Checks if Java JDK 7 is present">
-	      <available classname="java.lang.AutoCloseable" property="JDK7.present" />
-	      <fail unless="JDK7.present" message="Java JDK 7 is required." />
-	</target>
 
     <!-- clean Target -->
 	<target name="clean" description="Remove the output directories">
 		<delete dir="${build.dir}" />
 	</target>
 	
-	<target name="init" depends="clean, checkAntVersion, checkJavaVersion" description="Create the output directories.">
+	<target name="init" depends="clean" description="Create the output directories.">
 	    <mkdir dir="${build.dir}" />
 	</target>
 
     <!-- Compile Target -->
-    <target name="compile" depends="version" description="Compile the source.">
+    <target name="compile" description="Compile the source.">
         <mkdir dir="${build.dir}" />
-        	<javac destdir="${build.dir}" compiler="javac1.7" debug="true" debuglevel="lines,vars,source" includeantruntime="false" source="1.7" target="1.7">
+        	<javac destdir="${build.dir}" compiler="javac1.6" debug="true" debuglevel="lines,vars,source" includeantruntime="false" source="1.6" target="1.6">
             <src path="${src.dir}" />
             <classpath refid="classpath" />
         </javac>
@@ -79,28 +64,4 @@
     <target name="jar">
         <jar manifest="${src.dir}/META-INF/MANIFEST.MF" basedir="${build.dir}" jarfile="${jarfile}" />
     </target>
-
-	<target name="version" depends="init" description="Create l1j-version.properties file">
-		<tstamp>
-			<format property="build.tstamp" pattern="yyyyMMdd_HHmm" />
-		</tstamp>
-		<exec dir="." executable="svnversion" outputproperty="l1j.revision">
-			<arg line="-n ." />
-		</exec>
-		<concat destfile="config/l1j-version.properties">
-			version=${l1j.revision}
-			builddate=${build.tstamp}
-			detailed info:
-		</concat>
-		<concat destfile="config/l1j-version.properties" append="true">
-			<filelist dir="${src}/../.svn/" files="entries" />
-			<filterchain>
-				<prefixlines prefix="          " />
-				<headfilter lines="8" skip="4" />
-				<tokenfilter>
-					<ignoreblank />
-				</tokenfilter>
-			</filterchain>
-		</concat>
-	</target>
 </project>

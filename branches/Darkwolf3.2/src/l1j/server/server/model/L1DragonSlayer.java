@@ -280,7 +280,6 @@ public class L1DragonSlayer {
 						spawn(97044, _num, 32955, 32839, mapId, 10, 0);
 					}
 					break;
-				// 階段二
 				case STATUS_DRAGONSLAYER_START_2RD:
 					setDragonSlayerStatus(_num, STATUS_DRAGONSLAYER_START_2RD_1);
 					sendMessage(_num, msg[3], null);
@@ -307,7 +306,6 @@ public class L1DragonSlayer {
 						spawn(97045, _num, 32955, 32839, mapId, 10, 0);
 					}
 					break;
-				// 階段三
 				case STATUS_DRAGONSLAYER_START_3RD:
 					setDragonSlayerStatus(_num, STATUS_DRAGONSLAYER_START_3RD_1);
 					sendMessage(_num, msg[6], null);
