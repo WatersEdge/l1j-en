@@ -256,30 +256,18 @@ public class L1MonsterInstance extends L1NpcInstance {
 		startAI();
 	}
 
-	@Override
-	public void onTalkAction(L1PcInstance pc) {
-		int objid = getId();
-		L1NpcTalkData talking = NPCTalkDataTable.getInstance().getTemplate(
-				getNpcTemplate().get_npcId());
-		String htmlid = null;
-		String[] htmldata = null;
+    @Override
+    public void onTalkAction(L1PcInstance pc) {
+        int objid = getId();
+        L1NpcTalkData talking = NPCTalkDataTable.getInstance().getTemplate(
+                getNpcTemplate().get_npcId());
 
-
-			if (htmlid != null) { 
-				if (htmldata != null) { 
-					pc.sendPackets(new S_NPCTalkReturn(objid, htmlid,
-							htmldata));
-				} else {
-					pc.sendPackets(new S_NPCTalkReturn(objid, htmlid));
-				}
-			} else {
-				if (pc.getLawful() < -1000) { 
-					pc.sendPackets(new S_NPCTalkReturn(talking, objid, 2));
-				} else {
-					pc.sendPackets(new S_NPCTalkReturn(talking, objid, 1));
-				}
-			}
-		}
+        if (pc.getLawful() < -1000) {
+            pc.sendPackets(new S_NPCTalkReturn(talking, objid, 2));
+        } else {
+            pc.sendPackets(new S_NPCTalkReturn(talking, objid, 1));
+        }
+    }
 	
 	@Override
 	public void onAction(L1PcInstance pc) {

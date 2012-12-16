@@ -21,6 +21,7 @@ package l1j.server.server.model;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Logger;
@@ -264,7 +265,7 @@ public class L1Inventory extends L1Object {
 				}
 				return true;
 			} else if (itemList.length > count) {
-				DataComparator dc = new DataComparator();
+				DataComparator<L1ItemInstance> dc = new DataComparator<L1ItemInstance>();
 				Arrays.sort(itemList, dc);
 				for (int i = 0; i < count; i++) {
 					removeItem(itemList[i], 1);
@@ -275,13 +276,13 @@ public class L1Inventory extends L1Object {
 		return false;
 	}
 
-	@SuppressWarnings("unchecked")
-	public class DataComparator implements java.util.Comparator {
-		public int compare(Object item1, Object item2) {
-			return ((L1ItemInstance) item1).getEnchantLevel()
-					- ((L1ItemInstance) item2).getEnchantLevel();
-		}
-	}
+    public class DataComparator<T> implements Comparator<L1ItemInstance> {
+       
+    	@Override
+        public int compare(L1ItemInstance item1, L1ItemInstance item2) {
+            return item1.getEnchantLevel() - item2.getEnchantLevel();
+        }
+    }
 
 	public int removeItem(int objectId, int count) {
 		L1ItemInstance item = getItem(objectId);
@@ -393,13 +394,14 @@ public class L1Inventory extends L1Object {
 	}
 
 	public L1ItemInstance receiveDamage(L1ItemInstance item, int count) {
-		int itemType = item.getItem().getType2();
-		int currentDurability = item.get_durability();
 
 		if (item == null) {
 			return null;
 		}
 		
+		int itemType = item.getItem().getType2();
+		int currentDurability = item.get_durability();
+
 		if ((currentDurability == 0 && itemType == 0) || currentDurability < 0) {
 			item.set_durability(0);
 			return null;
@@ -429,13 +431,14 @@ public class L1Inventory extends L1Object {
 	}
 
 	public L1ItemInstance recoveryDamage(L1ItemInstance item) {
-		int itemType = item.getItem().getType2();
-		int durability = item.get_durability();
 
 		if (item == null) {
 			return null;
 		}
 
+		int itemType = item.getItem().getType2();
+		int durability = item.get_durability();
+		
 		if ((durability == 0 && itemType != 0) || durability < 0) {
 			item.set_durability(0);
 			return null;

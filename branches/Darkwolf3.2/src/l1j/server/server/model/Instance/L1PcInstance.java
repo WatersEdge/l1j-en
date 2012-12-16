@@ -957,13 +957,13 @@ public class L1PcInstance extends L1Character {
 
 	private ArrayList<L1PrivateShopSellList> _sellList = new ArrayList<L1PrivateShopSellList>();
 
-	public ArrayList getSellList() {
+	public ArrayList<L1PrivateShopSellList> getSellList() {
 		return _sellList;
 	}
 
 	private ArrayList<L1PrivateShopBuyList> _buyList = new ArrayList<L1PrivateShopBuyList>();
 
-	public ArrayList getBuyList() {
+	public ArrayList<L1PrivateShopBuyList> getBuyList() {
 		return _buyList;
 	}
 

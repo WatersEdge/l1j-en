@@ -54,7 +54,7 @@ public class L1GuardianInstance extends L1NpcInstance {
 	private static Logger _log = Logger.getLogger(L1GuardianInstance.class
 			.getName());
 
-	private Random _random = new Random();
+	private final Random _random = new Random();
 	private L1GuardianInstance _npc = this;
 
 	/**
@@ -201,33 +201,24 @@ public class L1GuardianInstance extends L1NpcInstance {
 			} else if (pcx < npcx && pcy < npcy) {
 				setHeading(7);
 			}
-			broadcastPacket(new S_ChangeHeading(this));
+			 broadcastPacket(new S_ChangeHeading(this));
 
-			//
-			if (htmlid != null) { //
-				if (htmldata != null) { //
-					player.sendPackets(new S_NPCTalkReturn(objid, htmlid,
-							htmldata));
-				} else {
-					player.sendPackets(new S_NPCTalkReturn(objid, htmlid));
-				}
-			} else {
-				if (player.getLawful() < -1000) {
-					player.sendPackets(new S_NPCTalkReturn(talking, objid, 2));
-				} else {
-					player.sendPackets(new S_NPCTalkReturn(talking, objid, 1));
-				}
-			}
-			synchronized (this) {
-				if (_monitor != null) {
-					_monitor.cancel();
-				}
-				setRest(true);
-				_monitor = new RestMonitor();
-				_restTimer.schedule(_monitor, REST_MILLISEC);
-			}
-		}
-	}
+	            if (player.getLawful() < -1000) {
+	                player.sendPackets(new S_NPCTalkReturn(talking, objid, 2));
+	            } else {
+	                player.sendPackets(new S_NPCTalkReturn(talking, objid, 1));
+	            }
+
+	            synchronized (this) {
+	                if (_monitor != null) {
+	                    _monitor.cancel();
+	                }
+	                setRest(true);
+	                _monitor = new RestMonitor();
+	                _restTimer.schedule(_monitor, REST_MILLISEC);
+	            }
+	        }
+	    }
 
 	@Override
 	public void receiveDamage(L1Character attacker, int damage) {
