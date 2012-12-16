@@ -22,6 +22,7 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import l1j.server.Config;
 import l1j.server.server.GeneralThreadPool;
 import l1j.server.server.datatables.SkillsTable;
 import l1j.server.server.model.L1Character;
@@ -840,7 +841,6 @@ class L1SkillTimerTimerImpl implements L1SkillTimer, Runnable {
 		_cha = cha;
 		_skillId = skillId;
 		_timeMillis = timeMillis;
-
 		_remainingTime = _timeMillis / 1000;
 	}
 

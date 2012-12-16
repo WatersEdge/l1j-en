@@ -20,6 +20,7 @@ package l1j.server.server.clientpackets;
 
 import java.util.Calendar;
 import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import l1j.server.server.ClientThread;
 import l1j.server.server.datatables.CastleTable;
@@ -37,24 +38,40 @@ public class C_ChangeWarTime extends ClientBasePacket {
 	private static final String C_CHANGE_WAR_TIME = "[C] C_ChangeWarTime";
 	private static Logger _log = Logger.getLogger(C_ChangeWarTime.class.getName());
 
-	public C_ChangeWarTime(byte abyte0[], ClientThread clientthread) throws Exception {
-		super(abyte0);
+    @Override
+    public void execute(byte[] decrypt, ClientThread client) {
+        try {
+            read(decrypt);
 
-		L1PcInstance player = clientthread.getActiveChar();
-		L1Clan clan = L1World.getInstance().getClan(player.getClanname());
-		
-		if (clan != null) {
-			int castle_id = clan.getCastleId();
-			if (castle_id != 0) { 
-				L1Castle l1castle = CastleTable.getInstance().getCastleTable(castle_id);
-				Calendar cal = l1castle.getWarTime();
-				player.sendPackets(new S_WarTime(cal));
-			}
-		}
-	}
+            L1PcInstance pc = client.getActiveChar();
+            if (pc == null) {
+                return;
+            }
+            if (pc.isDead()) {
+                return;
+            }
+            if (pc.isGhost()) {
+                return;
+            }
 
-	@Override
-	public String getType() {
-		return C_CHANGE_WAR_TIME;
-	}
+            L1Clan clan = L1World.getInstance().getClan(pc.getClanname());
+            if (clan != null) {
+                int castle_id = clan.getCastleId();
+                if (castle_id != 0) {
+                    L1Castle l1castle = CastleTable.getInstance().getCastleTable(castle_id);
+                    Calendar cal = l1castle.getWarTime();
+                    pc.sendPackets(new S_WarTime(cal));
+                }
+            }
+        } catch (final Exception e) {
+            _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+        } finally {
+            finish();
+        }
+    }
+
+    @Override
+    public String getType() {
+        return C_CHANGE_WAR_TIME;
+    }
 }

@@ -124,11 +124,25 @@ public class C_ItemUSe extends ClientBasePacket {
 	private static Random _random = new Random();
 	private int addtime; // used for stacking. do not remove.
 
-	public C_ItemUSe(byte abyte0[], ClientThread client) throws Exception {
-		super(abyte0);
-		int itemObjid = readD();
+    @Override
+    public void execute(byte[] decrypt, ClientThread client) {
+        try {
+            read(decrypt);
+            L1PcInstance pc = client.getActiveChar();
+            if (pc == null) {
+                return;
+            }
+            if (pc.isDead()) {
+                return;
+            }
+            if (pc.isGhost()) {
+                return;
+            }
+            if (pc.isTeleport()) {
+                return;
+            }
+            int itemObjid = readD();
 
-		L1PcInstance pc = client.getActiveChar();
 		if (pc.isGhost()) {
 			return;
 		}
@@ -554,7 +568,7 @@ public class C_ItemUSe extends ClientBasePacket {
 						}
 						msg = (new StringBuilder()).append(pm + enchant_level)
 								.append(" ").append(item_name_id).toString();
-						// 
+						
 						pc.sendPackets(new S_ServerMessage(160, msg, "$252",
 								"$248"));
 					} else {
@@ -569,12 +583,12 @@ public class C_ItemUSe extends ClientBasePacket {
 				if (item_minlvl != 0 && item_minlvl > pc.getLevel()
 						&& !pc.isGm()) {
 					pc.sendPackets(new S_ServerMessage(318, String
-							.valueOf(item_minlvl))); //
+							.valueOf(item_minlvl)));
 					return;
 				} else if (item_maxlvl != 0 && item_maxlvl < pc.getLevel()
 						&& !pc.isGm()) {
 					pc.sendPackets(new S_ServerMessage(673, String
-							.valueOf(item_maxlvl))); //
+							.valueOf(item_maxlvl)));
 					return;
 				}
 
@@ -589,8 +603,8 @@ public class C_ItemUSe extends ClientBasePacket {
 					pc.getInventory().setArrow(
 							l1iteminstance.getItem().getItemId());
 					pc.sendPackets(new S_ServerMessage(452, l1iteminstance
-							.getLogName())); //
-				} else if (l1iteminstance.getItem().getType() == 15) { //
+							.getLogName()));
+				} else if (l1iteminstance.getItem().getType() == 15) {
 					pc.getInventory().setSting(
 							l1iteminstance.getItem().getItemId());
 					pc.sendPackets(new S_ServerMessage(452, 
@@ -610,7 +624,7 @@ public class C_ItemUSe extends ClientBasePacket {
 							}
 						}
 					}
-				} else if (l1iteminstance.getItem().getType() == 2) { //
+				} else if (l1iteminstance.getItem().getType() == 2) {
 					if (l1iteminstance.getRemainingTime() <= 0
 							&& itemId != 40004) {
 						return;
@@ -623,14 +637,14 @@ public class C_ItemUSe extends ClientBasePacket {
 						pc.turnOnOffLight();
 					}
 					pc.sendPackets(new S_ItemName(l1iteminstance));
-				} else if (itemId == 40003) { //
+				} else if (itemId == 40003) {
 					for (L1ItemInstance lightItem : pc.getInventory()
 							.getItems()) {
 						if (lightItem.getItem().getItemId() == 40002) {
 							lightItem.setRemainingTime(l1iteminstance.getItem()
 									.getLightFuel());
 							pc.sendPackets(new S_ItemName(lightItem));
-							pc.sendPackets(new S_ServerMessage(230)); //
+							pc.sendPackets(new S_ServerMessage(230));
 							break;
 						}
 					}
@@ -773,7 +787,7 @@ public class C_ItemUSe extends ClientBasePacket {
 				} else if (itemId == 41403) {
 					UseHeallingPotion(pc, 300, 189);
 					pc.getInventory().removeItem(l1iteminstance, 1);
-				} else if (itemId >= 41417 && itemId <= 41421) { //
+				} else if (itemId >= 41417 && itemId <= 41421) {
 					UseHeallingPotion(pc, 90, 197);
 					pc.getInventory().removeItem(l1iteminstance, 1);
 				} else if (itemId == 41337) { // jp
@@ -1222,13 +1236,9 @@ public class C_ItemUSe extends ClientBasePacket {
 
 					if (pc.isWizard()) {
 						if (itemId == 40090 && blanksc_skillid <= 7 ||
-								//
 								itemId == 40091 && blanksc_skillid <= 15 ||
-								//
 								itemId == 40092 && blanksc_skillid <= 22 ||
-								//
 								itemId == 40093 && blanksc_skillid <= 31 ||
-								//
 								itemId == 40094 && blanksc_skillid <= 39) {
 
 							L1ItemInstance spellsc = ItemTable.getInstance()
@@ -1274,7 +1284,7 @@ public class C_ItemUSe extends ClientBasePacket {
 										lawful = -32767;
 									}
 									pc.setLawful(lawful);
-									if (l1skills.getItemConsumeId() != 0) { //
+									if (l1skills.getItemConsumeId() != 0) {
 										pc.getInventory().consumeItem(
 												l1skills.getItemConsumeId(),
 												l1skills.getItemConsumeCount());
@@ -3032,7 +3042,12 @@ public class C_ItemUSe extends ClientBasePacket {
 
 			L1ItemDelay.onItemUse(client, l1iteminstance);
 		}
-	}
+        } catch (final Exception e) {
+            _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+        } finally {
+            finish();
+        }
+    }
 
 	private void SuccessEnchant(L1PcInstance pc, L1ItemInstance item,
 			ClientThread client, int i) {

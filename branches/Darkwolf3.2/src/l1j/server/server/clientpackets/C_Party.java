@@ -19,6 +19,7 @@
 package l1j.server.server.clientpackets;
 
 import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import l1j.server.server.ClientThread;
 import l1j.server.server.model.L1Party;
@@ -30,25 +31,37 @@ import l1j.server.server.serverpackets.S_ServerMessage;
 // ClientBasePacket
 public class C_Party extends ClientBasePacket {
 
-	private static final String C_PARTY = "[C] C_Party";
-	private static Logger _log = Logger.getLogger(C_Party.class.getName());
+    private static final String C_PARTY = "[C] C_Party";
 
-	public C_Party(byte abyte0[], ClientThread clientthread) {
-		super(abyte0);
-		L1PcInstance pc = clientthread.getActiveChar();
-		if (pc.isGhost()) {
-		return;
-		}
-		L1Party party = pc.getParty();
-		if (pc.isInParty()) {
-			pc.sendPackets(new S_Party("party", pc.getId(), party.getLeader().getName(), party.getMembersNameList()));
-		} else {
-			pc.sendPackets(new S_ServerMessage(425));
-		}
-	}
+    private static Logger _log = Logger.getLogger(C_Party.class.getName());
 
-	@Override
-	public String getType() {
-		return C_PARTY;
-	}
+    @Override
+    public void execute(byte[] decrypt, ClientThread client) {
+        try {
+            read(decrypt);
+            L1PcInstance pc = client.getActiveChar();
+            if (pc == null) {
+                return;
+            }
+            if (pc.isGhost()) {
+                return;
+            }
+            L1Party party = pc.getParty();
+            if (pc.isInParty()) {
+                pc.sendPackets(new S_Party("party", pc.getId(), party
+                        .getLeader().getName(), party.getMembersNameList()));
+            } else {
+                pc.sendPackets(new S_ServerMessage(425));
+            }
+        } catch (final Exception e) {
+            _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+        } finally {
+            finish();
+        }
+    }
+
+    @Override
+    public String getType() {
+        return C_PARTY;
+    }
 }

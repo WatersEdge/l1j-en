@@ -19,6 +19,8 @@
 package l1j.server.server.clientpackets;
 
 import java.util.logging.Logger;
+import java.util.logging.Level;
+
 import l1j.server.server.ClientThread;
 import l1j.server.server.controllers.LoginController;
 
@@ -29,24 +31,24 @@ public class C_ReturnToLogin extends ClientBasePacket {
 	private static final String C_RETURN_TO_LOGIN = "[C] C_ReturnToLogin";
 	private static Logger _log = Logger.getLogger(C_ReturnToLogin.class.getName());
 
-	public C_ReturnToLogin(byte decrypt[], ClientThread client) throws Exception {
-		super(decrypt);
-		String account = client.getAccountName();
-		synchronized (client)
-		{
-			try {
-				if (client.getActiveChar() != null) {
-					client.kick();
-				}
-			}catch (Exception e) {
-				client.kick();
-			}
-			finally {
+    @Override
+    public void execute(byte[] decrypt, ClientThread client) {
+        try {
+            read(decrypt);
+            if (client == null) {
+            	client.kick();
+                return;
+            }
+				String account = client.getAccountName();
 				_log.finest((new StringBuilder()).append("Account: ").append(account).toString());
 				LoginController.getInstance().logout(client);
-			}
-		}
-	}
+			} catch (final Exception e) {
+	            _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+	        } finally {
+	            finish();
+	        }
+	    }
+
 
 	@Override
 	public String getType() {

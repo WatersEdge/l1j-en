@@ -19,6 +19,7 @@
 package l1j.server.server.clientpackets;
 
 import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import l1j.server.server.ClientThread;
 import l1j.server.server.model.L1World;
@@ -30,24 +31,41 @@ import l1j.server.server.serverpackets.S_PetInventory;
 // ClientBasePacket
 public class C_PetMenu extends ClientBasePacket {
 
-	private static final String C_PET_MENU = "[C] C_PetMenu";
-	private static Logger _log = Logger.getLogger(C_PetMenu.class.getName());
+    private static final String C_PET_MENU = "[C] C_PetMenu";
+    private static Logger _log = Logger.getLogger(C_PetMenu.class.getName());
 
-	public C_PetMenu(byte abyte0[], ClientThread clientthread)throws Exception {
-		super(abyte0);
+    @Override
+    public void execute(byte[] decrypt, ClientThread client) {
+        try {
+            read(decrypt);
+            L1PcInstance pc = client.getActiveChar();
+            if (pc == null) {
+                return;
+            }
+            if (pc.isDead()) {
+                return;
+            }
+            if (pc.isGhost()) {
+                return;
+            }
+            int petId = readD();
 
-		int petId = readD();
+            L1PetInstance pet = (L1PetInstance) L1World.getInstance()
+                    .findObject(petId);
 
-		L1PetInstance pet = (L1PetInstance) L1World.getInstance().findObject(petId);
-		L1PcInstance pc = clientthread.getActiveChar();
+            if (pet == null) {
+                return;
+            }
+            pc.sendPackets(new S_PetInventory(pet));
+        } catch (final Exception e) {
+            _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+        } finally {
+            finish();
+        }
+    }
 
-		if (pet != null && pc != null) {
-			pc.sendPackets(new S_PetInventory(pet));
-		}
-	}
-
-	@Override
-	public String getType() {
-		return C_PET_MENU;
-	}
+    @Override
+    public String getType() {
+        return C_PET_MENU;
+    }
 }

@@ -36,19 +36,31 @@ import l1j.server.server.serverpackets.S_CharAmount;
 import l1j.server.server.serverpackets.S_CharPacks;
 import l1j.server.server.utils.SQLUtil;
 
-public class C_CommonClick {
-
-	private static final String C_COMMON_CLICK = "[C] C_CommonClick";
+public class C_CommonClick extends ClientBasePacket {
+	 
+    private static final String C_COMMON_CLICK = "[C] C_CommonClick";
+ 
 	private static Logger _log = Logger.getLogger(C_CommonClick.class.getName());
 
-	public C_CommonClick(ClientThread client) {
-		deleteCharacter(client);
-		int amountOfChars = client.getAccount().countCharacters();
-		client.sendPacket(new S_CharAmount(amountOfChars, client));
-		if (amountOfChars > 0) {
-			sendCharPacks(client);
-		}
-	}
+    @Override
+    public void execute(byte[] decrypt, ClientThread client) {
+        try {
+            read(decrypt);
+            if (client == null) {
+                return;
+            }
+            deleteCharacter(client);
+            int amountOfChars = client.getAccount().countCharacters();
+            client.sendPacket(new S_CharAmount(amountOfChars, client));
+            if (amountOfChars > 0) {
+                sendCharPacks(client);
+            }
+        } catch (final Exception e) {
+            _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+        } finally {
+            finish();
+        }
+    }
 
 	private void deleteCharacter(ClientThread client) {
 		Connection conn = null;

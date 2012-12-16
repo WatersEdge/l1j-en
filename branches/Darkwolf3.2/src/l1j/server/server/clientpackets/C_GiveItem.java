@@ -19,6 +19,8 @@
 package l1j.server.server.clientpackets;
 
 import java.util.logging.Logger;
+import java.util.logging.Level;
+
 import java.util.Random;
 
 import l1j.server.server.ClientThread;
@@ -45,16 +47,26 @@ public class C_GiveItem extends ClientBasePacket {
 	private static final String C_GIVE_ITEM = "[C] C_GiveItem";
 	private static Random _random = new Random();
 
-	public C_GiveItem(byte decrypt[], ClientThread client) {
-		super(decrypt);
+	 @Override
+	    public void execute(byte[] decrypt, ClientThread client) {
+	        try {
+	            read(decrypt);
+	            L1PcInstance pc = client.getActiveChar();
+	            if (pc == null) {
+	                return;
+	            }
+	            if (pc.isDead()) {
+	                return;
+	            }
+	            if (pc.isGhost()) {
+	                return;
+	            }
 		int targetId = readD();
-		@SuppressWarnings("unused")
-		int x = readH();
-		int y = readH();
+        readH();
+        readH();
 		int itemId = readD();
 		int count = readD();
 
-		L1PcInstance pc = client.getActiveChar();
 		//TRICIDTODO: set configurable auto ban
 		if (count < 0)
 		{
@@ -62,9 +74,6 @@ public class C_GiveItem extends ClientBasePacket {
 			return;
 		}
 
-		if (pc.isGhost()) {
-			return;
-		}
 
 		L1Object object = L1World.getInstance().findObject(targetId);
 		if (object == null || !(object instanceof L1NpcInstance)) {
@@ -132,7 +141,12 @@ public class C_GiveItem extends ClientBasePacket {
 				usePetWeaponArmor(target, item);
 			}
 		}
-	}
+	        } catch (final Exception e) {
+	            _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+	        } finally {
+	            finish();
+	        }
+	    }
 
 	private void usePetWeaponArmor(L1NpcInstance target, L1ItemInstance item) {
         if (!(target instanceof L1PetInstance)) {

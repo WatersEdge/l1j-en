@@ -20,6 +20,7 @@
 package l1j.server.server.clientpackets;
 
 import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import l1j.server.server.ClientThread;
 import l1j.server.server.datatables.BuddyTable;
@@ -37,9 +38,15 @@ public class C_AddBuddy extends ClientBasePacket {
 	private static final String C_ADD_BUDDY = "[C] C_AddBuddy";
 	private static Logger _log = Logger.getLogger(C_AddBuddy.class.getName());
 
-	public C_AddBuddy(byte[] decrypt, ClientThread client) {
-		super(decrypt);
-		L1PcInstance pc = client.getActiveChar();
+    @Override
+    public void execute(byte[] decrypt, ClientThread client) {
+        try {
+            read(decrypt);
+            L1PcInstance pc = client.getActiveChar();
+            if (pc == null) {
+                return;
+            }
+
 		BuddyTable buddyTable = BuddyTable.getInstance();
 		L1Buddy buddyList = buddyTable.getBuddyTable(pc.getId());
 		String charName = readS();
@@ -61,10 +68,15 @@ public class C_AddBuddy extends ClientBasePacket {
 			}
 		}
 		pc.sendPackets(new S_ServerMessage(109, charName));
-	}
+        } catch (final Exception e) {
+            _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+        } finally {
+            finish();
+        }
+    }
 
-	@Override
-	public String getType() {
-		return C_ADD_BUDDY;
-	}
+    @Override
+    public String getType() {
+        return C_ADD_BUDDY;
+    }
 }

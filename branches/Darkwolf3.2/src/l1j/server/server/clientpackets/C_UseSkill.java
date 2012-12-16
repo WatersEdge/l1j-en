@@ -35,116 +35,129 @@ import static l1j.server.server.model.skill.L1SkillId.*;
 // Referenced classes of package l1j.server.server.clientpackets:
 // ClientBasePacket
 public class C_UseSkill extends ClientBasePacket {
+    private static final String C_USE_SKILL = "[C] C_UseSkill";
+    private static Logger _log = Logger.getLogger(C_UseSkill.class.getName());
 
-	private static Logger _log = Logger.getLogger(C_UseSkill.class.getName());
+    @Override
+    public void execute(byte[] decrypt, ClientThread client) {
+        try {
+            read(decrypt);
+            L1PcInstance pc = client.getActiveChar();
+            if (pc == null) {
+                return;
+            }
+            if (pc.isDead()) {
+                return;
+            }
+            if (pc.isGhost()) {
+                return;
+            }
+            if (pc.isTeleport()) {
+                return;
+            }
+            if (!pc.getMap().isUsableSkill()) {
+                pc.sendPackets(new S_ServerMessage(563));
+                return;
+            }
+            if (pc.hasSkillEffect(ABSOLUTE_BARRIER)) {
+                pc.killSkillEffectTimer(ABSOLUTE_BARRIER);
+                pc.startHpRegeneration();
+                pc.startMpRegeneration();
+                pc.startMpRegenerationByDoll();
+            }
+            pc.killSkillEffectTimer(MEDITATION);
 
-	public C_UseSkill(byte abyte0[], ClientThread client) throws Exception {
-		super(abyte0);
-		int row = readC();
-		int column = readC();
-		int skillId = (row * 8) + column + 1;
-		String charName = null;
-		String message = null;
-		int targetId = 0;
-		int targetX = 0;
-		int targetY = 0;
-		L1PcInstance pc = client.getActiveChar();
+            int row = readC();
+            int column = readC();
+            int skillId = (row * 8) + column + 1;
+            String charName = null;
+            String message = null;
+            int targetId = 0;
+            int targetX = 0;
+            int targetY = 0;
 
-		if (pc.isTeleport() || pc.isDead()) {
-			return;
-		}
-		
-		if (!pc.getMap().isUsableSkill()) {
-			pc.sendPackets(new S_ServerMessage(563));
-			return;
-		}
-		
-		if (!pc.isSkillMastery(skillId)) {
-			return;
-		}
+            if (!pc.isSkillMastery(skillId)) {
+                return;
+            }
 
-		if (Config.CHECK_SPELL_INTERVAL) {
-			int result;
-			// FIXME dir/no dir
-			if (SkillsTable.getInstance().getTemplate(skillId).getActionId() == ActionCodes.ACTION_SkillAttack) {
-				result = pc.getAcceleratorChecker().checkInterval(AcceleratorChecker.ACT_TYPE.SPELL_DIR);
-			} else {
-				result = pc.getAcceleratorChecker().checkInterval(AcceleratorChecker.ACT_TYPE.SPELL_NODIR);
-			}
-			if (result == AcceleratorChecker.R_DISCONNECTED) {
-				return;
-			}
-		}
+            if (Config.CHECK_SPELL_INTERVAL) {
+                int result;
+                // FIXME
+                if (SkillsTable.getInstance().getTemplate(skillId)
+                        .getActionId() == ActionCodes.ACTION_SkillAttack) {
+                    result = pc.getAcceleratorChecker().checkInterval(
+                            AcceleratorChecker.ACT_TYPE.SPELL_DIR);
+                } else {
+                    result = pc.getAcceleratorChecker().checkInterval(
+                            AcceleratorChecker.ACT_TYPE.SPELL_NODIR);
+                }
+                if (result == AcceleratorChecker.R_DISCONNECTED) {
+                    return;
+                }
+            }
 
-		if (abyte0.length > 4) {
-			try {
-				if (skillId == CALL_CLAN || skillId == RUN_CLAN) {
-					charName = readS();
-				} else if (skillId == TRUE_TARGET) { 
-					targetId = readD();
-					targetX = readH();
-					targetY = readH();
-					message = readS();
-				} else if (skillId == TELEPORT || skillId == MASS_TELEPORT) { 
-					readH(); // MapID
-					targetId = readD(); // Bookmark ID
-				} else if (skillId == FIRE_WALL || skillId == LIFE_STREAM) {
-					targetX = readH();
-					targetY = readH();
-				} else {
-					targetId = readD();
-				}
-			} catch (Exception e) {
-				_log.log(Level.SEVERE, "", e);
-			}
-		}
+            if (decrypt.length > 4) {
+                try {
+                    if (skillId == CALL_CLAN || skillId == RUN_CLAN) {
+                        charName = readS();
+                    } else if (skillId == TRUE_TARGET) {
+                        targetId = readD();
+                        targetX = readH();
+                        targetY = readH();
+                        message = readS();
+                    } else if (skillId == TELEPORT || skillId == MASS_TELEPORT) {
+                        readH(); // MapID
+                        targetId = readD(); // Bookmark ID
+                    } else if (skillId == FIRE_WALL || skillId == LIFE_STREAM) {
+                        targetX = readH();
+                        targetY = readH();
+                    } else {
+                        targetId = readD();
+                        targetX = readH();
+                        targetY = readH();
+                    }
+                } catch (Exception e) {
+                    // _log.log(Level.SEVERE, "", e);
+                }
+            }
 
-		if (pc.isTeleport()) {
-			return;
-		}
-		
-		if (pc.isDead()) {
-			return;
-		}
+            // try {
+            if (skillId == CALL_CLAN || skillId == RUN_CLAN) {
+                if (charName.isEmpty()) {
+                    return;
+                }
 
-		if (pc.hasSkillEffect(ABSOLUTE_BARRIER)) { 
-			pc.removeSkillEffect(ABSOLUTE_BARRIER); 
-		} 
-		
-		if (pc.hasSkillEffect(MEDITATION)) { 
-			pc.removeSkillEffect(MEDITATION); 
-		}
+                L1PcInstance target = L1World.getInstance().getPlayer(charName);
 
-		try {
-			if (skillId == CALL_CLAN || skillId == RUN_CLAN) { 
-				if (charName.isEmpty()) {
-				return;
-				}
+                if (target == null) {
+                    pc.sendPackets(new S_ServerMessage(73, charName));
+                    return;
+                }
+                if (pc.getClanid() != target.getClanid()) {
+                    pc.sendPackets(new S_ServerMessage(414));
+                    return;
+                }
+                targetId = target.getId();
+                if (skillId == CALL_CLAN) {
+                    int callClanId = pc.getCallClanId();
+                    if (callClanId == 0 || callClanId != targetId) {
+                        pc.setCallClanId(targetId);
+                        pc.setCallClanHeading(pc.getHeading());
+                    }
+                }
+            }
+            L1SkillUse l1skilluse = new L1SkillUse();
+            l1skilluse.handleCommands(pc, skillId, targetId, targetX, targetY,
+                    message, 0, L1SkillUse.TYPE_NORMAL);
+        } catch (final Exception e) {
+            _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+        } finally {
+            finish();
+        }
+    }
 
-				L1PcInstance target = L1World.getInstance().getPlayer(charName);
-
-				if (target == null) {
-					pc.sendPackets(new S_ServerMessage(73, charName)); 
-					return;
-				}
-				
-				if (pc.getClanid() != target.getClanid()) {
-					pc.sendPackets(new S_ServerMessage(414));
-					return;
-				}
-				targetId = target.getId();
-				if (skillId == CALL_CLAN) {
-					int callClanId = pc.getCallClanId();
-					if (callClanId == 0 || callClanId != targetId) {
-						pc.setCallClanId(targetId);
-						pc.setCallClanHeading(pc.getHeading());
-					}
-				}
-			}
-			L1SkillUse l1skilluse = new L1SkillUse();
-			l1skilluse.handleCommands(pc, skillId, targetId, targetX, targetY, message, 0, L1SkillUse.TYPE_NORMAL);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+    @Override
+    public String getType() {
+        return C_USE_SKILL;
+    }
 }

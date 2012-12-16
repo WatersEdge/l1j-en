@@ -19,6 +19,7 @@
 package l1j.server.server.clientpackets;
 
 import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import l1j.server.server.ClientThread;
 import l1j.server.server.model.L1Character;
@@ -37,9 +38,10 @@ public class C_SelectTarget extends ClientBasePacket {
         private static final String C_SELECT_TARGET = "[C] C_SelectTarget";
         private static Logger _log = Logger.getLogger(C_SelectTarget.class.getName());
 
-        public C_SelectTarget(byte abyte0[], ClientThread clientthread)
-                        throws Exception {
-                super(abyte0);
+        @Override
+        public void execute(byte[] decrypt, ClientThread client) {
+            try {
+                read(decrypt);
 
                 int petId = readD();
                 int type = readC();
@@ -94,10 +96,15 @@ public class C_SelectTarget extends ClientBasePacket {
                         }
                         pet.setMasterTarget(target);
                 }
+            } catch (final Exception e) {
+                _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+            } finally {
+                finish();
+            }
         }
 
         @Override
         public String getType() {
-                return C_SELECT_TARGET;
+            return C_SELECT_TARGET;
         }
-}
+    }

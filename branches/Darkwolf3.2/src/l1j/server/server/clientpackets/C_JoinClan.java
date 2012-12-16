@@ -19,6 +19,7 @@
 package l1j.server.server.clientpackets;
 
 import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import l1j.server.server.ClientThread;
 import l1j.server.server.model.L1Clan;
@@ -35,19 +36,33 @@ public class C_JoinClan extends ClientBasePacket {
 	private static final String C_JOIN_CLAN = "[C] C_JoinClan";
 	private static Logger _log = Logger.getLogger(C_JoinClan.class.getName());
 
-	public C_JoinClan(byte abyte0[], ClientThread clientthread) throws Exception {
-		super(abyte0);
 
-		L1PcInstance pc = clientthread.getActiveChar();
-		if (pc.isGhost()) {
-			return;
-		}
+    @Override
+    public void execute(byte[] decrypt, ClientThread client) {
+        try {
+            read(decrypt);
 
-		L1PcInstance target = FaceToFace.faceToFace(pc);
-		if (target != null) {
-			JoinClan(pc, target);
-		}
-	}
+            L1PcInstance pc = client.getActiveChar();
+            if (pc == null) {
+                return;
+            }
+            if (pc.isDead()) {
+                return;
+            }
+            if (pc.isGhost()) {
+                return;
+            }
+
+            L1PcInstance target = FaceToFace.faceToFace(pc);
+            if (target != null) {
+                JoinClan(pc, target);
+            }
+        } catch (final Exception e) {
+            _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+        } finally {
+            finish();
+        }
+    }
 
 	private void JoinClan(L1PcInstance player, L1PcInstance target) {
 		if (!target.isCrown()) {

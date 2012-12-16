@@ -19,6 +19,7 @@
 package l1j.server.server.clientpackets;
 
 import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import l1j.server.server.hackdetections.LogTradeBugItem;
 import l1j.server.server.ClientThread;
@@ -38,14 +39,27 @@ public class C_TradeAddItem extends ClientBasePacket {
 	private static final String C_TRADE_ADD_ITEM = "[C] C_TradeAddItem";
 	private static Logger _log = Logger.getLogger(C_TradeAddItem.class.getName());
 
-	public C_TradeAddItem(byte abyte0[], ClientThread client) throws Exception {
-		super(abyte0);
+    @Override
+    public void execute(byte[] decrypt, ClientThread client) {
+        try {
+            read(decrypt);
+            L1PcInstance pc = client.getActiveChar();
+            if (pc == null) {
+                return;
+            }
+            if (pc.isDead()) {
+                return;
+            }
+            if (pc.isGhost()) {
+                return;
+            }
 
 		int itemid = readD();
 		int itemcount = readD();
-		L1PcInstance pc = client.getActiveChar();
+		
 		L1PcInstance target = (L1PcInstance) L1World.getInstance().findObject(
 				pc.getTradeID());
+		
 		//TRICIDTODO: set configurable autoban
 		if (itemcount < 0)
 		{
@@ -111,10 +125,15 @@ public class C_TradeAddItem extends ClientBasePacket {
 			return;
 		}
 		trade.TradeAddItem(pc, itemid, itemcount);
-	}
+        } catch (final Exception e) {
+            _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+        } finally {
+            finish();
+        }
+    }
 
-	@Override
-	public String getType() {
-		return C_TRADE_ADD_ITEM;
-	}
+    @Override
+    public String getType() {
+        return C_TRADE_ADD_ITEM;
+    }
 }

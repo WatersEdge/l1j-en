@@ -67,7 +67,7 @@ public class Opcodes {
 
 	public static final int C_OPCODE_ENTERPORTAL = 26;
 
-	public static final int C_OPCODE_LEAVECLANE = 27;
+	public static final int C_OPCODE_LEAVECLAN = 27;
 
 	public static final int C_OPCODE_CALL = 29;
 
@@ -84,6 +84,8 @@ public class Opcodes {
 	public static final int C_OPCODE_CLIENTREPORT = 35;
 
 	public static final int C_OPCODE_EXTCOMMAND = 38;
+	
+	public static final int C_OPCODE_SENDLOCATION = 39; // or 40 need to test it.
 
 	public static final int C_OPCODE_TRADEADDCANCEL = 41;
 
@@ -213,7 +215,7 @@ public class Opcodes {
 
 	public static final int C_OPCODE_CREATEPARTY = 130;
 
-	public static final int C_OPCODE_CAHTPARTY = 131;
+	public static final int C_OPCODE_CHATPARTY = 131;
 
 	// 3.2 ServerPacket
 	public static final int S_OPCODE_REMOVE_OBJECT = 0;

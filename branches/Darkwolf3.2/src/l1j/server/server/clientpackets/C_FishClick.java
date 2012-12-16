@@ -22,6 +22,8 @@
 package l1j.server.server.clientpackets;
 
 import java.util.logging.Logger;
+import java.util.logging.Level;
+
 import java.util.Random;
 
 import l1j.server.server.ClientThread;
@@ -43,9 +45,21 @@ public class C_FishClick extends ClientBasePacket {
 	private static final int HEADING_TABLE_X[] = { 0, 1, 1, 1, 0, -1, -1, -1 };
 	private static final int HEADING_TABLE_Y[] = { -1, -1, 0, 1, 1, 1, 0, -1 };
 
-	public C_FishClick(byte abyte0[], ClientThread clientthread) throws Exception {
-		super(abyte0);
-		L1PcInstance pc = clientthread.getActiveChar();
+	 @Override
+	    public void execute(byte[] decrypt, ClientThread client) {
+	        try {
+	            read(decrypt);
+	            L1PcInstance pc = client.getActiveChar();
+	            if (pc == null) {
+	                return;
+	            }
+	            if (pc.isDead()) {
+	                return;
+	            }
+	            if (pc.isGhost()) {
+	                return;
+	            }
+	            
 		long currentTime = System.currentTimeMillis();
 		long time = pc.getFishingTime();
 
@@ -99,7 +113,12 @@ public class C_FishClick extends ClientBasePacket {
 			finishFishing(pc);
 			pc.sendPackets(new S_ServerMessage(1136, ""));
 		}
-	}
+	        } catch (final Exception e) {
+	            _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+	        } finally {
+	            finish();
+	        }
+	    }
 
 	private void finishFishing(L1PcInstance pc) {
 		pc.setFishingTime(0);

@@ -20,6 +20,7 @@ package l1j.server.server.clientpackets;
 
 import java.util.List;
 import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import l1j.server.server.ClientThread;
 import l1j.server.server.controllers.WarTimeController;
@@ -37,30 +38,44 @@ public class C_War extends ClientBasePacket {
 	private static final String C_WAR = "[C] C_War";
 	private static Logger _log = Logger.getLogger(C_War.class.getName());
 
-	public C_War(byte abyte0[], ClientThread clientthread) throws Exception {
-		super(abyte0);
-		int type = readC();
-		String s = readS();
+    @Override
+    public void execute(byte[] decrypt, ClientThread client) {
+        try {
+            read(decrypt);
+            L1PcInstance pc = client.getActiveChar();
+            if (pc == null) {
+                return;
+            }
+            if (pc.isDead()) {
+                return;
+            }
+            if (pc.isGhost()) {
+                return;
+            }
+            int type = readC();
+            String s = readS();
+            if (s.isEmpty()) {
+                return;
+            }
 
-		L1PcInstance player = clientthread.getActiveChar();
-		String playerName = player.getName();
-		String clanName = player.getClanname();
-		int clanId = player.getClanid();
+            String playerName = pc.getName();
+            String clanName = pc.getClanname();
+            int clanId = pc.getClanid();
 
-		if (!player.isCrown()) {
-			player.sendPackets(new S_ServerMessage(478)); 
+		if (!pc.isCrown()) {
+			pc.sendPackets(new S_ServerMessage(478)); 
 			return;
 		}
 		if (clanId == 0) {
-			player.sendPackets(new S_ServerMessage(272));
+			pc.sendPackets(new S_ServerMessage(272));
 			return;
 		}
 		L1Clan clan = L1World.getInstance().getClan(clanName);
 		if (clan == null) { 
 			return;
 		}
-		if (player.getId() != clan.getLeaderId()) {
-			player.sendPackets(new S_ServerMessage(478));
+		if (pc.getId() != clan.getLeaderId()) {
+			pc.sendPackets(new S_ServerMessage(478));
 			return;
 		}
 		if (clanName.toLowerCase().equals(s.toLowerCase())) {
@@ -84,7 +99,7 @@ public class C_War extends ClientBasePacket {
 		for (L1War war : warList) {
 			if (war.CheckClanInWar(clanName)) {
 				if (type == 0) {
-					player.sendPackets(new S_ServerMessage(234));
+					pc.sendPackets(new S_ServerMessage(234));
 					return;
 				}
 				inWar = true;
@@ -96,18 +111,18 @@ public class C_War extends ClientBasePacket {
 		}
 		if (clan.getCastleId() != 0) {
 			if (type == 0) {
-				player.sendPackets(new S_ServerMessage(474));
+				pc.sendPackets(new S_ServerMessage(474));
 				return;
 			} else if (type == 2 || type == 3) {
 				return;
 			}
 		}
-		if (enemyClan.getCastleId() == 0 && player.getLevel() <= 15) {
-			player.sendPackets(new S_ServerMessage(232));
+		if (enemyClan.getCastleId() == 0 && pc.getLevel() <= 15) {
+			pc.sendPackets(new S_ServerMessage(232));
 			return;
 		}
-		if (enemyClan.getCastleId() != 0 && player.getLevel() < 25) {
-			player.sendPackets(new S_ServerMessage(475));
+		if (enemyClan.getCastleId() != 0 && pc.getLevel() < 25) {
+			pc.sendPackets(new S_ServerMessage(475));
 			return;
 		}
 		if (enemyClan.getCastleId() != 0) {
@@ -116,7 +131,7 @@ public class C_War extends ClientBasePacket {
 				L1PcInstance clanMember[] = clan.getOnlineClanMember();
 				for (int k = 0; k < clanMember.length; k++) {
 					if (L1CastleLocation.checkInWarArea(castle_id, clanMember[k])) {
-						player.sendPackets(new S_ServerMessage(477));
+						pc.sendPackets(new S_ServerMessage(477));
 						return;
 					}
 				}
@@ -146,7 +161,7 @@ public class C_War extends ClientBasePacket {
 				}
 			} else {
 				if (type == 0) {
-					player.sendPackets(new S_ServerMessage(476));
+					pc.sendPackets(new S_ServerMessage(476));
 				}
 			}
 		} else {
@@ -154,7 +169,7 @@ public class C_War extends ClientBasePacket {
 			for (L1War war : warList) {
 				if (war.CheckClanInWar(enemyClanName)) {
 					if (type == 0) {
-						player.sendPackets(new S_ServerMessage(236, enemyClanName));
+						pc.sendPackets(new S_ServerMessage(236, enemyClanName));
 						return;
 					} else if (type == 2 || type == 3) {
 						if (!war.CheckClanInSameWar(clanName, enemyClanName)) {
@@ -172,24 +187,29 @@ public class C_War extends ClientBasePacket {
 			L1PcInstance enemyLeader = L1World.getInstance().getPlayer(enemyClan.getLeaderName());
 
 			if (enemyLeader == null) {
-				player.sendPackets(new S_ServerMessage(218, enemyClanName));
+				pc.sendPackets(new S_ServerMessage(218, enemyClanName));
 				return;
 			}
 			if (type == 0) {
-				enemyLeader.setTempID(player.getId());
+				enemyLeader.setTempID(pc.getId());
 				enemyLeader.sendPackets(new S_Message_YN(217, clanName, playerName));
 			} else if (type == 2) {
-				enemyLeader.setTempID(player.getId());
+				enemyLeader.setTempID(pc.getId());
 				enemyLeader.sendPackets(new S_Message_YN(221, clanName));
 			} else if (type == 3) {
-				enemyLeader.setTempID(player.getId());
+				enemyLeader.setTempID(pc.getId());
 				enemyLeader.sendPackets(new S_Message_YN(222, clanName));
 			}
-		}
-	}
+        }
+    } catch (final Exception e) {
+        _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+    } finally {
+        finish();
+    }
+}
 
-	@Override
-	public String getType() {
-		return C_WAR;
-	}
+@Override
+public String getType() {
+    return C_WAR;
+}
 }

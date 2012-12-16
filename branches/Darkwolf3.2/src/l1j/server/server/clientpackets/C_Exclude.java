@@ -34,33 +34,39 @@ public class C_Exclude extends ClientBasePacket {
 	private static final String C_EXCLUDE = "[C] C_Exclude";
 	private static Logger _log = Logger.getLogger(C_Exclude.class.getName());
 
-	public C_Exclude(byte[] decrypt, ClientThread client) {
-		super(decrypt);
-		String name = readS();
-		if (name.isEmpty()) {
-		return;
-		}
-		L1PcInstance pc = client.getActiveChar();
-		try {
-			L1ExcludingList exList = pc.getExcludingList();
-			if (exList.isFull()) {
-				pc.sendPackets(new S_ServerMessage(472));
-				return;
-			}
-			if (exList.contains(name)) {
-				String temp = exList.remove(name);
-				pc.sendPackets(new S_PacketBox(S_PacketBox.REM_EXCLUDE, temp));
-			} else {
-				exList.add(name);
-				pc.sendPackets(new S_PacketBox(S_PacketBox.ADD_EXCLUDE, name));
-			}
-		} catch (Exception e) {
-			_log.log(Level.SEVERE, e.getLocalizedMessage(), e);
-		}
-	}
+    @Override
+    public void execute(byte[] decrypt, ClientThread client) {
+        try {
+            read(decrypt);
+            L1PcInstance pc = client.getActiveChar();
+            if (pc == null) {
+                return;
+            }
+            String name = readS();
+            if (name.isEmpty()) {
+                return;
+            }
+            L1ExcludingList exList = pc.getExcludingList();
+            if (exList.isFull()) {
+                pc.sendPackets(new S_ServerMessage(472));
+                return;
+            }
+            if (exList.contains(name)) {
+                String temp = exList.remove(name);
+                pc.sendPackets(new S_PacketBox(S_PacketBox.REM_EXCLUDE, temp));
+            } else {
+                exList.add(name);
+                pc.sendPackets(new S_PacketBox(S_PacketBox.ADD_EXCLUDE, name));
+            }
+        } catch (final Exception e) {
+            _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+        } finally {
+            finish();
+        }
+    }
 
-	@Override
-	public String getType() {
-		return C_EXCLUDE;
-	}
+    @Override
+    public String getType() {
+        return C_EXCLUDE;
+    }
 }

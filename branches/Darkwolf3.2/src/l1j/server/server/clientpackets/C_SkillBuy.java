@@ -19,6 +19,7 @@
 package l1j.server.server.clientpackets;
 
 import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import l1j.server.server.ClientThread;
 import l1j.server.server.model.Instance.L1PcInstance;
@@ -31,20 +32,31 @@ public class C_SkillBuy extends ClientBasePacket {
 	private static final String C_SKILL_BUY = "[C] C_SkillBuy";
 	private static Logger _log = Logger.getLogger(C_SkillBuy.class.getName());
 
-	public C_SkillBuy(byte abyte0[], ClientThread clientthread) throws Exception {
-		super(abyte0);
+    @Override
+    public void execute(byte[] decrypt, ClientThread client) {
+        try {
+            read(decrypt);
+            L1PcInstance pc = client.getActiveChar();
+            if (pc == null) {
+                return;
+            }
+            if (pc.isDead()) {
+                return;
+            }
+            if (pc.isGhost()) {
+                return;
+            }
+            int i = readD();
+            pc.sendPackets(new S_SkillBuy(i, pc));
+        } catch (final Exception e) {
+            _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+        } finally {
+            finish();
+        }
+    }
 
-		int i = readD();
-
-		L1PcInstance pc = clientthread.getActiveChar();
-		if (pc.isGhost()) {
-		return;
-		}
-		pc.sendPackets(new S_SkillBuy(i, pc));
-	}
-
-	@Override
-	public String getType() {
-		return C_SKILL_BUY;
-	}
+    @Override
+    public String getType() {
+        return C_SKILL_BUY;
+    }
 }

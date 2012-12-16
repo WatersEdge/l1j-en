@@ -19,6 +19,7 @@
 package l1j.server.server.clientpackets;
 
 import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import l1j.server.server.ClientThread;
 import l1j.server.server.model.L1Teleport;
@@ -29,38 +30,53 @@ import l1j.server.server.serverpackets.S_OwnCharPack;
 // ClientBasePacket
 public class C_Ship extends ClientBasePacket {
 
-	private static final String C_SHIP = "[C] C_Ship";
-	private static Logger _log = Logger.getLogger(C_Ship.class.getName());
+    private static final String C_SHIP = "[C] C_Ship";
+    private static Logger _log = Logger.getLogger(C_Ship.class.getName());
 
-	public C_Ship(byte abyte0[], ClientThread client) {
-		super(abyte0);
+    @Override
+    public void execute(byte[] decrypt, ClientThread client) {
+        try {
+            read(decrypt);
+            L1PcInstance pc = client.getActiveChar();
+            if (pc == null) {
+                return;
+            }
+            if (pc.isDead()) {
+                return;
+            }
+            if (pc.isGhost()) {
+                return;
+            }
+            int shipMapId = readH();
+            int locX = readH();
+            int locY = readH();
 
-		int shipMapId = readH();
-		int locX = readH();
-		int locY = readH();
+            int mapId = pc.getMapId();
 
-		L1PcInstance pc = client.getActiveChar();
-		int mapId = pc.getMapId();
+            if (mapId == 5) { // Talking Island Ship to Aden Mainland
+                pc.getInventory().consumeItem(40299, 1);
+            } else if (mapId == 6) { // Aden Mainland Ship to Talking Island
+                pc.getInventory().consumeItem(40298, 1);
+            } else if (mapId == 83) { // Forgotten Island Ship to Aden Mainland
+                pc.getInventory().consumeItem(40300, 1);
+            } else if (mapId == 84) { // Aden Mainland Ship to Forgotten Island
+                pc.getInventory().consumeItem(40301, 1);
+            } else if (mapId == 446) { // Ship Hidden dock to Pirate island
+                pc.getInventory().consumeItem(40303, 1);
+            } else if (mapId == 447) { // Ship Pirate island to Hidden dock
+                pc.getInventory().consumeItem(40302, 1);
+            }
+            pc.sendPackets(new S_OwnCharPack(pc));
+            L1Teleport.teleport(pc, locX, locY, (short) shipMapId, 0, false);
+        } catch (final Exception e) {
+            _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+        } finally {
+            finish();
+        }
+    }
 
-		if (mapId == 5) { // Talking Island Ship to Aden Mainland
-			pc.getInventory().consumeItem(40299, 1);
-		} else if (mapId == 6) { // Aden Mainland Ship to Talking Island
-			pc.getInventory().consumeItem(40298, 1);
-		} else if (mapId == 83) { // Forgotten Island Ship to Aden Mainland
-			pc.getInventory().consumeItem(40300, 1);
-		} else if (mapId == 84) { // Aden Mainland Ship to Forgotten Island
-			pc.getInventory().consumeItem(40301, 1);
-		} else if (mapId == 446) { // Ship Hidden dock to Pirate island
-			pc.getInventory().consumeItem(40303, 1);
-		} else if (mapId == 447) { // Ship Pirate island to Hidden dock
-			pc.getInventory().consumeItem(40302, 1);
-		}
-		pc.sendPackets(new S_OwnCharPack(pc));
-		L1Teleport.teleport(pc, locX, locY, (short) shipMapId, 0, false);
-	}
-
-	@Override
-	public String getType() {
-		return C_SHIP;
-	}
+    @Override
+    public String getType() {
+        return C_SHIP;
+    }
 }

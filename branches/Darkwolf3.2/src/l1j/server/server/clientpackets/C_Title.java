@@ -37,9 +37,21 @@ public class C_Title extends ClientBasePacket {
 	private static final String C_TITLE = "[C] C_Title";
 	private static Logger _log = Logger.getLogger(C_Title.class.getName());
 
-	public C_Title(byte abyte0[], ClientThread clientthread) {
-		super(abyte0);
-		L1PcInstance pc = clientthread.getActiveChar();
+    @Override
+    public void execute(byte[] decrypt, ClientThread client) {
+        try {
+            read(decrypt);
+            L1PcInstance pc = client.getActiveChar();
+            if (pc == null) {
+                return;
+            }
+            if (pc.isDead()) {
+                return;
+            }
+            if (pc.isGhost()) {
+                return;
+            }
+
 		String charName = readS();
 		String title = readS();
 
@@ -98,10 +110,15 @@ public class C_Title extends ClientBasePacket {
 						pc.sendPackets(new S_ServerMessage(201, pc.getClanname()));
 						return;
 					}
-				}
-			}
-		}
-	}
+                }
+            }
+        }
+    } catch (final Exception e) {
+        _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+    } finally {
+        finish();
+    }
+}
 
 	private void changeTitle(L1PcInstance pc, String title) {
 		int objectId = pc.getId();

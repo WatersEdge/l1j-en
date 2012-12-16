@@ -18,52 +18,43 @@
  */
 package l1j.server.server.clientpackets;
 
-import java.io.FileNotFoundException;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
+import l1j.server.Config;
 import l1j.server.server.ClientThread;
-import l1j.server.server.model.L1Object;
-import l1j.server.server.model.L1World;
-import l1j.server.server.model.Instance.L1NpcInstance;
+import l1j.server.server.datatables.CharacterConfigTable;
 import l1j.server.server.model.Instance.L1PcInstance;
 
 // Referenced classes of package l1j.server.server.clientpackets:
-// ClientBasePacket
-public class C_NPCTalkAction extends ClientBasePacket {
+// ClientBasePacket, C_RequestDoors
+public class C_CharacterConfig extends ClientBasePacket {
 
-	private static final String C_NPC_TALK_ACTION = "[C] C_NPCTalkAction";
-	private static Logger _log = Logger.getLogger(C_NPCTalkAction.class.getName());
+	private static Logger _log = Logger.getLogger(C_CharacterConfig.class.getName());
+	private static final String C_CharacterConfig = "[C] C_CharacterConfig";
 
     @Override
     public void execute(byte[] decrypt, ClientThread client) {
         try {
             read(decrypt);
-            L1PcInstance pc = client.getActiveChar();
-            if (pc == null) {
-                return;
-            }
-            if (pc.isDead()) {
-                return;
-            }
-            if (pc.isGhost()) {
-                return;
-            }
-            int objectId = readD();
+            if (Config.CHARACTER_CONFIG_IN_SERVER_SIDE) {
+                L1PcInstance pc = client.getActiveChar();
+                if (pc == null) {
+                    return;
+                }
 
-            L1Object obj = L1World.getInstance().findObject(objectId);
-            if (obj == null) {
-                _log.warning("object not found, oid " + objectId);
-                return;
+                int length = readD() - 3;
+                byte data[] = readByte();
+                int count = CharacterConfigTable.getInstance()
+                        .countCharacterConfig(pc.getId());
+                if (count == 0) {
+                    CharacterConfigTable.getInstance().storeCharacterConfig(
+                            pc.getId(), length, data);
+                } else {
+                    CharacterConfigTable.getInstance().updateCharacterConfig(
+                            pc.getId(), length, data);
+                }
             }
-            String action = readS();
-            if (action.isEmpty()) {
-                return;
-            }
-            // try {
-            L1NpcInstance npc = (L1NpcInstance) obj;
-            npc.onFinalAction(pc, action);
-            // } catch (ClassCastException e) {
         } catch (final Exception e) {
             _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
         } finally {
@@ -71,8 +62,8 @@ public class C_NPCTalkAction extends ClientBasePacket {
         }
     }
 
-    @Override
-    public String getType() {
-        return C_NPC_TALK_ACTION;
-    }
+	@Override
+	public String getType() {
+		return C_CharacterConfig;
+	}
 }

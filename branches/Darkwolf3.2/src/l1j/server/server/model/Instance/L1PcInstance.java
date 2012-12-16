@@ -60,6 +60,7 @@ import l1j.server.server.model.L1Magic;
 import l1j.server.server.model.L1Object;
 import l1j.server.server.model.L1DeathMatch;
 import l1j.server.server.model.L1Party;
+import l1j.server.server.model.L1PartyRefresh;
 import l1j.server.server.model.L1PcDeleteTimer;
 import l1j.server.server.model.L1PcInventory;
 import l1j.server.server.model.L1PinkName;
@@ -129,6 +130,10 @@ public class L1PcInstance extends L1Character {
 	private static Random _random = new Random();
 	private GeneralThreadPool _threadPool = GeneralThreadPool.getInstance();
 	
+    boolean _rpActive = false;
+    private L1PartyRefresh _rp;
+    private int _partyType;
+
 	private short _hpr = 0;
 	private short _trueHpr = 0;
 
@@ -868,6 +873,31 @@ public class L1PcInstance extends L1Character {
 	public void setPartyID(int partyID) {
 		_partyID = partyID;
 	}
+
+    public void startRefreshParty() {
+        final int INTERVAL = 25000;
+        if (!_rpActive) {
+            _rp = new L1PartyRefresh(this);
+            _regenTimer.scheduleAtFixedRate(_rp, INTERVAL, INTERVAL);
+            _rpActive = true;
+        }
+    }
+
+    public void stopRefreshParty() {
+        if (_rpActive) {
+            _rp.cancel();
+            _rp = null;
+            _rpActive = false;
+        }
+    }
+
+    public void setPartyType(int type) {
+        _partyType = type;
+    }
+
+    public int getPartyType() {
+        return _partyType;
+    }
 
 	public int getTradeID() {
 		return _tradeID;

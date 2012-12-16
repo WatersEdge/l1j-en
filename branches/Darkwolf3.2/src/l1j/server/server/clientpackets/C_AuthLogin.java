@@ -19,6 +19,7 @@
 package l1j.server.server.clientpackets;
 
 import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import l1j.server.Config;
 import l1j.server.server.Account;
@@ -35,8 +36,10 @@ public class C_AuthLogin extends ClientBasePacket {
 	private static final String C_AUTH_LOGIN = "[C] C_AuthLogin";
 	private static Logger _log = Logger.getLogger(C_AuthLogin.class.getName());
 
-	public C_AuthLogin(byte[] decrypt, ClientThread client) {
-		super(decrypt);
+    @Override
+    public void execute(byte[] decrypt, ClientThread client) {
+        try {
+            read(decrypt);
 		String accountName = readS().toLowerCase();
 		String password = readS();
 		String ip = client.getIp();
@@ -89,7 +92,12 @@ public class C_AuthLogin extends ClientBasePacket {
 			_log.info("Account Allready Loggedin (" + client.getHostname() + ") Connection Refused.");
 			return;
 		}
-	}
+        } catch (final Exception e) {
+            _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+        } finally {
+            finish();
+        }
+    }
 
 	@Override
 	public String getType() {

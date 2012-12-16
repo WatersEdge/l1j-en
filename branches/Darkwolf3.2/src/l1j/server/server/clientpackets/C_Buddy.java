@@ -20,6 +20,7 @@
 package l1j.server.server.clientpackets;
 
 import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import l1j.server.server.ClientThread;
 import l1j.server.server.datatables.BuddyTable;
@@ -34,15 +35,34 @@ public class C_Buddy extends ClientBasePacket {
 	private static final String C_BUDDY = "[C] C_Buddy";
 	private static Logger _log = Logger.getLogger(C_Buddy.class.getName());
 
-	public C_Buddy(byte abyte0[], ClientThread clientthread) {
-		super(abyte0);
-		L1PcInstance pc = clientthread.getActiveChar();
-		L1Buddy buddy = BuddyTable.getInstance().getBuddyTable(pc.getId());
-		pc.sendPackets(new S_Buddy(pc.getId(), buddy));
-	}
+    @Override
+    public void execute(byte[] decrypt, ClientThread client) {
+        try {
+            read(decrypt);
+            L1PcInstance pc = client.getActiveChar();
+            if (pc == null) {
+                return;
+            }
+            if (pc.isDead()) {
+                return;
+            }
+            if (pc.isGhost()) {
+                return;
+            }
+            L1Buddy buddy = BuddyTable.getInstance().getBuddyTable(pc.getId());
+            if (buddy == null) {
+                return;
+            }
+            pc.sendPackets(new S_Buddy(pc.getId(), buddy));
+        } catch (final Exception e) {
+            _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+        } finally {
+            finish();
+        }
+    }
 
-	@Override
-	public String getType() {
-		return C_BUDDY;
-	}
+    @Override
+    public String getType() {
+        return C_BUDDY;
+    }
 }

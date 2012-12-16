@@ -20,6 +20,7 @@ package l1j.server.server.clientpackets;
 
 import java.util.ArrayList;
 import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import l1j.server.server.ActionCodes;
 import l1j.server.server.ClientThread;
@@ -41,13 +42,21 @@ public class C_Shop extends ClientBasePacket {
 	private static final String C_SHOP = "[C] C_Shop";
 	private static Logger _log = Logger.getLogger(C_Shop.class.getName());
 
-	public C_Shop(byte abyte0[], ClientThread clientthread) {
-		super(abyte0);
+    @Override
+    public void execute(byte[] decrypt, ClientThread client) {
+        try {
+            read(decrypt);
 
-		L1PcInstance pc = clientthread.getActiveChar();
-		if (pc.isGhost()) {
-			return;
-		}
+            L1PcInstance pc = client.getActiveChar();
+            if (pc == null) {
+                return;
+            }
+            if (pc.isDead()) {
+                return;
+            }
+            if (pc.isGhost()) {
+                return;
+            }
 
 		int mapId = pc.getMapId();
 		if (mapId != 340 && mapId != 350 && mapId != 360 && mapId != 370) {
@@ -171,10 +180,15 @@ public class C_Shop extends ClientBasePacket {
 			pc.sendPackets(new S_DoActionGFX(pc.getId(), ActionCodes.ACTION_Idle));
 			pc.broadcastPacket(new S_DoActionGFX(pc.getId(), ActionCodes.ACTION_Idle));
 		}
-	}
+        } catch (final Exception e) {
+            _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+        } finally {
+            finish();
+        }
+    }
 
-	@Override
-	public String getType() {
-		return C_SHOP;
-	}
+    @Override
+    public String getType() {
+        return C_SHOP;
+    }
 }

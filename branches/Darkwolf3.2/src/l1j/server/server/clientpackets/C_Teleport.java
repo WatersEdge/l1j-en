@@ -19,6 +19,7 @@
 package l1j.server.server.clientpackets;
 
 import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import l1j.server.server.ClientThread;
 import l1j.server.server.model.Instance.L1PcInstance;
@@ -31,15 +32,27 @@ public class C_Teleport extends ClientBasePacket {
 	private static final String C_TELEPORT = "[C] C_Teleport";
 	private static Logger _log = Logger.getLogger(C_Teleport.class.getName());
 
-	public C_Teleport(byte abyte0[], ClientThread clientthread) throws Exception {
-		super(abyte0);
+	    @Override
+	    public void execute(byte[] decrypt, ClientThread client) {
+	        try {
+	            read(decrypt);
+	            L1PcInstance pc = client.getActiveChar();
+	            if (pc == null) {
+	                return;
+	            }
+	            if (pc.isDead()) {
+	                return;
+	            }
+	            Teleportation.Teleportation(pc);
+	        } catch (final Exception e) {
+	            _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+	        } finally {
+	            finish();
+	        }
+	    }
 
-		L1PcInstance pc = clientthread.getActiveChar();
-		Teleportation.Teleportation(pc);
+	    @Override
+	    public String getType() {
+	        return C_TELEPORT;
+	    }
 	}
-
-	@Override
-	public String getType() {
-		return C_TELEPORT;
-	}
-}

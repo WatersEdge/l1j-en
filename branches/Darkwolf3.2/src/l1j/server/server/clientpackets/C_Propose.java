@@ -19,6 +19,7 @@
 package l1j.server.server.clientpackets;
 
 import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import l1j.server.Config;
 import l1j.server.server.ClientThread;
@@ -35,15 +36,24 @@ public class C_Propose extends ClientBasePacket {
 	private static final String C_PROPOSE = "[C] C_Propose";
 	private static Logger _log = Logger.getLogger(C_Propose.class.getName());
 
-	public C_Propose(byte abyte0[], ClientThread clientthread) {
-		super(abyte0);
+    @Override
+    public void execute(byte[] decrypt, ClientThread client) {
+        try {
+            read(decrypt);
+            L1PcInstance pc = client.getActiveChar();
+            if (pc == null) {
+                return;
+            }
+            if (pc.isDead()) {
+                return;
+            }
+            if (pc.isGhost()) {
+                return;
+            }
+            
 		int c = readC();
 
-		L1PcInstance pc = clientthread.getActiveChar();
 		if (c == 0) { 
-			if (pc.isGhost()) {
-				return;
-			}
 			L1PcInstance target = FaceToFace.faceToFace(pc);
 			if (target != null) {
 				if (pc.getPartnerId() != 0) {
@@ -78,7 +88,12 @@ public class C_Propose extends ClientBasePacket {
 			}
 			pc.sendPackets(new S_Message_YN(653, "")); 
 		}
-	}
+    } catch (final Exception e) {
+        _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+    } finally {
+        finish();
+    }
+}
 
 	@Override
 	public String getType() {

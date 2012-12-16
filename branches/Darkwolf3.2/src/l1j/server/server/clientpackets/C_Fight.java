@@ -19,6 +19,7 @@
 package l1j.server.server.clientpackets;
 
 import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import l1j.server.server.ClientThread;
 import l1j.server.server.model.Instance.L1PcInstance;
@@ -33,32 +34,45 @@ public class C_Fight extends ClientBasePacket {
 	private static final String C_FIGHT = "[C] C_Fight";
 	private static Logger _log = Logger.getLogger(C_Fight.class.getName());
 
-	public C_Fight(byte abyte0[], ClientThread client) throws Exception {
-		super(abyte0);
+    @Override
+    public void execute(byte[] decrypt, ClientThread client) {
+        try {
+            read(decrypt);
 
-		L1PcInstance pc = client.getActiveChar();
-		if (pc.isGhost()) {
-		return;
-		}
-		L1PcInstance target = FaceToFace.faceToFace(pc);
-		if (target != null) {
-			if (!target.isParalyzed()) {
-				if (pc.getFightId() != 0) {
-					pc.sendPackets(new S_ServerMessage(633)); 
-					return;
-				} else if (target.getFightId() != 0) {
-					target.sendPackets(new S_ServerMessage(634)); 
-					return;
-				}
-				pc.setFightId(target.getId());
-				target.setFightId(pc.getId());
-				target.sendPackets(new S_Message_YN(630, pc.getName())); 
-			}
-		}
-	}
+            L1PcInstance pc = client.getActiveChar();
+            if (pc == null) {
+                return;
+            }
+            if (pc.isDead()) {
+                return;
+            }
+            if (pc.isGhost()) {
+                return;
+            }
+            L1PcInstance target = FaceToFace.faceToFace(pc);
+            if (target != null) {
+                if (!target.isParalyzed()) {
+                    if (pc.getFightId() != 0) {
+                        pc.sendPackets(new S_ServerMessage(633));
+                        return;
+                    } else if (target.getFightId() != 0) {
+                        target.sendPackets(new S_ServerMessage(634));
+                        return;
+                    }
+                    pc.setFightId(target.getId());
+                    target.setFightId(pc.getId());
+                    target.sendPackets(new S_Message_YN(630, pc.getName()));
+                }
+            }
+        } catch (final Exception e) {
+            _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+        } finally {
+            finish();
+        }
+    }
 
-	@Override
-	public String getType() {
-		return C_FIGHT;
-	}
+    @Override
+    public String getType() {
+        return C_FIGHT;
+    }
 }

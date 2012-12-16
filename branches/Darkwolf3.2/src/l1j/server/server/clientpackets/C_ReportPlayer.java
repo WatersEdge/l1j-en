@@ -40,9 +40,14 @@ public class C_ReportPlayer extends ClientBasePacket {
 	private static Logger _log = Logger.getLogger(C_ReportPlayer.class.getName());
 	int objid = readD();
 	
-	public C_ReportPlayer(byte abyte0[], ClientThread clientthread) throws Exception {
-		super(abyte0);
-		L1PcInstance pc = clientthread.getActiveChar();
+    @Override
+    public void execute(byte[] decrypt, ClientThread client) {
+        try {
+            read(decrypt);
+            L1PcInstance pc = client.getActiveChar();
+            if (pc == null) {
+                return;
+            }
 		
 		Connection con = null;
 		PreparedStatement pstm = null;
@@ -66,7 +71,12 @@ public class C_ReportPlayer extends ClientBasePacket {
 				SQLUtil.close(pstm);
 				SQLUtil.close(con);
 			}
-	}
+    } catch (final Exception e) {
+        _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+    } finally {
+        finish();
+    }
+}
 	
 	@Override
 	public String getType() {

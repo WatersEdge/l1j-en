@@ -19,6 +19,7 @@
 package l1j.server.server.clientpackets;
 
 import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import l1j.server.server.ClientThread;
 import l1j.server.server.datatables.CastleTable;
@@ -35,38 +36,55 @@ public class C_Deposit extends ClientBasePacket {
 	private static final String C_DEPOSIT = "[C] C_Deposit";
 	private static Logger _log = Logger.getLogger(C_Deposit.class.getName());
 
-	public C_Deposit(byte abyte0[], ClientThread clientthread) throws Exception {
-		super(abyte0);
+	@Override
+	public void execute(byte[] decrypt, ClientThread client) {
+	    try {
+	          read(decrypt);
+	          L1PcInstance pc = client.getActiveChar();
+	          if (pc == null) {
+	              return;
+	          }
+	          if (pc.isDead()) {
+	              return;
+	          }
+	          if (pc.isGhost()) {
+	              return;
+	          }
+
 		int i = readD();
 		int j = readD();
 
-		L1PcInstance player = clientthread.getActiveChar();
 		//TRICIDTODO:  set configurable auto ban
 		if (j < 0)
 		{
-			_log.info(player.getName() + " Attempted Dupe Exploit (C_Deposit).");
+			_log.info(pc.getName() + " Attempted Dupe Exploit (C_Deposit).");
 			return;
 		}
 		
-		if (i == player.getId()) {
-			L1Clan clan = L1World.getInstance().getClan(player.getClanname());
+		if (i == pc.getId()) {
+			L1Clan clan = L1World.getInstance().getClan(pc.getClanname());
 			if (clan != null) {
 				int castle_id = clan.getCastleId();
 				if (castle_id != 0) { 
 					L1Castle l1castle = CastleTable.getInstance().getCastleTable(castle_id);
 					synchronized (l1castle) {
 						int money = l1castle.getPublicMoney();
-						if (player.getInventory().consumeItem(L1ItemId.ADENA, j)) {
+						if (pc.getInventory().consumeItem(L1ItemId.ADENA, j)) {
 							money += j;
 							l1castle.setPublicMoney(money);
 							CastleTable.getInstance().updateCastle(l1castle);
 						}
-					}
-				}
-			}
-		}
-	}
-
+                    }
+                }
+            }
+        }
+    } catch (final Exception e) {
+        _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+    } finally {
+        finish();
+    }
+}
+	
 	@Override
 	public String getType() {
 		return C_DEPOSIT;

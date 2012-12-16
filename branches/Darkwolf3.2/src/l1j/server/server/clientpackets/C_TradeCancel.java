@@ -19,6 +19,7 @@
 package l1j.server.server.clientpackets;
 
 import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import l1j.server.server.ClientThread;
 import l1j.server.server.model.L1Trade;
@@ -31,16 +32,26 @@ public class C_TradeCancel extends ClientBasePacket {
 	private static final String C_TRADE_CANCEL = "[C] C_TradeCancel";
 	private static Logger _log = Logger.getLogger(C_TradeCancel.class.getName());
 
-	public C_TradeCancel(byte abyte0[], ClientThread clientthread) throws Exception {
-		super(abyte0);
+	    @Override
+	    public void execute(byte[] decrypt, ClientThread client) {
+	        try {
+	            read(decrypt);
+	            L1PcInstance pc = client.getActiveChar();
+	            if (pc == null) {
+	                return;
+	            }
+	            
+	            L1Trade trade = new L1Trade();
+	            trade.TradeCancel(pc);
+	        } catch (final Exception e) {
+	            _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+	        } finally {
+	            finish();
+	        }
+	    }
 
-		L1PcInstance player = clientthread.getActiveChar();
-		L1Trade trade = new L1Trade();
-		trade.TradeCancel(player);
+	    @Override
+	    public String getType() {
+	        return C_TRADE_CANCEL;
+	    }
 	}
-
-	@Override
-	public String getType() {
-		return C_TRADE_CANCEL;
-	}
-}

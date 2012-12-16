@@ -19,12 +19,14 @@
 package l1j.server.server.clientpackets;
 
 import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import l1j.server.server.ClientThread;
 import l1j.server.server.model.L1Object;
 import l1j.server.server.model.L1World;
 import l1j.server.server.model.Instance.L1AuctionBoardInstance;
 import l1j.server.server.model.Instance.L1BoardInstance;
+import l1j.server.server.model.Instance.L1PcInstance;
 
 // Referenced classes of package l1j.server.server.clientpackets:
 // ClientBasePacket, C_Board
@@ -33,22 +35,41 @@ public class C_Board extends ClientBasePacket {
 	private static final String C_BOARD = "[C] C_Board";
 	private static Logger _log = Logger.getLogger(C_Board.class.getName());
 
-	private boolean isBoardInstance(L1Object obj) {
-		return (obj instanceof L1BoardInstance || obj instanceof L1AuctionBoardInstance);
-	}
+    public void execute(byte[] decrypt, ClientThread client) {
+        try {
+            read(decrypt);
+            L1PcInstance pc = client.getActiveChar();
+            if (pc == null) {
+                return;
+            }
+            if (pc.isDead()) {
+                return;
+            }
+            if (pc.isGhost()) {
+                return;
+            }
+            int objectId = readD();
+            L1Object obj = L1World.getInstance().findObject(objectId);
+            if (obj == null) {
+                return;
+            }
+            if (!isBoardInstance(obj)) {
+                return;
+            }
+            obj.onAction(pc);
+        } catch (final Exception e) {
+            _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+        } finally {
+            finish();
+        }
+    }
 
-	public C_Board(byte abyte0[], ClientThread client) {
-		super(abyte0);
-		int objectId = readD();
-		L1Object obj = L1World.getInstance().findObject(objectId);
-		if (!isBoardInstance(obj)) {
-		return;
-		}
-		obj.onAction(client.getActiveChar());
-	}
+    @Override
+    public String getType() {
+        return C_BOARD;
+    }
 
-	@Override
-	public String getType() {
-		return C_BOARD;
-	}
+    private boolean isBoardInstance(L1Object obj) {
+        return (obj instanceof L1BoardInstance || obj instanceof L1AuctionBoardInstance);
+    }
 }

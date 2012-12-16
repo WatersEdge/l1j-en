@@ -35,12 +35,23 @@ public class C_Emblem extends ClientBasePacket {
 	private static final String C_EMBLEM = "[C] C_Emblem";
 	private static Logger _log = Logger.getLogger(C_Emblem.class.getName());
 
-	public C_Emblem(byte abyte0[], ClientThread clientthread) throws Exception {
-		super(abyte0);
+    @Override
+    public void execute(byte[] decrypt, ClientThread client) {
+        try {
+            read(decrypt);
+            L1PcInstance pc = client.getActiveChar();
+            if (pc == null) {
+                return;
+            }
+            if (pc.isDead()) {
+                return;
+            }
+            if (pc.isGhost()) {
+                return;
+            }
 
-		L1PcInstance player = clientthread.getActiveChar();
-		if (player.getClanid() != 0) {
-			String emblem_file = String.valueOf(player.getClanid());
+		if (pc.getClanid() != 0) {
+			String emblem_file = String.valueOf(pc.getClanid());
 
 			FileOutputStream fos = null;
 			try {
@@ -57,10 +68,15 @@ public class C_Emblem extends ClientBasePacket {
 				}
 				fos = null;
 			}
-			player.sendPackets(new S_Emblem(player.getClanid()));
-			L1World.getInstance().broadcastPacketToAll(new S_Emblem(player.getClanid()));
+			pc.sendPackets(new S_Emblem(pc.getClanid()));
+			L1World.getInstance().broadcastPacketToAll(new S_Emblem(pc.getClanid()));
 		}
-	}
+        } catch (final Exception e) {
+            _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+        } finally {
+            finish();
+        }
+    }
 
 	@Override
 	public String getType() {

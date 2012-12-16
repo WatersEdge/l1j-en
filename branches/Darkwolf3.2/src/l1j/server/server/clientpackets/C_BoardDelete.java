@@ -19,6 +19,8 @@
 package l1j.server.server.clientpackets;
 
 import java.util.logging.Logger;
+import java.util.logging.Level;
+
 import l1j.server.server.ClientThread;
 import l1j.server.server.datatables.BoardTable;
 import l1j.server.server.model.L1Object;
@@ -32,19 +34,26 @@ public class C_BoardDelete extends ClientBasePacket {
 	private static final String C_BOARD_DELETE = "[C] C_BoardDelete";
 	private static Logger _log = Logger.getLogger(C_BoardDelete.class.getName());
 
-	public C_BoardDelete(byte decrypt[], ClientThread client) {
-		super(decrypt);
-		int objId = readD();
-		int topicId = readD();
-		L1Object obj = L1World.getInstance().findObject(objId);
-		L1BoardInstance board = (L1BoardInstance) obj;
-		if (board != null) {
-			BoardTable.getInstance().deleteTopic(topicId);
-		}
-	}
+    @Override
+    public void execute(byte[] decrypt, ClientThread client) {
+        try {
+            read(decrypt);
+            int objId = readD();
+            int topicId = readD();
+            L1Object obj = L1World.getInstance().findObject(objId);
+            L1BoardInstance board = (L1BoardInstance) obj;
+            if (board != null) {
+                BoardTable.getInstance().deleteTopic(topicId);
+            }
+        } catch (final Exception e) {
+            _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+        } finally {
+            finish();
+        }
+    }
 
-	@Override
-	public String getType() {
-		return C_BOARD_DELETE;
-	}
+    @Override
+    public String getType() {
+        return C_BOARD_DELETE;
+    }
 }

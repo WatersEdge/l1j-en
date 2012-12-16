@@ -20,6 +20,7 @@
 package l1j.server.server.clientpackets;
 
 import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import l1j.server.server.ClientThread;
 import l1j.server.server.datatables.BuddyTable;
@@ -29,18 +30,32 @@ import l1j.server.server.model.Instance.L1PcInstance;
 // ClientBasePacket
 public class C_DelBuddy extends ClientBasePacket {
 
-	private static final String C_DEL_BUDDY = "[C] C_DelBuddy";
-	private static Logger _log = Logger.getLogger(C_DelBuddy.class.getName());
+    private static final String C_DEL_BUDDY = "[C] C_DelBuddy";
 
-	public C_DelBuddy(byte abyte0[], ClientThread clientthread) {
-		super(abyte0);
-		L1PcInstance pc = clientthread.getActiveChar();
-		String charName = readS();
-		BuddyTable.getInstance().removeBuddy(pc.getId(), charName);
-	}
+    private static Logger _log = Logger.getLogger(C_DelBuddy.class.getName());
 
-	@Override
-	public String getType() {
-		return C_DEL_BUDDY;
-	}
+    @Override
+    public void execute(byte[] decrypt, ClientThread client) {
+        try {
+            read(decrypt);
+            L1PcInstance pc = client.getActiveChar();
+            if (pc == null) {
+                return;
+            }
+            String charName = readS();
+            if (charName.isEmpty()) {
+                return;
+            }
+            BuddyTable.getInstance().removeBuddy(pc.getId(), charName);
+        } catch (final Exception e) {
+            _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+        } finally {
+            finish();
+        }
+    }
+
+    @Override
+    public String getType() {
+        return C_DEL_BUDDY;
+    }
 }

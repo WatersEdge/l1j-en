@@ -19,6 +19,7 @@
 package l1j.server.server.clientpackets;
 
 import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import l1j.server.Config;
 import l1j.server.server.hackdetections.LogSpeedHack;
@@ -48,19 +49,23 @@ public class C_Attack extends ClientBasePacket {
 
 	private int _targetY = 0;
 
-	public C_Attack(byte[] decrypt, ClientThread client) {
-		super(decrypt);
-		int targetId = readD();
-		int x = readH();
-		int y = readH();
-		_targetX = x;
-		_targetY = y;
+    @Override
+    public void execute(byte[] decrypt, ClientThread client) {
+        try {
+            read(decrypt);
+            L1PcInstance pc = client.getActiveChar();
+            if (pc == null) {
+                return;
+            }
+            int targetId = readD();
+            int x = readH();
+            int y = readH();
+            _targetX = x;
+            _targetY = y;
 
-		L1PcInstance pc = client.getActiveChar();
-
-		if (pc.isGhost() || pc.isDead() || pc.isTeleport()) {
-			return;
-		}
+            if (pc.isGhost() || pc.isDead() || pc.isTeleport()) {
+                return;
+            }
 
 		L1Object target = L1World.getInstance().findObject(targetId);
 
@@ -152,8 +157,14 @@ public class C_Attack extends ClientBasePacket {
 				pc.sendPackets(new S_AttackPacket(pc, 0, ActionCodes.ACTION_Attack));
 				pc.broadcastPacket(new S_AttackPacket(pc, 0, ActionCodes.ACTION_Attack));
 			}
-		}
-	}
+        }
+    } catch (final Exception e) {
+        _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+    } finally {
+        finish();
+    }
+}
+
 
 	private void calcOrbit(int cX, int cY, int head) {
 		float disX = Math.abs(cX - _targetX);

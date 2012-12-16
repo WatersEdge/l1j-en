@@ -18,6 +18,7 @@
 package l1j.server.server.clientpackets;
 
 import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import l1j.server.server.ClientThread;
 import l1j.server.server.model.Instance.L1PcInstance;
@@ -29,19 +30,30 @@ public class C_ExitGhost extends ClientBasePacket {
 	private static Logger _log = Logger.getLogger(C_ExitGhost.class.getName());
 	private static final String C_EXIT_GHOST = "[C] C_ExitGhost";
 
-	public C_ExitGhost(byte decrypt[], ClientThread client) throws Exception {
-		super(decrypt);
+    @Override
+    public void execute(byte[] decrypt, ClientThread client) {
+        try {
+            read(decrypt);
 
-		L1PcInstance pc = client.getActiveChar();
+            L1PcInstance pc = client.getActiveChar();
+            if (pc == null) {
+                return;
+            }
 
-		if (!pc.isGhost()) {
-			return;
-		}
-		pc.makeReadyEndGhost();
-	}
+            if (!pc.isGhost()) {
+                return;
+            }
 
-	@Override
-	public String getType() {
-		return C_EXIT_GHOST;
-	}
+            pc.makeReadyEndGhost();
+        } catch (final Exception e) {
+            _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+        } finally {
+            finish();
+        }
+    }
+
+    @Override
+    public String getType() {
+        return C_EXIT_GHOST;
+    }
 }

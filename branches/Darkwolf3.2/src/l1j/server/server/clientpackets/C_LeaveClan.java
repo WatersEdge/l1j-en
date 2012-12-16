@@ -39,13 +39,21 @@ public class C_LeaveClan extends ClientBasePacket {
 	private static final String C_LEAVE_CLAN = "[C] C_LeaveClan";
 	private static Logger _log = Logger.getLogger(C_LeaveClan.class.getName());
 
-	public C_LeaveClan(byte abyte0[], ClientThread clientthread) throws Exception {
-		super(abyte0);
+    @Override
+    public void execute(byte[] decrypt, ClientThread client) {
+        try {
+            read(decrypt);
 
-		L1PcInstance player = clientthread.getActiveChar();
-		String player_name = player.getName();
-		String clan_name = player.getClanname();
-		int clan_id = player.getClanid();
+            L1PcInstance pc = client.getActiveChar();
+            if (pc == null) {
+                return;
+            }
+
+		String player_name = pc.getName();
+		String clan_name = pc.getClanname();
+		
+		int clan_id = pc.getClanid();
+		
 		if (clan_id == 0) {
 		return;
 		}
@@ -53,16 +61,16 @@ public class C_LeaveClan extends ClientBasePacket {
 		if (clan != null) {
 			String clan_member_name[] = clan.getAllMembers();
 			int i;
-			if (player.isCrown() && player.getId() == clan.getLeaderId()) {
+			if (pc.isCrown() && pc.getId() == clan.getLeaderId()) {
 				int castleId = clan.getCastleId();
 				int houseId = clan.getHouseId();
 				if (castleId != 0 || houseId != 0) {
-					player.sendPackets(new S_ServerMessage(665));
+					pc.sendPackets(new S_ServerMessage(665));
 					return;
 				}
 				for (L1War war : L1World.getInstance().getWarList()) {
 					if (war.CheckClanInWar(clan_name)) {
-						player.sendPackets(new S_ServerMessage(302));
+						pc.sendPackets(new S_ServerMessage(302));
 						return;
 					}
 				}
@@ -99,29 +107,34 @@ public class C_LeaveClan extends ClientBasePacket {
 				for (i = 0; i < clanMember.length; i++) {
 					clanMember[i].sendPackets(new S_ServerMessage(178, player_name, clan_name)); 
 				}
-				if (clan.getWarehouseUsingChar() == player.getId()) {
+				if (clan.getWarehouseUsingChar() == pc.getId()) {
 					clan.setWarehouseUsingChar(0);
 				}
-				player.setClanid(0);
-				player.setClanname("");
-				player.setClanRank(0);
-				player.setTitle("");
-				player.sendPackets(new S_CharTitle(player.getId(), ""));
-				player.broadcastPacket(new S_CharTitle(player.getId(), ""));
-				player.save();
+				pc.setClanid(0);
+				pc.setClanname("");
+				pc.setClanRank(0);
+				pc.setTitle("");
+				pc.sendPackets(new S_CharTitle(pc.getId(), ""));
+				pc.broadcastPacket(new S_CharTitle(pc.getId(), ""));
+				pc.save();
 				clan.delMemberName(player_name);
 			}
 		} else {
-			player.setClanid(0);
-			player.setClanname("");
-			player.setClanRank(0);
-			player.setTitle("");
-			player.sendPackets(new S_CharTitle(player.getId(), ""));
-			player.broadcastPacket(new S_CharTitle(player.getId(), ""));
-			player.save();
-			player.sendPackets(new S_ServerMessage(178, player_name, clan_name)); 
+			pc.setClanid(0);
+			pc.setClanname("");
+			pc.setClanRank(0);
+			pc.setTitle("");
+			pc.sendPackets(new S_CharTitle(pc.getId(), ""));
+			pc.broadcastPacket(new S_CharTitle(pc.getId(), ""));
+			pc.save();
+			pc.sendPackets(new S_ServerMessage(178, player_name, clan_name)); 
 		}
-	}
+        } catch (final Exception e) {
+            _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+        } finally {
+            finish();
+        }
+    }
 
 	@Override
 	public String getType() {

@@ -19,6 +19,7 @@
 package l1j.server.server.clientpackets;
 
 import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import l1j.server.server.ClientThread;
 import l1j.server.server.model.L1ChatParty;
@@ -34,13 +35,18 @@ public class C_ChatParty extends ClientBasePacket {
 	private static final String C_CHAT_PARTY = "[C] C_ChatParty";
 	private static Logger _log = Logger.getLogger(C_ChatParty.class.getName());
 
-	public C_ChatParty(byte abyte0[], ClientThread clientthread) {
-		super(abyte0);
+    @Override
+    public void execute(byte[] decrypt, ClientThread client) {
+        try {
+            read(decrypt);
 
-		L1PcInstance pc = clientthread.getActiveChar();
-		if (pc.isGhost()) {
-			return;
-		}
+            L1PcInstance pc = client.getActiveChar();
+            if (pc == null) {
+                return;
+            }
+            if (pc.isGhost()) {
+                return;
+            }
 
 		int type = readC();
 		if (type == 0) { //chatban
@@ -81,11 +87,16 @@ public class C_ChatParty extends ClientBasePacket {
 			} else {
 				pc.sendPackets(new S_ServerMessage(425));
 			}
-		}
-	}
+        }
+    } catch (final Exception e) {
+        _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+    } finally {
+        finish();
+    }
+}
 
-	@Override
-	public String getType() {
-		return C_CHAT_PARTY;
-	}
+@Override
+public String getType() {
+    return C_CHAT_PARTY;
+}
 }

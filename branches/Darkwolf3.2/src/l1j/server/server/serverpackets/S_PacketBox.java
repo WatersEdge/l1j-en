@@ -151,6 +151,17 @@ public class S_PacketBox extends ServerBasePacket {
 	// Dolls
 	public static final int ICON_MAGIC_DOLL = 56;
 
+    // Updating Party
+    public static final int UPDATE_OLD_PART_MEMBER = 104;
+
+    public static final int PATRY_UPDATE_MEMBER = 105;
+
+    public static final int PATRY_SET_MASTER = 106;
+
+    public static final int PATRY_MEMBERS = 110;
+
+    public static final int SEND_LOCATION = 111;
+
 	public S_PacketBox(int subCode) {
 		writeC(Opcodes.S_OPCODE_PACKETBOX);
 		writeC(subCode);

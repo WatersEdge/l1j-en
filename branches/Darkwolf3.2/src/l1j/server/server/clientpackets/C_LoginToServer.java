@@ -74,20 +74,26 @@ public class C_LoginToServer extends ClientBasePacket {
 	private static final String C_LOGIN_TO_SERVER = "[C] C_LoginToServer";
 	private static Logger _log = Logger.getLogger(C_LoginToServer.class.getName());
 
-	public C_LoginToServer(byte abyte0[], ClientThread client) 
-	throws FileNotFoundException, Exception {
-		super(abyte0);
+    @Override
+    public void execute(byte[] decrypt, ClientThread client) {
+        try {
+            read(decrypt);
+            if (client == null) {
+                return;
+            }
+    		if (client.getActiveChar() != null) {
+    			_log.info("Invalid character logged in from " 
+    					+ client.getHostname() + ".");
+    			client.close();
+    			return;
+    		}
+            String charName = readS();
+            String login = client.getAccountName();
+            L1PcInstance pc = L1PcInstance.load(charName);
+            if (pc == null) {
+                return;
+            }
 
-		String login = client.getAccountName();
-		String charName = readS();
-
-		if (client.getActiveChar() != null) {
-			_log.info("Invalid character logged in from " 
-					+ client.getHostname() + ".");
-			client.close();
-			return;
-		}
-		L1PcInstance pc = L1PcInstance.load(charName);
 		if (pc == null || !login.equals(pc.getAccountName())) {
 			_log.info("Invalid login request=" + charName + " account=" 
 					+ login + " host=" + client.getHostname());
@@ -271,7 +277,12 @@ public class C_LoginToServer extends ClientBasePacket {
 		if (pc.getHellTime() > 0) {
 			pc.beginHell(false);
 		}
-	}
+        } catch (final Exception e) {
+            _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+        } finally {
+            finish();
+        }
+    }
 
 	private void items(L1PcInstance pc) {
 		CharacterTable.getInstance().restoreInventory(pc);

@@ -19,6 +19,7 @@
 package l1j.server.server.clientpackets;
 
 import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import l1j.server.Config;
 import l1j.server.server.ClientThread;
@@ -33,48 +34,87 @@ import l1j.server.server.serverpackets.S_ServerMessage;
 // ClientBasePacket
 public class C_ChatWhisper extends ClientBasePacket {
 
-	private static final String C_CHAT_WHISPER = "[C] C_ChatWhisper";
-	private static Logger _log = Logger.getLogger(C_ChatWhisper.class.getName());
+    private static final String C_CHAT_WHISPER = "[C] C_ChatWhisper";
 
-	public C_ChatWhisper(byte abyte0[], ClientThread client) throws Exception {
-		super(abyte0);
-		String targetName = readS();
-		String text = readS();
-		L1PcInstance whisperFrom = client.getActiveChar();
+    private static Logger _log = Logger
+            .getLogger(C_ChatWhisper.class.getName());
 
-		if (whisperFrom.hasSkillEffect(1005)) {
-			whisperFrom.sendPackets(new S_ServerMessage(242));
-			return;
-		}
-		if (whisperFrom.getLevel() < Config.WHISPER_CHAT_LEVEL) {
-			whisperFrom.sendPackets(new S_ServerMessage(404, String.valueOf(Config.WHISPER_CHAT_LEVEL)));
-			return;
-		}
-		L1PcInstance whisperTo = L1World.getInstance().getPlayer(targetName);
+    @Override
+    public void execute(byte[] decrypt, ClientThread client) {
+        try {
+            read(decrypt);
+            String targetName = readS();
+            String text = readS();
+            L1PcInstance pc = client.getActiveChar();
+            if (pc == null) {
+                return;
+            }
+            
+            if (pc.hasSkillEffect(1005)) {
+                pc.sendPackets(new S_ServerMessage(242));
+                return;
+            }
+            
+            if (pc.getLevel() < Config.WHISPER_CHAT_LEVEL) {
+                pc.sendPackets(new S_ServerMessage(404, String
+                        .valueOf(Config.WHISPER_CHAT_LEVEL)));
+                return;
+            }
+            
+    		L1PcInstance whisperFrom = client.getActiveChar();
 
-		if (whisperTo == null) {
-			whisperFrom.sendPackets(new S_ServerMessage(73, targetName));
-			return;
-		}
-		if (whisperTo.equals(whisperFrom)) {
-			return;
-		}
-		//TRICIDTODO: Make this configurable
-		if (whisperTo.getExcludingList().contains(whisperFrom.getName()) && !whisperFrom.isGm() && !whisperFrom.isMonitor()) { // do not remove gm/mon whisper ability
-			whisperFrom.sendPackets(new S_ServerMessage(117, whisperTo.getName()));
-			return;
-		}
-		if (!whisperTo.isCanWhisper() && !whisperFrom.isGm() && !whisperFrom.isMonitor()) { // do not remove gm/mon whisper ability
-			whisperFrom.sendPackets(new S_ServerMessage(205, whisperTo.getName()));
-			return;
-		}
-		ChatLogTable.getInstance().storeChat(whisperFrom, whisperTo, text, 1);
-		whisperFrom.sendPackets(new S_ChatPacket(whisperTo, text, Opcodes.S_OPCODE_GLOBALCHAT, 9));
-		whisperTo.sendPackets(new S_ChatPacket(whisperFrom, text, Opcodes.S_OPCODE_WHISPERCHAT, 16));
-	}
+    		if (whisperFrom.hasSkillEffect(1005)) {
+    			whisperFrom.sendPackets(new S_ServerMessage(242));
+    			return;
+    		}
+    		if (whisperFrom.getLevel() < Config.WHISPER_CHAT_LEVEL) {
+    			whisperFrom.sendPackets(new S_ServerMessage(404, String.valueOf(Config.WHISPER_CHAT_LEVEL)));
+    			return;
+    		}
+    		
+    		L1PcInstance whisperTo = L1World.getInstance().getPlayer(targetName);
 
-	@Override
-	public String getType() {
-		return C_CHAT_WHISPER;
-	}
+            if (whisperTo == null) {
+                pc.sendPackets(new S_ServerMessage(73, targetName));
+                return;
+            }
+            
+            if (whisperTo.equals(pc)) {
+                return;
+            }
+    		if (whisperTo == null) {
+    			whisperFrom.sendPackets(new S_ServerMessage(73, targetName));
+    			return;
+    		}
+    		if (whisperTo.equals(whisperFrom)) {
+    			return;
+    		}
+    		//TRICIDTODO: Make this configurable
+    		if (whisperTo.getExcludingList().contains(whisperFrom.getName()) && !whisperFrom.isGm() && !whisperFrom.isMonitor()) { // do not remove gm/mon whisper ability
+    			whisperFrom.sendPackets(new S_ServerMessage(117, whisperTo.getName()));
+    			return;
+    		}
+    		if (!whisperTo.isCanWhisper() && !whisperFrom.isGm() && !whisperFrom.isMonitor()) { // do not remove gm/mon whisper ability
+    			whisperFrom.sendPackets(new S_ServerMessage(205, whisperTo.getName()));
+    			return;
+    		}
+            if (text.length() > 52) {
+                text = text.substring(0, 52); // begin - end
+            }
+            ChatLogTable.getInstance().storeChat(pc, whisperTo, text, 1);
+            pc.sendPackets(new S_ChatPacket(whisperTo, text,
+                    Opcodes.S_OPCODE_GLOBALCHAT, 9));
+            whisperTo.sendPackets(new S_ChatPacket(pc, text,
+                    Opcodes.S_OPCODE_WHISPERCHAT, 16));
+        } catch (final Exception e) {
+            _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+        } finally {
+            finish();
+        }
+    }
+
+    @Override
+    public String getType() {
+        return C_CHAT_WHISPER;
+    }
 }

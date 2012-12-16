@@ -24,6 +24,7 @@ import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 import java.util.TimeZone;
 import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import l1j.server.Config;
 import l1j.server.server.ClientThread;
@@ -55,14 +56,26 @@ public class C_Amount extends ClientBasePacket {
 	private static final Logger _log = Logger.getLogger(C_Amount.class.getName());
 	private static final String C_AMOUNT = "[C] C_Amount";
 
-	public C_Amount(byte[] decrypt, ClientThread client) throws Exception {
-		super(decrypt);
+    @Override
+    public void execute(byte[] decrypt, ClientThread client) {
+        try {
+            read(decrypt);
+            L1PcInstance pc = client.getActiveChar();
+            if (pc == null) {
+                return;
+            }
+            if (pc.isDead()) {
+                return;
+            }
+            if (pc.isGhost()) {
+                return;
+            }
+
 		int objectId = readD();
 		int amount = readD();
 		int c = readC();
 		String s = readS();
 
-		L1PcInstance pc = client.getActiveChar();
 		L1NpcInstance npc = (L1NpcInstance) L1World.getInstance().findObject(objectId);
 		if (npc == null) {
 		return;
@@ -216,7 +229,12 @@ public class C_Amount extends ClientBasePacket {
 				}
 			}
 		}
-	}
+		} catch (final Exception e) {
+            _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+        } finally {
+            finish();
+        }
+    }
 
 	@Override
 	public String getType() {

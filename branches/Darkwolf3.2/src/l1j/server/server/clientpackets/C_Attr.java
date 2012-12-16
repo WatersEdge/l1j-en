@@ -69,16 +69,35 @@ public class C_Attr extends ClientBasePacket {
 	private static final int HEADING_TABLE_X[] = { 0, 1, 1, 1, 0, -1, -1, -1 };
 	private static final int HEADING_TABLE_Y[] = { -1, -1, 0, 1, 1, 1, 0, -1 };
 
-	public C_Attr(byte abyte0[], ClientThread clientthread) throws Exception {
-		super(abyte0);
-		int i = readH();
-		int c;
-		String name;
+    @Override
+    public void execute(byte[] decrypt, ClientThread client) {
+        try {
+            read(decrypt);
+            L1PcInstance pc = client.getActiveChar();
+            if (pc == null) {
+                return;
+            }
+            if (pc.isDead()) {
+                return;
+            }
+            if (pc.isGhost()) {
+                return;
+            }
 
-		L1PcInstance pc = clientthread.getActiveChar();
+            int i = readH(); // 3.51C
+            int attrcode;
+            if (i == 479) {
+                attrcode = i;
+            } else {
+                @SuppressWarnings("unused")
+                int count = readD();
+                attrcode = readH();
+            }
+            int c;
+            String name;
 
-		switch (i) {
-		case 97: 
+            switch (attrcode) {
+		    case 97: 
 			c = readC();
 			L1PcInstance joinPc = (L1PcInstance) L1World.getInstance().findObject(pc.getTempID());
 			pc.setTempID(0);
@@ -137,7 +156,7 @@ public class C_Attr extends ClientBasePacket {
 							joinPc.sendPackets(new S_ServerMessage(95, clanName));
 						} else {
 							if (Config.CLAN_ALLIANCE) {
-								changeClan(clientthread, pc, joinPc, maxMember);
+								changeClan(client, pc, joinPc, maxMember);
 							} else {
 								joinPc.sendPackets(new S_ServerMessage(89)); 
 							}
@@ -490,8 +509,13 @@ public class C_Attr extends ClientBasePacket {
             break;
 		default:
 			break;
-		}
-	}
+            }
+        } catch (final Exception e) {
+            _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+        } finally {
+            finish();
+        }
+    }
 
 	private void changeClan(ClientThread clientthread, L1PcInstance pc, L1PcInstance joinPc, int maxMember) {
 		int clanId = pc.getClanid();

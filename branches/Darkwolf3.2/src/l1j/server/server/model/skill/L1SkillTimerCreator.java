@@ -29,8 +29,6 @@ public class L1SkillTimerCreator {
 		} else if (Config.SKILLTIMER_IMPLTYPE == 2) {
 			return new L1SkillTimerThreadImpl(cha, skillId, timeMillis);
 		}
-
-		//
 		return new L1SkillTimerTimerImpl(cha, skillId, timeMillis);
 	}
 }

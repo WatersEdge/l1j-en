@@ -20,6 +20,7 @@ package l1j.server.server.clientpackets;
 
 import java.util.Random;
 import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import l1j.server.server.ClientThread;
 import l1j.server.server.datatables.CharBuffTable;
@@ -33,11 +34,16 @@ public class C_NewCharSelect extends ClientBasePacket {
 	private static final String C_NEW_CHAR_SELECT = "[C] C_NewCharSelect";
 	private static Logger _log = Logger.getLogger(C_NewCharSelect.class.getName());
 
-	public C_NewCharSelect(byte[] decrypt, ClientThread client) {
-		super(decrypt);
-		
-		L1PcInstance pc = client.getActiveChar();
-		
+    @Override
+    public void execute(byte[] decrypt, ClientThread client) {
+        try {
+            read(decrypt);
+            if (client == null) {
+                return;
+            }
+
+        L1PcInstance pc = client.getActiveChar();
+
 		restartdelay(500,500);
 		
 		client.sendPacket(new S_PacketBox(S_PacketBox.LOGOUT)); // 2.70C->3.0
@@ -75,7 +81,12 @@ public class C_NewCharSelect extends ClientBasePacket {
 		} else {
 			_log.fine("Disconnect Request From Account : " + client.getAccountName());
 		}
-	}
+        } catch (final Exception e) {
+            _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+        } finally {
+            finish();
+        }
+    }
 
 	public void restartdelay(int i, int j){
 		try {

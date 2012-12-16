@@ -19,6 +19,7 @@
 package l1j.server.server.clientpackets;
 
 import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import l1j.server.server.ClientThread;
 import l1j.server.server.datatables.CastleTable;
@@ -39,12 +40,24 @@ public class C_Drawal extends ClientBasePacket {
 	private static final String C_DRAWAL = "[C] C_Drawal";
 	private static Logger _log = Logger.getLogger(C_Drawal.class.getName());
 
-	public C_Drawal(byte abyte0[], ClientThread clientthread) throws Exception {
-		super(abyte0);
+	@Override
+	public void execute(byte[] decrypt, ClientThread client) {
+	        try {
+	            read(decrypt);
+	            L1PcInstance pc = client.getActiveChar();
+	            if (pc == null) {
+	                return;
+	            }
+	            if (pc.isDead()) {
+	                return;
+	            }
+	            if (pc.isGhost()) {
+	                return;
+	    }
+
 		int i = readD();
 		int j = readD();
 
-		L1PcInstance pc = clientthread.getActiveChar();
 		//TRICIDTODO: set configurable auto ban
 		if (j < 0) {
 			_log.info(pc.getName() + " Attempted Dupe Exploit (C_Drawal).");
@@ -70,9 +83,14 @@ public class C_Drawal extends ClientBasePacket {
 					}
 					pc.sendPackets(new S_ServerMessage(143, "$457", "$4" + " (" + j + ")"));
 				}
-			}
-		}
-	}
+            }
+        }
+    } catch (final Exception e) {
+        _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+    } finally {
+        finish();
+    }
+}
 
 	@Override
 	public String getType() {

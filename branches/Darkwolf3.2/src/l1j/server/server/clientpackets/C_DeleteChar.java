@@ -39,11 +39,19 @@ public class C_DeleteChar extends ClientBasePacket {
 	private static final String C_DELETE_CHAR = "[C] RequestDeleteChar";
 	private static Logger _log = Logger.getLogger(C_DeleteChar.class.getName());
 
-	public C_DeleteChar(byte decrypt[], ClientThread client) throws Exception {
-		super(decrypt);
-		String name = readS();
-		String hostip = client.getHostname();
-		
+	public void execute(byte[] decrypt, ClientThread client) {
+
+        try {
+            read(decrypt);
+            String hostip = client.getHostname();
+            if (client == null) {
+                return;
+            }
+            String name = readS();
+            if (name.isEmpty()) {
+                return;
+            }
+
 		try {
 			L1PcInstance pc = CharacterTable.getInstance().restoreCharacter(name);
 			if (pc != null && pc.getLevel() >= 30 && Config.DELETE_CHARACTER_AFTER_7DAYS) {
@@ -120,8 +128,13 @@ public class C_DeleteChar extends ClientBasePacket {
 			return;
 		}
 		client.sendPacket(new S_DeleteCharOK(S_DeleteCharOK.DELETE_CHAR_NOW));
-	}
-
+        } catch (final Exception e) {
+            _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+        } finally {
+            finish();
+        }
+    }
+	
 	@Override
 	public String getType() {
 		return C_DELETE_CHAR;

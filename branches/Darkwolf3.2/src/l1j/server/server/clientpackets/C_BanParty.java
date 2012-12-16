@@ -19,6 +19,7 @@
 package l1j.server.server.clientpackets;
 
 import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import l1j.server.server.ClientThread;
 import l1j.server.server.model.Instance.L1PcInstance;
@@ -28,30 +29,48 @@ import l1j.server.server.serverpackets.S_ServerMessage;
 // ClientBasePacket
 public class C_BanParty extends ClientBasePacket {
 
-	private static final String C_BAN_PARTY = "[C] C_BanParty";
-	private static Logger _log = Logger.getLogger(C_BanParty.class.getName());
+    private static final String C_BAN_PARTY = "[C] C_BanParty";
 
-	public C_BanParty(byte decrypt[], ClientThread client) throws Exception {
-		super(decrypt);
-		String s = readS();
+    private static Logger _log = Logger.getLogger(C_BanParty.class.getName());
 
-		L1PcInstance player = client.getActiveChar();
-		if (!player.getParty().isLeader(player)) {
-			player.sendPackets(new S_ServerMessage(427));
-			return;
-		}
+    @Override
+    public void execute(byte[] decrypt, ClientThread client) {
+        try {
+            read(decrypt);
+            L1PcInstance pc = client.getActiveChar();
+            if (pc == null) {
+                return;
+            }
+            if (pc.isDead()) {
+                return;
+            }
+            if (pc.isGhost()) {
+                return;
+            }
+            String s = readS();
 
-		for (L1PcInstance member : player.getParty().getMembers()) {
-			if (member.getName().toLowerCase().equals(s.toLowerCase())) {
-				player.getParty().kickMember(member);
-				return;
-			}
-		}
-		player.sendPackets(new S_ServerMessage(426, s)); 
-	}
+            if (!pc.getParty().isLeader(pc)) {
+                pc.sendPackets(new S_ServerMessage(427));
+                return;
+            }
 
-	@Override
-	public String getType() {
-		return C_BAN_PARTY;
-	}
+            for (L1PcInstance member : pc.getParty().getMembers()) {
+                if (member.getName().toLowerCase().equals(s.toLowerCase())) {
+                    pc.getParty().kickMember(member);
+                    return;
+                }
+            }
+
+            pc.sendPackets(new S_ServerMessage(426, s));
+        } catch (final Exception e) {
+            _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+        } finally {
+            finish();
+        }
+    }
+
+    @Override
+    public String getType() {
+        return C_BAN_PARTY;
+    }
 }

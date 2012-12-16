@@ -32,81 +32,90 @@ import l1j.server.server.serverpackets.S_ServerMessage;
 // ClientBasePacket
 public class C_Rank extends ClientBasePacket {
 
-	private static final String C_RANK = "[C] C_Rank";
-	private static Logger _log = Logger.getLogger(C_Rank.class.getName());
+	    private static final String C_RANK = "[C] C_Rank";
+	    private static Logger _log = Logger.getLogger(C_Rank.class.getName());
 
-	public C_Rank(byte abyte0[], ClientThread clientthread) throws Exception {
-		super(abyte0);
+	    @Override
+	    public void execute(byte[] decrypt, ClientThread client) {
+	        try {
+	            read(decrypt);
+	            L1PcInstance pc = client.getActiveChar();
+	            if (pc == null) {
+	                return;
+	            }
+	            L1Clan clan = L1World.getInstance().getClan(pc.getClanname());
+	            if (clan == null) {
+	                return;
+	            }
+	            @SuppressWarnings("unused")
+	            int data = readC(); // ?
+	            int rank = readC();
+	            String name = readS();
 
-		int rank = readC();
-		String name = readS();
+	            L1PcInstance targetPc = L1World.getInstance().getPlayer(name);
 
-		L1PcInstance pc = clientthread.getActiveChar();
-		L1PcInstance targetPc = L1World.getInstance().getPlayer(name);
+	            if (rank < 1 && 3 < rank) {
+	                pc.sendPackets(new S_ServerMessage(781));
+	                return;
+	            }
 
-		if (pc == null) {
-			return;
-		}
+	            if (pc.isCrown()) {
+	                if (pc.getId() != clan.getLeaderId()) {
+	                    pc.sendPackets(new S_ServerMessage(785));
+	                    return;
+	                }
+	            } else {
+	                pc.sendPackets(new S_ServerMessage(518));
+	                return;
+	            }
 
-		L1Clan clan = L1World.getInstance().getClan(pc.getClanname());
-		if (clan == null) {
-			return;
-		}
+	            if (targetPc != null) {
+	                if (pc.getClanid() == targetPc.getClanid()) {
+	                    try {
+	                        targetPc.setClanRank(rank);
+	                        targetPc.save();
+	                        String rankString = "$772";
+	                        if (rank == L1Clan.CLAN_RANK_PROBATION) {
+	                            rankString = "$774";
+	                        } else if (rank == L1Clan.CLAN_RANK_PUBLIC) {
+	                            rankString = "$773";
+	                        } else if (rank == L1Clan.CLAN_RANK_GUARDIAN) {
+	                            rankString = "$772";
+	                        }
+	                        targetPc.sendPackets(new S_ServerMessage(784,
+	                                rankString));
+	                    } catch (Exception e) {
+	                        _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+	                    }
+	                } else {
+	                    pc.sendPackets(new S_ServerMessage(414));
+	                    return;
+	                }
+	            } else {
+	                L1PcInstance restorePc = CharacterTable.getInstance()
+	                        .restoreCharacter(name);
+	                if (restorePc != null
+	                        && restorePc.getClanid() == pc.getClanid()) {
+	                    try {
+	                        restorePc.setClanRank(rank);
+	                        restorePc.save();
+	                    } catch (Exception e) {
+	                        _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+	                    }
+	                } else {
+	                    pc.sendPackets(new S_ServerMessage(109, name));
+	                    return;
+	                }
+	            }
+	        } catch (final Exception e) {
+	            _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+	        } finally {
+	            finish();
+	        }
+	    }
 
-		if (rank < 1 && 3 < rank) {
-			pc.sendPackets(new S_ServerMessage(781));
-			return;
-		}
-
-		if (pc.isCrown()) { 
-			if (pc.getId() != clan.getLeaderId()) { 
-				pc.sendPackets(new S_ServerMessage(785)); 
-				return;
-			}
-		} else {
-			pc.sendPackets(new S_ServerMessage(518)); 
-			return;
-		}
-
-		if (targetPc != null) {
-			if (pc.getClanid() == targetPc.getClanid()) {
-				try {
-					targetPc.setClanRank(rank);
-					targetPc.save();
-					String rankString = "$772";
-					if (rank == L1Clan.CLAN_RANK_PROBATION) {
-						rankString = "$774";
-					} else if (rank == L1Clan.CLAN_RANK_PUBLIC) {
-						rankString = "$773";
-					} else if (rank == L1Clan.CLAN_RANK_GUARDIAN) {
-						rankString = "$772";
-					}
-					targetPc.sendPackets(new S_ServerMessage(784, rankString));
-				} catch (Exception e) {
-					_log.log(Level.SEVERE, e.getLocalizedMessage(), e);
-				}
-			} else {
-				pc.sendPackets(new S_ServerMessage(414)); 
-				return;
-			}
-		} else {
-			L1PcInstance restorePc = CharacterTable.getInstance().restoreCharacter(name);
-			if (restorePc != null && restorePc.getClanid() == pc.getClanid()) {
-				try {
-					restorePc.setClanRank(rank);
-					restorePc.save();
-				} catch (Exception e) {
-					_log.log(Level.SEVERE, e.getLocalizedMessage(), e);
-				}
-			} else {
-				pc.sendPackets(new S_ServerMessage(109, name));
-				return;
-			}
-		}
+	    @Override
+	    public String getType() {
+	        return C_RANK;
+	    }
 	}
-
-	@Override
-	public String getType() {
-		return C_RANK;
-	}
-}

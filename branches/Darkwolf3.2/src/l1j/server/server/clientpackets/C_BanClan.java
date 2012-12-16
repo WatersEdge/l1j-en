@@ -35,11 +35,23 @@ public class C_BanClan extends ClientBasePacket {
 	private static final String C_BAN_CLAN = "[C] C_BanClan";
 	private static Logger _log = Logger.getLogger(C_BanClan.class.getName());
 
-	public C_BanClan(byte abyte0[], ClientThread clientthread) throws Exception {
-		super(abyte0);
-		String s = readS();
+    @Override
+    public void execute(byte[] decrypt, ClientThread client) {
+        try {
+            read(decrypt);
+            L1PcInstance pc = client.getActiveChar();
+            if (pc == null) {
+                return;
+            }
+            if (pc.isDead()) {
+                return;
+            }
+            if (pc.isGhost()) {
+                return;
+            }
 
-		L1PcInstance pc = clientthread.getActiveChar();
+        String s = readS();
+
 		L1Clan clan = L1World.getInstance().getClan(pc.getClanname());
 		if (clan != null) {
 			String clanMemberName[] = clan.getAllMembers();
@@ -83,11 +95,16 @@ public class C_BanClan extends ClientBasePacket {
 			} else {
 				pc.sendPackets(new S_ServerMessage(518)); 
 			}
-		}
-	}
+        }
+    } catch (final Exception e) {
+        _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+    } finally {
+        finish();
+    }
+}
 
-	@Override
-	public String getType() {
-		return C_BAN_CLAN;
-	}
+@Override
+public String getType() {
+    return C_BAN_CLAN;
+}
 }

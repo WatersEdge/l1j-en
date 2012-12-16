@@ -23,6 +23,7 @@ import java.io.FileReader;
 import java.io.LineNumberReader;
 import java.util.StringTokenizer;
 import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import javolution.util.FastTable;
 
@@ -35,12 +36,22 @@ public class C_ClientReport extends ClientBasePacket {
 		private static final String C_CLIENT_REPORT = "[C] C_ClientReport";
 		private static Logger _log = Logger.getLogger(C_ClientReport.class.getName());
 		private FastTable _ToAll;
-		public C_ClientReport(byte abyte0[], ClientThread clientthread)
-		throws Exception {
+	    
+	@Override
+	public void execute(byte[] decrypt, ClientThread client) {
+	    try {
+	        read(decrypt);
 
-			super(abyte0);
-
-			L1PcInstance pc = clientthread.getActiveChar();
+			L1PcInstance pc = client.getActiveChar();
+            if (pc == null) {
+                return;
+            }
+            if (pc.isDead()) {
+                return;
+            }
+            if (pc.isGhost()) {
+                return;
+            }
 
 			_ToAll = new FastTable();
 			loadAnnouncements();
@@ -50,8 +61,14 @@ public class C_ClientReport extends ClientBasePacket {
 						_ToAll.get(i).toString()).append("\n").toString();
 			}
 			pc.sendPackets(new S_SystemMessage(message));
-		}
-		private void loadAnnouncements() {
+	    } catch (final Exception e) {
+            _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+        } finally {
+            finish();
+        }
+    }
+	    
+	private void loadAnnouncements() {
 			_ToAll.clear();
 			File file = new File("data/toall.txt");
 			if (file.exists()) {

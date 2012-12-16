@@ -19,6 +19,7 @@
 package l1j.server.server.clientpackets;
 
 import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import l1j.server.server.ClientThread;
 import l1j.server.server.model.Getback;
@@ -43,10 +44,15 @@ public class C_Restart extends ClientBasePacket {
 	private static Logger _log = Logger.getLogger(C_Restart.class.getName());
 	private static final String C_RESTART = "[C] C_Restart";
 
-	public C_Restart(byte abyte0[], ClientThread clientthread) throws Exception {
-		super(abyte0);
-		
-		L1PcInstance pc = clientthread.getActiveChar();
+    @Override
+    public void execute(byte[] decrypt, ClientThread client) {
+        try {
+            read(decrypt);
+            L1PcInstance pc = client.getActiveChar();
+
+            if (pc == null) {
+                return;
+            }
 
 		int[] loc;
 		
@@ -88,8 +94,15 @@ public class C_Restart extends ClientBasePacket {
 			pc.sendPackets(new S_SkillSound(pc.getId(), 830));
 			pc.sendPackets(new S_HPUpdate(pc.getCurrentHp(), pc.getMaxHp()));
 			pc.sendPackets(new S_MPUpdate(pc.getCurrentMp(), pc.getMaxMp()));
-		}
-	}
+		} 
+    } catch (final Exception e) {
+        _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+
+    } finally {
+        finish();
+
+    }
+}
 
 	@Override
 	public String getType() {

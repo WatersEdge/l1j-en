@@ -120,12 +120,26 @@ public class C_NPCAction extends ClientBasePacket {
 	private static Logger _log = Logger.getLogger(C_NPCAction.class.getName());
 	private static Random _random = new Random();
 
-	public C_NPCAction(byte abyte0[], ClientThread client) throws Exception {
-		super(abyte0);
-		
-		int objid = readD();
-		
-		String s = readS();
+    @Override
+    public void execute(byte[] decrypt, ClientThread client) {
+        try {
+            read(decrypt);
+            L1PcInstance pc = client.getActiveChar();
+            if (pc == null) {
+                return;
+            }
+            if (pc.isDead()) {
+                return;
+            }
+            if (pc.isGhost()) {
+                return;
+            }
+            int objid = readD();
+            String s = readS();
+            if (s.isEmpty()) {
+                return;
+            }
+
 		String s2 = null;
 		
 		if (s.equalsIgnoreCase("select") || s.equalsIgnoreCase("map") || s.equalsIgnoreCase("apply")) {
@@ -149,7 +163,6 @@ public class C_NPCAction extends ClientBasePacket {
 		String failure_htmlid = null;
 		String[] htmldata = null;
 
-		L1PcInstance pc = client.getActiveChar();
 		L1PcInstance target;
 		L1Object obj = L1World.getInstance().findObject(objid);
 		if (obj != null) {
@@ -3969,7 +3982,12 @@ public class C_NPCAction extends ClientBasePacket {
 		if (htmlid != null) { 
 			pc.sendPackets(new S_NPCTalkReturn(objid, htmlid, htmldata));
 		}
-	}
+        } catch (final Exception e) {
+            _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+        } finally {
+            finish();
+        }
+    }
 
 	private String karmaLevelToHtmlId(int level) {
 		if (level == 0 || level < -7 || 7 < level) {

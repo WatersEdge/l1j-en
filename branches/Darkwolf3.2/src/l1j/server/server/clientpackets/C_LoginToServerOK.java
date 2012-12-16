@@ -19,6 +19,8 @@
 package l1j.server.server.clientpackets;
 
 import java.util.logging.Logger;
+import java.util.logging.Level;
+
 import l1j.server.server.ClientThread;
 import l1j.server.server.model.Instance.L1PcInstance;
 
@@ -29,13 +31,17 @@ public class C_LoginToServerOK extends ClientBasePacket {
 	private static final String C_LOGIN_TO_SERVER_OK = "[C] C_LoginToServerOK";
 	private static Logger _log = Logger.getLogger(C_LoginToServerOK.class.getName());
 
-	public C_LoginToServerOK(byte[] decrypt, ClientThread client) {
-		super(decrypt);
+    @Override
+    public void execute(byte[] decrypt, ClientThread client) {
+        try {
+            read(decrypt);
+            L1PcInstance pc = client.getActiveChar();
+            if (pc == null) {
+                return;
+            }
 
 		int type = readC();
 		int button = readC();
-
-		L1PcInstance pc = client.getActiveChar();
 		
 		if (type == 255) { // Whisper
 			if (button == 95 || button == 127) {
@@ -68,9 +74,14 @@ public class C_LoginToServerOK extends ClientBasePacket {
 				pc.setShowTradeChat(false);
 			} else if (button == 1) { // open
 				pc.setShowTradeChat(true);
-			}
-		}
-	}
+			 }
+        }
+    } catch (final Exception e) {
+        _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+    } finally {
+        finish();
+    }
+}
 
 	@Override
 	public String getType() {

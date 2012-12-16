@@ -35,18 +35,31 @@ public class C_Clan extends ClientBasePacket {
 	private static final String C_CLAN = "[C] C_Clan";
 	private static Logger _log = Logger.getLogger(C_Clan.class.getName());
 
-	public C_Clan(byte abyte0[], ClientThread client) {
-		super(abyte0);
-		int clanId = readD();
+    @Override
+    public void execute(byte[] decrypt, ClientThread client) {
+        try {
+            read(decrypt);
+            L1PcInstance pc = client.getActiveChar();
+            if (pc == null) {
+                return;
+            }
+            int clanId = readD();
 
-		L1PcInstance pc = client.getActiveChar();
-		L1Clan clan = ClanTable.getInstance().getTemplate(clanId);
-		String name = clan.getClanName();
-		pc.sendPackets(new S_Emblem(clan.getClanId()));
-	}
+            L1Clan clan = ClanTable.getInstance().getTemplate(clanId);
+            if (clan == null) {
+                return;
+            }
+            // String name = clan.getClanName();
+            pc.sendPackets(new S_Emblem(clan.getClanId()));
+        } catch (final Exception e) {
+            _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+        } finally {
+            finish();
+        }
+    }
 
-	@Override
-	public String getType() {
-		return C_CLAN;
-	}
+    @Override
+    public String getType() {
+        return C_CLAN;
+    }
 }

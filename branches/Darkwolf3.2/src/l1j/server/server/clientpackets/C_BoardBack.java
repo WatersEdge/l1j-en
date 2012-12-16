@@ -19,11 +19,13 @@
 package l1j.server.server.clientpackets;
 
 import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import l1j.server.server.ClientThread;
 import l1j.server.server.model.L1Object;
 import l1j.server.server.model.L1World;
 import l1j.server.server.model.Instance.L1BoardInstance;
+import l1j.server.server.model.Instance.L1PcInstance;
 
 // Referenced classes of package l1j.server.server.clientpackets:
 // ClientBasePacket, C_BoardPage
@@ -32,17 +34,37 @@ public class C_BoardBack extends ClientBasePacket {
 	private static final String C_BOARD_BACK = "[C] C_BoardBack";
 	private static Logger _log = Logger.getLogger(C_BoardBack.class.getName());
 
-	public C_BoardBack(byte abyte0[], ClientThread client) {
-		super(abyte0);
-		int objId = readD();
-		int topicNumber = readD();
-		L1Object obj = L1World.getInstance().findObject(objId);
-		L1BoardInstance board = (L1BoardInstance) obj;
-		board.onAction(client.getActiveChar(), topicNumber);
-	}
+    @Override
+    public void execute(byte[] decrypt, ClientThread client) {
+        try {
+            read(decrypt);
+            L1PcInstance pc = client.getActiveChar();
+            if (pc == null) {
+                return;
+            }
+            if (pc.isDead()) {
+                return;
+            }
+            if (pc.isGhost()) {
+                return;
+            }
+            int objId = readD();
+            int topicNumber = readD();
+            L1Object obj = L1World.getInstance().findObject(objId);
+            if (obj == null) {
+                return;
+            }
+            L1BoardInstance board = (L1BoardInstance) obj;
+            board.onAction(pc, topicNumber);
+        } catch (final Exception e) {
+            _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+        } finally {
+            finish();
+        }
+    }
 
-	@Override
-	public String getType() {
-		return C_BOARD_BACK;
-	}
+    @Override
+    public String getType() {
+        return C_BOARD_BACK;
+    }
 }

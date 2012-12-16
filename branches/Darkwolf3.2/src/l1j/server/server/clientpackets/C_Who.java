@@ -19,6 +19,7 @@
 package l1j.server.server.clientpackets;
 
 import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import l1j.server.Config;
 import l1j.server.server.ClientThread;
@@ -32,29 +33,47 @@ import l1j.server.server.serverpackets.S_WhoCharinfo;
 
 public class C_Who extends ClientBasePacket {
 
-	private static final String C_WHO = "[C] C_Who";
-	private static Logger _log = Logger.getLogger(C_Who.class.getName());
+    private static final String C_WHO = "[C] C_Who";
 
-	public C_Who(byte[] decrypt, ClientThread client) {
-		super(decrypt);
-		String s = readS();
-		L1PcInstance find = L1World.getInstance().getPlayer(s);
-		L1PcInstance pc = client.getActiveChar();
+    private static Logger _log = Logger.getLogger(C_Who.class.getName());
 
-		if (find != null) {
-			S_WhoCharinfo s_whocharinfo = new S_WhoCharinfo(find);
-			pc.sendPackets(s_whocharinfo);
-		} else {
-			if (Config.ALT_WHO_COMMAND) {
-				String amount = String.valueOf(L1World.getInstance().getAllPlayers().size());
-				S_WhoAmount s_whoamount = new S_WhoAmount(amount);
-				pc.sendPackets(s_whoamount);
-			}
-		}
-	}
+    @Override
+    public void execute(byte[] decrypt, ClientThread client) {
+        try {
+            read(decrypt);
+            L1PcInstance pc = client.getActiveChar();
+            if (pc == null) {
+                return;
+            }
+            if (pc.isDead()) {
+                return;
+            }
+            if (pc.isGhost()) {
+                return;
+            }
+            String s = readS();
+            L1PcInstance find = L1World.getInstance().getPlayer(s);
 
-	@Override
-	public String getType() {
-		return C_WHO;
-	}
+            if (find != null) {
+                S_WhoCharinfo s_whocharinfo = new S_WhoCharinfo(find);
+                pc.sendPackets(s_whocharinfo);
+            } else {
+                if (Config.ALT_WHO_COMMAND) {
+                    String amount = String.valueOf(L1World.getInstance()
+                            .getAllPlayers().size());
+                    S_WhoAmount s_whoamount = new S_WhoAmount(amount);
+                    pc.sendPackets(s_whoamount);
+                }
+            }
+        } catch (final Exception e) {
+            _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+        } finally {
+            finish();
+        }
+    }
+
+    @Override
+    public String getType() {
+        return C_WHO;
+    }
 }

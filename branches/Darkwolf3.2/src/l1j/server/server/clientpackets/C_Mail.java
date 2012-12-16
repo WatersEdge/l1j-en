@@ -43,10 +43,16 @@ public class C_Mail extends ClientBasePacket {
 	private static int TYPE_CLAN_MAIL = 1;
 	private static int TYPE_MAIL_BOX = 2;
 
-	public C_Mail(byte abyte0[], ClientThread client) {
-		super(abyte0);
+    @Override
+    public void execute(byte[] decrypt, ClientThread client) {
+        try {
+            read(decrypt);
+            L1PcInstance pc = client.getActiveChar();
+            if (pc == null) {
+                return;
+            }
+
 		int type = readC();
-		L1PcInstance pc = client.getActiveChar();
 
 		if (type == 0x00 || type == 0x01 || type == 0x02) {
 			pc.sendPackets(new S_Mail(pc.getName(), type));
@@ -119,7 +125,12 @@ public class C_Mail extends ClientBasePacket {
 			MailTable.getInstance().setMailType(mailId, TYPE_MAIL_BOX);
 			pc.sendPackets(new S_Mail(mailId, type));
 		}
-	}
+        } catch (final Exception e) {
+            _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+        } finally {
+            finish();
+        }
+    }
 
 	private int getMailSizeByReceiver(String receiverName, int type) {
 		ArrayList<L1Mail> mails = new ArrayList<L1Mail>();

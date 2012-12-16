@@ -45,10 +45,19 @@ public class C_CreateChar extends ClientBasePacket {
 	private static final String C_CREATE_CHAR = "[C] C_CreateChar";
 	private L1ClassFeature classFeature = null;
 	
-	public C_CreateChar(byte[] abyte0, ClientThread client) throws Exception {
-		super(abyte0);
-		L1PcInstance pc = new L1PcInstance();
-		String name = readS();
+
+    @Override
+    public void execute(byte[] decrypt, ClientThread client) {
+        try {
+            read(decrypt);
+            L1PcInstance pc = new L1PcInstance();
+            if (pc == null) {
+                return;
+            }
+            String name = readS();
+            if (name.isEmpty()) {
+                return;
+            }
 
 		Account account = Account.load(client.getAccountName());
 		int characterSlot = account.getCharacterSlot();
@@ -119,7 +128,12 @@ public class C_CreateChar extends ClientBasePacket {
 		S_CharCreateStatus s_charcreatestatus2 = new S_CharCreateStatus(S_CharCreateStatus.REASON_OK);
 		client.sendPacket(s_charcreatestatus2);
 		initNewChar(client, pc);
-	}
+        } catch (final Exception e) {
+            _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+        } finally {
+            finish();
+        }
+    }
 
 	private static void initNewChar(ClientThread client, L1PcInstance pc) throws IOException, Exception {
 		L1ClassFeature classFeature = L1ClassFeature.newClassFeature(pc.getType());

@@ -19,6 +19,7 @@
 package l1j.server.server.clientpackets;
 
 import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import l1j.server.server.ClientThread;
 
@@ -29,14 +30,21 @@ public class C_HireSoldier extends ClientBasePacket {
 	private static final String C_HIRE_SOLDIER = "[C] C_HireSoldier";
 	private static Logger _log = Logger.getLogger(C_HireSoldier.class.getName());
 
-	public C_HireSoldier(byte[] decrypt, ClientThread client) {
-		super(decrypt);
+    @Override
+    public void execute(byte[] decrypt, ClientThread client) {
+        try {
+            read(decrypt);
 		int something1 = readH();
 		int something2 = readH();
 		int something3 = readD();
 		int something4 = readD();
 		int number = readH();
-	}
+        } catch (final Exception e) {
+            _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+        } finally {
+            finish();
+        }
+    }
 
 	@Override
 	public String getType() {

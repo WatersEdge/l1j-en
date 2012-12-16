@@ -19,6 +19,7 @@
 package l1j.server.server.clientpackets;
 
 import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import l1j.server.server.ClientThread;
 import l1j.server.server.model.L1Trade;
@@ -33,33 +34,50 @@ public class C_TradeOK extends ClientBasePacket {
 	private static final String C_TRADE_CANCEL = "[C] C_TradeOK";
 	private static Logger _log = Logger.getLogger(C_TradeOK.class.getName());
 
-	public C_TradeOK(byte abyte0[], ClientThread clientthread) throws Exception {
-		super(abyte0);
+    @Override
+    public void execute(byte[] decrypt, ClientThread client) {
+        try {
+            read(decrypt);
+            L1PcInstance pc = client.getActiveChar();
+            if (pc == null) {
+                return;
+            }
+            if (pc.isDead()) {
+                return;
+            }
+            if (pc.isGhost()) {
+                return;
+            }
+            L1PcInstance trading_partner = (L1PcInstance) L1World.getInstance()
+                    .findObject(pc.getTradeID());
+            if (trading_partner != null) {
+                pc.setTradeOk(true);
 
-		L1PcInstance player = clientthread.getActiveChar();
-		L1PcInstance trading_partner = (L1PcInstance) L1World.getInstance().findObject(player.getTradeID());
-		if (trading_partner != null) {
-			player.setTradeOk(true);
+                if (pc.getTradeOk() && trading_partner.getTradeOk())
+                {
+                    if (pc.getInventory().getSize() < (180 - 16)
+                            && trading_partner.getInventory().getSize() < (180 - 16))
+                    {
+                        L1Trade trade = new L1Trade();
+                        trade.TradeOK(pc);
+                    } else
+                    {
+                        pc.sendPackets(new S_ServerMessage(263));
+                        trading_partner.sendPackets(new S_ServerMessage(263));
+                        L1Trade trade = new L1Trade();
+                        trade.TradeCancel(pc);
+                    }
+                }
+            }
+        } catch (final Exception e) {
+            _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+        } finally {
+            finish();
+        }
+    }
 
-			if (player.getTradeOk() && trading_partner.getTradeOk()) 
-			{
-				if (player.getInventory().getSize() < (180 - 16) && trading_partner.getInventory().getSize() < (180 - 16)) 
-				{
-					L1Trade trade = new L1Trade();
-					trade.TradeOK(player);
-				} else
-				{
-					player.sendPackets(new S_ServerMessage(263)); 
-					trading_partner.sendPackets(new S_ServerMessage(263));
-					L1Trade trade = new L1Trade();
-					trade.TradeCancel(player);
-				}
-			}
-		}
-	}
-
-	@Override
-	public String getType() {
-		return C_TRADE_CANCEL;
-	}
+    @Override
+    public String getType() {
+        return C_TRADE_CANCEL;
+    }
 }

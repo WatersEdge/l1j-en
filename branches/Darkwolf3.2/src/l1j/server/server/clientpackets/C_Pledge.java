@@ -20,6 +20,7 @@
 package l1j.server.server.clientpackets;
 
 import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import l1j.server.server.ClientThread;
 import l1j.server.server.model.L1Clan;
@@ -35,24 +36,36 @@ public class C_Pledge extends ClientBasePacket {
 	private static final String C_PLEDGE = "[C] C_Pledge";
 	private static Logger _log = Logger.getLogger(C_Pledge.class.getName());
 
-	public C_Pledge(byte abyte0[], ClientThread clientthread) {
-		super(abyte0);
-		L1PcInstance pc = clientthread.getActiveChar();
+    @Override
+    public void execute(byte[] decrypt, ClientThread client) {
+        try {
+            read(decrypt);
+            L1PcInstance pc = client.getActiveChar();
+            if (pc == null) {
+                return;
+            }
+            if (pc.getClanid() > 0) {
+                L1Clan clan = L1World.getInstance().getClan(pc.getClanname());
+                if (pc.isCrown() && pc.getId() == clan.getLeaderId()) {
+                    pc.sendPackets(new S_Pledge("pledgeM", pc.getId(), clan
+                            .getClanName(), clan.getOnlineMembersFPWithRank(),
+                            clan.getAllMembersFPWithRank()));
+                } else {
+                    pc.sendPackets(new S_Pledge("pledge", pc.getId(), clan
+                            .getClanName(), clan.getOnlineMembersFP()));
+                }
+            } else {
+                pc.sendPackets(new S_ServerMessage(1064));
+            }
+        } catch (final Exception e) {
+            _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+        } finally {
+            finish();
+        }
+    }
 
-		if (pc.getClanid() > 0) {
-			L1Clan clan = L1World.getInstance().getClan(pc.getClanname());
-			if (pc.isCrown() && pc.getId() == clan.getLeaderId()) {
-				pc.sendPackets(new S_Pledge("pledgeM", pc.getId(), clan.getClanName(), clan.getOnlineMembersFPWithRank(), clan.getAllMembersFPWithRank()));
-			} else {
-				pc.sendPackets(new S_Pledge("pledge", pc.getId(), clan.getClanName(), clan.getOnlineMembersFP()));
-			}
-		} else {
-			pc.sendPackets(new S_ServerMessage(1064));
-		}
-	}
-
-	@Override
-	public String getType() {
-		return C_PLEDGE;
-	}
+    @Override
+    public String getType() {
+        return C_PLEDGE;
+    }
 }

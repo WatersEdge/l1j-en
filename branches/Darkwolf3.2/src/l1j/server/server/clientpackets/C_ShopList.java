@@ -19,6 +19,7 @@
 package l1j.server.server.clientpackets;
 
 import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import l1j.server.server.ClientThread;
 import l1j.server.server.model.Instance.L1PcInstance;
@@ -28,25 +29,37 @@ import l1j.server.server.serverpackets.S_PrivateShop;
 // ClientBasePacket
 public class C_ShopList extends ClientBasePacket {
 
-	private static final String C_SHOP_LIST = "[C] C_ShopList";
-	private static Logger _log = Logger.getLogger(C_ShopList.class.getName());
+    private static final String C_SHOP_LIST = "[C] C_ShopList";
 
-	public C_ShopList(byte abyte0[], ClientThread clientthread) {
-		super(abyte0);
+    private static Logger _log = Logger.getLogger(C_ShopList.class.getName());
 
-		int type = readC();
-		int objectId = readD();
+    @Override
+    public void execute(byte[] decrypt, ClientThread client) {
+        try {
+            read(decrypt);
+            L1PcInstance pc = client.getActiveChar();
+            if (pc == null) {
+                return;
+            }
+            if (pc.isDead()) {
+                return;
+            }
+            if (pc.isGhost()) {
+                return;
+            }
+            int type = readC();
+            int objectId = readD();
 
-		L1PcInstance pc = clientthread.getActiveChar();
-		if (pc.isGhost()) {
-		return;
-		}
+            pc.sendPackets(new S_PrivateShop(pc, objectId, type));
+        } catch (final Exception e) {
+            _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+        } finally {
+            finish();
+        }
+    }
 
-		pc.sendPackets(new S_PrivateShop(pc, objectId, type));
-	}
-
-	@Override
-	public String getType() {
-		return C_SHOP_LIST;
-	}
+    @Override
+    public String getType() {
+        return C_SHOP_LIST;
+    }
 }

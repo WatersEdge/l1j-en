@@ -19,6 +19,7 @@
 package l1j.server.server.clientpackets;
 
 import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import l1j.server.Config;
 import l1j.server.server.ClientThread;
@@ -42,10 +43,19 @@ public class C_Chat extends ClientBasePacket {
 	private static final String C_CHAT = "[C] C_Chat";
 	private static Logger _log = Logger.getLogger(C_Chat.class.getName());
 
-	public C_Chat(byte abyte0[], ClientThread clientthread) {
-		super(abyte0);
+    @Override
+    public void execute(byte[] decrypt, ClientThread client) {
+        try {
+            read(decrypt);
 
-		L1PcInstance pc = clientthread.getActiveChar();
+            L1PcInstance pc = client.getActiveChar();
+            if (pc == null) {
+                return;
+            }
+            if (pc.isGhost()) {
+                return;
+            }
+
 		int chatType = readC();
 		String chatText = readS();
 		if (pc.hasSkillEffect(SILENCE) || pc.hasSkillEffect(AREA_OF_SILENCE) || pc.hasSkillEffect(STATUS_POISON_SILENCE)) {
@@ -216,13 +226,19 @@ public class C_Chat extends ClientBasePacket {
 					if (!listner.getExcludingList().contains(pc.getName())) {
 						listner.sendPackets(s_chatpacket);
 					}
-				}
-			}
-		}
-		if (!pc.isGm()) {
-			pc.checkChatInterval();
-		}
-	}
+                }
+            }
+        }
+        if (!pc.isGm()) {
+            pc.checkChatInterval();
+        }
+    } catch (final Exception e) {
+        _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+    } finally {
+        finish();
+    }
+}
+
 
 	private void chatWorld(L1PcInstance pc, String chatText, int chatType) {
 		if (pc.isGm() || pc.isMonitor()) { // Do not remove monitor ability

@@ -19,6 +19,7 @@
 package l1j.server.server.clientpackets;
 
 import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import l1j.server.server.ClientThread;
 import l1j.server.server.datatables.NpcActionTable;
@@ -33,38 +34,44 @@ import l1j.server.server.serverpackets.S_NPCTalkReturn;
 // ClientBasePacket, C_NPCTalk
 public class C_NPCTalk extends ClientBasePacket {
 
-	private static final String C_NPC_TALK = "[C] C_NPCTalk";
-	private static Logger _log = Logger.getLogger(C_NPCTalk.class.getName());
+    private static final String C_NPC_TALK = "[C] C_NPCTalk";
+    private static Logger _log = Logger.getLogger(C_NPCTalk.class.getName());
 
-	public C_NPCTalk(byte abyte0[], ClientThread client) throws Exception {
-		super(abyte0);
-		int objid = readD();
-		L1Object obj = L1World.getInstance().findObject(objid);
-		L1PcInstance pc = client.getActiveChar();
-		if (obj != null && pc != null) {
-			L1NpcAction action = NpcActionTable.getInstance().get(pc, obj);
-			if (action != null) {
-				L1NpcHtml html = action.execute("", pc, obj, new byte[0]);
-				if (html != null) {
-					pc.sendPackets(new S_NPCTalkReturn(obj.getId(), html));
-				}
-				return;
-			}
-			obj.onTalkAction(pc);
-		} else {
-			if (obj == null && pc != null)
-			{
-				_log.severe(pc.getName() + " sent an invalid objectid, objid=" + objid);
-			}
-			else
-			{
-				_log.severe("Null L1PcInstance in C_RequestNPCTalk.");
-			}
-		}
-	}
+	    @Override
+	    public void execute(byte[] decrypt, ClientThread client) {
+	        try {
+	            read(decrypt);
+	            L1PcInstance pc = client.getActiveChar();
+	            if (pc.isDead()) {
+	                return;
+	            }
+	            if (pc.isGhost()) {
+	                return;
+	            }
+	            int objid = readD();
+	            L1Object obj = L1World.getInstance().findObject(objid);
+	            if (obj != null && pc != null) {
+	                L1NpcAction action = NpcActionTable.getInstance().get(pc, obj);
+	                if (action != null) {
+	                    L1NpcHtml html = action.execute("", pc, obj, new byte[0]);
+	                    if (html != null) {
+	                        pc.sendPackets(new S_NPCTalkReturn(obj.getId(), html));
+	                    }
+	                    return;
+	                }
+	                obj.onTalkAction(pc);
+	            } else {
+	            	_log.severe(pc.getName() + " sent an invalid objectid, objid=" + objid);
+	            }
+	        } catch (final Exception e) {
+	            _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+	        } finally {
+	            finish();
+	        }
+	    }
 
-	@Override
-	public String getType() {
-		return C_NPC_TALK;
+	    @Override
+	    public String getType() {
+	        return C_NPC_TALK;
+	    }
 	}
-}

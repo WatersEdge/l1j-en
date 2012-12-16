@@ -40,8 +40,9 @@ public class C_ChangePassword extends ClientBasePacket {
 	private static final String C_Change_Password = "[C] C_Change_Password";
 	private static Logger _log = Logger.getLogger(C_ChangePassword.class.getName());
 
-	public C_ChangePassword(byte[] decrypt, ClientThread client) {
-		super(decrypt);
+    @Override
+    public void execute(byte[] decrypt, ClientThread client) {
+            read(decrypt);
 
 		String accountName = readS().toLowerCase();
 		String oldpassword = readS();
@@ -62,11 +63,11 @@ public class C_ChangePassword extends ClientBasePacket {
 			   } catch (UnsupportedEncodingException e) {
 			    e.printStackTrace();
 			}
-		ChanePassword(accountName, newPassword);
+		ChancePassword(accountName, newPassword);
 		client.sendPacket(new S_LoginResult(S_LoginResult.REASON_SERVER));
 	}
 	
-	private static void ChanePassword(final String login, final String newPassword) {
+	private static void ChancePassword(final String login, final String newPassword) {
 		  Connection con = null;
 		  PreparedStatement pstm = null;
 		  try {

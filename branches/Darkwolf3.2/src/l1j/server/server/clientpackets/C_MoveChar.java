@@ -20,6 +20,7 @@ package l1j.server.server.clientpackets;
 import static l1j.server.server.model.Instance.L1PcInstance.REGENSTATE_MOVE;
 
 import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import l1j.server.Config;
 import l1j.server.server.hackdetections.LogSpeedHack;
@@ -52,17 +53,24 @@ public class C_MoveChar extends ClientBasePacket {
 		pc.sendPackets(new S_SystemMessage(pc.getMap().toString(pc.getLocation())));
 	}
 
-	public C_MoveChar(byte decrypt[], ClientThread client) throws Exception {
-		super(decrypt);
+    @Override
+    public void execute(byte[] decrypt, ClientThread client) {
+        try {
+            read(decrypt);
+            L1PcInstance pc = client.getActiveChar();
+            if (pc == null) {
+                return;
+            }
+            if (pc.isDead()) {
+                return;
+            }
+            if (pc.isTeleport()) {
+                return;
+            }
+
 		int locx = readH();
 		int locy = readH();
 		int heading = readC();
-
-		L1PcInstance pc = client.getActiveChar();
-
-		if (pc.isTeleport()) { 
-			return;
-		}
 
 		if (Config.CHECK_MOVE_INTERVAL) {
 			int result;
@@ -129,6 +137,11 @@ public class C_MoveChar extends ClientBasePacket {
 
 		L1WorldTraps.getInstance().onPlayerMoved(pc);
 		pc.getMap().setPassable(pc.getLocation(), false);
-		// user.UpdateObject(); 
-	}
+		// user.UpdateObject();
+        } catch (final Exception e) {
+            _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+        } finally {
+            finish();
+        }
+    }
 }

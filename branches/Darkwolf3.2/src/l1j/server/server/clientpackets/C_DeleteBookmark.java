@@ -19,25 +19,39 @@
 package l1j.server.server.clientpackets;
 
 import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import l1j.server.server.ClientThread;
 import l1j.server.server.model.Instance.L1PcInstance;
 import l1j.server.server.templates.L1BookMark;
 
 public class C_DeleteBookmark extends ClientBasePacket {
-	
-	private static final String C_DETELE_BOOKMARK = "[C] C_DeleteBookmark";
-	private static Logger _log = Logger.getLogger(C_DeleteBookmark.class.getName());
+    private static final String C_DETELE_BOOKMARK = "[C] C_DeleteBookmark";
 
-	public C_DeleteBookmark(byte[] decrypt, ClientThread client) {
-		super(decrypt);
-		String bookmarkname = readS();
-		L1PcInstance pc = client.getActiveChar();
-		L1BookMark.deleteBookmark(pc, bookmarkname);
-	}
+    private static Logger _log = Logger.getLogger(C_DeleteBookmark.class.getName());
 
-	@Override
-	public String getType() {
-		return C_DETELE_BOOKMARK;
-	}
+    @Override
+    public void execute(byte[] decrypt, ClientThread client) {
+        try {
+            read(decrypt);
+            L1PcInstance pc = client.getActiveChar();
+            if (pc == null) {
+                return;
+            }
+            String bookmarkname = readS();
+            if (bookmarkname.isEmpty()) {
+                return;
+            }
+            L1BookMark.deleteBookmark(pc, bookmarkname);
+        } catch (final Exception e) {
+            _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+        } finally {
+            finish();
+        }
+    }
+
+    @Override
+    public String getType() {
+        return C_DETELE_BOOKMARK;
+    }
 }

@@ -19,6 +19,7 @@
 package l1j.server.server.clientpackets;
 
 import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import l1j.server.server.ClientThread;
 import l1j.server.server.model.L1CastleLocation;
@@ -31,31 +32,48 @@ import l1j.server.server.templates.L1BookMark;
 // ClientBasePacket
 public class C_AddBookmark extends ClientBasePacket {
 
-	private static final String C_ADD_BOOKMARK = "[C] C_AddBookmark";
-	private static Logger _log = Logger.getLogger(C_AddBookmark.class.getName());
+    private static final String C_ADD_BOOKMARK = "[C] C_AddBookmark";
 
-	public C_AddBookmark(byte[] decrypt, ClientThread client) {
-		super(decrypt);
-		String s = readS();
+    private static Logger _log = Logger
+            .getLogger(C_AddBookmark.class.getName());
 
-		L1PcInstance pc = client.getActiveChar();
-		if (pc.isGhost()) {
-			return;
-		}
+    @Override
+    public void execute(byte[] decrypt, ClientThread client) {
+        try {
+            read(decrypt);
+            L1PcInstance pc = client.getActiveChar();
+            if (pc == null) {
+                return;
+            }
+            if (pc.isDead()) {
+                return;
+            }
+            if (pc.isGhost()) {
+                return;
+            }
 
-		if (pc.getMap().isMarkable() || pc.isGm()) {
-			if ((L1CastleLocation.checkInAllWarArea(pc.getX(), pc.getY(), pc.getMapId()) || L1HouseLocation.isInHouse(pc.getX(), pc.getY(), pc.getMapId())) && !pc.isGm()) {
-				pc.sendPackets(new S_ServerMessage(214));
-			} else {
-				L1BookMark.addBookmark(pc, s);
-			}
-		} else {
-			pc.sendPackets(new S_ServerMessage(214));
-		}
-	}
+            if (pc.getMap().isMarkable() || pc.isGm()) {
+                if ((L1CastleLocation.checkInAllWarArea(pc.getX(), pc.getY(),
+                        pc.getMapId()) || L1HouseLocation.isInHouse(pc.getX(),
+                        pc.getY(), pc.getMapId()))
+                        && !pc.isGm()) {
+                    pc.sendPackets(new S_ServerMessage(214));
+                } else {
+                    String s = readS();
+                    L1BookMark.addBookmark(pc, s);
+                }
+            } else {
+                pc.sendPackets(new S_ServerMessage(214));
+            }
+        } catch (final Exception e) {
+            _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+        } finally {
+            finish();
+        }
+    }
 
-	@Override
-	public String getType() {
-		return C_ADD_BOOKMARK;
-	}
+    @Override
+    public String getType() {
+        return C_ADD_BOOKMARK;
+    }
 }

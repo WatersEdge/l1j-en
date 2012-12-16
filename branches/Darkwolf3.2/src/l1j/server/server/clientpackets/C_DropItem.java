@@ -19,9 +19,9 @@
 package l1j.server.server.clientpackets;
 
 import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import l1j.server.server.Account;
-
 import l1j.server.server.datatables.IpTable;
 import l1j.server.server.serverpackets.S_Disconnect;
 import l1j.server.server.ClientThread;
@@ -37,14 +37,25 @@ public class C_DropItem extends ClientBasePacket {
 	private static Logger _log = Logger.getLogger(C_DropItem.class.getName());
 	private static final String C_DROP_ITEM = "[C] C_DropItem";
 
-	public C_DropItem(byte[] decrypt, ClientThread client) throws Exception {
-		super(decrypt);
+    @Override
+    public void execute(byte[] decrypt, ClientThread client) {
+        try {
+            read(decrypt);
+            L1PcInstance pc = client.getActiveChar();
+            if (pc == null) {
+                return;
+            }
+            if (pc.isDead()) {
+                return;
+            }
+            if (pc.isGhost()) {
+                return;
+            }
+
 		int x = readH();
 		int y = readH();
 		int objectId = readD();
 		int count = readD();
-
-		L1PcInstance pc = client.getActiveChar();
 		
 		//additional dupe checks.  Thanks Mike
 		if (pc.getOnlineStatus() != 1) {
@@ -120,8 +131,13 @@ public class C_DropItem extends ClientBasePacket {
 			}
 			pc.getInventory().tradeItem(item, count, L1World.getInstance().getInventory(x, y, pc.getMapId()));
 			pc.turnOnOffLight();
-		}
-	}
+		 }
+        } catch (final Exception e) {
+            _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+        } finally {
+            finish();
+        }
+    }
 
 	@Override
 	public String getType() {

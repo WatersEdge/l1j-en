@@ -51,8 +51,10 @@ public class C_CharReset extends ClientBasePacket {
  * //\Z 127.0.0.1 Request Work ID : 120 0000: 78 03 23 0a 0b 17 12 0d
  */	
 
-	public C_CharReset(byte abyte0[], ClientThread clientthread) {
-		super(abyte0);
+    @Override
+    public void execute(byte[] decrypt, ClientThread client) {
+        try {
+
 		final int[] ORIGINAL_STR
 		= new int[] { 13, 16, 11, 8, 12, 13, 11 };
         final int[] ORIGINAL_DEX
@@ -77,7 +79,17 @@ public class C_CharReset extends ClientBasePacket {
        int cha;
        int statusAmount;
 
-       L1PcInstance pc = clientthread.getActiveChar();
+       L1PcInstance pc = client.getActiveChar();
+       if (pc == null) {
+           return;
+       }
+       if (pc.isDead()) {
+           return;
+       }
+       if (pc.isGhost()) {
+           return;
+       }
+
        byte level = (byte)ExpTable.getLevelByExp(pc.getExp());
        classFeature = L1ClassFeature.newClassFeature(pc.getType());
 
@@ -199,6 +211,11 @@ public class C_CharReset extends ClientBasePacket {
 		break;
 	    default:
 		return;
+       }
+        } catch (final Exception e) {
+            _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+        } finally {
+            finish();
         }
     }
     

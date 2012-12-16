@@ -19,6 +19,7 @@
 package l1j.server.server.clientpackets;
 
 import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import l1j.server.server.ClientThread;
 import l1j.server.server.model.L1Location;
@@ -34,31 +35,43 @@ public class C_CallPlayer extends ClientBasePacket {
 
 	private static Logger _log = Logger.getLogger(C_CallPlayer.class.getName());
 
-	public C_CallPlayer(byte[] decrypt, ClientThread client) {
-		super(decrypt);
-		L1PcInstance pc = client.getActiveChar();
+	public void execute(byte[] decrypt, ClientThread client) {
+	        try {
+	            read(decrypt);
+	            L1PcInstance pc = client.getActiveChar();
+	            if (pc == null) {
+	                return;
+	            }
+	            if (pc.isDead()) {
+	                return;
+	            }
 
-		if (!pc.isGm()) {
-			return;
-		}
+	            if (!pc.isGm()) {
+	                return;
+	            }
 
-		String name = readS();
-		if (name.isEmpty()) {
-			return;
-		}
+	            String name = readS();
+	            if (name.isEmpty()) {
+	                return;
+	            }
 
-		L1PcInstance target = L1World.getInstance().getPlayer(name);
+	            L1PcInstance target = L1World.getInstance().getPlayer(name);
 
-		if (target == null) {
-			return;
-		}
+	            if (target == null) {
+	                return;
+	            }
 
-		L1Location loc = L1Location.randomLocation(target.getLocation(), 1, 2, false);
-		L1Teleport.teleport(pc, loc.getX(), loc.getY(), target.getMapId(), pc.getHeading(), false);
+	            L1Location loc = L1Location.randomLocation(target.getLocation(), 1, 2, false);
+	            L1Teleport.teleport(pc, loc.getX(), loc.getY(), target.getMapId(), pc.getHeading(), false);
+	        } catch (final Exception e) {
+	            _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+	        } finally {
+	            finish();
+	        }
+	    }
+
+	    @Override
+	    public String getType() {
+	        return C_CALL;
+	    }
 	}
-
-	@Override
-	public String getType() {
-		return C_CALL;
-	}
-}

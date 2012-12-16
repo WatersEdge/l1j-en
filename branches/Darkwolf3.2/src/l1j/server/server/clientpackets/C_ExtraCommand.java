@@ -19,6 +19,7 @@
 package l1j.server.server.clientpackets;
 
 import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import l1j.server.server.ClientThread;
 import l1j.server.server.model.Instance.L1PcInstance;
@@ -31,35 +32,44 @@ public class C_ExtraCommand extends ClientBasePacket {
 	private static final String C_EXTRA_COMMAND = "[C] C_ExtraCommand";
 	private static Logger _log = Logger.getLogger(C_ExtraCommand.class.getName());
 
-	public C_ExtraCommand(byte abyte0[], ClientThread client) throws Exception {
-		super(abyte0);
-		int actionId = readC();
-		L1PcInstance pc = client.getActiveChar();
-		
-		if (pc.isGhost()) {
-			return;
-		}
-		
-		if (pc.isInvisble()) {
-			return;
-		}
-		
-		if (pc.isTeleport()) {
-			return;
-		}
-		
-		if (pc.hasSkillEffect(SHAPE_CHANGE)) {
-			int gfxId = pc.getTempCharGfx();
-			if (gfxId != 6080 && gfxId != 6094) {
-			return;
-			}
-		}
-		S_DoActionGFX gfx = new S_DoActionGFX(pc.getId(), actionId);
-		pc.broadcastPacket(gfx);
-	}
+	 @Override
+	    public void execute(byte[] decrypt, ClientThread client) {
+	        try {
+	            read(decrypt);
+	            L1PcInstance pc = client.getActiveChar();
+	            if (pc == null) {
+	                return;
+	            }
+	            if (pc.isDead()) {
+	                return;
+	            }
+	            if (pc.isGhost()) {
+	                return;
+	            }
+	            if (pc.isInvisble()) {
+	                return;
+	            }
+	            if (pc.isTeleport()) {
+	                return;
+	            }
+	            if (pc.hasSkillEffect(SHAPE_CHANGE)) {
+	                int gfxId = pc.getTempCharGfx();
+	                if (gfxId != 6080 && gfxId != 6094) {
+	                    return;
+	                }
+	            }
+	            int actionId = readC();
+	            S_DoActionGFX gfx = new S_DoActionGFX(pc.getId(), actionId);
+	            pc.broadcastPacket(gfx);
+	        } catch (final Exception e) {
+	            _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+	        } finally {
+	            finish();
+	        }
+	    }
 
-	@Override
-	public String getType() {
-		return C_EXTRA_COMMAND;
+	    @Override
+	    public String getType() {
+	        return C_EXTRA_COMMAND;
+	    }
 	}
-}

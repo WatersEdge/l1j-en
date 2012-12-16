@@ -16,42 +16,40 @@
  *
  * http://www.gnu.org/copyleft/gpl.html
  */
-package l1j.server.server.clientpackets;
+package l1j.server.server.model;
 
-import java.util.logging.Logger;
+import java.util.TimerTask;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import l1j.server.server.ClientThread;
 import l1j.server.server.model.Instance.L1PcInstance;
+import l1j.server.server.serverpackets.S_PacketBox;
+import l1j.server.server.serverpackets.S_Party;
 
-// Referenced classes of package l1j.server.server.clientpackets:
-// ClientBasePacket
-public class C_LeaveParty extends ClientBasePacket {
+public class L1PartyRefresh extends TimerTask {
+    private static Logger _log = Logger.getLogger(L1PartyRefresh.class
+            .getName());
+    private final L1PcInstance _pc;
 
-	private static final String C_LEAVE_PARTY = "[C] C_LeaveParty";
-	private static Logger _log = Logger.getLogger(C_LeaveParty.class.getName());
+    public L1PartyRefresh(L1PcInstance pc) {
+        _pc = pc;
+    }
 
-    @Override
-    public void execute(byte[] decrypt, ClientThread client) {
-        try {
-            read(decrypt);
-
-            L1PcInstance pc = client.getActiveChar();
-            if (pc == null) {
-                return;
-            }
-            if (pc.isInParty()) {
-                pc.getParty().leaveMember(pc);
-            }
-        } catch (final Exception e) {
-            _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
-        } finally {
-            finish();
-        }
+    private void fresh() {
+        _pc.sendPackets(new S_Party(S_PacketBox.PATRY_MEMBERS, _pc));
     }
 
     @Override
-    public String getType() {
-        return C_LEAVE_PARTY;
+    public void run() {
+        try {
+            if (_pc.isDead() || _pc.getParty() == null) {
+                _pc.stopRefreshParty();
+                return;
+            }
+            fresh();
+        } catch (Throwable e) {
+            _pc.stopRefreshParty();
+            _log.log(Level.WARNING, e.getLocalizedMessage(), e);
+        }
     }
 }

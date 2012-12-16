@@ -19,6 +19,7 @@
 package l1j.server.server.clientpackets;
 
 import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import l1j.server.server.ClientThread;
 import l1j.server.server.datatables.SkillsTable;
@@ -36,8 +37,20 @@ public class C_SkillBuyOK extends ClientBasePacket {
 	private static final String C_SKILL_BUY_OK = "[C] C_SkillBuyOK";
 	private static Logger _log = Logger.getLogger(C_SkillBuyOK.class.getName());
 
-	public C_SkillBuyOK(byte abyte0[], ClientThread clientthread) throws Exception {
-		super(abyte0);
+    @Override
+    public void execute(byte[] decrypt, ClientThread client) {
+        try {
+            read(decrypt);
+            L1PcInstance pc = client.getActiveChar();
+            if (pc == null) {
+                return;
+            }
+            if (pc.isDead()) {
+                return;
+            }
+            if (pc.isGhost()) {
+                return;
+            }
 
 		int count = readH();
 		int sid[] = new int[count];
@@ -48,13 +61,11 @@ public class C_SkillBuyOK extends ClientBasePacket {
 		int level1_cost = 0;
 		int level2_cost = 0;
 		int level3_cost = 0;
+		
 		String skill_name = null;
+		
 		int skill_id = 0;
-
-		L1PcInstance pc = clientthread.getActiveChar();
-		if (pc.isGhost()) {
-			return;
-		}
+		
 		for (int i = 0; i < count; i++) {
 			sid[i] = readD();
 			switch (sid[i]) {
@@ -384,10 +395,15 @@ public class C_SkillBuyOK extends ClientBasePacket {
 		} else {
 			pc.sendPackets(new S_ServerMessage(189));
 		}
-	}
+    } catch (final Exception e) {
+        _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+    } finally {
+        finish();
+    }
+}
 
-	@Override
-	public String getType() {
-		return C_SKILL_BUY_OK;
-	}
+    @Override
+    public String getType() {
+      return C_SKILL_BUY_OK;
+   }
 }

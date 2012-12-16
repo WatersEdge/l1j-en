@@ -19,6 +19,7 @@
 package l1j.server.server.clientpackets;
 
 import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import l1j.server.server.ClientThread;
 import l1j.server.server.model.Instance.L1PcInstance;
@@ -33,29 +34,43 @@ public class C_Trade extends ClientBasePacket {
 	private static final String C_TRADE = "[C] C_Trade";
 	private static Logger _log = Logger.getLogger(C_Trade.class.getName());
 
-	public C_Trade(byte abyte0[], ClientThread clientthread) throws Exception {
-		super(abyte0);
+    @Override
+    public void execute(byte[] decrypt, ClientThread client) {
+        try {
+            read(decrypt);
 
-		L1PcInstance player = clientthread.getActiveChar();
-		if (player.isGhost()) {
-			return;
-		}
-		L1PcInstance target = FaceToFace.faceToFace(player);
+            L1PcInstance pc = client.getActiveChar();
+            if (pc == null) {
+                return;
+            }
+            if (pc.isDead()) {
+                return;
+            }
+            if (pc.isGhost()) {
+                return;
+            }
+
+		L1PcInstance target = FaceToFace.faceToFace(pc);
 		if (target != null && target.getTradeID() == 0) { // fix for trade bug
-			if (player.getInventory().getWeight240() >= 197) { 
-				player.sendPackets(new S_ServerMessage(110)); 
+			if (pc.getInventory().getWeight240() >= 197) { 
+				pc.sendPackets(new S_ServerMessage(110)); 
 				return;
 			}
 			if (!target.isParalyzed()) {
-				player.setTradeID(target.getId()); 
-				target.setTradeID(player.getId());
-				target.sendPackets(new S_Message_YN(252, player.getName())); 
+				pc.setTradeID(target.getId()); 
+				target.setTradeID(pc.getId());
+				target.sendPackets(new S_Message_YN(252, pc.getName())); 
 			}
-		}
-	}
+        }
+    } catch (final Exception e) {
+        _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+    } finally {
+        finish();
+    }
+}
 
-	@Override
-	public String getType() {
-		return C_TRADE;
-	}
+    @Override
+    public String getType() {
+       return C_TRADE;
+    }
 }
