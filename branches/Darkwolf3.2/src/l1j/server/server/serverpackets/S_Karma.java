@@ -16,41 +16,27 @@
  *
  * http://www.gnu.org/copyleft/gpl.html
  */
-package l1j.server.server.model.monitor;
+package l1j.server.server.serverpackets;
 
+import l1j.server.server.encryptions.Opcodes;
 import l1j.server.server.model.Instance.L1PcInstance;
-import l1j.server.server.serverpackets.S_Lawful;
-import l1j.server.server.serverpackets.S_Karma;
 
-public class L1PcExpMonitor extends L1PcMonitor {
+public class S_Karma extends ServerBasePacket {
+    private static final String S_KARMA = "[S] S_Karma";
 
-	private int _old_lawful;
+    public S_Karma(L1PcInstance pc) {
+        writeC(Opcodes.S_OPCODE_PACKETBOX);
+        writeC(S_PacketBox.KARMA);
+        writeD(pc.getKarma());
+    }
 
-	private int _old_exp;
+    @Override
+    public byte[] getContent() {
+        return getBytes();
+    }
 
-	private int _old_karma;
-	
-	public L1PcExpMonitor(int oId) {
-		super(oId);
-	}
-
-	@Override
-	public void execTask(L1PcInstance pc) {
-		if (_old_lawful != pc.getLawful()) {
-			_old_lawful = pc.getLawful();
-			S_Lawful s_lawful = new S_Lawful(pc.getId(), _old_lawful);
-			pc.sendPackets(s_lawful);
-			pc.broadcastPacket(s_lawful);
-		}
-
-		if (_old_exp != pc.getExp()) {
-			_old_exp = pc.getExp();
-			pc.onChangeExp();
-		}
-		
-		if (_old_karma != pc.getKarma()) {
-            _old_karma = pc.getKarma();
-            pc.sendPackets(new S_Karma(pc));
-        }
+    @Override
+    public String getType() {
+        return S_KARMA;
     }
 }

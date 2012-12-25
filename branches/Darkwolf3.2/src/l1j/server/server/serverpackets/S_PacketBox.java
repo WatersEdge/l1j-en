@@ -145,9 +145,12 @@ public class S_PacketBox extends ServerBasePacket {
 	// C type, H time
 	public static final int ICON_COOKING = 53;
 
-	//Fishing
+	// Fishing
 	public static final int FISHING = 55;
     
+	// Karma
+	public static final int KARMA = 87;
+	
 	// Dolls
 	public static final int ICON_MAGIC_DOLL = 56;
 

@@ -62,6 +62,7 @@ import l1j.server.server.serverpackets.S_LoginGame;
 import l1j.server.server.serverpackets.S_War;
 import l1j.server.server.serverpackets.S_Weather;
 import l1j.server.server.serverpackets.S_bonusstats;
+import l1j.server.server.serverpackets.S_Karma;
 import l1j.server.server.templates.L1BookMark;
 import l1j.server.server.templates.L1GetBackRestart;
 import l1j.server.server.templates.L1Skills;
@@ -192,7 +193,9 @@ public class C_LoginToServer extends ClientBasePacket {
 		pc.broadcastPacket(s_charTitle);
 
 		pc.sendVisualEffectAtLogin();
-
+		
+		pc.sendPackets(new S_Karma(pc));
+		
 		pc.sendPackets(new S_Weather(L1World.getInstance().getWeather()));
 
 		items(pc);
