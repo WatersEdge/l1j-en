@@ -62,6 +62,7 @@ import l1j.server.server.serverpackets.S_LoginGame;
 import l1j.server.server.serverpackets.S_War;
 import l1j.server.server.serverpackets.S_Weather;
 import l1j.server.server.serverpackets.S_bonusstats;
+import l1j.server.server.serverpackets.S_InitialAbilityGrowth;
 import l1j.server.server.serverpackets.S_Karma;
 import l1j.server.server.templates.L1BookMark;
 import l1j.server.server.templates.L1GetBackRestart;
@@ -128,6 +129,9 @@ public class C_LoginToServer extends ClientBasePacket {
 		client.setActiveChar(pc);
 		
 		pc.sendPackets(new S_LoginGame()); 
+		
+		S_InitialAbilityGrowth s_initialAbility = new S_InitialAbilityGrowth(pc);
+		pc.sendPackets(s_initialAbility);
 
 		bookmarks(pc);
 
