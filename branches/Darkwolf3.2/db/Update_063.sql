@@ -1,0 +1,1 @@
+ALTER TABLE characters ADD birthday datetime DEFAULT NULL COMMENT 'Birthday' after char_name;

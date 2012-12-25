@@ -31,6 +31,7 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 
 import l1j.server.Config;
 import l1j.server.L1DatabaseFactory;
@@ -134,6 +135,8 @@ public class L1PcInstance extends L1Character {
     private L1PartyRefresh _rp;
     private int _partyType;
 
+    private Timestamp _birthday;
+    
 	private short _hpr = 0;
 	private short _trueHpr = 0;
 
@@ -550,10 +553,6 @@ public class L1PcInstance extends L1Character {
 
 	public void sendVisualEffectAtLogin() {
 
-// for (L1Clan clan : L1World.getInstance().getAllClans()) {
-// sendPackets(new S_Emblem(clan.getClanId()));
-// }
-
 		if (getClanid() != 0) { 
 			L1Clan clan = L1World.getInstance().getClan(getClanname());
 			if (clan != null) {
@@ -563,7 +562,6 @@ public class L1PcInstance extends L1Character {
 				}
 			}
 		}
-
 		sendVisualEffect();
 	}
 
@@ -873,6 +871,35 @@ public class L1PcInstance extends L1Character {
 	public void setPartyID(int partyID) {
 		_partyID = partyID;
 	}
+
+    public Timestamp getBirthday() {
+        return _birthday;
+    }
+ 
+    public int getSimpleBirthday() {
+    	
+        if (_birthday != null) {
+ 
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+ 
+            String fm = sdf.format(getBirthday().getTime());
+ 
+            int BornTime = Integer.parseInt(fm);
+ 
+            return BornTime;
+        } else {
+ 
+            return 0;
+        }
+    }
+ 
+    public void setBirthday(Timestamp time) {
+        _birthday = time;
+    }
+
+    public void setBirthday() {
+        _birthday = new Timestamp(System.currentTimeMillis());
+    }
 
     public void startRefreshParty() {
         final int INTERVAL = 25000;
