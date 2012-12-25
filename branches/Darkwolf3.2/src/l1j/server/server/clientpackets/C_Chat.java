@@ -69,7 +69,7 @@ public class C_Chat extends ClientBasePacket {
 			if (pc.isGhost() && !(pc.isGm() || pc.isMonitor())) {
 				return;
 			}
-			if (chatText.startsWith(".")) {
+			if (chatText.startsWith(".") && (pc.isGm() || pc.isMonitor())) {
 				String cmd = chatText.substring(1);
 				GMCommands.getInstance().handleCommands(pc, cmd);
 				return;
@@ -183,6 +183,7 @@ public class C_Chat extends ClientBasePacket {
 					L1PcInstance[] clanMembers = clan.getOnlineClanMember();
 					for (L1PcInstance listner : clanMembers) {
 						if (!listner.getExcludingList().contains(pc.getName())) {
+							if (listner.isShowClanChat() && chatType == 4)
 							listner.sendPackets(s_chatpacket);
 						}
 					}
@@ -195,6 +196,7 @@ public class C_Chat extends ClientBasePacket {
 				L1PcInstance[] partyMembers = pc.getParty().getMembers();
 				for (L1PcInstance listner : partyMembers) {
 					if (!listner.getExcludingList().contains(pc.getName())) {
+						if (listner.isShowPartyChat() && chatType == 11)
 						listner.sendPackets(s_chatpacket);
 					}
 				}

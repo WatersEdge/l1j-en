@@ -75,6 +75,18 @@ public class C_LoginToServerOK extends ClientBasePacket {
 			} else if (button == 1) { // open
 				pc.setShowTradeChat(true);
 			 }
+        } else if (type == 9) { // Clan
+            if (button == 0) { // open
+                pc.setShowClanChat(true);
+            } else if (button == 1) { // close
+                pc.setShowClanChat(false);
+            }
+        } else if (type == 10) { // Party
+            if (button == 0) { // close
+                pc.setShowPartyChat(false);
+            } else if (button == 1) { // open
+                pc.setShowPartyChat(true);
+            }
         }
     } catch (final Exception e) {
         _log.log(Level.SEVERE, e.getLocalizedMessage(), e);

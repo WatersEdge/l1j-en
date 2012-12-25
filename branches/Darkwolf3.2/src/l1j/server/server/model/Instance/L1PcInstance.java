@@ -4177,6 +4177,25 @@ if (player instanceof L1PcInstance) {
 		_isShowWorldChat = flag;
 	}
 
+	private boolean _isShowClanChat = true;
+	private boolean _isShowPartyChat = true;
+
+    public boolean isShowClanChat() {
+        return _isShowClanChat;
+    }
+
+    public boolean isShowPartyChat() {
+        return _isShowPartyChat;
+    }
+
+    public void setShowClanChat(boolean flag) {
+        _isShowClanChat = flag;
+    }
+
+    public void setShowPartyChat(boolean flag) {
+        _isShowPartyChat = flag;
+    }
+
 	private int _fightId;
 
 	public int getFightId() {
