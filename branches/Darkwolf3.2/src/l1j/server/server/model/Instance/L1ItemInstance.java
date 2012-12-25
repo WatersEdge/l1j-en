@@ -814,6 +814,14 @@ public class L1ItemInstance extends L1Object {
 				os.writeC(33);
 				os.writeC(6);
 			}
+            if (getItem().get_addhpr() != 0) {
+                os.writeC(37);
+                os.writeC(getItem().get_addhpr());
+            }
+            if (getItem().get_addmpr() != 0) {
+                os.writeC(38);
+                os.writeC(getItem().get_addmpr());
+            }
 // if (getItem.getLuck() != 0) {
 // os.writeC(20);
 // os.writeC(val);
