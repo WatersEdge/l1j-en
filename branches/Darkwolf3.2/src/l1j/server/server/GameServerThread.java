@@ -76,6 +76,7 @@ import l1j.server.server.model.gametime.L1GameTimeClock;
 import l1j.server.server.model.item.L1TreasureBox;
 import l1j.server.server.model.map.L1WorldMap;
 import l1j.server.server.model.trap.L1WorldTraps;
+import l1j.server.server.model.WeatherSystem.Weather;
 
 public class GameServerThread {
 private static GameServerThread _instance;
@@ -270,5 +271,10 @@ public GameServerThread() throws Exception {
 	NpcChatTable.getInstance();
 	LightSpawnTable.getInstance();
 	MailTable.getInstance();
-  }
+	// Server Weather Controller
+	if (Config.WEATHERSYSTEM != true) {
+	    GeneralThreadPool.getInstance().execute(
+	    Weather.getInstance());
+        }
+    }
 }

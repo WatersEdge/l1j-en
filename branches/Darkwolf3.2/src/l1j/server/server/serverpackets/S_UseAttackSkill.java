@@ -82,7 +82,7 @@ public class S_UseAttackSkill extends ServerBasePacket {
 		writeC(actionId);
 		writeD(withCastMotion ? cha.getId() : 0);
 		writeD(targetobj);
-		writeC(isHit);
+		writeH(isHit);
 		writeC(newheading);
 		writeD(_sequentialNumber.incrementAndGet()); //
 		writeH(spellgfx);

@@ -450,6 +450,9 @@ public final class Config {
 	@Configure(file = ALTSETTINGS, key = "SoftAC")
 	public static boolean SOFT_AC = true;
 	
+	@Configure(file = ALTSETTINGS, key = "Weathersystem")
+	public static boolean WEATHERSYSTEM = false;
+
 	@Configure(file = ALTSETTINGS, key = "GheyMarraige")
 	public static boolean GHEY_MARRAIGE = false;
 
