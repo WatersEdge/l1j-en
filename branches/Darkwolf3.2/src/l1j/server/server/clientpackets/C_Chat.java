@@ -58,6 +58,11 @@ public class C_Chat extends ClientBasePacket {
 
 		int chatType = readC();
 		String chatText = readS();
+		
+		if (chatText.isEmpty()) {
+		  return;
+	    }
+
 		if (pc.hasSkillEffect(SILENCE) || pc.hasSkillEffect(AREA_OF_SILENCE) || pc.hasSkillEffect(STATUS_POISON_SILENCE)) {
 			return;
 		}
@@ -65,6 +70,9 @@ public class C_Chat extends ClientBasePacket {
 			pc.sendPackets(new S_ServerMessage(242)); 
 			return;
 		}
+	    if (chatText.length() > 52) { // Max of 52 for chat lenght
+	        chatText = chatText.substring(0, 52); // begin - end
+	    }
 		if (chatType == 0) { 
 			if (pc.isGhost() && !(pc.isGm() || pc.isMonitor())) {
 				return;

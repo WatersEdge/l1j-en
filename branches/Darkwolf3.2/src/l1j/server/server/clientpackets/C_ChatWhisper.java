@@ -46,8 +46,13 @@ public class C_ChatWhisper extends ClientBasePacket {
             String targetName = readS();
             String text = readS();
             L1PcInstance pc = client.getActiveChar();
+            
             if (pc == null) {
                 return;
+            }
+            
+            if (whisperFrom == null) {
+              return;
             }
             
             if (pc.hasSkillEffect(1005)) {
@@ -98,7 +103,7 @@ public class C_ChatWhisper extends ClientBasePacket {
     			whisperFrom.sendPackets(new S_ServerMessage(205, whisperTo.getName()));
     			return;
     		}
-            if (text.length() > 52) {
+            if (text.length() > 52) { // Max of 52 for chat lenght
                 text = text.substring(0, 52); // begin - end
             }
             ChatLogTable.getInstance().storeChat(pc, whisperTo, text, 1);
