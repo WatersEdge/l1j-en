@@ -48,8 +48,9 @@ public class C_Door extends ClientBasePacket {
                 return;
         }
 
-		int locX = readH();
-		int locY = readH();
+		readH();
+		readH();
+		
 		int objectId = readD();
 
 		L1DoorInstance door = (L1DoorInstance)L1World.getInstance().findObject(objectId);
