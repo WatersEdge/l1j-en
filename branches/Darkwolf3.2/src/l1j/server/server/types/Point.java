@@ -136,16 +136,16 @@ public class Point {
 	public boolean isInScreen(Point pt) {
 		int dist = this.getTileDistance(pt);
 
-		if (dist > 17) {
+		if (dist > 22) {
 			return false;
-		} else if (dist <= 13) {
+		} else if (dist <= 18) {
 			return true;
 		} else {
 //			Point pointZero = new Point(this.getX() - 15, this.getY() - 15);
 //			int dist2 = pointZero.getTileDistance(pt);
-			int dist2 = Math.abs(pt.getX() - (this.getX() - 15))
-					+ Math.abs(pt.getY() - (this.getY() - 15));
-			if (17 <= dist2 && dist2 <= 43) {
+			int dist2 = Math.abs(pt.getX() - (this.getX() - 20))
+					+ Math.abs(pt.getY() - (this.getY() - 20));
+			if (22 <= dist2 && dist2 <= 58) {
 				return true;
 			}
 				return false;
