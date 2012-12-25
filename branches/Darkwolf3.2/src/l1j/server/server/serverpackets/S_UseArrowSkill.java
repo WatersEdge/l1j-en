@@ -36,46 +36,37 @@ public class S_UseArrowSkill extends ServerBasePacket {
 	public S_UseArrowSkill(L1Character cha, int targetobj, int spellgfx,
 			int x, int y, boolean isHit) {
 
-		int aid = 1;
-		if (cha.getTempCharGfx() == 3860) {
-			aid = 21;
-		}
-		writeC(Opcodes.S_OPCODE_ATTACKPACKET);
-		writeC(aid);
-		writeD(cha.getId());
-		writeD(targetobj);
-		writeH(isHit ? 6 : 0);
-		writeC(cha.getHeading());
-		writeD(_sequentialNumber.incrementAndGet());
-		writeH(spellgfx);
-		writeC(127); // Using the skills of space in the light source?
-		writeH(cha.getX());
-		writeH(cha.getY());
-		writeH(x);
-		writeH(y);
-		writeC(0);
-		writeC(0);
-		writeC(0);
-		writeC(0);
-		writeC(0);
+        int aid = 1;
+        if (cha.getTempCharGfx() == 3860) {
+            aid = 21;
+        }
+        writeC(Opcodes.S_OPCODE_ATTACKPACKET);
+        writeC(aid);
+        writeD(cha.getId());
+        writeD(targetobj);
+        writeH(isHit ? 0x0006 : 0x0000);
+        writeC(cha.getHeading());
+        writeD(_sequentialNumber.incrementAndGet());
+        writeH(spellgfx);
+        writeC(127);
+        writeH(cha.getX());
+        writeH(cha.getY());
+        writeH(x);
+        writeH(y);
+        writeD(0x00000000);
+        writeC(0x00);
 	}
 
-	@Override
-	public byte[] getContent() {
-		if (_byte == null) {
-			_byte = _bao.toByteArray();
-		} else {
-			int seq = _sequentialNumber.incrementAndGet();
-			_byte[12] = (byte) (seq & 0xff);
-			_byte[13] = (byte) (seq >> 8 & 0xff);
-			_byte[14] = (byte) (seq >> 16 & 0xff);
-			_byte[15] = (byte) (seq >> 24 & 0xff);
-		}
-		return _byte;
-	}
+    @Override
+    public byte[] getContent() {
+        if (_byte == null) {
+            _byte = getBytes();
+        }
+        return _byte;
+    }
 
-	@Override
-	public String getType() {
-		return S_USE_ARROW_SKILL;
-	}
+    @Override
+    public String getType() {
+        return S_USE_ARROW_SKILL;
+    }
 }

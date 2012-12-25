@@ -89,7 +89,6 @@ import l1j.server.server.serverpackets.S_OwnCharAttrDef;
 import l1j.server.server.serverpackets.S_OwnCharStatus;
 import l1j.server.server.serverpackets.S_OwnCharStatus2;
 import l1j.server.server.serverpackets.S_PacketBox;
-import l1j.server.server.serverpackets.S_Paralysis;
 import l1j.server.server.serverpackets.S_SPMR;
 import l1j.server.server.serverpackets.S_ServerMessage;
 import l1j.server.server.serverpackets.S_ShowPolyList;
@@ -263,7 +262,6 @@ public class C_ItemUSe extends ClientBasePacket {
 		} else if (itemId == 140100 || itemId == 40100 || itemId == 40099 || itemId == 40086 || itemId == 40863) {
 			bmapid = readH();
 			btele = readD();
-			pc.sendPackets(new S_Paralysis(S_Paralysis.TYPE_TELEPORT_UNLOCK, false));
 		} else if (itemId == 40090 || itemId == 40091 || itemId == 40092
 				|| itemId == 40093 || itemId == 40094) {
 			blanksc_skillid = readC();

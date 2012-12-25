@@ -24,15 +24,12 @@ import l1j.server.Config;
 import l1j.server.server.model.Instance.L1NpcInstance;
 import l1j.server.server.model.Instance.L1PcInstance;
 import l1j.server.server.model.map.L1Map;
-import l1j.server.server.serverpackets.S_Paralysis;
 import l1j.server.server.serverpackets.S_SkillSound;
 import l1j.server.server.serverpackets.S_Teleport;
 import l1j.server.server.utils.Teleportation;
 
 public class L1Teleport {
-
 	private static Logger _log = Logger.getLogger(L1Teleport.class.getName());
-
 
 	public static final int TELEPORT = 0;
 
@@ -69,13 +66,8 @@ public class L1Teleport {
 	public static void teleport(L1PcInstance pc, int x, int y, short mapId,
 			int head, boolean effectable, int skillType) {
 
-		pc
-				.sendPackets(new S_Paralysis(S_Paralysis.TYPE_TELEPORT_UNLOCK,
-						false));
-
 		if (effectable && (skillType >= 0 && skillType <= EFFECT_SPR.length)) {
-			S_SkillSound packet = new S_SkillSound(pc.getId(),
-					EFFECT_SPR[skillType]);
+			S_SkillSound packet = new S_SkillSound(pc.getId(), EFFECT_SPR[skillType]);
 			pc.sendPackets(packet);
 			pc.broadcastPacket(packet);
 
@@ -89,6 +81,7 @@ public class L1Teleport {
 		pc.setTeleportY(y);
 		pc.setTeleportMapId(mapId);
 		pc.setTeleportHeading(head);
+		
 		if (Config.SEND_PACKET_BEFORE_TELEPORT) {
 			pc.sendPackets(new S_Teleport(pc));
 		} else {
