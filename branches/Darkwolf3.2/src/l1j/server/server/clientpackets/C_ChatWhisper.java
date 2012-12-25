@@ -51,10 +51,6 @@ public class C_ChatWhisper extends ClientBasePacket {
                 return;
             }
             
-            if (whisperFrom == null) {
-              return;
-            }
-            
             if (pc.hasSkillEffect(1005)) {
                 pc.sendPackets(new S_ServerMessage(242));
                 return;
@@ -77,6 +73,10 @@ public class C_ChatWhisper extends ClientBasePacket {
     			return;
     		}
     		
+            if (whisperFrom == null) {
+                return;
+            }
+              
     		L1PcInstance whisperTo = L1World.getInstance().getPlayer(targetName);
 
             if (whisperTo == null) {

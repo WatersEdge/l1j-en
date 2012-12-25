@@ -351,40 +351,26 @@ public class L1PetInstance extends L1NpcInstance {
 		}
 	}
 
-	public void collect(boolean isDepositnpc) {
-		L1Inventory targetInventory = _petMaster.getInventory();
+    public void collect() {
+        L1Inventory targetInventory = _petMaster.getInventory();
         List<L1ItemInstance> items = _inventory.getItems();
         int size = _inventory.getSize();
         for (int i = 0; i < size; i++) {
-                L1ItemInstance item = items.get(0);
-                if (item.isEquipped()) {
-                        continue;
-                }
-                if (item.isEquipped()) {
-                        if (!isDepositnpc) {
-                                continue;
-                        } else {
-                                L1PetItem petItem = PetItemTable.getInstance()
-                                .getTemplate(item.getItemId());
-                                if (petItem.getUseType() == 1) {
-                                        setWeapon(null);
-                                } else if (petItem.getUseType() == 0) {
-                                        setArmor(null);
-                                }
-                                item.setEquipped(false);
-                        }
-                }
-                if (_petMaster.getInventory().checkAddItem(
-                        item, item.getCount()) == L1Inventory.OK) {
-                        getInventory().tradeItem(item, item.getCount(), targetInventory);
-                        _petMaster.sendPackets(new S_ServerMessage(143, getName(), item
+            L1ItemInstance item = items.get(0);
+            if (item.isEquipped()) {
+                continue;
+            }
+            if (_petMaster.getInventory().checkAddItem(
+                    item, item.getCount()) == L1Inventory.OK) {
+                _inventory.tradeItem(item, item.getCount(), targetInventory);
+                _petMaster.sendPackets(new S_ServerMessage(143, getName(), item
                         .getLogName()));
-                } else {
-                        targetInventory = L1World.getInstance().getInventory(getX(),
+            } else {
+                targetInventory = L1World.getInstance().getInventory(getX(),
                         getY(), getMapId());
-                        getInventory().tradeItem(item, item.getCount(), targetInventory);
-                 }
-           }
+                _inventory.tradeItem(item, item.getCount(), targetInventory);
+            }
+        }
     }
 
 	public void dropItem() {
@@ -500,16 +486,14 @@ public class L1PetInstance extends L1NpcInstance {
 			for (Object petObject : petList) {
 				if (petObject instanceof L1PetInstance) { 
 					L1PetInstance pet = (L1PetInstance) petObject;
-					if (_petMaster != null && _petMaster.getLevel() >= pet
-							.getLevel()) {
+					if (_petMaster != null && _petMaster.getLevel() >= pet.getLevel()) {
 						pet.setCurrentPetStatus(status);
 					} else {
 						L1PetType type = PetTypeTable.getInstance().get(
-								pet.getNpcTemplate().get_npcId());
+						pet.getNpcTemplate().get_npcId());
 						int id = type.getDefyMessageId();
 						if (id != 0) {
-							broadcastPacket(new S_NpcChatPacket(pet,
-									"$" + id, 0));
+							broadcastPacket(new S_NpcChatPacket(pet, "$" + id, 0));
 						}
 					}
 				}
@@ -562,7 +546,7 @@ public class L1PetInstance extends L1NpcInstance {
 		} else if (action.equalsIgnoreCase("dismiss")) { 
 			status = 6;
 		} else if (action.equalsIgnoreCase("getitem")) { 
-			collect(false);
+			collect();
 		}
 		return status;
 	}

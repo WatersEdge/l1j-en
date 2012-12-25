@@ -712,21 +712,51 @@ public class C_NPCAction extends ClientBasePacket {
 				pc.sendPackets(new S_ServerMessage(79));
 			}
 			htmlid = ""; 
-		} else if (s.equalsIgnoreCase("depositnpc")) { 
-			Object[] petList = pc.getPetList().values().toArray();
-			for (Object petObject : petList) {
-				if (petObject instanceof L1PetInstance) { 
-					L1PetInstance pet = (L1PetInstance) petObject;
+        } else if (s.equalsIgnoreCase("depositnpc")) {
+            Object[] petList = pc.getPetList().values().toArray();
+            for (Object petObject : petList) {
+                if (petObject instanceof L1PetInstance) {
+                    L1PetInstance pet = (L1PetInstance) petObject;
 					pet.save(); // fix for pet xp. do not remove
 					pet.stopFoodTimer(pet);
-					pet.collect(false);
-					pc.getPetList().remove(pet.getId());
+					pet.collect();
+					pc.removePet(pet);
 					pet.deleteMe();
-				}
-			}
+                }
+            }
 			htmlid = ""; 
-		} else if (s.equalsIgnoreCase("withdrawnpc")) {
-			pc.sendPackets(new S_PetList(objid, pc));
+        } else if (s.equalsIgnoreCase("withdrawnpc")) {
+            pc.sendPackets(new S_PetList(objid, pc));
+        } else if (s.equalsIgnoreCase("aggressive")) {
+            if (obj instanceof L1PetInstance) {
+                final L1PetInstance l1pet = (L1PetInstance) obj;
+                l1pet.setCurrentPetStatus(1);
+            }
+        } else if (s.equalsIgnoreCase("defensive")) {
+            if (obj instanceof L1PetInstance) {
+                final L1PetInstance l1pet = (L1PetInstance) obj;
+                l1pet.setCurrentPetStatus(2);
+            }
+        } else if (s.equalsIgnoreCase("stay")) {
+            if (obj instanceof L1PetInstance) {
+                final L1PetInstance l1pet = (L1PetInstance) obj;
+                l1pet.setCurrentPetStatus(3);
+            }
+        } else if (s.equalsIgnoreCase("extend")) {
+            if (obj instanceof L1PetInstance) {
+                final L1PetInstance l1pet = (L1PetInstance) obj;
+                l1pet.setCurrentPetStatus(4);
+            }
+        } else if (s.equalsIgnoreCase("alert")) {
+            if (obj instanceof L1PetInstance) {
+                final L1PetInstance l1pet = (L1PetInstance) obj;
+                l1pet.setCurrentPetStatus(5);
+            }
+        } else if (s.equalsIgnoreCase("dismiss")) {
+            if (obj instanceof L1PetInstance) {
+                final L1PetInstance l1pet = (L1PetInstance) obj;
+                l1pet.setCurrentPetStatus(6);
+            }
 		} else if (s.equalsIgnoreCase("changename")) {
 			pc.setTempID(objid); 
 			pc.sendPackets(new S_Message_YN(325, "")); 

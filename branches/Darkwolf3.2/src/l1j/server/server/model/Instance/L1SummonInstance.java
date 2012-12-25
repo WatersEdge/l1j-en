@@ -29,6 +29,7 @@ import l1j.server.server.GeneralThreadPool;
 import l1j.server.server.encryptions.IdFactory;
 import l1j.server.server.datatables.DropTable;
 import l1j.server.server.datatables.NpcTable;
+import l1j.server.server.datatables.PetTypeTable;
 import l1j.server.server.model.L1Attack;
 import l1j.server.server.model.L1Character;
 import l1j.server.server.model.L1Inventory;
@@ -40,7 +41,10 @@ import l1j.server.server.serverpackets.S_PetMenuPacket;
 import l1j.server.server.serverpackets.S_ServerMessage;
 import l1j.server.server.serverpackets.S_SkillSound;
 import l1j.server.server.serverpackets.S_SummonPack;
+import l1j.server.server.serverpackets.S_NpcChatPacket;
 import l1j.server.server.templates.L1Npc;
+import l1j.server.server.templates.L1PetType;
+
 import static l1j.server.server.model.skill.L1SkillId.*;
 
 public class L1SummonInstance extends L1NpcInstance {
@@ -54,6 +58,20 @@ public class L1SummonInstance extends L1NpcInstance {
 	private boolean _tamed;
 	private boolean _isReturnToNature = false;
 	private static Random _random = new Random();
+    
+	class SummonTimer implements Runnable {
+        @Override
+        public void run() {
+            if (_destroyed) {
+                return;
+            }
+            if (_tamed) {
+                liberate();
+            } else {
+                Death(null);
+            }
+        }
+    }
 
 	public boolean noTarget(int depth) {
 		if (_currentPetStatus == 3) { // If summon is in rest mode
@@ -117,20 +135,6 @@ public class L1SummonInstance extends L1NpcInstance {
 			return true;
 		}
 		return false;
-	}
-
-	class SummonTimer implements Runnable {
-		@Override
-		public void run() {
-			if (_destroyed) {
-				return;
-			}
-			if (_tamed) {
-				liberate();
-			} else {
-				Death(null);
-			}
-		}
 	}
 
 	public L1SummonInstance(L1Npc template, L1Character master) {
@@ -423,18 +427,27 @@ public class L1SummonInstance extends L1NpcInstance {
 			} else {
 				Death(null);
 			}
-		} else {
-		
-			Object[] petList = _master.getPetList().values().toArray();
-			for (Object petObject : petList) {
-				if (petObject instanceof L1SummonInstance) {
-					L1SummonInstance summon = (L1SummonInstance) petObject;
-					summon.set_currentPetStatus(status);
-				} else {
-				}
-			}
-		}
-	}
+        } else {
+            Object[] petList = _master.getPetList().values().toArray();
+            for (Object petObject : petList) {
+                if (petObject instanceof L1SummonInstance) {
+                    L1SummonInstance summon = (L1SummonInstance) petObject;
+                    summon.set_currentPetStatus(status);
+                } else if (petObject instanceof L1PetInstance) {
+                    L1PetInstance pet = (L1PetInstance) petObject;
+                    if ((player != null) && (player.getLevel() >= pet.getLevel())) {
+                        pet.setCurrentPetStatus(status);
+                    } else {
+                        L1PetType type = PetTypeTable.getInstance().get(pet.getNpcTemplate().get_npcId());
+                        int id = type.getDefyMessageId();
+                        if (id != 0) {
+                            broadcastPacket(new S_NpcChatPacket(pet, "$" + id, 0));
+                        }
+                    }
+                }
+            }
+        }
+    }
 
 	@Override
 	public void onPerceive(L1PcInstance perceivedFrom) {
