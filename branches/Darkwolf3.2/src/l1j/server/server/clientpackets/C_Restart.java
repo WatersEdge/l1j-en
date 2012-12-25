@@ -53,8 +53,10 @@ public class C_Restart extends ClientBasePacket {
             if (pc == null) {
                 return;
             }
-
-		int[] loc;
+            
+        pc.stopPcDeleteTimer();
+		
+        int[] loc;
 		
 		if (pc.getHellTime() > 0) {
 			loc = new int[3];
