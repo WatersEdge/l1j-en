@@ -21,6 +21,7 @@ package l1j.server.server.datatables;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.Map;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.logging.Level;
@@ -31,11 +32,10 @@ import l1j.server.server.templates.L1PetItem;
 import l1j.server.server.utils.SQLUtil;
 
 public class PetItemTable {
-	private static Logger _log = Logger.getLogger(PetItemTable.class
-			.getName());
+	private static Logger _log = Logger.getLogger(PetItemTable.class.getName());
 	private static PetItemTable _instance;
-	private final HashMap<Integer, L1PetItem> _petItemIdIndex = 
-		new HashMap<Integer, L1PetItem>();
+    private final HashMap<Integer, L1PetItem> _petItemIdIndex = new HashMap<Integer, L1PetItem>();
+    private static Map<String, Integer> _useTypes = new HashMap<String, Integer>();
 
 	public static PetItemTable getInstance() {
 		if (_instance == null) {
@@ -43,6 +43,11 @@ public class PetItemTable {
 		}
 		return _instance;
 	}
+	
+    static {
+        _useTypes.put("armor", new Integer(0));
+        _useTypes.put("tooth", new Integer(1));
+    }
 
 	private PetItemTable() {
 		loadPetItem();
@@ -70,6 +75,7 @@ public class PetItemTable {
 		while (rs.next()) {
 			L1PetItem petItem = new L1PetItem();
 			petItem.setItemId(rs.getInt("item_id"));
+			petItem.setUseType((_useTypes.get(rs.getString("use_type"))).intValue());
 			petItem.setHitModifier(rs.getInt("hitmodifier"));
 			petItem.setDamageModifier(rs.getInt("dmgmodifier"));
 			petItem.setAddAc(rs.getInt("ac"));

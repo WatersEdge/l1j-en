@@ -23,20 +23,24 @@ import l1j.server.server.model.Instance.L1PetInstance;
 
 public class S_PetEquipment extends ServerBasePacket {
 	private static final String S_PET_EQUIPMENT = "[S] S_PetEquipment";
+	private byte[] _byte = null;
 
 	public S_PetEquipment(int i, L1PetInstance pet, int j) {
 		writeC(Opcodes.S_OPCODE_PACKETBOX);
-		writeC(0x25);
+		writeC(S_PacketBox.PET_EQUIPMENT);
 		writeC(i);
 		writeD(pet.getId());
 		writeC(j);
 		writeC(pet.getAc());
 	}
 
-	@Override
-	public byte[] getContent() {
-		return getBytes();
-	}
+    @Override
+    public byte[] getContent() {
+        if (_byte == null) {
+            _byte = getBytes();
+        }
+        return _byte;
+    }
 
 	@Override
 	public String getType() {

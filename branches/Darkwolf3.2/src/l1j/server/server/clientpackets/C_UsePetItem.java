@@ -59,12 +59,8 @@ public class C_UsePetItem extends ClientBasePacket {
             int petId = readD();
             int listNo = readC();
 
-            L1PetInstance pet = (L1PetInstance) L1World.getInstance()
-                    .findObject(petId);
+            L1PetInstance pet = (L1PetInstance) L1World.getInstance().findObject(petId);
 
-            if (pet == null) {
-                return;
-            }
             L1ItemInstance item = pet.getInventory().getItems().get(listNo);
             if (item == null) {
                 return;

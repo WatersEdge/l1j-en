@@ -274,7 +274,7 @@ public class C_Attr extends ClientBasePacket {
 			}
 			break;
 		case 325:
-			c = readC(); 
+			c = readH(); 
 			name = readS();
 			L1PetInstance pet = (L1PetInstance) L1World.getInstance().findObject(pc.getTempID());
 			pc.setTempID(0);

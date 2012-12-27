@@ -116,8 +116,8 @@ public class S_PacketBox extends ServerBasePacket {
 
 	public static final int ICON_CHATBAN = 36;
 
-	// C_7 Packets flying
-	public static final int SOMETHING2 = 37;
+	// Pet Equipment
+	public static final int PET_EQUIPMENT = 37;
 
 	// Clan information HTML
 	public static final int HTML_CLAN1 = 38;

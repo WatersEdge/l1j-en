@@ -719,7 +719,7 @@ public class C_NPCAction extends ClientBasePacket {
                     L1PetInstance pet = (L1PetInstance) petObject;
 					pet.save(); // fix for pet xp. do not remove
 					pet.stopFoodTimer(pet);
-					pet.collect();
+					pet.collect(true);
 					pc.removePet(pet);
 					pet.deleteMe();
                 }

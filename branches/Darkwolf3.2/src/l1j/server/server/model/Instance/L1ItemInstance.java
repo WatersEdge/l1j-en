@@ -29,6 +29,7 @@ import java.io.LineNumberReader;
 
 import l1j.server.server.datatables.NpcTable;
 import l1j.server.server.datatables.InnKeyTable;
+import l1j.server.server.datatables.PetItemTable;
 import l1j.server.server.datatables.PetTable;
 import l1j.server.server.datatables.LetterTable;
 import l1j.server.server.datatables.FurnitureSpawnTable;
@@ -36,6 +37,7 @@ import l1j.server.server.model.L1EquipmentTimer;
 import l1j.server.server.model.L1ItemOwnerTimer;
 import l1j.server.server.model.L1Object;
 import l1j.server.server.model.L1World;
+import l1j.server.server.model.L1ItemOwnerTimer;
 import l1j.server.server.model.L1PcInventory;
 import l1j.server.server.model.skill.L1SkillId;
 import l1j.server.server.serverpackets.S_OwnCharStatus;
@@ -44,6 +46,7 @@ import l1j.server.server.templates.L1Armor;
 import l1j.server.server.templates.L1Item;
 import l1j.server.server.templates.L1Npc;
 import l1j.server.server.templates.L1Pet;
+import l1j.server.server.templates.L1PetItem; 
 import l1j.server.server.utils.BinaryOutputStream;
 import static l1j.server.server.model.skill.L1SkillId.*;
 
@@ -277,6 +280,16 @@ public class L1ItemInstance extends L1Object {
 		return _attrEnchantLevel;
 	}
 
+	private boolean _isNowLighting = false;
+
+	public boolean isNowLighting() {
+	return _isNowLighting;
+	}
+
+	public void setNowLighting(boolean flag) {
+		_isNowLighting = flag;
+	}
+	
 	public int getMr() {
 		int mr = _item.get_mdef();
 		if (getItemId() == 20011 || getItemId() == 20110
@@ -601,219 +614,409 @@ public class L1ItemInstance extends L1Object {
 		return name.toString();
 	}
 
-	public byte[] getStatusBytes() {
-		int itemType2 = getItem().getType2();
-		int itemId = getItemId();
-		BinaryOutputStream os = new BinaryOutputStream();
+		private int _acByMagic = 0;
+
+		public int getAcByMagic() {
+			return _acByMagic;
+		}
+
+		public void setAcByMagic(int i) {
+			_acByMagic = i;
+		}
+
+		private int _dmgByMagic = 0;
+
+		public int getDmgByMagic() {
+			return _dmgByMagic;
+		}
+
+		public void setDmgByMagic(int i) {
+			_dmgByMagic = i;
+		}
+
+		private int _holyDmgByMagic = 0;
+
+		public int getHolyDmgByMagic() {
+			return _holyDmgByMagic;
+		}
+
+		public void setHolyDmgByMagic(int i) {
+			_holyDmgByMagic = i;
+		}
+
+		private int _hitByMagic = 0;
+
+		public int getHitByMagic() {
+			return _hitByMagic;
+		}
+
+		public void setHitByMagic(int i) {
+			_hitByMagic = i;
+		}
+
+		private int _itemOwnerId = 0;
+
+		public int getItemOwnerId() {
+		return _itemOwnerId;
+		}
+
+		public void setItemOwnerId(int i) {
+			_itemOwnerId = i;
+		}
+
+		public void startItemOwnerTimer(L1PcInstance pc) {
+			setItemOwnerId(pc.getId());
+			L1ItemOwnerTimer timer = new L1ItemOwnerTimer(this, 10000);
+			timer.begin();
+		}
+
+		private L1EquipmentTimer _equipmentTimer;
+
+		public void startEquipmentTimer(L1PcInstance pc) {
+			if (getRemainingTime() > 0) {
+				_equipmentTimer = new L1EquipmentTimer(pc, this);
+				Timer timer = new Timer(true);
+				timer.scheduleAtFixedRate(_equipmentTimer, 1000, 1000);
+			}
+		}
+
+		public void stopEquipmentTimer(L1PcInstance pc) {
+			if (getRemainingTime() > 0) {
+				_equipmentTimer.cancel();
+				_equipmentTimer = null;
+			}
+		}
 		
-		if (itemType2 == 0) { // etcitem
-			switch (getItem().getType()) {
-			case 2: // light
-				os.writeC(22); 
-				os.writeH(getItem().getLightRange());
-				break;
-			case 7: // food
-				os.writeC(21);
-				os.writeH(getItem().getFoodVolume());
-				break;
-			case 0: // arrow
-			case 15: // sting
-				os.writeC(1); 
-				os.writeC(getItem().getDmgSmall());
-				os.writeC(getItem().getDmgLarge());
-				break;
-			case 11: 
-				os.writeC(7);
-				os.writeC(128);
-				os.writeC(23);
-				break;
-			default:
-				os.writeC(23);
-				break;
-			}
-			os.writeC(getItem().getMaterial());
-			os.writeD(getWeight());
-			
-		} else if (itemType2 == 1 || itemType2 == 2) { // weapon | armor
-			if (itemType2 == 1) { // weapon
-				os.writeC(1);
-				os.writeC(getItem().getDmgSmall());
-				os.writeC(getItem().getDmgLarge());
-				os.writeC(getItem().getMaterial());
-				os.writeD(getWeight());
-			} else if (itemType2 == 2) { // armor
-				// AC
-				os.writeC(19); 
-				int ac = ((L1Armor) getItem()).get_ac();
-				if (ac < 0) {
-					ac = ac - ac - ac;
+		public void setSkillArmorEnchant(L1PcInstance pc, int skillId, int skillTime) {
+			int type = getItem().getType();
+			int type2 = getItem().getType2();
+			if (_isRunning) {
+				_timer.cancel();
+				int itemId = getItem().getItemId();
+				if (pc != null && pc.getInventory().checkItem(itemId)) {
+					if (type == 2 && type2 == 2 && isEquipped()) {
+						pc.addAc(3);
+						pc.sendPackets(new S_OwnCharStatus(pc));
+					}
 				}
-				os.writeH(ac);
-				os.writeC(getItem().getMaterial());
-				os.writeD(getWeight());
-			}
-			if (getEnchantLevel() != 0) {
-				os.writeC(2);
-				os.writeC(getEnchantLevel());
-			}
-			if (get_durability() != 0) {
-				os.writeC(3);
-				os.writeC(get_durability());
-			}
-			if (getItem().isTwohandedWeapon()) {
-				os.writeC(4);
-			}
-			
-			if (itemType2 == 1) { // weapon
-				if (getItem().getHitModifier() != 0) {
-					os.writeC(5);
-					os.writeC(getItem().getHitModifier());
-				}
-			} else if (itemType2 == 2) { // armor
-				if (getItem().getHitModifierByArmor() != 0) {
-					os.writeC(5);
-					os.writeC(getItem().getHitModifierByArmor());
-				}
+				setAcByMagic(0);
+				_isRunning = false;
+				_timer = null;
 			}
 
-			if (itemType2 == 1) { // weapon
-				if (getItem().getDmgModifier() != 0) {
-					os.writeC(6);
-					os.writeC(getItem().getDmgModifier());
-				}
-			} else if (itemType2 == 2) { // armor
-				if (getItem().getDmgModifierByArmor() != 0) {
-					os.writeC(6);
-					os.writeC(getItem().getDmgModifierByArmor());
-				}
+			if (type == 2 && type2 == 2 && isEquipped()) {
+				pc.addAc(-3);
+				pc.sendPackets(new S_OwnCharStatus(pc));
 			}
+			setAcByMagic(3);
+			_pc = pc;
+			_timer = new EnchantTimer();
+			(new Timer()).schedule(_timer, skillTime);
+			_isRunning = true;
+		}
 
-			int bit = 0;
-			bit |= getItem().isUseRoyal()   ? 1 : 0;
-			bit |= getItem().isUseKnight()  ? 2 : 0;
-			bit |= getItem().isUseElf()     ? 4 : 0;
-			bit |= getItem().isUseMage()    ? 8 : 0;
-			bit |= getItem().isUseDarkelf() ? 16 : 0;
-			bit |= getItem().isUseDragonknight() ? 32 : 0;
-			bit |= getItem().isUseIllusionist() ? 64 : 0;
-			// bit |= getItem().isUseHiPet() ? 64 : 0; 
-			os.writeC(7);
-			os.writeC(bit);
+		public void setSkillWeaponEnchant(L1PcInstance pc, int skillId,
+				int skillTime) {
+			if (getItem().getType2() != 1) {
+				return;
+			}
+			if (_isRunning) {
+				_timer.cancel();
+				setDmgByMagic(0);
+				setHolyDmgByMagic(0);
+				setHitByMagic(0);
+				_isRunning = false;
+				_timer = null;
+			}
+			switch(skillId) {
+				case HOLY_WEAPON:
+					setHolyDmgByMagic(1);
+					setHitByMagic(1);
+					break;
+				case ENCHANT_WEAPON:
+					setDmgByMagic(2);
+					break;
+				case BLESS_WEAPON:
+					setDmgByMagic(2);
+					setHitByMagic(2);
+					break;
+				case SHADOW_FANG:
+					setDmgByMagic(5);
+					break;
+				default:
+					break;
+			}
+			_pc = pc;
+			_timer = new EnchantTimer();
+			(new Timer()).schedule(_timer, skillTime);
+			_isRunning = true;
+		}
+	
+    public byte[] getStatusBytes() {
+        int itemType2 = getItem().getType2();
+        int itemId = getItemId();
+        BinaryOutputStream os = new BinaryOutputStream();
+        L1PetItem petItem = PetItemTable.getInstance().getTemplate(itemId);
 
-			if (getItem().getBowHitModifierByArmor() != 0) {
-				os.writeC(24);
-				os.writeC(getItem().getBowHitModifierByArmor());
-			}
+        if (petItem != null) {
+            if (petItem.getUseType() == 1) {
+                os.writeC(7);
+                os.writeC(128);
+                os.writeC(23);
+                os.writeC(getItem().getMaterial());
+                os.writeD(getWeight());
+            } else {
+                // AC
+                os.writeC(19);
+                int ac = petItem.getAddAc();
+                if (ac < 0) {
+                    ac = ac - ac - ac;
+                }
+                os.writeC(ac);
+                os.writeC(getItem().getMaterial());
+                os.writeC(-1);
+                os.writeD(getWeight());
+                os.writeC(7);
+                os.writeC(128);
 
-			if (getItem().getBowDmgModifierByArmor() != 0) {
-				os.writeC(35);
-				os.writeC(getItem().getBowDmgModifierByArmor());
-			}
+                // STR~CHA
+                if (petItem.getAddStr() != 0) {
+                    os.writeC(8);
+                    os.writeC(petItem.getAddStr());
+                }
+                if (petItem.getAddDex() != 0) {
+                    os.writeC(9);
+                    os.writeC(petItem.getAddDex());
+                }
+                if (petItem.getAddCon() != 0) {
+                    os.writeC(10);
+                    os.writeC(petItem.getAddCon());
+                }
+                if (petItem.getAddWis() != 0) {
+                    os.writeC(11);
+                    os.writeC(petItem.getAddWis());
+                }
+                if (petItem.getAddInt() != 0) {
+                    os.writeC(12);
+                    os.writeC(petItem.getAddInt());
+                }
+                // HP, MP
+                if (petItem.getAddHp() != 0) {
+                    os.writeC(14);
+                    os.writeH(petItem.getAddHp());
+                }
+                if (petItem.getAddMp() != 0) {
+                    os.writeC(32);
+                    os.writeC(petItem.getAddMp());
+                }
+                // MR
+                if (petItem.getAddMr() != 0) {
+                    os.writeC(15);
+                    os.writeH(petItem.getAddMr());
+                }
+                // SP
+                if (petItem.getAddSp() != 0) {
+                    os.writeC(17);
+                    os.writeC(petItem.getAddSp());
+                }
+            }
+        } else if (itemType2 == 0) { // etcitem
+            switch (getItem().getType()) {
+                case 2: // light
+                    os.writeC(22);
+                    os.writeH(getItem().getLightRange());
+                    break;
+                case 7: // food
+                    os.writeC(21);
+                    os.writeH(getItem().getFoodVolume());
+                    break;
+                case 0: // arrow
+                case 15: // sting
+                    os.writeC(1);
+                    os.writeC(getItem().getDmgSmall());
+                    os.writeC(getItem().getDmgLarge());
+                    break;
+                default:
+                    os.writeC(23);
+                    break;
+            }
+            os.writeC(getItem().getMaterial());
+            os.writeD(getWeight());
 
-			if (itemId == 126 || itemId == 127) { 
-				os.writeC(16);
-			}
-		
-			if (itemId == 262) { 
-				os.writeC(34);
-			}
-			// STR~CHA
-			if (getItem().get_addstr() != 0) {
-				os.writeC(8);
-				os.writeC(getItem().get_addstr());
-			}
-			if (getItem().get_adddex() != 0) {
-				os.writeC(9);
-				os.writeC(getItem().get_adddex());
-			}
-			if (getItem().get_addcon() != 0) {
-				os.writeC(10);
-				os.writeC(getItem().get_addcon());
-			}
-			if (getItem().get_addwis() != 0) {
-				os.writeC(11);
-				os.writeC(getItem().get_addwis());
-			}
-			if (getItem().get_addint() != 0) {
-				os.writeC(12);
-				os.writeC(getItem().get_addint());
-			}
-			if (getItem().get_addcha() != 0) {
-				os.writeC(13);
-				os.writeC(getItem().get_addcha());
-			}
-			// HP, MP
-			if (getItem().get_addhp() != 0) {
-				os.writeC(14);
-				os.writeH(getItem().get_addhp());
-			}
-			if (getItem().get_addmp() != 0) {
-				os.writeC(32);
-				os.writeC(getItem().get_addmp());
-			}
-			if (getMr() != 0) {
-				os.writeC(15);
-				os.writeH(getMr());
-			}
-			if (getItem().get_addsp() != 0) {
-				os.writeC(17);
-				os.writeC(getItem().get_addsp());
-			}
-			if (getItem().isHasteItem()) {
-				os.writeC(18);
-			}
-			if (getItem().get_defense_fire() != 0) {
-				os.writeC(27);
-				os.writeC(getItem().get_defense_fire());
-			}
-			if (getItem().get_defense_water() != 0) {
-				os.writeC(28);
-				os.writeC(getItem().get_defense_water());
-			}
-			if (getItem().get_defense_wind() != 0) {
-				os.writeC(29);
-				os.writeC(getItem().get_defense_wind());
-			}
-			if (getItem().get_defense_earth() != 0) {
-				os.writeC(30);
-				os.writeC(getItem().get_defense_earth());
-			}
-			if (getItem().get_regist_freeze() != 0) {
-				os.writeC(15);
-				os.writeH(getItem().get_regist_freeze());
-				os.writeC(33);
-				os.writeC(1);
-			}
-			if (getItem().get_regist_stone() != 0) {
-				os.writeC(15);
-				os.writeH(getItem().get_regist_stone());
-				os.writeC(33);
-				os.writeC(2);
-			}
-			if (getItem().get_regist_sleep() != 0) {
-				os.writeC(15);
-				os.writeH(getItem().get_regist_sleep());
-				os.writeC(33);
-				os.writeC(3);
-			}
-			if (getItem().get_regist_blind() != 0) {
-				os.writeC(15);
-				os.writeH(getItem().get_regist_blind());
-				os.writeC(33);
-				os.writeC(4);
-			}
-			if (getItem().get_regist_stun() != 0) {
-				os.writeC(15);
-				os.writeH(getItem().get_regist_stun());
-				os.writeC(33);
-				os.writeC(5);
-			}
-			if (getItem().get_regist_sustain() != 0) {
-				os.writeC(15);
-				os.writeH(getItem().get_regist_sustain());
-				os.writeC(33);
-				os.writeC(6);
-			}
+        } else if (itemType2 == 1 || itemType2 == 2) { // weapon | armor
+            if (itemType2 == 1) { // weapon
+                os.writeC(1);
+                os.writeC(getItem().getDmgSmall());
+                os.writeC(getItem().getDmgLarge());
+                os.writeC(getItem().getMaterial());
+                os.writeD(getWeight());
+            } else if (itemType2 == 2) { // armor
+                // AC
+                os.writeC(19);
+                int ac = ((L1Armor) getItem()).get_ac();
+                if (ac < 0) {
+                    ac = ac - ac - ac;
+                }
+                os.writeH(ac);
+                os.writeC(getItem().getMaterial());
+                os.writeD(getWeight());
+            }
+            if (getEnchantLevel() != 0) {
+                os.writeC(2);
+                os.writeC(getEnchantLevel());
+            }
+            if (get_durability() != 0) {
+                os.writeC(3);
+                os.writeC(get_durability());
+            }
+            if (getItem().isTwohandedWeapon()) {
+                os.writeC(4);
+            }
+            if (itemType2 == 1) { // weapon
+                if (getItem().getHitModifier() != 0) {
+                    os.writeC(5);
+                    os.writeC(getItem().getHitModifier());
+                }
+            } else if (itemType2 == 2) { // armor
+                if (getItem().getHitModifierByArmor() != 0) {
+                    os.writeC(5);
+                    os.writeC(getItem().getHitModifierByArmor());
+                }
+            }
+            if (itemType2 == 1) { // weapon
+                if (getItem().getDmgModifier() != 0) {
+                    os.writeC(6);
+                    os.writeC(getItem().getDmgModifier());
+                }
+            } else if (itemType2 == 2) { // armor
+                if (getItem().getDmgModifierByArmor() != 0) {
+                    os.writeC(6);
+                    os.writeC(getItem().getDmgModifierByArmor());
+                }
+            }
+            int bit = 0;
+            bit |= getItem().isUseRoyal() ? 1 : 0;
+            bit |= getItem().isUseKnight() ? 2 : 0;
+            bit |= getItem().isUseElf() ? 4 : 0;
+            bit |= getItem().isUseMage() ? 8 : 0;
+            bit |= getItem().isUseDarkelf() ? 16 : 0;
+            bit |= getItem().isUseDragonknight() ? 32 : 0;
+            bit |= getItem().isUseIllusionist() ? 64 : 0;
+            // bit |= getItem().isUseHiPet() ? 64 : 0;
+            os.writeC(7);
+            os.writeC(bit);
+            if (getItem().getBowHitModifierByArmor() != 0) {
+                os.writeC(24);
+                os.writeC(getItem().getBowHitModifierByArmor());
+            }
+            if (getItem().getBowDmgModifierByArmor() != 0) {
+                os.writeC(35);
+                os.writeC(getItem().getBowDmgModifierByArmor());
+            }
+            if (itemId == 126 || itemId == 127) {
+                os.writeC(16);
+            }
+            if (itemId == 262) {
+                os.writeC(34);
+            }
+            // STR~CHA
+            if (getItem().get_addstr() != 0) {
+                os.writeC(8);
+                os.writeC(getItem().get_addstr());
+            }
+            if (getItem().get_adddex() != 0) {
+                os.writeC(9);
+                os.writeC(getItem().get_adddex());
+            }
+            if (getItem().get_addcon() != 0) {
+                os.writeC(10);
+                os.writeC(getItem().get_addcon());
+            }
+            if (getItem().get_addwis() != 0) {
+                os.writeC(11);
+                os.writeC(getItem().get_addwis());
+            }
+            if (getItem().get_addint() != 0) {
+                os.writeC(12);
+                os.writeC(getItem().get_addint());
+            }
+            if (getItem().get_addcha() != 0) {
+                os.writeC(13);
+                os.writeC(getItem().get_addcha());
+            }
+            // HP, MP
+            if (getItem().get_addhp() != 0) {
+                os.writeC(14);
+                os.writeH(getItem().get_addhp());
+            }
+            if (getItem().get_addmp() != 0) {
+                os.writeC(32);
+                os.writeC(getItem().get_addmp());
+            }
+            // MR
+            if (getMr() != 0) {
+                os.writeC(15);
+                os.writeH(getMr());
+            }
+            if (getItem().get_addsp() != 0) {
+                os.writeC(17);
+                os.writeC(getItem().get_addsp());
+            }
+            if (getItem().isHasteItem()) {
+                os.writeC(18);
+            }
+            if (getItem().get_defense_fire() != 0) {
+                os.writeC(27);
+                os.writeC(getItem().get_defense_fire());
+            }
+            if (getItem().get_defense_water() != 0) {
+                os.writeC(28);
+                os.writeC(getItem().get_defense_water());
+            }
+            if (getItem().get_defense_wind() != 0) {
+                os.writeC(29);
+                os.writeC(getItem().get_defense_wind());
+            }
+            if (getItem().get_defense_earth() != 0) {
+                os.writeC(30);
+                os.writeC(getItem().get_defense_earth());
+            }
+            if (getItem().get_regist_freeze() != 0) {
+                os.writeC(15);
+                os.writeH(getItem().get_regist_freeze());
+                os.writeC(33);
+                os.writeC(1);
+            }
+            if (getItem().get_regist_stone() != 0) {
+                os.writeC(15);
+                os.writeH(getItem().get_regist_stone());
+                os.writeC(33);
+                os.writeC(2);
+            }
+            if (getItem().get_regist_sleep() != 0) {
+                os.writeC(15);
+                os.writeH(getItem().get_regist_sleep());
+                os.writeC(33);
+                os.writeC(3);
+            }
+            if (getItem().get_regist_blind() != 0) {
+                os.writeC(15);
+                os.writeH(getItem().get_regist_blind());
+                os.writeC(33);
+                os.writeC(4);
+            }
+            if (getItem().get_regist_stun() != 0) {
+                os.writeC(15);
+                os.writeH(getItem().get_regist_stun());
+                os.writeC(33);
+                os.writeC(5);
+            }
+            if (getItem().get_regist_sustain() != 0) {
+                os.writeC(15);
+                os.writeH(getItem().get_regist_sustain());
+                os.writeC(33);
+                os.writeC(6);
+            }
             if (getItem().get_addhpr() != 0) {
                 os.writeC(37);
                 os.writeC(getItem().get_addhpr());
@@ -822,204 +1025,9 @@ public class L1ItemInstance extends L1Object {
                 os.writeC(38);
                 os.writeC(getItem().get_addmpr());
             }
-// if (getItem.getLuck() != 0) {
-// os.writeC(20);
-// os.writeC(val);
-// }
-// if (getItem.getDesc() != 0) {
-// os.writeC(25);
-// os.writeH(val); // desc.tbl ID
-// }
-// if (getItem.getLevel() != 0) {
-// os.writeC(26);
-// os.writeH(val);
-// }
-		}
+        }
 		return os.getBytes();
-	}
-
-class EnchantTimer extends TimerTask {
-
-	public EnchantTimer() {
-	}
-
-	@Override
-	public void run() {
-		try {
-			int type = getItem().getType();
-			int type2 = getItem().getType2();
-			int itemId = getItem().getItemId();
-			if (_pc != null && _pc.getInventory().checkItem(itemId)) {
-				if (type == 2 && type2 == 2 && isEquipped()) {
-					_pc.addAc(3);
-					_pc.sendPackets(new S_OwnCharStatus(_pc));
-				}
-			}
-			setAcByMagic(0);
-			setDmgByMagic(0);
-			setHolyDmgByMagic(0);
-			setHitByMagic(0);
-			_pc.sendPackets(new S_ServerMessage(308, getLogName()));
-			_isRunning = false;
-			_timer = null;
-		} catch (Exception e) {
-		}
-	}
-}
-
-	private int _acByMagic = 0;
-
-	public int getAcByMagic() {
-		return _acByMagic;
-	}
-
-	public void setAcByMagic(int i) {
-		_acByMagic = i;
-	}
-
-	private int _dmgByMagic = 0;
-
-	public int getDmgByMagic() {
-		return _dmgByMagic;
-	}
-
-	public void setDmgByMagic(int i) {
-		_dmgByMagic = i;
-	}
-
-	private int _holyDmgByMagic = 0;
-
-	public int getHolyDmgByMagic() {
-		return _holyDmgByMagic;
-	}
-
-	public void setHolyDmgByMagic(int i) {
-		_holyDmgByMagic = i;
-	}
-
-	private int _hitByMagic = 0;
-
-	public int getHitByMagic() {
-		return _hitByMagic;
-	}
-
-	public void setHitByMagic(int i) {
-		_hitByMagic = i;
-	}
-
-	public void setSkillArmorEnchant(L1PcInstance pc, int skillId, int skillTime) {
-		int type = getItem().getType();
-		int type2 = getItem().getType2();
-		if (_isRunning) {
-			_timer.cancel();
-			int itemId = getItem().getItemId();
-			if (pc != null && pc.getInventory().checkItem(itemId)) {
-				if (type == 2 && type2 == 2 && isEquipped()) {
-					pc.addAc(3);
-					pc.sendPackets(new S_OwnCharStatus(pc));
-				}
-			}
-			setAcByMagic(0);
-			_isRunning = false;
-			_timer = null;
-		}
-
-		if (type == 2 && type2 == 2 && isEquipped()) {
-			pc.addAc(-3);
-			pc.sendPackets(new S_OwnCharStatus(pc));
-		}
-		setAcByMagic(3);
-		_pc = pc;
-		_timer = new EnchantTimer();
-		(new Timer()).schedule(_timer, skillTime);
-		_isRunning = true;
-	}
-
-	public void setSkillWeaponEnchant(L1PcInstance pc, int skillId,
-			int skillTime) {
-		if (getItem().getType2() != 1) {
-			return;
-		}
-		if (_isRunning) {
-			_timer.cancel();
-			setDmgByMagic(0);
-			setHolyDmgByMagic(0);
-			setHitByMagic(0);
-			_isRunning = false;
-			_timer = null;
-		}
-
-		switch(skillId) {
-			case HOLY_WEAPON:
-				setHolyDmgByMagic(1);
-				setHitByMagic(1);
-				break;
-
-			case ENCHANT_WEAPON:
-				setDmgByMagic(2);
-				break;
-
-			case BLESS_WEAPON:
-				setDmgByMagic(2);
-				setHitByMagic(2);
-				break;
-
-			case SHADOW_FANG:
-				setDmgByMagic(5);
-				break;
-
-			default:
-				break;
-		}
-
-		_pc = pc;
-		_timer = new EnchantTimer();
-		(new Timer()).schedule(_timer, skillTime);
-		_isRunning = true;
-	}
-
-	private int _itemOwnerId = 0;
-
-	public int getItemOwnerId() {
-	return _itemOwnerId;
-	}
-
-	public void setItemOwnerId(int i) {
-		_itemOwnerId = i;
-	}
-
-	public void startItemOwnerTimer(L1PcInstance pc) {
-		setItemOwnerId(pc.getId());
-		L1ItemOwnerTimer timer = new L1ItemOwnerTimer(this, 10000);
-		timer.begin();
-	}
-
-	private L1EquipmentTimer _equipmentTimer;
-
-	public void startEquipmentTimer(L1PcInstance pc) {
-		if (getRemainingTime() > 0) {
-			_equipmentTimer = new L1EquipmentTimer(pc, this);
-			Timer timer = new Timer(true);
-			timer.scheduleAtFixedRate(_equipmentTimer, 1000, 1000);
-		}
-	}
-
-	public void stopEquipmentTimer(L1PcInstance pc) {
-		if (getRemainingTime() > 0) {
-			_equipmentTimer.cancel();
-			_equipmentTimer = null;
-		}
-	}
-
-	private boolean _isNowLighting = false;
-
-	public boolean isNowLighting() {
-	return _isNowLighting;
-	}
-
-	public void setNowLighting(boolean flag) {
-		_isNowLighting = flag;
-	}
+	 }
 
 	private void onDelete() {
         int itemId = getItem().getItemId();
@@ -1041,4 +1049,32 @@ class EnchantTimer extends TimerTask {
                 InnKeyTable.DeleteKey(this);
         }
     }
-}
+
+	class EnchantTimer extends TimerTask {
+
+	    public EnchantTimer() {
+	    }
+
+	    @Override
+	    public void run() {
+	        try {
+	            int type = getItem().getType();
+	            int type2 = getItem().getType2();
+	            int itemId = getItem().getItemId();
+	            if (_pc != null && _pc.getInventory().checkItem(itemId)) {
+	                if (type == 2 && type2 == 2 && isEquipped()) {
+	                    _pc.addAc(3);
+	                    _pc.sendPackets(new S_OwnCharStatus(_pc));
+	                }
+	            }
+	            setAcByMagic(0);
+	            setDmgByMagic(0);
+	            setHolyDmgByMagic(0);
+	            setHitByMagic(0);
+	            _pc.sendPackets(new S_ServerMessage(308, getLogName()));
+	            _isRunning = false;
+	            _timer = null;
+	        } catch (Exception e) {
+	    }
+	    }
+	}}

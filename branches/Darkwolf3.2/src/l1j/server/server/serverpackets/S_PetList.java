@@ -31,58 +31,69 @@ import l1j.server.server.serverpackets.S_PetList;
 // Referenced classes of package l1j.server.server.serverpackets:
 // ServerBasePacket
 public class S_PetList extends ServerBasePacket {
-	private static Logger _log = Logger.getLogger(S_PetList.class.getName());
-	private static final String S_PETLIST = "[S] S_PetList";
-	private byte[] _byte = null;
+	    @SuppressWarnings("unused")
+	    private static Logger _log = Logger.getLogger(S_PetList.class.getName());
+	    private static final String S_PETLIST = "[S] S_PetList";
+	    private byte[] _byte = null;
 
-	public S_PetList(int npcObjId, L1PcInstance pc) {
-		buildPacket(npcObjId, pc);
-	}
+	    public S_PetList(int npcObjId, L1PcInstance pc) {
+	        buildPacket(npcObjId, pc);
+	    }
 
-	private void buildPacket(int npcObjId, L1PcInstance pc) {
-		List<L1ItemInstance> amuletList = new ArrayList<L1ItemInstance>();
-		for (Object itemObject : pc.getInventory().getItems()) {
-			L1ItemInstance item = (L1ItemInstance) itemObject;
-			if (item.getItem().getItemId() == 40314 || item.getItem().getItemId() == 40316) {
-				if (!isWithdraw(pc, item)) {
-					amuletList.add(item);
-				}
-			}
-		}
-		if (amuletList.size() != 0) {
-			writeC(Opcodes.S_OPCODE_SELECTLIST);
-			writeD(0x00000046); // Price
-			writeH(amuletList.size());
-			for (L1ItemInstance item : amuletList) {
-				writeD(item.getId());
-				writeC(item.getCount());
-			}
-		}
-	}
+	    private void buildPacket(int npcObjId, L1PcInstance pc) {
+	        List<L1ItemInstance> amuletList = new ArrayList<L1ItemInstance>();
+	        for (Object itemObject : pc.getInventory().getItems()) {
+	            L1ItemInstance item = (L1ItemInstance) itemObject;
+	            if (item.getItem().getItemId() == 40314
+	                    || item.getItem().getItemId() == 40316) {
+	                if (!isWithdraw(pc, item)) {
+	                    amuletList.add(item);
+	                }
+	            }
+	        }
+	        if (amuletList.size() != 0) {
+	            writeC(Opcodes.S_OPCODE_SHOWRETRIEVELIST);
+	            writeD(npcObjId);
+	            writeH(amuletList.size());
+	            writeC(0x0c);
+	            for (L1ItemInstance item : amuletList) {
+	                writeD(item.getId());
+	                writeC(0x00);
+	                writeH(item.get_gfxid());
+	                writeC(item.getBless());
+	                writeD(item.getCount());
+	                writeC(item.isIdentified() ? 1 : 0);
+	                writeS(item.getViewName());
+	            }
+	        } else {
+	            return;
+	        }
+	        writeD(0x00000073); // Price TODO
+	    }
 
-	private boolean isWithdraw(L1PcInstance pc, L1ItemInstance item) {
-		Object[] petlist = pc.getPetList().values().toArray();
-		for (Object petObject : petlist) {
-			if (petObject instanceof L1PetInstance) {
-				L1PetInstance pet = (L1PetInstance) petObject;
-				if (item.getId() == pet.getItemObjId()) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
+	    @Override
+	    public byte[] getContent() {
+	        if (_byte == null) {
+	            _byte = getBytes();
+	        }
+	        return _byte;
+	    }
 
-	@Override
-	public byte[] getContent() {
-		if (_byte == null) {
-			_byte = getBytes();
-		}
-		return _byte;
-	}
+	    @Override
+	    public String getType() {
+	        return S_PETLIST;
+	    }
 
-	@Override
-	public String getType() {
-		return S_PETLIST;
+	    private boolean isWithdraw(L1PcInstance pc, L1ItemInstance item) {
+	        Object[] petlist = pc.getPetList().values().toArray();
+	        for (Object petObject : petlist) {
+	            if (petObject instanceof L1PetInstance) {
+	                L1PetInstance pet = (L1PetInstance) petObject;
+	                if (item.getId() == pet.getItemObjId()) {
+	                    return true;
+	                }
+	            }
+	        }
+	        return false;
+	    }
 	}
-}

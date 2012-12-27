@@ -46,7 +46,7 @@ public class S_PetInventory extends ServerBasePacket {
 				continue; 
 			} 
 				writeD(petItem.getId());
-				writeC(0x13);
+				writeC(0x02);
 				writeH(petItem.get_gfxid());
 				writeC(petItem.getBless());
 				writeD(petItem.getCount());
@@ -59,7 +59,7 @@ public class S_PetInventory extends ServerBasePacket {
 					} 
 				writeS(petItem.getViewName()); 
 				} 
-			writeC(pet.getAc());
+		    writeC(pet.getAc() - 13);
 		}
 	
 	@Override
