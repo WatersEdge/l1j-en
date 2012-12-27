@@ -25,13 +25,16 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import l1j.server.L1DatabaseFactory;
+import l1j.server.server.RandomGenerator.RandomGenerator;
+import l1j.server.server.RandomGenerator.RandomGeneratorFactory;
 import l1j.server.server.model.L1BossSpawn;
 import l1j.server.server.templates.L1Npc;
 import l1j.server.server.utils.SQLUtil;
 
 public class BossSpawnTable {
-	private static Logger _log = Logger.getLogger(BossSpawnTable.class
-			.getName());
+	private static Logger _log = Logger.getLogger(BossSpawnTable.class.getName());
+	
+	private static RandomGenerator _random = RandomGeneratorFactory.newRandom();
 
 	private BossSpawnTable() {
 	}
@@ -70,7 +73,13 @@ public class BossSpawnTable {
 					spawnDat.setLocY1(rs.getInt("locy1"));
 					spawnDat.setLocX2(rs.getInt("locx2"));
 					spawnDat.setLocY2(rs.getInt("locy2"));
-					spawnDat.setHeading(rs.getInt("heading"));
+					
+					int heading = rs.getInt("heading");
+
+					if (heading < 0 || heading > 7) {
+						heading = _random.nextInt(8);
+					}
+					
 					spawnDat.setMapId(rs.getShort("mapid"));
 					spawnDat.setRespawnScreen(rs.getBoolean("respawn_screen"));
 					spawnDat.setMovementDistance(rs.getInt("movement_distance"));
