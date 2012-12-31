@@ -18,7 +18,9 @@
  */
 package l1j.server.server.utils;
 
-import java.util.Random;
+import l1j.server.server.RandomGenerator.RandomGenerator;
+import l1j.server.server.RandomGenerator.RandomGeneratorFactory;
+
 /**
  * <p>
  * The maximum value from high and low values surrounded by a numerical range of classes.
@@ -29,7 +31,7 @@ import java.util.Random;
  * </p>
  */
 public class IntRange {
-	private static final Random _rnd = new Random();
+	private static final RandomGenerator _rnd = RandomGeneratorFactory.newRandom();
 	private int _low;
 	private int _high;
 

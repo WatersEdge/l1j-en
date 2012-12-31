@@ -253,7 +253,7 @@ public class L1FollowerInstance extends L1NpcInstance {
 				L1Object object = L1World.getInstance().findObject(mob.getId());
 				L1QuestInstance newnpc = (L1QuestInstance) object;
 				newnpc.onNpcAI();
-				newnpc.turnOnOffLight();
+				newnpc.updateLight();
 				newnpc.startChat(L1NpcInstance.CHAT_TIMING_APPEARANCE); 
 			} catch (Exception e) {
 				e.printStackTrace();

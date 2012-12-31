@@ -79,6 +79,16 @@ public class L1Npc extends L1Object implements Cloneable {
 		_level = i;
 	}
 
+	private int _digestItem;
+
+	public int getDigestItem() {
+		return _digestItem;
+	}
+
+	public void setDigestItem(int i) {
+		_digestItem = i;
+	}
+	
 	private int _hp;
 
 	public int get_hp() {

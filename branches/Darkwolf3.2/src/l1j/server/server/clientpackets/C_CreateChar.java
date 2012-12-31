@@ -50,7 +50,7 @@ public class C_CreateChar extends ClientBasePacket {
     public void execute(byte[] decrypt, ClientThread client) {
         try {
             read(decrypt);
-            L1PcInstance pc = new L1PcInstance();
+            L1PcInstance pc = new L1PcInstance(client.getAccount());
             if (pc == null) {
                 return;
             }
@@ -76,13 +76,13 @@ public class C_CreateChar extends ClientBasePacket {
 			return;
 		}
 		if (CharacterTable.doesCharNameExist(name)) {
-			_log.fine("Character Name: " + pc.getName() + " Already Exists. Creation Failed.");
+			_log.fine("Character Name : " + pc.getName() + " Already Exists. Creation Failed.");
 			S_CharCreateStatus s_charcreatestatus1 = new S_CharCreateStatus(S_CharCreateStatus.REASON_ALREADY_EXSISTS);
 			client.sendPacket(s_charcreatestatus1);
 			return;
 		}
 		if (client.getAccount().countCharacters() >= 6) {
-			_log.fine("Account: " + client.getAccountName() + " Attempted To Create More Than 6 Characters.");
+			_log.fine("Account : " + client.getAccountName() + " Attempted To Create More Than 6 Characters.");
 			S_CharCreateStatus s_charcreatestatus1 = new S_CharCreateStatus(S_CharCreateStatus.REASON_WRONG_AMOUNT);
 			client.sendPacket(s_charcreatestatus1);
 			return;
@@ -119,7 +119,7 @@ public class C_CreateChar extends ClientBasePacket {
 		int statusAmount = pc.getDex() + pc.getCha() + pc.getCon() + pc.getInt() + pc.getStr() + pc.getWis();
 
 		if (statusAmount != 75 || statusError) {
-			_log.finest("Character have wrong value");
+			_log.finest("Character Has A Wrong Value");
 			S_CharCreateStatus s_charcreatestatus3 = new S_CharCreateStatus(S_CharCreateStatus.REASON_WRONG_AMOUNT);
 			client.sendPacket(s_charcreatestatus3);
 			return;
@@ -146,7 +146,7 @@ public class C_CreateChar extends ClientBasePacket {
 		pc.setX(spawn[0]);
 		pc.setY(spawn[1]);
 		pc.setMap((short)spawn[2]);
-		pc.setHeading(5);
+		pc.setHeading(0);
 		pc.setLawful(0);
 		pc.addBaseMaxHp(initHp);
 		pc.setCurrentHp(initHp);

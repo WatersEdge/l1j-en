@@ -23,6 +23,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -77,14 +78,13 @@ public class L1WorldTraps {
 				rndPt.setY(rs.getInt("locRndY"));
 				int count = rs.getInt("count");
 				int span = rs.getInt("span");
+				
 				for (int i = 0; i < count; i++) {
-					L1TrapInstance trap = new L1TrapInstance(IdFactory
-							.getInstance().nextId(), trapTemp, loc, rndPt, span);
+					L1TrapInstance trap = new L1TrapInstance(IdFactory.getInstance().nextId(), trapTemp, loc, rndPt, span);
 					L1World.getInstance().addVisibleObject(trap);
 					_allTraps.add(trap);
 				}
-				L1TrapInstance base = new L1TrapInstance(IdFactory
-						.getInstance().nextId(), loc);
+				L1TrapInstance base = new L1TrapInstance(IdFactory.getInstance().nextId(), loc);
 				L1World.getInstance().addVisibleObject(base);
 				_allBases.add(base);
 			}
@@ -168,5 +168,22 @@ public class L1WorldTraps {
 			_targetTrap.resetLocation();
 			_targetTrap.enableTrap();
 		}
+	}
+
+	public synchronized void addTrap(L1TrapInstance trap) {
+		_allTraps.add(trap);
+	}
+
+	 public synchronized void removeTrap(L1TrapInstance trap) {
+		 for (Iterator<L1TrapInstance> i =_allTraps.listIterator(); i.hasNext();) {
+			  L1TrapInstance traps=i.next();
+			  if(traps.getId()==trap.getId()){
+					  i.remove();
+				  break;
+			  }
+		 }
+		List<L1TrapInstance>traps =new ArrayList<L1TrapInstance>();
+		traps.add(trap);
+		removeTraps(traps);
 	}
 }

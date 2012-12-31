@@ -517,7 +517,7 @@ public class L1DragonSlayer {
 				}
 			}
 
-			npc.turnOnOffLight();
+			npc.updateLight();
 			npc.startChat(L1NpcInstance.CHAT_TIMING_APPEARANCE);
 			
 			if (0 < timeMillisToDelete) {

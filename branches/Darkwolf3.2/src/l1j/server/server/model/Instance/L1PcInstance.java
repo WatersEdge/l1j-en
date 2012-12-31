@@ -36,12 +36,14 @@ import java.text.SimpleDateFormat;
 import l1j.server.Config;
 import l1j.server.L1DatabaseFactory;
 import l1j.server.server.ActionCodes;
+import l1j.server.server.Account;
 import l1j.server.server.ClientThread;
 import l1j.server.server.GeneralThreadPool;
 import l1j.server.server.PacketOutput;
 import l1j.server.server.controllers.WarTimeController;
 import l1j.server.server.command.executor.L1HpBar;
 import l1j.server.server.datatables.CharacterTable;
+import l1j.server.server.datatables.DeathPenaltyTable;
 import l1j.server.server.datatables.ExpTable;
 import l1j.server.server.datatables.ItemTable;
 import l1j.server.server.model.HpRegeneration;
@@ -72,16 +74,9 @@ import l1j.server.server.model.L1War;
 import l1j.server.server.model.L1World;
 import l1j.server.server.model.MpReductionByAwake;
 import l1j.server.server.model.MpRegeneration;
-import l1j.server.server.model.dolls.MpRegenerationByDoll;
-import l1j.server.server.model.dolls.HpRegenerationByDoll;
-import l1j.server.server.model.dolls.ItemMakeByDoll;
-import l1j.server.server.model.dolls.AcByDoll;
-import l1j.server.server.model.dolls.BowHitAddByDoll;
-import l1j.server.server.model.dolls.DamageByDoll;
-import l1j.server.server.model.dolls.EvasionByDoll;
-import l1j.server.server.model.dolls.ReductionByDoll;
-import l1j.server.server.model.dolls.RegistFreezeByDoll;
-import l1j.server.server.model.dolls.WeightReductionByDoll;
+import l1j.server.server.model.HpRegenerationByDoll;
+import l1j.server.server.model.ItemMakeByDoll;
+import l1j.server.server.model.MpRegenerationByDoll;
 import l1j.server.server.model.classes.L1ClassFeature;
 import l1j.server.server.model.classes.L1ClassId;
 import l1j.server.server.model.gametime.L1GameTimeCarrier;
@@ -93,6 +88,7 @@ import l1j.server.server.model.monitor.L1PcInvisDelay;
 import l1j.server.server.model.skill.L1SkillId;
 import l1j.server.server.model.skill.L1SkillUse;
 import l1j.server.server.serverpackets.S_BlueMessage;
+import l1j.server.server.serverpackets.S_Fishing;
 import l1j.server.server.serverpackets.S_Exp;
 import l1j.server.server.serverpackets.S_bonusstats;
 import l1j.server.server.serverpackets.S_CastleMaster;
@@ -130,16 +126,40 @@ public class L1PcInstance extends L1Character {
 	private static final long serialVersionUID = 1L;
 	private static Random _random = new Random();
 	private GeneralThreadPool _threadPool = GeneralThreadPool.getInstance();
-	
+	private MpRegeneration _mpRegen;
+	private MpRegenerationByDoll _mpRegenByDoll;
+	private MpReductionByAwake _mpReductionByAwake;
+	private HpRegeneration _hpRegen;
+	private HpRegenerationByDoll _hpRegenByDoll;
+	private ItemMakeByDoll _itemMakeByDoll;
+	private static Timer _regenTimer = new Timer(true);
+	private boolean _mpRegenActive;
+	private boolean _mpRegenActiveByDoll;
+	private boolean _mpReductionActiveByAwake;
+	private boolean _hpRegenActive;
+	private boolean _hpRegenActiveByDoll;
+	private boolean _ItemMakeActiveByDoll;
     boolean _rpActive = false;
     private L1PartyRefresh _rp;
     private int _partyType;
-
     private Timestamp _birthday;
-    
 	private short _hpr = 0;
 	private short _trueHpr = 0;
-
+	private final Account _account;
+	
+	public L1PcInstance(Account account) {
+		_account = account;
+		_accessLevel = 0;
+		_currentWeapon = 0;
+		_inventory = new L1PcInventory(this);
+		_dwarf = new L1DwarfInventory(this);
+		_dwarfForElf = new L1DwarfForElfInventory(this);
+		_tradewindow = new L1Inventory();
+		_bookmarks = new ArrayList<L1BookMark>();
+		_quest = new L1Quest(this);
+		_equipSlot = new L1EquipmentSlot(this); 
+	}
+	
 	public short getHpr() {
 		return (short) (_hpr + L1MagicDoll.getHprByDoll(this));
 	}
@@ -243,7 +263,7 @@ public class L1PcInstance extends L1Character {
 	}
 
 	public void startItemMakeByDoll() {
-		final int INTERVAL_BY_DOLL = 50;
+		final int INTERVAL_BY_DOLL = 600000;
 		boolean isExistItemMakeDoll = false;
 		if (L1MagicDoll.isItemMake(this)) {
 			isExistItemMakeDoll = true;
@@ -264,100 +284,8 @@ public class L1PcInstance extends L1Character {
 		}
 	}
 
-	public void startAcByDoll() {
-		final int INTERVAL_BY_DOLL = 0;
-		boolean isExistAcDoll = false;
-		if (L1MagicDoll.isAc(this)) {
-			isExistAcDoll = true;
-		}
-		if (!_AcByDoll && isExistAcDoll) {
-			_AcActiveByDoll = new AcByDoll(this);
-			_regenTimer.scheduleAtFixedRate(_AcActiveByDoll, INTERVAL_BY_DOLL,
-				INTERVAL_BY_DOLL);
-			_AcByDoll = true;
-		}
-	}
-	
-	public void stopAcByDoll() {
-		if (_AcByDoll) {
-			_AcActiveByDoll.cancel();
-			_AcActiveByDoll = null;
-			_AcByDoll = false;
-		}
-	}
-	
-	public void stopRegistFreezeByDoll() {
-		if (_RegistFreezeActiveByDoll) {
-			_RegistFreezeByDoll.cancel();
-			_RegistFreezeByDoll = null;
-			_RegistFreezeActiveByDoll = false;
-		}
-	}
-	
-	public void stopDamageByDoll() {
-		if (_DamageActiveByDoll) {
-			_DamageByDoll.cancel();
-			_DamageByDoll = null;
-			_DamageActiveByDoll = false;
-		}
-	}
-	
-	public void stopDamageReductionByDoll() {
-		if (_ReductionActiveByDoll) {
-			_ReductionByDoll.cancel();
-			_ReductionByDoll = null;
-			_ReductionActiveByDoll = false;
-		}
-	}
-	
-	public void stopDamageEvasionByDoll() {
-		if (_EvasionActiveByDoll) {
-			_EvasionByDoll.cancel();
-			_EvasionByDoll = null;
-			_EvasionActiveByDoll = false;
-		}
-	}
-	
-	public void stopBowHitAddByDoll() {
-		if (_BowHitAddActiveByDoll) {
-			_BowHitAddByDoll.cancel();
-			_BowHitAddByDoll = null;
-			_BowHitAddActiveByDoll = false;
-		}
-	}
-	
-	public void stopBowDamageByDoll() {
-		if (_DamageActiveByDoll) {
-			_DamageByDoll.cancel();
-			_DamageByDoll = null;
-			_DamageActiveByDoll = false;
-		}
-	}
-	
-	public void startWeightReductionByDoll() {
-		final int INTERVAL_BY_DOLL = 0;
-		boolean isExistWeightDoll = false;
-		if (L1MagicDoll.isWeightReduction(this)) {
-			isExistWeightDoll = true;
-		}
-		if (!_AcByDoll && isExistWeightDoll) {
-			_WeightReductionByDoll = new WeightReductionByDoll(this);
-			_regenTimer.scheduleAtFixedRate(_WeightReductionByDoll, INTERVAL_BY_DOLL,
-				INTERVAL_BY_DOLL);
-			_WeightReductionActiveByDoll = true;
-		}
-	}
-	
-	public void stopWeightReductionByDoll() {
-		if (_WeightReductionActiveByDoll) {
-			_WeightReductionByDoll.cancel();
-			_WeightReductionByDoll = null;
-			_WeightReductionActiveByDoll = false;
-		}
-	}
-	
 	public void startHpRegenerationByDoll() {
-		final int INTERVAL_BY_DOLL = 60000;
+		final int INTERVAL_BY_DOLL = 64000;
 		boolean isExistHprDoll = false;
 		if (L1MagicDoll.isHpRegeneration(this)) {
 			isExistHprDoll = true;
@@ -388,9 +316,7 @@ public class L1PcInstance extends L1Character {
 
 	public void startObjectAutoUpdate() {
 		removeAllKnownObjects();
-		_autoUpdateFuture = GeneralThreadPool.getInstance()
-				.pcScheduleAtFixedRate(new L1PcAutoUpdate(getId()), 0L,
-						INTERVAL_AUTO_UPDATE);
+		_autoUpdateFuture = GeneralThreadPool.getInstance().pcScheduleAtFixedRate(new L1PcAutoUpdate(getId()), 0L, INTERVAL_AUTO_UPDATE);
 	}
 
 	public void stopEtcMonitor() {
@@ -420,6 +346,26 @@ public class L1PcInstance extends L1Character {
 	private static final long INTERVAL_EXP_MONITOR = 500;
 	private ScheduledFuture<?> _expMonitorFuture;
 
+	private int _fishX;
+
+	public int getFishX() {
+		return _fishX;
+	}
+
+	public void setFishX(int i) {
+		_fishX = i;
+	}
+
+	private int _fishY;
+
+	public int getFishY() {
+		return _fishY;
+	}
+
+	public void setFishY(int i) {
+		_fishY = i;
+	}
+	
 	public void onChangeExp() {
 		int level = ExpTable.getLevelByExp(getExp());
 		int char_level = getLevel();
@@ -446,13 +392,14 @@ public class L1PcInstance extends L1Character {
 			return;
 		}
 
-		if (perceivedFrom.getMapId() > 10000 
-				&& perceivedFrom.getInnKeyId() != getInnKeyId()) { 
+		if (perceivedFrom.getMapId() > 10000 && perceivedFrom.getInnKeyId() != getInnKeyId()) { 
 			return;
         }
+		
 		perceivedFrom.addKnownObject(this);
 		perceivedFrom.sendPackets(new S_OtherCharPacks(this, 
-				perceivedFrom.hasSkillEffect(GMSTATUS_FINDINVIS))); 
+		perceivedFrom.hasSkillEffect(GMSTATUS_FINDINVIS))); 
+		
 		if (isInParty() && getParty().isMember(perceivedFrom)) {
 			perceivedFrom.sendPackets(new S_HPMeter(this));
 		}
@@ -466,17 +413,16 @@ public class L1PcInstance extends L1Character {
 		}
 
 		if (isPrivateShop()) {
-			perceivedFrom.sendPackets(new S_DoActionShop(getId(),
-					ActionCodes.ACTION_Shop, getShopChat()));
+			perceivedFrom.sendPackets(new S_DoActionShop(getId(), ActionCodes.ACTION_Shop, getShopChat()));
+		} else if (isFishing()) {
+			perceivedFrom.sendPackets(new S_Fishing(getId(), ActionCodes.ACTION_Fishing, getFishX(), getFishY()));
 		}
 
-		if (isCrown()) { 
+		if (isCrown()) {
 			L1Clan clan = L1World.getInstance().getClan(getClanname());
 			if (clan != null) {
-				if (getId() == clan.getLeaderId() 
-						&& clan.getCastleId() != 0) {
-					perceivedFrom.sendPackets(new S_CastleMaster(clan
-							.getCastleId(), getId()));
+				if (getId() == clan.getLeaderId() && clan.getCastleId() != 0) {
+					perceivedFrom.sendPackets(new S_CastleMaster(clan.getCastleId(), getId()));
 				}
 			}
 		}
@@ -512,14 +458,12 @@ public class L1PcInstance extends L1Character {
 			} else {
 				if (visible instanceof L1NpcInstance) {
 					L1NpcInstance npc = (L1NpcInstance) visible;
-					if (getLocation().isInScreen(npc.getLocation())
-							&& npc.getHiddenStatus() != 0) {
+					if (getLocation().isInScreen(npc.getLocation()) && npc.getHiddenStatus() != 0) {
 						npc.approachPlayer(this);
 					}
 				}
 			}
-			if (hasSkillEffect(GMSTATUS_HPBAR)
-					&& L1HpBar.isHpBarTarget(visible)) {
+			if (hasSkillEffect(GMSTATUS_HPBAR) && L1HpBar.isHpBarTarget(visible)) {
 				sendPackets(new S_HPMeter((L1Character) visible));
 			}
 		}
@@ -556,8 +500,7 @@ public class L1PcInstance extends L1Character {
 		if (getClanid() != 0) { 
 			L1Clan clan = L1World.getInstance().getClan(getClanname());
 			if (clan != null) {
-				if (isCrown() && getId() == clan.getLeaderId() &&
-						clan.getCastleId() != 0) {
+				if (isCrown() && getId() == clan.getLeaderId() && clan.getCastleId() != 0) {
 					sendPackets(new S_CastleMaster(clan.getCastleId(), getId()));
 				}
 			}
@@ -593,18 +536,6 @@ public class L1PcInstance extends L1Character {
 
 	public void clearSkillMastery() {
 		skillList.clear();
-	}
-
-	public L1PcInstance() {
-		_accessLevel = 0;
-		_currentWeapon = 0;
-		_inventory = new L1PcInventory(this);
-		_dwarf = new L1DwarfInventory(this);
-		_dwarfForElf = new L1DwarfForElfInventory(this);
-		_tradewindow = new L1Inventory();
-		_bookmarks = new ArrayList<L1BookMark>();
-		_quest = new L1Quest(this);
-		_equipSlot = new L1EquipmentSlot(this); 
 	}
 
 	@Override
@@ -974,6 +905,16 @@ public class L1PcInstance extends L1Character {
 		_isGres = flag;
 	}
 
+	private boolean _FoeSlayer = false;
+
+	public void setFoeSlayer(boolean FoeSlayer) {
+		_FoeSlayer = FoeSlayer;
+	}
+
+	public boolean isFoeSlayer() {
+		return _FoeSlayer;
+	}
+	
 	public boolean isPinkName() {
 		return _isPinkName;
 	}
@@ -1234,9 +1175,7 @@ public class L1PcInstance extends L1Character {
 		}
 	}
 
-	public long _oldTime = 0;
-
-	public void receiveDamage(L1Character attacker, double damage, boolean isMagicDamage) { //
+	public void receiveDamage(L1Character attacker, double damage, boolean isMagicDamage) {
 		if (getCurrentHp() > 0 && !isDead()) {
 			if (attacker != this) {
 				if (!(attacker instanceof L1EffectInstance)
@@ -1246,7 +1185,7 @@ public class L1PcInstance extends L1Character {
 				}
 			}
 
-			if (isMagicDamage == true) { //
+			if (isMagicDamage == true) {
 				long nowTime = System.currentTimeMillis();
 				long interval = nowTime - _oldTime;
 
@@ -1301,7 +1240,7 @@ public class L1PcInstance extends L1Character {
 						damage = 0;
 					}
 
-					_oldTime = nowTime; // 
+					_oldTime = nowTime;
 				}
 			}
 			if (damage > 0) {
@@ -1786,72 +1725,133 @@ if (player instanceof L1PcInstance) {
 		return false;
 	}
 
+	private int _expBonus = 0;
+
+	public int getExpBonusPct() {
+		return _expBonus;
+	}
+
+	public void addExpBonusPct(int i) {
+		_expBonus += i;
+	}
+	
 	public void resExp() {
-		int oldLevel = getLevel();
-		int needExp = ExpTable.getNeedExpNextLevel(oldLevel);
-		int exp = 0;
-		if (oldLevel < 45) {
-			exp = (int) (needExp * 0.05);
-		} else if (oldLevel == 45) {
-			exp = (int) (needExp * 0.045);
-		} else if (oldLevel == 46) {
-			exp = (int) (needExp * 0.04);
-		} else if (oldLevel == 47) {
-			exp = (int) (needExp * 0.035);
-		} else if (oldLevel == 48) {
-			exp = (int) (needExp * 0.03);
-		// Modified to scale down the XP death loss % at higher lvls.
-		} else if (oldLevel >= 49 && oldLevel < 65) {
-			exp = (int) (needExp * 0.025);
-		} else if (oldLevel >= 65 && oldLevel < 70) {
-			exp = (int) (needExp * 0.0125);
-		} else if (oldLevel >= 65 && oldLevel < 75) {
-			exp = (int) (needExp * 0.00625);
-		} else if (oldLevel >= 75 && oldLevel < 79) {
-			exp = (int) (needExp * 0.003125);
-		} else if (oldLevel >= 79 && oldLevel < 80) {
-			exp = (int) (needExp * 0.0015625);
-		} else if (oldLevel >= 80) {
-			exp = (int) (needExp * 0.00078125);
+		int level = getLevel();
+		double exp = calcDeathPenalty(level + 1);
+		if (level <= 50) {
+			exp *= 0.7;
+		} else if (level == 51) {
+			exp *= 0.71;
+		} else if (level == 52) {
+			exp *= 0.72;
+		} else if (level == 53) {
+			exp *= 0.73;
+		} else if (level == 54) {
+			exp *= 0.74;
+		} else if (level == 55) {
+			exp *= 0.75;
+		} else if (level == 56) {
+			exp *= 0.76;
+		} else if (level == 57) {
+			exp *= 0.77;
+		} else if (level == 58) {
+			exp *= 0.78;
+		} else if (level == 59) {
+			exp *= 0.79;
+		} else if (level == 60) {
+			exp *= 0.8;
+		} else if (level == 61) {
+			exp *= 0.81;
+		} else if (level == 62) {
+			exp *= 0.82;
+		} else if (level == 63) {
+			exp *= 0.83;
+		} else if (level == 64) {
+			exp *= 0.84;
+		} else if (level == 65) {
+			exp *= 0.85;
+		} else if (level == 66) {
+			exp *= 0.86;
+		} else if (level == 67) {
+			exp *= 0.87;
+		} else if (level == 68) {
+			exp *= 0.88;
+		} else if (level == 69) {
+			exp *= 0.89;
+		} else if (level == 70) {
+			exp *= 0.9;
+		} else if (level == 71) {
+			exp *= 0.91;
+		} else if (level == 72) {
+			exp *= 0.92;
+		} else if (level == 73) {
+			exp *= 0.93;
+		} else if (level == 74) {
+			exp *= 0.94;
+		} else if (level == 75) {
+			exp *= 0.95;
+		} else if (level == 76) {
+			exp *= 0.96;
+		} else if (level == 77) {
+			exp *= 0.97;
+		} else if (level == 78) {
+			exp *= 0.98;
+		} else {
+			exp *= 0.99;
 		}
 
 		if (exp == 0) {
 			return;
 		}
-		addExp(exp);
+		addExp((int) exp);
+	}
+
+	private double calcDeathPenalty(int level) {
+		int exp = ExpTable.getNeedExpNextLevel(level);
+		if (level <= 10) {
+			exp = 0;
+		} else if (level <= 44) {
+			exp *= 0.1;
+		} else if (level == 45) {
+			exp *= 0.09;
+		} else if (level == 46) {
+			exp *= 0.08;
+		} else if (level == 47) {
+			exp *= 0.07;
+		} else if (level == 48) {
+			exp *= 0.06;
+		} else if (level == 49) {
+			exp *= 0.05;
+		} else if (level <= 64) {
+			exp *= 0.045;
+		} else if (level <= 69) {
+			exp *= 0.04;
+		} else if (level <= 74) {
+			exp *= 0.035;
+		} else if (level <= 78) {
+			exp *= 0.03;
+		} else if (level == 79) {
+			exp *= 0.025;
+		} else if (level <= 81) {
+			exp *= 0.02;
+		} else {
+			exp *= 0.015;
+		}
+
+		int penaltyRate = DeathPenaltyTable.getDeathPenaltyRate(level);
+		
+		if (penaltyRate < 0) {
+			penaltyRate = 0;
+		}
+
+		exp = exp * penaltyRate / 100;
+		
+		return exp;
 	}
 
 	public void deathPenalty() {
-		int oldLevel = getLevel();
-		int needExp = ExpTable.getNeedExpNextLevel(oldLevel);
-		int exp = 0;
-		if (oldLevel >= 1 && oldLevel < 11) {
-			exp = 0;
-		} else if (oldLevel >= 11 && oldLevel < 45) {
-			exp = (int) (needExp * 0.1);
-		} else if (oldLevel == 45) {
-			exp = (int) (needExp * 0.09);
-		} else if (oldLevel == 46) {
-			exp = (int) (needExp * 0.08);
-		} else if (oldLevel == 47) {
-			exp = (int) (needExp * 0.07);
-		} else if (oldLevel == 48) {
-			exp = (int) (needExp * 0.06);
-		// Modified to scale down the XP death loss % at higher lvls.
-		} else if (oldLevel >= 49 && oldLevel < 65) {
-			exp = (int) (needExp * 0.05);
-		} else if (oldLevel >= 65 && oldLevel < 70) {
-			exp = (int) (needExp * 0.025);
-		} else if (oldLevel >= 65 && oldLevel < 75) {
-			exp = (int) (needExp * 0.0125);
-		} else if (oldLevel >= 75 && oldLevel < 79) {
-			exp = (int) (needExp * 0.00625);
-		} else if (oldLevel >= 79 && oldLevel < 80) {
-			exp = (int) (needExp * 0.003125);
-		} else if (oldLevel >= 80) {
-			exp = (int) (needExp * 0.0015625);
-		}
-
+		int level = getLevel();
+		int exp = (int) calcDeathPenalty(level);
 		if (exp == 0) {
 			return;
 		}
@@ -2007,34 +2007,6 @@ if (player instanceof L1PcInstance) {
 	private boolean _isPinkName = false;
 	private final ArrayList<L1BookMark> _bookmarks;
 	private L1Quest _quest;
-	private MpRegeneration _mpRegen;
-	private MpRegenerationByDoll _mpRegenByDoll;
-	private MpReductionByAwake _mpReductionByAwake;
-	private HpRegeneration _hpRegen;
-	private static Timer _regenTimer = new Timer(true);
-	private boolean _mpRegenActive;
-	private boolean _mpRegenActiveByDoll;
-	private boolean _mpReductionActiveByAwake;
-	private boolean _hpRegenActive;
-	private boolean _hpRegenActiveByDoll;
-	private HpRegenerationByDoll _hpRegenByDoll;
-	private boolean _ItemMakeActiveByDoll;
-	private ItemMakeByDoll _itemMakeByDoll;
-	private boolean _AcByDoll;
-	private AcByDoll _AcActiveByDoll;
-	private boolean _RegistFreezeActiveByDoll;
-	private RegistFreezeByDoll _RegistFreezeByDoll;
-	private boolean _DamageActiveByDoll;
-	private DamageByDoll _DamageByDoll;
-	private boolean _ReductionActiveByDoll;
-	private ReductionByDoll _ReductionByDoll;
-	private boolean _EvasionActiveByDoll;
-	private EvasionByDoll _EvasionByDoll;
-	private boolean _BowHitAddActiveByDoll;
-	private BowHitAddByDoll _BowHitAddByDoll;
-	private boolean _WeightReductionActiveByDoll;
-	private WeightReductionByDoll _WeightReductionByDoll;
-	
 	private L1EquipmentSlot _equipSlot;
 	private L1PcDeleteTimer _pcDeleteTimer;
 
@@ -2365,6 +2337,16 @@ if (player instanceof L1PcInstance) {
 		return _baseMr;
 	}
 
+	private int _minigameplaying = 0;
+
+	public void setMiniGamePlaying(int i) {
+		_minigameplaying = i;
+	}
+
+	public int getMiniGamePlaying() {
+		return _minigameplaying;
+	}
+	
 	private int _advenHp;
 
 	public int getAdvenHp() {
@@ -2542,6 +2524,30 @@ if (player instanceof L1PcInstance) {
 		}
 	}
 
+	private long _oldTime = 0;
+
+	public long getOldTime() {
+		return _oldTime;
+	}
+
+	public void setOldTime(long i) {
+		_oldTime = i;
+	}
+
+	private int _numberOfDamaged = 0;
+
+	public int getNumberOfDamaged() {
+		return _numberOfDamaged;
+	}
+
+	public void setNumberOfDamaged(int i) {
+		_numberOfDamaged = i;
+	}
+
+	public void addNumberOfDamaged(int i) {
+		_numberOfDamaged += i;
+	}
+	
 	public static final int REGENSTATE_NONE = 4;
 	public static final int REGENSTATE_MOVE = 2;
 	public static final int REGENSTATE_ATTACK = 1;
@@ -2631,10 +2637,7 @@ if (player instanceof L1PcInstance) {
 	}
 
 	public synchronized void addExp(int exp) {
-		_exp += exp;
-		if (_exp > ExpTable.MAX_EXP) {
-			_exp = ExpTable.MAX_EXP;
-		}
+		_exp = ExpTable.EXP_RANGE.ensure(_exp + exp);
 	}
 
 	public synchronized void addContribution(int contribution) {
@@ -2642,9 +2645,7 @@ if (player instanceof L1PcInstance) {
 	}
 
 	public void beginExpMonitor() {
-		_expMonitorFuture = GeneralThreadPool.getInstance()
-				.pcScheduleAtFixedRate(new L1PcExpMonitor(getId()), 0L,
-						INTERVAL_EXP_MONITOR);
+		_expMonitorFuture = GeneralThreadPool.getInstance().pcScheduleAtFixedRate(new L1PcExpMonitor(getId()), 0L, INTERVAL_EXP_MONITOR);
 	}
 
 	private void levelUp(int gap) {
@@ -2744,8 +2745,6 @@ if (player instanceof L1PcInstance) {
 			if (getHighLevel() - getLevel() >= Config.LEVEL_DOWN_RANGE) {
 				sendPackets(new S_ServerMessage(64));
 				sendPackets(new S_Disconnect());
-//				_log.info(String.format("x_Ee%sfB",
-//						getName()));
 			}
 		}
 
@@ -2760,7 +2759,11 @@ if (player instanceof L1PcInstance) {
 	public void beginGameTimeCarrier() {
 		new L1GameTimeCarrier(this).start();
 	}
-
+	
+	public int getAccountId() {
+		return _account.getId();
+	}
+	
 	private boolean _ghost = false; 
 
 	public boolean isGhost() {
@@ -2939,8 +2942,7 @@ if (player instanceof L1PcInstance) {
 	public boolean isWanted() {
 		if (_lastPk == null) {
 			return false;
-		} else if (System.currentTimeMillis() - _lastPk.getTime()
-				> 24 * 3600 * 1000) {
+		} else if (System.currentTimeMillis() - _lastPk.getTime() > 24 * 3600 * 1000) {
 			setLastPk(null);
 			return false;
 		}
@@ -2964,8 +2966,7 @@ if (player instanceof L1PcInstance) {
 	public boolean isWantedForElf() {
 		if (_lastPkForElf == null) {
 			return false;
-		} else if (System.currentTimeMillis() - _lastPkForElf.getTime()
-				> 24 * 3600 * 1000) {
+		} else if (System.currentTimeMillis() - _lastPkForElf.getTime() > 24 * 3600 * 1000) {
 			setLastPkForElf(null);
 			return false;
 		}
@@ -3041,18 +3042,6 @@ if (player instanceof L1PcInstance) {
 			removeSkillEffect(STATUS_HASTE);
 		}
 	}
-
-	private int _food;
-
-    @Override
-    public int get_food() {
-            return _food;
-    }
-
-    @Override
-    public void set_food(int i) {
-            _food = i;
-    }
     
 	private int _damageReductionByArmor = 0; 
 
@@ -3102,6 +3091,40 @@ if (player instanceof L1PcInstance) {
 
 	public void addBowDmgModifierByArmor(int i) {
 		_bowDmgModifierByArmor += i;
+	}
+
+	private boolean _useAdditionalWarehouse;
+
+	public boolean getUseAdditionalWarehouse() {
+		return _useAdditionalWarehouse;
+	}
+
+	public void setUseAdditionalWarehouse(boolean flag) {
+		_useAdditionalWarehouse = flag;
+	}
+
+	private Timestamp _logoutTime;
+
+	public void setLogoutTime(Timestamp time) {
+		_logoutTime = time;
+	}
+
+	public void setLogoutTime() {
+		_logoutTime = new Timestamp(System.currentTimeMillis());
+	}
+
+	public Timestamp getLogoutTime() {
+		return _logoutTime;
+	}
+	
+	private Timestamp _rejoinClanTime;
+
+	public Timestamp getRejoinClanTime() {
+		return _rejoinClanTime;
+	}
+
+	public void setRejoinClanTime(Timestamp time) {
+		_rejoinClanTime = time;
 	}
 
 	private boolean _gresValid; 
@@ -4261,6 +4284,16 @@ if (player instanceof L1PcInstance) {
 		}
 	}
 
+	private int _food;
+
+	public int getFood() {
+		return _food;
+	}
+
+	public void setFood(int i) {
+		_food = i;
+	}
+	
 	private int _callClanId;
 
 	public int getCallClanId() {
@@ -4382,5 +4415,15 @@ if (player instanceof L1PcInstance) {
 
 	public boolean isShapeChange() {
 		return _isShapeChange;
+	}
+	
+	private int _potionRecoveryRate = 0;
+
+	public int getPotionRecoveryRatePct() {
+		return _potionRecoveryRate;
+	}
+
+	public void addPotionRecoveryRatePct(int i) {
+		_potionRecoveryRate += i;
 	}
 }

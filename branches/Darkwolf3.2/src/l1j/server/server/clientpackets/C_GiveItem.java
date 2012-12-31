@@ -118,9 +118,9 @@ public class C_GiveItem extends ClientBasePacket {
 		item = inv.tradeItem(item, count, targetInv);
 		
 		target.onGetItem(item, count);
-		target.turnOnOffLight();
+		target.updateLight();
 		
-		pc.turnOnOffLight();
+		pc.updateLight();
 		
 		L1PetType petType = PetTypeTable.getInstance().get(target.getNpcTemplate().get_npcId());
 		if (petType == null || target.isDead()) {

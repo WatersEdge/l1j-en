@@ -82,11 +82,9 @@ public class S_OtherCharPacks extends ServerBasePacket {
 			writeC(pc.getCurrentWeapon());
 		}
 		writeC(pc.getHeading());
-		// writeC(0); // makes char invis (0x01), cannot move. spells display
-		writeC(pc.getChaLightSize());
+		writeC(pc.getLightSize());
 		writeC(pc.getMoveSpeed());
 		writeD(0x0000); // exp
-		// writeC(0x00);
 		writeH(pc.getLawful());
 		writeS(pc.getName());
 		writeS(pc.getTitle());

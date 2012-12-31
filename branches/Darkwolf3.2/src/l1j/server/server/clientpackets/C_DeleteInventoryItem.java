@@ -57,7 +57,7 @@ public class C_DeleteInventoryItem extends ClientBasePacket {
 			return;
 		}
 
-		if (item.getItem().isCantDelete()) {
+		if (item.getItem().isDeletable()) {
 			pc.sendPackets(new S_ServerMessage(125));
 			return;
 		}
@@ -94,7 +94,7 @@ public class C_DeleteInventoryItem extends ClientBasePacket {
 		LogDeleteItem ldi = new LogDeleteItem();
 		ldi.storeLogDeleteItem(pc, item);
 		pc.getInventory().removeItem(item, item.getCount());
-		pc.turnOnOffLight();
+		pc.updateLight();
         } catch (final Exception e) {
             _log.log(Level.SEVERE, e.getLocalizedMessage(), e);
         } finally {

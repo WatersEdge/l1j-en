@@ -136,7 +136,7 @@ public class L1UbSpawn implements Comparable<L1UbSpawn> {
 			pc.sendPackets(s_npcPack);
 		}
 		mob.onNpcAI();
-		mob.turnOnOffLight();
+		mob.updateLight();
 	}
 
 	public void spawnAll() throws InterruptedException {

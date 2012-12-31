@@ -62,7 +62,7 @@ public class S_NPCPack extends ServerBasePacket {
 			writeC(npc.getStatus());
 		}
 		writeC(npc.getHeading());
-		writeC(npc.getChaLightSize());
+		writeC(npc.getLightSize());
 		writeC(npc.getMoveSpeed());
 		writeD(npc.getExp());
 		writeH(npc.getTempLawful());

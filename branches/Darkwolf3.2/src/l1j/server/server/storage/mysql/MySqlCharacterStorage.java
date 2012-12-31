@@ -26,6 +26,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import l1j.server.L1DatabaseFactory;
+import l1j.server.server.Account;
 import l1j.server.server.model.Instance.L1PcInstance;
 import l1j.server.server.storage.CharacterStorage;
 import l1j.server.server.utils.SQLUtil;
@@ -41,66 +42,66 @@ public class MySqlCharacterStorage implements CharacterStorage {
 		ResultSet rs = null;
 		try {
 			con = L1DatabaseFactory.getInstance().getConnection();
-			pstm = con.prepareStatement("SELECT * FROM characters WHERE char_name=?");
+			pstm = con.prepareStatement("SELECT * FROM characters WHERE name=?");
 			pstm.setString(1, charName);
 
 			rs = pstm.executeQuery();
 			if (!rs.next()) {
 				return null;
 			}
-			pc = new L1PcInstance();
-			pc.setAccountName(rs.getString("account_name"));
-			pc.setId(rs.getInt("objid"));
-			pc.setName(rs.getString("char_name"));
+			pc = new L1PcInstance(Account.findById(rs.getInt("account_id")));
+			pc.setAccountName(rs.getString("account_id"));
+			pc.setId(rs.getInt("id"));
+			pc.setName(rs.getString("name"));
 			pc.setBirthday(rs.getTimestamp("birthday"));
-			pc.setHighLevel(rs.getInt("HighLevel"));
-			pc.setExp(rs.getInt("Exp"));
-			pc.addBaseMaxHp(rs.getShort("MaxHp"));
-			short currentHp = rs.getShort("CurHp");
+			pc.setHighLevel(rs.getInt("high_level"));
+			pc.setExp(rs.getInt("exp"));
+			pc.addBaseMaxHp(rs.getShort("max_hp"));
+			short currentHp = rs.getShort("cur_hp");
 			if (currentHp < 1) {
 				currentHp = 1;
 			}
 			pc.setCurrentHpDirect(currentHp);
 			pc.setDead(false);
 			pc.setStatus(0);
-			pc.addBaseMaxMp(rs.getShort("MaxMp"));
-			pc.setCurrentMpDirect(rs.getShort("CurMp"));
-			pc.addBaseStr(rs.getByte("Str"));
-			pc.addBaseCon(rs.getByte("Con"));
-			pc.addBaseDex(rs.getByte("Dex"));
-			pc.addBaseCha(rs.getByte("Cha"));
-			pc.addBaseInt(rs.getByte("Intel"));
-			pc.addBaseWis(rs.getByte("Wis"));
-			int status = rs.getInt("Status");
+			pc.addBaseMaxMp(rs.getShort("max_mp"));
+			pc.setCurrentMpDirect(rs.getShort("cur_mp"));
+			pc.addBaseStr(rs.getByte("str"));
+			pc.addBaseCon(rs.getByte("con"));
+			pc.addBaseDex(rs.getByte("dex"));
+			pc.addBaseCha(rs.getByte("cha"));
+			pc.addBaseInt(rs.getByte("int"));
+			pc.addBaseWis(rs.getByte("wis"));
+			int status = rs.getInt("status");
 			pc.setCurrentWeapon(status);
-			int classId = rs.getInt("Class");
+			int classId = rs.getInt("class");
 			pc.setClassId(classId);
 			pc.setTempCharGfx(classId);
 			pc.setGfxId(classId);
-			pc.set_sex(rs.getInt("Sex"));
-			pc.setType(rs.getInt("Type"));
-			int head = rs.getInt("Heading");
+			pc.set_sex(rs.getInt("sex"));
+			pc.setType(rs.getInt("type"));
+			int head = rs.getInt("heading");
 			if (head > 7) {
 				head = 0;
 			}
 			pc.setHeading(head);
-			pc.setX(rs.getInt("locX"));
-			pc.setY(rs.getInt("locY"));
-			pc.setMap(rs.getShort("MapID"));
-			pc.set_food(rs.getInt("Food"));
-			pc.setLawful(rs.getInt("Lawful"));
-			pc.setTitle(rs.getString("Title"));
-			pc.setClanid(rs.getInt("ClanID"));
-			pc.setClanname(rs.getString("Clanname"));
-			pc.setClanRank(rs.getInt("ClanRank"));
-			pc.setBonusStats(rs.getInt("BonusStatus"));
-			pc.setElixirStats(rs.getInt("ElixirStatus"));
-			pc.setElfAttr(rs.getInt("ElfAttr"));
-			pc.set_PKcount(rs.getInt("PKcount"));
-			pc.setPkCountForElf(rs.getInt("PkCountForElf"));
-			pc.setExpRes(rs.getInt("ExpRes"));
-			pc.setPartnerId(rs.getInt("PartnerID"));
-			pc.setAccessLevel(rs.getShort("AccessLevel"));
+			pc.setX(rs.getInt("locx"));
+			pc.setY(rs.getInt("locy"));
+			pc.setMap(rs.getShort("map_id"));
+			pc.set_food(rs.getInt("food"));
+			pc.setLawful(rs.getInt("lawful"));
+			pc.setTitle(rs.getString("title"));
+			pc.setClanid(rs.getInt("clan_id"));
+			pc.setClanname(rs.getString("clan_name"));
+			pc.setClanRank(rs.getInt("clan_rank"));
+			pc.setBonusStats(rs.getInt("bonus_status"));
+			pc.setElixirStats(rs.getInt("elixir_status"));
+			pc.setElfAttr(rs.getInt("elf_attr"));
+			pc.set_PKcount(rs.getInt("pk_count"));
+			pc.setPkCountForElf(rs.getInt("pk_count_for_elf"));
+			pc.setExpRes(rs.getInt("exp_res"));
+			pc.setPartnerId(rs.getInt("partner_id"));
+			pc.setAccessLevel(rs.getShort("access_level"));
 			if (pc.getAccessLevel() == 200) {
 				pc.setGm(true);
 				pc.setMonitor(false);
@@ -111,26 +112,30 @@ public class MySqlCharacterStorage implements CharacterStorage {
 				pc.setGm(false);
 				pc.setMonitor(false);
 			}
-			pc.setOnlineStatus(rs.getInt("OnlineStatus"));
-			pc.setHomeTownId(rs.getInt("HomeTownID"));
-			pc.setContribution(rs.getInt("Contribution"));
-			pc.setHellTime(rs.getInt("HellTime"));
-			pc.setBanned(rs.getBoolean("Banned"));
-			pc.setKarma(rs.getInt("Karma"));
-			pc.setLastPk(rs.getTimestamp("LastPk"));
-			pc.setLastPkForElf(rs.getTimestamp("LastPkForElf"));
-			pc.setDeleteTime(rs.getTimestamp("DeleteTime"));
-			pc.setOriginalStr(rs.getInt("OriginalStr"));
-			pc.setOriginalCon(rs.getInt("OriginalCon"));
-			pc.setOriginalDex(rs.getInt("OriginalDex"));
-			pc.setOriginalCha(rs.getInt("OriginalCha"));
-			pc.setOriginalInt(rs.getInt("OriginalInt"));
-			pc.setOriginalWis(rs.getInt("OriginalWis"));
+			pc.setOnlineStatus(rs.getInt("online_status"));
+			pc.setHomeTownId(rs.getInt("hometown_id"));
+			pc.setContribution(rs.getInt("contribution"));
+			pc.setPay(rs.getInt("pay"));
+			pc.setHellTime(rs.getInt("hell_time"));
+			pc.setBanned(rs.getBoolean("banned"));
+			pc.setKarma(rs.getInt("karma"));
+			pc.setLastPk(rs.getTimestamp("last_pk"));
+			pc.setLastPkForElf(rs.getTimestamp("last_pk_for_elf"));
+			pc.setDeleteTime(rs.getTimestamp("delete_time"));
+			pc.setOriginalStr(rs.getInt("original_str"));
+			pc.setOriginalCon(rs.getInt("original_con"));
+			pc.setOriginalDex(rs.getInt("original_dex"));
+			pc.setOriginalCha(rs.getInt("original_cha"));
+			pc.setOriginalInt(rs.getInt("original_int"));
+			pc.setOriginalWis(rs.getInt("original_wis"));
+			pc.setUseAdditionalWarehouse(rs.getBoolean("use_additional_warehouse"));
+			pc.setLogoutTime(rs.getTimestamp("logout_time"));
+			
 			pc.refresh();
 			pc.setMoveSpeed(0);
 			pc.setBraveSpeed(0);
 			pc.setGmInvis(false);
-			_log.finest("restored char data: ");
+			_log.finest("Loaded Character Info : ");
 		} catch (SQLException e) {
 			_log.log(Level.SEVERE, e.getLocalizedMessage(), e);
 			return null;
@@ -149,9 +154,9 @@ public class MySqlCharacterStorage implements CharacterStorage {
 		try {
 			int i = 0;
 			con = L1DatabaseFactory.getInstance().getConnection();
-			pstm = con.prepareStatement("INSERT INTO characters SET account_name=?,objid=?,char_name==?,birthday=?,level=?,HighLevel=?,Exp=?,MaxHp=?,CurHp=?,MaxMp=?,CurMp=?,Ac=?,Str=?,Con=?,Dex=?,Cha=?,Intel=?,Wis=?,Status=?,Class=?,Sex=?,Type=?,Heading=?,LocX=?,LocY=?,MapID=?,Food=?,Lawful=?,Title=?,ClanID=?,Clanname=?,ClanRank=?,BonusStatus=?,ElixirStatus=?,ElfAttr=?,PKcount=?,PkCountForElf=?,ExpRes=?,PartnerID=?,AccessLevel=?,OnlineStatus=?,HomeTownID=?,Contribution=?,Pay=?,HellTime=?,Banned=?,Karma=?,LastPk=?,LastPkForElf=?,DeleteTime=?");
-			pstm.setString(++i, pc.getAccountName());
+			pstm = con.prepareStatement("INSERT INTO characters SET id=?,account_id=?,name=?,birthday=?,level=?,high_level=?,exp=?,max_hp=?,cur_hp=?,max_mp=?,cur_mp=?,ac=?,str=?,con=?,dex=?,cha=?,`int`=?,wis=?,status=?,class=?,sex=?,type=?,heading=?,locx=?,locy=?,map_id=?,food=?,lawful=?,title=?,clan_id=?,clan_name=?,clan_rank=?,bonus_status=?,elixir_status=?,elf_attr=?,pk_count=?,pk_count_for_elf=?,exp_res=?,partner_id=?,access_level=?,online_status=?,hometown_id=?,contribution=?,pay=?,hell_time=?,banned=?,karma=?,last_pk=?,last_pk_for_elf=?,delete_time=?,rejoin_clan_time=?,use_additional_warehouse=?,logout_time=?");
 			pstm.setInt(++i, pc.getId());
+			pstm.setInt(++i, pc.getAccountId());
 			pstm.setString(++i, pc.getName());
 			pstm.setInt(++i, pc.getSimpleBirthday());
 			pstm.setInt(++i, pc.getLevel());
@@ -204,8 +209,11 @@ public class MySqlCharacterStorage implements CharacterStorage {
 			pstm.setTimestamp(++i, pc.getLastPk());
 			pstm.setTimestamp(++i, pc.getLastPkForElf());
 			pstm.setTimestamp(++i, pc.getDeleteTime());
+			pstm.setTimestamp(++i, pc.getRejoinClanTime());
+			pstm.setBoolean(++i, pc.getUseAdditionalWarehouse());
+			pstm.setTimestamp(++i, pc.getLogoutTime());
 			pstm.execute();
-			_log.finest("stored char data: " + pc.getName());
+			_log.finest("Stored Character Info : " + pc.getName());
 		} catch (SQLException e) {
 			_log.log(Level.SEVERE, e.getLocalizedMessage(), e);
 		} finally {
@@ -222,36 +230,36 @@ public class MySqlCharacterStorage implements CharacterStorage {
 		ResultSet rs = null;
 		try {
 			con = L1DatabaseFactory.getInstance().getConnection();
-			pstm = con.prepareStatement("SELECT * FROM characters WHERE account_name=? AND char_name=?");
+			pstm = con.prepareStatement("SELECT * FROM characters WHERE account_name=? AND name=?");
 			pstm.setString(1, accountName);
 			pstm.setString(2, charName);
 			rs = pstm.executeQuery();
 			if (!rs.next()) {
-				_log.warning("invalid delete char request: account=" + accountName + " char=" + charName);
+				_log.warning("invalid delete char request: account =" + accountName + " char=" + charName);
 				throw new RuntimeException("could not delete character");
 			}
-			pstm = con.prepareStatement("DELETE FROM character_buddys WHERE char_id IN (SELECT objid FROM characters WHERE char_name = ?)");
+			pstm = con.prepareStatement("DELETE FROM character_buddys WHERE char_id IN (SELECT id FROM characters WHERE name = ?)");
 			pstm.setString(1, charName);
 			pstm.execute();
-			pstm = con.prepareStatement("DELETE FROM character_buff WHERE char_obj_id IN (SELECT objid FROM characters WHERE char_name = ?)");
+			pstm = con.prepareStatement("DELETE FROM character_buffs WHERE char_obj_id IN (SELECT id FROM characters WHERE name = ?)");
 			pstm.setString(1, charName);
 			pstm.execute();
-			pstm = con.prepareStatement("DELETE FROM character_config WHERE object_id IN (SELECT objid FROM characters WHERE char_name = ?)");
+			pstm = con.prepareStatement("DELETE FROM character_config WHERE object_id IN (SELECT id FROM characters WHERE name = ?)");
 			pstm.setString(1, charName);
 			pstm.execute();
-			pstm = con.prepareStatement("DELETE FROM character_items WHERE char_id IN (SELECT objid FROM characters WHERE char_name = ?)");
+			pstm = con.prepareStatement("DELETE FROM character_items WHERE char_id IN (SELECT id FROM characters WHERE name = ?)");
 			pstm.setString(1, charName);
 			pstm.execute();
-			pstm = con.prepareStatement("DELETE FROM character_quests WHERE char_id IN (SELECT objid FROM characters WHERE char_name = ?)");
+			pstm = con.prepareStatement("DELETE FROM character_quests WHERE char_id IN (SELECT id FROM characters WHERE name = ?)");
 			pstm.setString(1, charName);
 			pstm.execute();
-			pstm = con.prepareStatement("DELETE FROM character_skills WHERE char_obj_id IN (SELECT objid FROM characters WHERE char_name = ?)");
+			pstm = con.prepareStatement("DELETE FROM character_skills WHERE char_obj_id IN (SELECT id FROM characters WHERE name = ?)");
 			pstm.setString(1, charName);
 			pstm.execute();
-			pstm = con.prepareStatement("DELETE FROM character_teleport WHERE char_id IN (SELECT objid FROM characters WHERE char_name = ?)");
+			pstm = con.prepareStatement("DELETE FROM character_teleport WHERE char_id IN (SELECT id FROM characters WHERE name = ?)");
 			pstm.setString(1, charName);
 			pstm.execute();
-			pstm = con.prepareStatement("DELETE FROM characters WHERE char_name=?");
+			pstm = con.prepareStatement("DELETE FROM characters WHERE name=?");
 			pstm.setString(1, charName);
 			pstm.execute();
 		} catch (SQLException e) {
@@ -270,7 +278,7 @@ public class MySqlCharacterStorage implements CharacterStorage {
 		try {
 			int i = 0;
 			con = L1DatabaseFactory.getInstance().getConnection();
-			pstm = con.prepareStatement("UPDATE characters SET level=?,HighLevel=?,Exp=?,MaxHp=?,CurHp=?,MaxMp=?,CurMp=?,Ac=?,Str=?,Con=?,Dex=?,Cha=?,Intel=?,Wis=?,Status=?,Class=?,Sex=?,Type=?,Heading=?,LocX=?,LocY=?,MapID=?,Food=?,Lawful=?,Title=?,ClanID=?,Clanname=?,ClanRank=?,BonusStatus=?,ElixirStatus=?,ElfAttr=?,PKcount=?,PkCountForElf=?,ExpRes=?,PartnerID=?,AccessLevel=?,OnlineStatus=?,HomeTownID=?,Contribution=?,HellTime=?,Banned=?,Karma=?,LastPk=?,LastPkForElf=?,DeleteTime=? WHERE objid=?");
+			pstm = con.prepareStatement("UPDATE characters SET level=?,high_level=?,exp=?,max_hp=?,cur_hp=?,max_mp=?,cur_mp=?,ac=?,str=?,con=?,dex=?,cha=?,`int`=?,wis=?,status=?,class=?,sex=?,type=?,heading=?,locx=?,locy=?,map_id=?,food=?,lawful=?,title=?,clan_id=?,clan_name=?,clan_rank=?,bonus_status=?,elixir_status=?,elf_attr=?,pk_count=?,pk_count_for_elf=?,exp_res=?,partner_id=?,access_level=?,online_status=?,hometown_id=?,contribution=?,hell_time=?,banned=?,karma=?,last_pk=?,last_pk_for_elf=?,delete_time=?,rejoin_clan_time=?,use_additional_warehouse=?,logout_time=? WHERE id=?");
 			pstm.setInt(++i, pc.getLevel());
 			pstm.setInt(++i, pc.getHighLevel());
 			pstm.setInt(++i, pc.getExp());
@@ -320,9 +328,12 @@ public class MySqlCharacterStorage implements CharacterStorage {
 			pstm.setTimestamp(++i, pc.getLastPk());
 			pstm.setTimestamp(++i, pc.getLastPkForElf());
 			pstm.setTimestamp(++i, pc.getDeleteTime());
+			pstm.setTimestamp(++i, pc.getRejoinClanTime());
+			pstm.setBoolean(++i, pc.getUseAdditionalWarehouse());
+			pstm.setTimestamp(++i, pc.getLogoutTime());
 			pstm.setInt(++i, pc.getId());
 			pstm.execute();
-			_log.finest("stored char data:" + pc.getName());
+			_log.finest("Stored Character Info :" + pc.getName());
 		} catch (SQLException e) {
 			_log.log(Level.SEVERE, e.getLocalizedMessage(), e);
 		} finally {

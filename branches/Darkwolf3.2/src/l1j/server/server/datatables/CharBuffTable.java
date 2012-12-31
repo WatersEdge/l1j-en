@@ -18,41 +18,87 @@
  */
 package l1j.server.server.datatables;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import l1j.server.L1DatabaseFactory;
+import l1j.server.server.datatables.SkillsTable;
 import l1j.server.server.model.Instance.L1PcInstance;
-import l1j.server.server.utils.SQLUtil;
 import static l1j.server.server.model.skill.L1SkillId.*;
+import l1j.server.server.model.skill.executor.L1BuffSkillExecutor;
+import l1j.server.server.templates.L1CharacterBuff;
+import l1j.server.server.templates.L1Skills;
+import l1j.server.L1DatabaseFactory;
+import l1j.server.server.utils.SQLUtil;
+import l1j.server.server.utils.collections.Lists;
 
 public class CharBuffTable {
-
-	private CharBuffTable() { }
+	private CharBuffTable() {
+	}
 
 	private static Logger _log = Logger.getLogger(CharBuffTable.class.getName());
 
-	private static final int[] buffSkill = { 2, 67, 3, 99, 151, 159, 168, 43, 54, 1000, 1001, STATUS_ELFBRAVE, 
-	52, 101, 150, 26, 42, 109, 110, 114, 115, 117, 148, 155, 163, 149, 156, 166, 1002, 1005, 
-	COOKING_1_0_N, COOKING_1_0_S, COOKING_1_1_N, COOKING_1_1_S,COOKING_1_2_N, COOKING_1_2_S, COOKING_1_3_N, COOKING_1_3_S,
-	COOKING_1_4_N, COOKING_1_4_S, COOKING_1_5_N, COOKING_1_5_S, COOKING_1_6_N, COOKING_1_6_S, COOKING_2_0_N, COOKING_2_0_S,
-	COOKING_2_1_N, COOKING_2_1_S, COOKING_2_2_N, COOKING_2_2_S, COOKING_2_3_N, COOKING_2_3_S, COOKING_2_4_N, COOKING_2_4_S,
-	COOKING_2_5_N, COOKING_2_5_S, COOKING_2_6_N, COOKING_2_6_S, COOKING_3_0_N, COOKING_3_0_S, COOKING_3_1_N, COOKING_3_1_S,
-	COOKING_3_2_N, COOKING_3_2_S, COOKING_3_3_N, COOKING_3_3_S, COOKING_3_4_N, COOKING_3_4_S, COOKING_3_5_N, COOKING_3_5_S, COOKING_3_6_N, COOKING_3_6_S };
+	private static final int[] BUFF_SKILL_IDS = {
+		STATUS_BRAVE, STATUS_HASTE, STATUS_BLUE_POTION, STATUS_UNDERWATER_BREATH,
+		STATUS_WISDOM_POTION, STATUS_CHAT_PROHIBITED, STATUS_POISON,
+		STATUS_POISON_SILENCE, STATUS_POISON_PARALYZING, STATUS_POISON_PARALYZED,
+		STATUS_CURSE_PARALYZING, STATUS_CURSE_PARALYZED, STATUS_FLOATING_EYE,
+		STATUS_HOLY_WATER, STATUS_HOLY_MITHRIL_POWDER, STATUS_HOLY_WATER_OF_EVA,
+		STATUS_ELFBRAVE, STATUS_RIBRAVE, STATUS_CUBE_IGNITION_TO_ALLY,
+		STATUS_CUBE_QUAKE_TO_ALLY, STATUS_CUBE_SHOCK_TO_ALLY,
+		STATUS_CUBE_BALANCE, STATUS_THIRD_SPEED, STATUS_FLORA_POTION_STR,
+		STATUS_FLORA_POTION_DEX, STATUS_FREEZE, STATUS_CURSE_BARLOG,
+		STATUS_CURSE_YAHEE, STATUS_WEAKNESS_EXPOSURE_LV1,
+		STATUS_WEAKNESS_EXPOSURE_LV2, STATUS_WEAKNESS_EXPOSURE_LV3,
+		STATUS_DESTRUCTION_NOSTRUM, STATUS_EXP_UP, STATUS_EXP_UP_II,
+		POTION_OF_SWORDMAN, POTION_OF_MAGICIAN, POTION_OF_RECOVERY,
+		POTION_OF_MEDITATION, POTION_OF_LIFE, POTION_OF_MAGIC,
+		POTION_OF_MAGIC_RESIST, POTION_OF_STR, POTION_OF_DEX, POTION_OF_CON,
+		POTION_OF_INT, POTION_OF_WIS, POTION_OF_RAGE, POTION_OF_CONCENTRATION,
+		COOKING_1_0_N, COOKING_1_1_N, COOKING_1_2_N, COOKING_1_3_N,
+		COOKING_1_4_N, COOKING_1_5_N, COOKING_1_6_N, COOKING_1_7_N,
+		COOKING_1_0_S, COOKING_1_1_S, COOKING_1_2_S, COOKING_1_3_S,
+		COOKING_1_4_S, COOKING_1_5_S, COOKING_1_6_S, COOKING_1_7_S,
+		COOKING_2_0_N, COOKING_2_1_N, COOKING_2_2_N, COOKING_2_3_N,
+		COOKING_2_4_N, COOKING_2_5_N, COOKING_2_6_N, COOKING_2_7_N,
+		COOKING_2_0_S, COOKING_2_1_S, COOKING_2_2_S, COOKING_2_3_S,
+		COOKING_2_4_S, COOKING_2_5_S, COOKING_2_6_S, COOKING_2_7_S,
+		COOKING_3_0_N, COOKING_3_1_N, COOKING_3_2_N, COOKING_3_3_N,
+		COOKING_3_4_N, COOKING_3_5_N, COOKING_3_6_N, COOKING_3_7_N,
+		COOKING_3_0_S, COOKING_3_1_S, COOKING_3_2_S, COOKING_3_3_S,
+		COOKING_3_4_S, COOKING_3_5_S, COOKING_3_6_S, COOKING_3_7_S,
+		ELIXIR_OF_IVORY_TOWER, BLOODSTAIN_OF_ANTHARAS, BLOODSTAIN_OF_FAFURION,
+		BLOODSTAIN_OF_LINDVIOR, BLOODSTAIN_OF_VALAKAS, BLESS_OF_CRAY,
+		BLESS_OF_SAEL, MAGIC_EYE_OF_ANTHARAS, MAGIC_EYE_OF_FAFURION,
+		MAGIC_EYE_OF_LINDVIOR, MAGIC_EYE_OF_VALAKAS, MAGIC_EYE_OF_BIRTH,
+		MAGIC_EYE_OF_SHAPE, MAGIC_EYE_OF_LIFE, STONE_OF_DRAGON,
+		BLESS_OF_COMA1, BLESS_OF_COMA2, BLESS_OF_SAMURAI
+		};
 
-	private static void StoreBuff(int objId, int skillId, int time, int polyId) {
+	private static List<Integer> buffSkillIds() {
+		List<Integer> result = SkillsTable.getInstance().findBuffSkillIds();
+		for (int id : BUFF_SKILL_IDS) {
+			result.add(id);
+		}
+		return result;
+	}
+
+	private static void store(int objId, int skillId, int time, int polyId,
+			int attrKind) {
 		java.sql.Connection con = null;
 		PreparedStatement pstm = null;
-		
 		try {
 			con = L1DatabaseFactory.getInstance().getConnection();
-			pstm = con.prepareStatement("INSERT INTO character_buff SET char_obj_id=?, skill_id=?, remaining_time=?, poly_id=?");
+			pstm = con.prepareStatement("INSERT character_buffs (char_obj_id, skill_id, remaining_time, poly_id, attr_kind) VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE remaining_time = VALUES(remaining_time), poly_id = VALUES(poly_id), attr_kind = VALUES(attr_kind)");
 			pstm.setInt(1, objId);
 			pstm.setInt(2, skillId);
 			pstm.setInt(3, time);
 			pstm.setInt(4, polyId);
+			pstm.setInt(5, attrKind);
 			pstm.execute();
 		} catch (SQLException e) {
 			_log.log(Level.SEVERE, e.getLocalizedMessage(), e);
@@ -62,14 +108,13 @@ public class CharBuffTable {
 		}
 	}
 
-	public static void DeleteBuff(L1PcInstance pc) {
+	public static void delete(int charId) {
 		java.sql.Connection con = null;
 		PreparedStatement pstm = null;
-		
 		try {
 			con = L1DatabaseFactory.getInstance().getConnection();
-			pstm = con.prepareStatement("DELETE FROM character_buff WHERE char_obj_id=?");
-			pstm.setInt(1, pc.getId());
+			pstm = con.prepareStatement("DELETE FROM character_buffs WHERE char_obj_id=?");
+			pstm.setInt(1, charId);
 			pstm.execute();
 		} catch (SQLException e) {
 			_log.log(Level.SEVERE, e.getLocalizedMessage(), e);
@@ -80,16 +125,72 @@ public class CharBuffTable {
 		}
 	}
 
-	public static void SaveBuff(L1PcInstance pc) {
-		for (int skillId : buffSkill) {
+	private static boolean saveByExecutor(int skillId, L1PcInstance pc) {
+		L1Skills skill = SkillsTable.getInstance().findBySkillId(skillId);
+		if (skill == null) {
+			return false;
+		}
+		L1BuffSkillExecutor exe = skill.newBuffSkillExecutor();
+		if (exe == null) {
+			return false;
+		}
+
+		L1CharacterBuff buff = exe.getCharacterBuff(pc);
+		if (buff == null) {
+			return false;
+		}
+
+		store(buff.getCharcterId(), buff.getSkillId(), buff.getRemainingTime(),
+				buff.getPolyId(), buff.getAttrKind());
+		return true;
+	}
+
+	public static void save(L1PcInstance pc) {
+		for (int skillId : buffSkillIds()) {
 			int timeSec = pc.getSkillEffectTimeSec(skillId);
 			if (0 < timeSec) {
+				if (saveByExecutor(skillId, pc)) {
+					continue;
+				}
 				int polyId = 0;
 				if (skillId == SHAPE_CHANGE) {
 					polyId = pc.getTempCharGfx();
 				}
-				StoreBuff(pc.getId(), skillId, timeSec, polyId);
+				store(pc.getId(), skillId, timeSec, polyId, 0);
 			}
 		}
+	}
+
+	private static L1CharacterBuff fromResultSet(ResultSet rs) throws SQLException {
+		int charcterId = rs.getInt("char_obj_id");
+		int skillId = rs.getInt("skill_id");
+		int remainingTime = rs.getInt("remaining_time");
+		int polyId = rs.getInt("poly_id");
+		int attrKind = rs.getInt("attr_kind");
+		return new L1CharacterBuff(charcterId, skillId, remainingTime, polyId, attrKind);
+	}
+
+	public static List<L1CharacterBuff> findByCharacterId(int id) {
+		List<L1CharacterBuff> result = Lists.newArrayList();
+
+		Connection con = null;
+		PreparedStatement pstm = null;
+		ResultSet rs = null;
+		try {
+			con = L1DatabaseFactory.getInstance().getConnection();
+			pstm = con.prepareStatement("SELECT * FROM character_buffs WHERE char_obj_id = ?");
+			pstm.setInt(1, id);
+			rs = pstm.executeQuery();
+			while (rs.next()) {
+				result.add(fromResultSet(rs));
+			}
+		} catch (SQLException e) {
+			_log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+		} finally {
+			SQLUtil.close(rs);
+			SQLUtil.close(pstm);
+			SQLUtil.close(con);
+		}
+		return result;
 	}
 }

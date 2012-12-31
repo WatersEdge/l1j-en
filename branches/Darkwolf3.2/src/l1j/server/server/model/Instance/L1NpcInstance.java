@@ -23,7 +23,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ScheduledFuture;
@@ -72,6 +71,8 @@ import l1j.server.server.types.Point;
 import l1j.server.server.utils.TimerPool;
 import static l1j.server.server.model.item.L1ItemId.*;
 import static l1j.server.server.model.skill.L1SkillId.*;
+import l1j.server.server.RandomGenerator.RandomGenerator;
+import l1j.server.server.RandomGenerator.RandomGeneratorFactory;
 
 public class L1NpcInstance extends L1Character {
 	private static final long serialVersionUID = 1L;
@@ -100,7 +101,7 @@ public class L1NpcInstance extends L1Character {
 	private int _petcost; 
 	public L1Inventory _inventory = new L1Inventory();
 	private L1MobSkillUse mobSkill;
-	private static Random _random = new Random();
+	private static RandomGenerator _random = RandomGeneratorFactory.newRandom();
 	private boolean firstFound = true;
 	public static int courceRange = 15;
 	private int _drainedMana = 0;
@@ -371,28 +372,23 @@ public class L1NpcInstance extends L1Character {
 				if (getLocation().getTileLineDistance(target.getLocation()) > escapeDistance) {
 					tagertClear();
 				} else {
-					int dir = targetReverseDirection(target.getX(), target
-							.getY());
+					int dir = targetReverseDirection(target.getX(), target.getY());
 					dir = checkObject(getX(), getY(), getMapId(), dir);
 					setDirectionMove(dir);
 					setSleepTime(calcSleepTime(getPassispeed(), MOVE_SPEED));
 				}
 			}
 		} else { 
-			if (isAttackPosition(target.getX(), target.getY(), getNpcTemplate()
-					.get_ranged())) {
+			if (isAttackPosition(target.getX(), target.getY(), getNpcTemplate().get_ranged())) {
 				if (mobSkill.isSkillTrigger(target)) { 
 					if (_random.nextInt(2) >= 1) { 
-						setHeading(targetDirection(target.getX(), target
-								.getY()));
+						setHeading(targetDirection(target.getX(), target.getY()));
 						attackTarget(target);
 					} else {
 						if (mobSkill.skillUse(target, true)) { 
-							setSleepTime(calcSleepTime(mobSkill.getSleepTime(),
-									MAGIC_SPEED));
+							setSleepTime(calcSleepTime(mobSkill.getSleepTime(), MAGIC_SPEED));
 						} else { 
-							setHeading(targetDirection(target.getX(), target
-									.getY()));
+							setHeading(targetDirection(target.getX(), target.getY()));
 							attackTarget(target);
 						}
 					}
@@ -402,14 +398,12 @@ public class L1NpcInstance extends L1Character {
 				}
 			} else {
 				if (mobSkill.skillUse(target, false)) {
-					setSleepTime(calcSleepTime(mobSkill.getSleepTime(),
-							MAGIC_SPEED));
+					setSleepTime(calcSleepTime(mobSkill.getSleepTime(), MAGIC_SPEED));
 					return;
 				}
 
 				if (getPassispeed() > 0) {
-					int distance = getLocation().getTileDistance(
-							target.getLocation());
+					int distance = getLocation().getTileDistance(target.getLocation());
 					if (firstFound == true && getNpcTemplate().is_teleport()
 							&& distance > 3 && distance < 15) {
 						if (nearTeleport(target.getX(), target.getY()) == true) {
@@ -626,9 +620,8 @@ public class L1NpcInstance extends L1Character {
 		int count = targetItem.getCount();
 		L1Inventory groundInventory = L1World.getInstance().getInventory(
 				targetItem.getX(), targetItem.getY(), targetItem.getMapId());
-		L1ItemInstance item = groundInventory.tradeItem(targetItem, targetItem
-				.getCount(), getInventory());
-		turnOnOffLight();
+		L1ItemInstance item = groundInventory.tradeItem(targetItem, targetItem.getCount(), getInventory());
+		updateLight();
 		onGetItem(item, count);
 		_targetItemList.remove(_targetItem);
 		_targetItem = null;
@@ -637,8 +630,7 @@ public class L1NpcInstance extends L1Character {
 
 	public boolean noTarget(int depth) {
 		if (_master != null && _master.getMapId() == getMapId()
-				&& getLocation().getTileLineDistance(_master
-						.getLocation()) > 2) { 
+				&& getLocation().getTileLineDistance(_master.getLocation()) > 2) { 
 			int dir = moveDirection(_master.getX(), _master.getY());
 			if (dir != -1) {
 				setDirectionMove(dir);
@@ -651,44 +643,34 @@ public class L1NpcInstance extends L1Character {
 				return true; 
 			}
 			if (_master == null && getPassispeed() > 0 && !isRest()) {
-				//
 				L1MobGroupInfo mobGroupInfo = getMobGroupInfo();
 				if (mobGroupInfo == null
-						|| mobGroupInfo != null && mobGroupInfo
-								.isLeader(this)) {
-					//
-					//
+						|| mobGroupInfo != null && mobGroupInfo.isLeader(this)) {
 					if (_randomMoveDistance == 0) {
 						_randomMoveDistance = _random.nextInt(5) + 1;
 						_randomMoveDirection = _random.nextInt(20);
-						//
 						if (getHomeX() != 0 && getHomeY() != 0
 								&& _randomMoveDirection < 8
 								&& _random.nextInt(3) == 0) {
-							_randomMoveDirection = moveDirection(getHomeX(),
-									getHomeY());
+							_randomMoveDirection = moveDirection(getHomeX(), getHomeY());
 						}
 					} else {
 						_randomMoveDistance--;
 					}
-					int dir = checkObject(getX(), getY(), getMapId(),
-							_randomMoveDirection);
+					int dir = checkObject(getX(), getY(), getMapId(), _randomMoveDirection);
 					if (dir != -1) {
 						setDirectionMove(dir);
-						setSleepTime(calcSleepTime(getPassispeed(),
-								MOVE_SPEED));
+						setSleepTime(calcSleepTime(getPassispeed(), MOVE_SPEED));
 					}
 				} else { 
 					L1NpcInstance leader = mobGroupInfo.getLeader();
-					if (getLocation().getTileLineDistance(leader
-							.getLocation()) > 2) {
+					if (getLocation().getTileLineDistance(leader.getLocation()) > 2) {
 						int dir = moveDirection(leader.getX(), leader.getY());
 						if (dir == -1) {
 							return true;
 						} else {
 							setDirectionMove(dir);
-							setSleepTime(calcSleepTime(getPassispeed(),
-									MOVE_SPEED));
+							setSleepTime(calcSleepTime(getPassispeed(), MOVE_SPEED));
 						}
 					}
 				}
@@ -1231,8 +1213,7 @@ public class L1NpcInstance extends L1Character {
 		_master = null;
 		L1World.getInstance().removeVisibleObject(this);
 		L1World.getInstance().removeObject(this);
-		List<L1PcInstance> players = L1World.getInstance().getRecognizePlayer(
-				this);
+		List<L1PcInstance> players = L1World.getInstance().getRecognizePlayer(this);
 
 		if (players.size() > 0) {
 			S_RemoveObject s_deleteNewObject = new S_RemoveObject(this);
@@ -1299,9 +1280,7 @@ public class L1NpcInstance extends L1Character {
 				appearOnGround(pc);
 			}
 			} else {
-// if (getNpcTemplate().get_npcId() != 45681) { // hrIO
 					searchItemFromAir();
-// }
 			}
  		} else if (getHiddenStatus() == HIDDEN_STATUS_ICE) {
 			if (getCurrentHp() < getMaxHp()) {
@@ -1427,8 +1406,7 @@ public class L1NpcInstance extends L1Character {
 	}
 
 	public int moveDirection(int x, int y) {
-		return moveDirection(x, y, getLocation().getLineDistance(
-				new Point(x, y)));
+		return moveDirection(x, y, getLocation().getLineDistance(new Point(x, y)));
 	}
 
 	
@@ -1487,8 +1465,7 @@ public class L1NpcInstance extends L1Character {
 			dir = checkObject(getX(), getY(), getMapId(), dir);
 		}
 
-		for (L1Object object : L1World.getInstance().getVisibleObjects(this,
-				1)) {
+		for (L1Object object : L1World.getInstance().getVisibleObjects(this, 1)) {
 			// PC, Summon, Pet
 			if (object instanceof L1PcInstance
 					|| object instanceof L1SummonInstance
@@ -1591,8 +1568,7 @@ public class L1NpcInstance extends L1Character {
 		return -1;
 	}
 
-	private int _serchCource(int x, int y) 
-	{
+	private int _serchCource(int x, int y) {
 		int i;
 		int locCenter = courceRange + 1;
 		int diff_x = x - locCenter; 
@@ -1802,8 +1778,7 @@ public class L1NpcInstance extends L1Character {
 			return; 
 		}
 
-		Random random = new Random();
-		if (random.nextInt(100) > chance) {
+		if (_random.nextInt(100) > chance) {
 			return;
 		}
 

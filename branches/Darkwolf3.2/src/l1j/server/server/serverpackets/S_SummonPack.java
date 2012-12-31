@@ -56,7 +56,7 @@ public class S_SummonPack extends ServerBasePacket {
 		writeH(pet.getGfxId()); // SpriteID in List.spr
 		writeC(pet.getStatus()); // Modes in List.spr
 		writeC(pet.getHeading());
-		writeC(pet.getChaLightSize()); // (Bright) - 0~15
+		writeC(pet.getLightSize()); // (Bright) - 0~15
 		writeC(pet.getMoveSpeed()); // Speed - 0:normal, 1:fast,
 		// 2:slow
 		writeD(0);

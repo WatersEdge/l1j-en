@@ -56,6 +56,7 @@ public class L1PcInventory extends L1Inventory {
 
 	private int _stingId; 
 
+	public static final int COL_CHARGE_TIME = 256;
 
 	public L1PcInventory(L1PcInstance owner) {
 		_owner = owner;
@@ -561,7 +562,7 @@ public class L1PcInventory extends L1Inventory {
 		for (Object itemObject : _items) {
 			L1ItemInstance item = (L1ItemInstance) itemObject;
 			if (item.isEquipped()) {
-				hpr += item.getItem().get_addhpr();
+				hpr += item.getItem().getHp();
 			}
 		}
 		return hpr;
@@ -572,7 +573,7 @@ public class L1PcInventory extends L1Inventory {
 		for (Object itemObject : _items) {
 			L1ItemInstance item = (L1ItemInstance) itemObject;
 			if (item.isEquipped()) {
-				mpr += item.getItem().get_addmpr();
+				mpr += item.getItem().getMp();
 			}
 		}
 		return mpr;

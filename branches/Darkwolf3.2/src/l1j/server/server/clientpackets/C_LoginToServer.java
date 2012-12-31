@@ -33,6 +33,7 @@ import l1j.server.server.controllers.WarTimeController;
 import l1j.server.server.datatables.CharacterTable;
 import l1j.server.server.datatables.GetBackRestartTable;
 import l1j.server.server.datatables.SkillsTable;
+import l1j.server.server.datatables.CharBuffTable;
 import l1j.server.server.model.Getback;
 import l1j.server.server.model.L1CastleLocation;
 import l1j.server.server.model.L1Clan;
@@ -43,6 +44,8 @@ import l1j.server.server.model.L1World;
 import l1j.server.server.model.Instance.L1PcInstance;
 import l1j.server.server.model.Instance.L1SummonInstance;
 import l1j.server.server.model.skill.L1SkillUse;
+import l1j.server.server.model.skill.L1BuffUtil;
+import l1j.server.server.model.skill.executor.L1BuffSkillExecutor;
 import l1j.server.server.serverpackets.S_ActiveSpells;
 import l1j.server.server.serverpackets.S_AddSkill;
 import l1j.server.server.serverpackets.S_Bookmarks;
@@ -67,6 +70,7 @@ import l1j.server.server.serverpackets.S_Karma;
 import l1j.server.server.templates.L1BookMark;
 import l1j.server.server.templates.L1GetBackRestart;
 import l1j.server.server.templates.L1Skills;
+import l1j.server.server.templates.L1CharacterBuff;
 import l1j.server.server.utils.SQLUtil;
 import static l1j.server.server.model.skill.L1SkillId.*;
 
@@ -130,8 +134,8 @@ public class C_LoginToServer extends ClientBasePacket {
 		
 		pc.sendPackets(new S_LoginGame()); 
 		
-		S_InitialAbilityGrowth s_initialAbility = new S_InitialAbilityGrowth(pc);
-		pc.sendPackets(s_initialAbility);
+		//S_InitialAbilityGrowth s_initialAbility = new S_InitialAbilityGrowth(pc);
+		//pc.sendPackets(s_initialAbility);
 
 		bookmarks(pc);
 
@@ -205,7 +209,7 @@ public class C_LoginToServer extends ClientBasePacket {
 		items(pc);
 		skills(pc);
 		buff(client, pc);
-		pc.turnOnOffLight();
+		pc.updateLight();
 
 		if (pc.getCurrentHp() > 0) {
 			pc.setDead(false);
@@ -481,46 +485,52 @@ public class C_LoginToServer extends ClientBasePacket {
 			if (summon.getMaster().getId() == pc.getId()) {
 				summon.setMaster(pc);
 				pc.addPet(summon);
-				for (L1PcInstance visiblePc : L1World.getInstance()
-						.getVisiblePlayer(summon)) {
+				for (L1PcInstance visiblePc : L1World.getInstance().getVisiblePlayer(summon)) {
 					visiblePc.sendPackets(new S_SummonPack(summon, visiblePc));
 				}
 			}
 		}
 	}
 
+	private boolean buffByExecutor(L1PcInstance pc, L1CharacterBuff buff) {
+		L1Skills skill = SkillsTable.getInstance().findBySkillId(buff.getSkillId());
+		if (skill == null) {
+			return false;
+		}
+		L1BuffSkillExecutor exe = skill.newBuffSkillExecutor();
+		if (exe == null) {
+			return false;
+		}
+		pc.setSkillEffect(buff.getSkillId(), buff.getRemainingTime() * 1000);
+		exe.restoreEffect(pc, buff);
+		return true;
+	}
+	
 	private void buff(ClientThread clientthread, L1PcInstance pc) {
-		Connection con = null;
-		PreparedStatement pstm = null;
-		ResultSet rs = null;
+		for (L1CharacterBuff buff : CharBuffTable.findByCharacterId(pc.getId())) {
+		int skillid = buff.getSkillId();
+		int remaining_time = buff.getRemainingTime();
 		
-		try {
-			con = L1DatabaseFactory.getInstance().getConnection();
-			pstm = con.prepareStatement("SELECT * FROM character_buff WHERE char_obj_id=?");
-			pstm.setInt(1, pc.getId());
-			rs = pstm.executeQuery();
-			while (rs.next()) {
-				int skillid = rs.getInt("skill_id");
-				int remaining_time = rs.getInt("remaining_time");
-				if (skillid == SHAPE_CHANGE) { 
-					int poly_id = rs.getInt("poly_id");
-					L1PolyMorph.doPoly(pc, poly_id, remaining_time, 
-							L1PolyMorph.MORPH_BY_LOGIN);
+		if (buffByExecutor(pc, buff)) {
+			continue;
+		}
+
+		if (skillid == SHAPE_CHANGE) {
+			if (pc.getMiniGamePlaying() == 0) {
+				L1PolyMorph.doPoly(pc, buff.getPolyId(), remaining_time, L1PolyMorph.MORPH_BY_LOGIN);
+			}
 				} else if (skillid == STATUS_BRAVE) {
-					pc.sendPackets(new S_SkillBrave(pc.getId(), 1, 
-							remaining_time));
+					pc.sendPackets(new S_SkillBrave(pc.getId(), 1, remaining_time));
 					pc.broadcastPacket(new S_SkillBrave(pc.getId(), 1, 0));
 					pc.setBraveSpeed(1);
 					pc.setSkillEffect(skillid, remaining_time * 1000);
 				} else if (skillid == STATUS_ELFBRAVE) {
-					pc.sendPackets(new S_SkillBrave(pc.getId(), 3, 
-							remaining_time));
+					pc.sendPackets(new S_SkillBrave(pc.getId(), 3, remaining_time));
 					pc.broadcastPacket(new S_SkillBrave(pc.getId(), 3, 0));
 					pc.setBraveSpeed(1);
 					pc.setSkillEffect(skillid, remaining_time * 1000);
 				} else if (skillid == STATUS_HASTE) { 
-					pc.sendPackets(new S_SkillHaste(pc.getId(), 1, 
-							remaining_time));
+					pc.sendPackets(new S_SkillHaste(pc.getId(), 1, remaining_time));
 					pc.broadcastPacket(new S_SkillHaste(pc.getId(), 1, 0));
 					pc.setMoveSpeed(1);
 					pc.setSkillEffect(skillid, remaining_time * 1000);
@@ -530,29 +540,87 @@ public class C_LoginToServer extends ClientBasePacket {
 				} else if (skillid == STATUS_CHAT_PROHIBITED) {
 					pc.sendPackets(new S_SkillIconGFX(36, remaining_time));
 					pc.setSkillEffect(skillid, remaining_time * 1000);
-				} else if (skillid >= COOKING_1_0_N && skillid <= COOKING_1_6_N
-					|| skillid >= COOKING_1_0_S && skillid <= COOKING_1_6_S
-					|| skillid >= COOKING_2_0_N && skillid <= COOKING_2_6_N
-					|| skillid >= COOKING_2_0_S && skillid <= COOKING_2_6_S
-					|| skillid >= COOKING_3_0_N && skillid <= COOKING_3_6_N
-					|| skillid >= COOKING_3_0_S && skillid <= COOKING_3_6_S) {
-					L1Cooking.eatCooking(pc, skillid, remaining_time);
+				} else if (skillid >= COOKING_BEGIN && skillid <= COOKING_END) {
+					L1Skills skill = SkillsTable.getInstance().findBySkillId(skillid);
+					L1BuffSkillExecutor exe = skill.newBuffSkillExecutor();
+					exe.addEffect(null, pc, remaining_time);
+					pc.setSkillEffect(skillid, remaining_time * 1000);
+				} else if (skillid == BLOODSTAIN_OF_ANTHARAS) {
+					L1BuffUtil.bloodstain(pc, (byte) 0, remaining_time / 60, false);
+				} else if (skillid == BLOODSTAIN_OF_FAFURION) {
+					L1BuffUtil.bloodstain(pc, (byte) 1, remaining_time / 60, false);
+				} else if (skillid == BLOODSTAIN_OF_LINDVIOR) {
+					L1BuffUtil.bloodstain(pc, (byte) 2, remaining_time / 60, false);
+				} else if (skillid == BLOODSTAIN_OF_VALAKAS) {
+					L1BuffUtil.bloodstain(pc, (byte) 3, remaining_time / 60, false);
+				} else if (skillid == BLESS_OF_CRAY) {
+					L1BuffUtil.effectBlessOfDragonSlayer(pc, skillid, 2400, 7681);
+				} else if (skillid == BLESS_OF_SAEL) {
+					L1BuffUtil.effectBlessOfDragonSlayer(pc, skillid, 2400, 7680);
+				} else if (skillid == MAGIC_EYE_OF_ANTHARAS) {
+					pc.addResistHold(5);
+					pc.setSkillEffect(skillid, remaining_time * 1000);
+				} else if (skillid == MAGIC_EYE_OF_FAFURION) {
+					pc.addResistFreeze(5);
+					pc.setSkillEffect(skillid, remaining_time * 1000);
+				} else if (skillid == MAGIC_EYE_OF_LINDVIOR) {
+					pc.addResistSleep(5);
+					pc.setSkillEffect(skillid, remaining_time * 1000);
+				} else if (skillid == MAGIC_EYE_OF_VALAKAS) {
+					pc.addResistStun(5);
+					pc.setSkillEffect(skillid, remaining_time * 1000);
+				} else if (skillid == MAGIC_EYE_OF_BIRTH) {
+					pc.addResistHold(5);
+					pc.addResistFreeze(5);
+					pc.setSkillEffect(skillid, remaining_time * 1000);
+				} else if (skillid == MAGIC_EYE_OF_SHAPE) {
+					pc.addResistHold(5);
+					pc.addResistFreeze(5);
+					pc.addResistSleep(5);
+					pc.setSkillEffect(skillid, remaining_time * 1000);
+				} else if (skillid == MAGIC_EYE_OF_LIFE) {
+					pc.addResistHold(5);
+					pc.addResistFreeze(5);
+					pc.addResistSleep(5);
+					pc.addResistStun(5);
+					pc.setSkillEffect(skillid, remaining_time * 1000);
+				} else if (skillid == STONE_OF_DRAGON) {
+					//L1FloraPotion potion = L1FloraPotion.get(50555);
+					pc.addHitup(5);
+					pc.addDmgup(5);
+					pc.addBowHitup(5);
+					pc.addBowDmgup(5);
+					pc.addSp(5);
+					pc.sendPackets(new S_SPMR(pc));
+					pc.setSkillEffect(skillid, remaining_time * 1000);
+				} else if (skillid == BLESS_OF_COMA1) {
+					pc.setSkillEffect(skillid, remaining_time * 1000);
+					pc.addStr(5);
+					pc.addDex(5);
+					pc.addCon(1);
+					pc.addHitup(3);
+					pc.addAc(-3);
+				} else if (skillid == BLESS_OF_COMA2) {
+					pc.addStr(5);
+					pc.addDex(5);
+					pc.addCon(3);
+					pc.addHitup(5);
+					pc.addAc(-8);
+					pc.addSp(1);
+					pc.addExpBonusPct(20);
+					pc.sendPackets(new S_SPMR(pc));
+					pc.setSkillEffect(skillid, remaining_time * 1000);
+				} else if (skillid == BLESS_OF_SAMURAI) {
+					pc.addExpBonusPct(10);
+					pc.setSkillEffect(skillid, remaining_time * 1000);
 				} else {
 					L1SkillUse l1skilluse = new L1SkillUse();
-					l1skilluse.handleCommands(clientthread.getActiveChar(),
-					skillid, pc.getId(), pc.getX(), pc.getY(), null, 
-					remaining_time, L1SkillUse.TYPE_LOGIN);
+					l1skilluse.handleCommands(clientthread.getActiveChar(), 
+						skillid, pc.getId(), pc.getX(), pc.getY(), null, remaining_time, L1SkillUse.TYPE_LOGIN);
 				}
-			}
-		} catch (SQLException e) {
-			_log.log(Level.SEVERE, e.getLocalizedMessage(), e);
-		} finally {
-			SQLUtil.close(rs);
-			SQLUtil.close(pstm);
-			SQLUtil.close(con);
-		}
+		  }
 	}
-
+	
 	@Override
 	public String getType() {
 		return C_LOGIN_TO_SERVER;

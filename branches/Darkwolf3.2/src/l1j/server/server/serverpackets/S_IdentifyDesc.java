@@ -66,7 +66,7 @@ public class S_IdentifyDesc extends ServerBasePacket {
 				writeH(135); // 1 percent of defense force protection equipment
 				writeC(2);
 				writeS(name.toString());
-				writeS(Math.abs(item.getItem().get_ac()) + "+"  
+				writeS(Math.abs(item.getItem().getAc()) + "+"  
 					+ item.getEnchantLevel());
 			}
 		} else if (item.getItem().getType2() == 0) { // etcitem

@@ -106,7 +106,7 @@ public class C_PickUpItem extends ClientBasePacket {
      			if (pc.getInventory().checkAddItem(item, pickupCount) == L1Inventory.OK) {
      				if (item.getX() != 0 && item.getY() != 0) { 
      					groundInventory.tradeItem(item, pickupCount, pc.getInventory());
-     					pc.turnOnOffLight();
+     					pc.updateLight();
      					LogPickUpItem lpui = new LogPickUpItem();
      					lpui.storeLogPickUpItem(pc, item, before_inven, after_inven, brfore_ground, after_ground, (int)pickupCount);
      					pc.sendPackets(new S_AttackPacket(pc, objectId, ActionCodes.ACTION_Pickup));

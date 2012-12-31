@@ -26,6 +26,7 @@ import java.util.StringTokenizer;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.LineNumberReader;
+import java.util.Arrays;
 
 import l1j.server.server.datatables.NpcTable;
 import l1j.server.server.datatables.InnKeyTable;
@@ -37,8 +38,10 @@ import l1j.server.server.model.L1EquipmentTimer;
 import l1j.server.server.model.L1ItemOwnerTimer;
 import l1j.server.server.model.L1Object;
 import l1j.server.server.model.L1World;
+import l1j.server.server.model.L1ChargeTimer;
 import l1j.server.server.model.L1ItemOwnerTimer;
 import l1j.server.server.model.L1PcInventory;
+import l1j.server.server.model.L1Inventory;
 import l1j.server.server.model.skill.L1SkillId;
 import l1j.server.server.serverpackets.S_OwnCharStatus;
 import l1j.server.server.serverpackets.S_ServerMessage;
@@ -48,55 +51,47 @@ import l1j.server.server.templates.L1Npc;
 import l1j.server.server.templates.L1Pet;
 import l1j.server.server.templates.L1PetItem; 
 import l1j.server.server.utils.BinaryOutputStream;
+import l1j.server.server.utils.IntRange;
 import static l1j.server.server.model.skill.L1SkillId.*;
 
 // Referenced classes of package l1j.server.server.model:
 // L1Object, L1PcInstance
-
 public class L1ItemInstance extends L1Object {
-	private static Logger _log = Logger.getLogger(L1ItemInstance.class
-			.getName());
-
+	private static Logger _log = Logger.getLogger(L1ItemInstance.class.getName());
 	private static final long serialVersionUID = 1L;
-
 	private int _count;
-
 	private int _itemId;
-
 	private L1Item _item;
-
+	private L1Inventory _inventoryItem;
 	private boolean _isActive = false;
-	
 	private boolean _isEquipped = false;
-
 	private int _enchantLevel;
-
 	private boolean _isIdentified = false;
-
 	private int _durability;
-
 	private int _chargeCount;
-
 	private int _remainingTime;
-
 	private Timestamp _lastUsed = null;
-
 	private int _lastWeight;
-
 	private final LastStatus _lastStatus = new LastStatus();
-
 	private L1PcInstance _pc;
-
 	private boolean _isRunning = false;
-
 	private EnchantTimer _timer;
-
 	private int _bless;
-
 	private int _attrEnchantKind;
-
 	private int _attrEnchantLevel;
-
+	private int _defenseWater;
+	private int _defenseWind;
+	private int _defenseFire;
+	private int _defenseEarth;
+	private int _resistStun;
+	private int _resistStone;
+	private int _resistSleep;
+	private int _resistFreeze;
+	private int _resistHold;
+	private int _resistBlind;
+	private int _expBonus;
+	private int _potionRecoveryRate;
+	
 	public L1ItemInstance() {
 		_count = 1;
 		_enchantLevel = 0;
@@ -152,6 +147,143 @@ public class L1ItemInstance extends L1Object {
 	public void setItemId(int itemId) {
 		_itemId = itemId;
 	}
+	
+	public int getAc() {
+		return _inventoryItem.getAc();
+	}
+	
+	public void setAc(int _ac) {
+		_inventoryItem.setAc(_ac);
+	}
+	
+	public int getStr() {
+		return _inventoryItem.getStr();
+	}
+	
+	public void setStr(int _str) {
+		_inventoryItem.setStr(_str);
+	}
+		
+	public int getCon() {
+		return _inventoryItem.getCon();
+	}
+	
+	public void setCon(int _con) {
+		_inventoryItem.setCon(_con);
+	}
+		
+	public int getDex() {
+		return _inventoryItem.getDex();
+	}
+	
+	public void setDex(int _dex) {
+		_inventoryItem.setDex(_dex);
+	}
+	
+	public int getWis() {
+		return _inventoryItem.getWis();
+	}
+	
+	public void setWis(int _wis) {
+		_inventoryItem.setWis(_wis);
+	}
+		
+	public int getCha() {
+		return _inventoryItem.getCha();
+	}
+	
+	public void setCha(int _cha) {
+		_inventoryItem.setCha(_cha);
+	}
+		
+	public int getInt() {
+		return _inventoryItem.getInt();
+	}
+	
+	public void setInt(int _int) {
+		_inventoryItem.setInt(_int);
+	}
+	
+	public int getHp() {
+		return _inventoryItem.getHp();
+	}
+	
+	public void setHp(int _hp) {
+		_inventoryItem.setHp(_hp);
+	}
+	
+	public int getHpr() {
+		return _inventoryItem.getHpr();
+	}
+	
+	public void setHpr(int _hpr) {
+		_inventoryItem.setHpr(_hpr);
+	}
+	
+	public int getMp() {
+		return _inventoryItem.getMp();
+	}
+	
+	public void setMp(int _mp) {
+		_inventoryItem.setMp(_mp);
+	}
+		
+	public int getMpr() {
+		return _inventoryItem.getMpr();
+	}
+	
+	public void setMpr(int _mpr) {
+		_inventoryItem.setMpr(_mpr);
+	}
+				
+	public int getSp() {
+		return _inventoryItem.getSp();
+	}
+	
+	public void setSp(int _sp) {
+		_inventoryItem.setSp(_sp);
+	}
+	
+	public int getMr() {
+		return _inventoryItem.getMr();
+	}
+	
+	public void setMr(int _mr) {
+		_inventoryItem.setMr(_mr);
+	}
+	
+	public int getHitModifier() {
+		return _inventoryItem.getHitModifier();
+	}
+	
+	public void setHitModifier(int _hitModifier) {
+		_inventoryItem.setHitModifier(_hitModifier);
+	}
+	
+	public int getDmgModifier() {
+		return _inventoryItem.getDmgModifier();
+	}
+	
+	public void setDmgModifier(int _dmgModifier) {
+		_inventoryItem.setDmgModifier(_dmgModifier);
+	}
+	
+	public int getBowHitModifier() {
+		return _inventoryItem.getBowHitModifier();
+	}
+	
+	public void setBowHitModifier(int _hitModifier) {
+		_inventoryItem.setBowHitModifier(_hitModifier);
+	}
+	
+	public int getBowDmgModifier() {
+		return _inventoryItem.getBowDmgModifier();
+	}
+	
+	public void setBowDmgModifier(int _dmgModifier) {
+		_inventoryItem.setBowDmgModifier(_dmgModifier);
+	}
+	
     private int _keyId = 0;
 
     public int getKeyId() {
@@ -280,6 +412,114 @@ public class L1ItemInstance extends L1Object {
 		return _attrEnchantLevel;
 	}
 
+	public int getDefenseEarth() {
+		return _defenseEarth;
+	}
+	
+	public void setDefenseEarth(int _defenseEarth) {
+		_defenseEarth = _defenseEarth;
+	}
+	
+	public int getDefenseWater() {
+		return _defenseWater;
+	}
+	
+	public void setDefenseWater(int _defenseWater) {
+		_defenseWater = _defenseWater;
+	}
+	
+	public int getDefenseFire() {
+		return _defenseFire;
+	}
+	
+	public void setDefenseFire(int _defenseFire) {
+		_defenseFire = _defenseFire;
+	}
+	
+	public int getDefenseWind() {
+		return _defenseWind;
+	}
+	
+	public void setDefenseWind(int _defenseWind) {
+		_defenseWind = _defenseWind;
+	}
+	
+	public int getResistStun() {
+		return _resistStun;
+	}
+	
+	public void setResistStun(int _resistStun) {
+		_resistStun = _resistStun;
+	}
+	
+	public int getResistStone() {
+		return _resistStone;
+	}
+	
+	public void setResistStone(int _resistStone) {
+		_resistStun = _resistStone;
+	}
+	
+	public int getResistSleep() {
+		return _resistSleep;
+	}
+	
+	public void setResistSleep(int _resistSleep) {
+		_resistStun = _resistSleep;
+	}
+	
+	public int getResistFreeze() {
+		return _resistFreeze;
+	}
+	
+	public void setResistFreeze(int _resistFreeze) {
+		_resistStun = _resistFreeze;
+	}
+	
+	public int getResistHold() {
+		return _resistHold;
+	}
+	
+	public void setResistHold(int _resistHold) {
+		_resistStun = _resistHold;
+	}
+	
+	public int getResistBlind() {
+		return _resistBlind;
+	}
+	
+	public void setResistBlind(int _resistBlind) {
+		_resistStun = _resistBlind;
+	}
+
+	public int getExpBonus() {
+		return _expBonus;
+	}
+	
+	public void setExpBonus(int _expBonus) {
+		_expBonus = _expBonus;
+	}
+	
+	public int getPotionRecoveryRate() {
+		return _potionRecoveryRate;
+	}
+	
+	public void setPotionRecoveryRate(int _potionRecoveryRate) {
+		_potionRecoveryRate = _potionRecoveryRate;
+	}
+	
+	public boolean getCanBeDmg() {
+		if (getItem().getType2() == 1) {
+			return getItem().getCanbeDmg() && _inventoryItem.getCanBeDmg();
+		} else {
+			return _inventoryItem.getCanBeDmg();
+		}
+	}
+	
+	public void setCanBeDmg(boolean _canBeDmg) {
+		_inventoryItem.setCanBeDmg(_canBeDmg);
+	}
+	
 	private boolean _isNowLighting = false;
 
 	public boolean isNowLighting() {
@@ -288,19 +528,6 @@ public class L1ItemInstance extends L1Object {
 
 	public void setNowLighting(boolean flag) {
 		_isNowLighting = flag;
-	}
-	
-	public int getMr() {
-		int mr = _item.get_mdef();
-		if (getItemId() == 20011 || getItemId() == 20110
-				|| getItemId() == 21108 || getItemId() == 120011) {
-			mr += getEnchantLevel();
-		}
-		if (getItemId() == 20056 || getItemId() == 120056
-				|| getItemId() == 220056) {
-			mr += getEnchantLevel() * 2;
-		}
-		return mr;
 	}
 
 	public void set_durability(int i) {
@@ -575,7 +802,7 @@ public class L1ItemInstance extends L1Object {
 			if (getItem().getItemId() == 20383) {
 				name.append(" (" + getChargeCount() + ")");
 			}
-			if (getItem().getMaxUseTime() > 0 && getItem().getType2() != 0) {
+			if (getItem().getExpirationTime() > 0 && getItem().getType2() != 0) {
 				name.append(" (" + getRemainingTime() + ")");
 			}
 		}
@@ -670,6 +897,44 @@ public class L1ItemInstance extends L1Object {
 			timer.begin();
 		}
 
+		public boolean isChargeDoll() {
+			int[] dollId = new int[] {
+				49320, 49321, 49322, 49323, 49324, 49325,
+				49326, 49327, 49328, 49329, 49330, 49331,
+				49332, 49333, 49334, 49335, 49336, 49337,
+				49338, 49339, 49340, 49341, 49342, 49343,
+				49365, 49366, 49367, 49368, 49369, 49370,
+				49371, 49372, 49373, 49374, 49375, 49376
+			};
+
+			return Arrays.binarySearch(dollId, getItemId()) < 0 ? false : true;
+		}
+		
+		private L1ChargeTimer _chargeTimer;
+
+		public int getChargeTime() {
+			return _inventoryItem.getChargeTime();
+		}
+		
+		public void setChargeTime(int chargeTime) {
+			_inventoryItem.setChargeTime(chargeTime);
+		}
+		
+		public void startChargeTimer(L1PcInstance pc) {
+			if (getChargeTime() > 0) {
+				_chargeTimer = new L1ChargeTimer(pc, this);
+				Timer timer = new Timer(true);
+				timer.scheduleAtFixedRate(_chargeTimer, 0, 1000);
+			}
+		}
+
+		public void stopChargeTimer() {
+			if (_chargeTimer != null && getChargeTime() > 0) {
+				_chargeTimer.cancel();
+				_chargeTimer = null;
+			}
+		}
+		
 		private L1EquipmentTimer _equipmentTimer;
 
 		public void startEquipmentTimer(L1PcInstance pc) {
@@ -853,7 +1118,7 @@ public class L1ItemInstance extends L1Object {
             } else if (itemType2 == 2) { // armor
                 // AC
                 os.writeC(19);
-                int ac = ((L1Armor) getItem()).get_ac();
+                int ac = ((L1Armor) getItem()).getAc();
                 if (ac < 0) {
                     ac = ac - ac - ac;
                 }
@@ -869,7 +1134,7 @@ public class L1ItemInstance extends L1Object {
                 os.writeC(3);
                 os.writeC(get_durability());
             }
-            if (getItem().isTwohandedWeapon()) {
+            if (getItem().isTwohanded()) {
                 os.writeC(4);
             }
             if (itemType2 == 1) { // weapon
@@ -920,136 +1185,141 @@ public class L1ItemInstance extends L1Object {
                 os.writeC(34);
             }
             // STR~CHA
-            if (getItem().get_addstr() != 0) {
+            if (getItem().getStr() != 0) {
                 os.writeC(8);
-                os.writeC(getItem().get_addstr());
+                os.writeC(getItem().getStr());
             }
-            if (getItem().get_adddex() != 0) {
+            if (getItem().getDex() != 0) {
                 os.writeC(9);
-                os.writeC(getItem().get_adddex());
+                os.writeC(getItem().getDex());
             }
-            if (getItem().get_addcon() != 0) {
+            if (getItem().getCon() != 0) {
                 os.writeC(10);
-                os.writeC(getItem().get_addcon());
+                os.writeC(getItem().getCon());
             }
-            if (getItem().get_addwis() != 0) {
+            if (getItem().getWis() != 0) {
                 os.writeC(11);
-                os.writeC(getItem().get_addwis());
+                os.writeC(getItem().getWis());
             }
-            if (getItem().get_addint() != 0) {
+            if (getItem().getInt() != 0) {
                 os.writeC(12);
-                os.writeC(getItem().get_addint());
+                os.writeC(getItem().getInt());
             }
-            if (getItem().get_addcha() != 0) {
+            if (getItem().getCha() != 0) {
                 os.writeC(13);
-                os.writeC(getItem().get_addcha());
+                os.writeC(getItem().getCha());
             }
             // HP, MP
-            if (getItem().get_addhp() != 0) {
+            if (getItem().getHp() != 0) {
                 os.writeC(14);
-                os.writeH(getItem().get_addhp());
+                os.writeH(getItem().getHp());
             }
-            if (getItem().get_addmp() != 0) {
+            if (getItem().getMp() != 0) {
                 os.writeC(32);
-                os.writeC(getItem().get_addmp());
+                os.writeC(getItem().getMp());
             }
-            // MR
-            if (getMr() != 0) {
-                os.writeC(15);
-                os.writeH(getMr());
-            }
-            if (getItem().get_addsp() != 0) {
+            if (getItem().getSp() != 0) {
                 os.writeC(17);
-                os.writeC(getItem().get_addsp());
+                os.writeC(getItem().getSp());
             }
-            if (getItem().isHasteItem()) {
+            if (getItem().isHaste()) {
                 os.writeC(18);
             }
-            if (getItem().get_defense_fire() != 0) {
-                os.writeC(27);
-                os.writeC(getItem().get_defense_fire());
-            }
-            if (getItem().get_defense_water() != 0) {
-                os.writeC(28);
-                os.writeC(getItem().get_defense_water());
-            }
-            if (getItem().get_defense_wind() != 0) {
-                os.writeC(29);
-                os.writeC(getItem().get_defense_wind());
-            }
-            if (getItem().get_defense_earth() != 0) {
-                os.writeC(30);
-                os.writeC(getItem().get_defense_earth());
-            }
-            if (getItem().get_regist_freeze() != 0) {
-                os.writeC(15);
-                os.writeH(getItem().get_regist_freeze());
-                os.writeC(33);
-                os.writeC(1);
-            }
-            if (getItem().get_regist_stone() != 0) {
-                os.writeC(15);
-                os.writeH(getItem().get_regist_stone());
-                os.writeC(33);
-                os.writeC(2);
-            }
-            if (getItem().get_regist_sleep() != 0) {
-                os.writeC(15);
-                os.writeH(getItem().get_regist_sleep());
-                os.writeC(33);
-                os.writeC(3);
-            }
-            if (getItem().get_regist_blind() != 0) {
-                os.writeC(15);
-                os.writeH(getItem().get_regist_blind());
-                os.writeC(33);
-                os.writeC(4);
-            }
-            if (getItem().get_regist_stun() != 0) {
-                os.writeC(15);
-                os.writeH(getItem().get_regist_stun());
-                os.writeC(33);
-                os.writeC(5);
-            }
-            if (getItem().get_regist_sustain() != 0) {
-                os.writeC(15);
-                os.writeH(getItem().get_regist_sustain());
-                os.writeC(33);
-                os.writeC(6);
-            }
-            if (getItem().get_addhpr() != 0) {
+            if (getItem().getDefenseFire() != 0 || getDefenseFire() != 0) {
+				os.writeC(27);
+				os.writeC(getItem().getDefenseFire() + getDefenseFire());
+			}
+			if (getItem().getDefenseWater() != 0 || getDefenseWater() != 0) {
+				os.writeC(28);
+				os.writeC(getItem().getDefenseWater() + getDefenseWater());
+			}
+			if (getItem().getDefenseWind() != 0 || getDefenseWind() != 0) {
+				os.writeC(29);
+				os.writeC(getItem().getDefenseWind() + getDefenseWind());
+			}
+			if (getItem().getDefenseEarth() != 0 || getDefenseEarth() != 0) {
+				os.writeC(30);
+				os.writeC(getItem().getDefenseEarth() + getDefenseEarth());
+			}
+			if (getItem().getResistFreeze() != 0 || getResistFreeze() != 0) {
+				os.writeC(15);
+				os.writeH(getItem().getResistFreeze() + getResistFreeze());
+				os.writeC(33);
+				os.writeC(1);
+			}
+			if (getItem().getResistStone() != 0 || getResistStone() != 0) {
+				os.writeC(15);
+				os.writeH(getItem().getResistStone() + getResistStone());
+				os.writeC(33);
+				os.writeC(2);
+			}
+			if (getItem().getResistSleep() != 0 || getResistSleep() != 0) {
+				os.writeC(15);
+				os.writeH(getItem().getResistSleep() + getResistSleep());
+				os.writeC(33);
+				os.writeC(3);
+			}
+			if (getItem().getResistBlind() != 0 || getResistBlind() != 0) {
+				os.writeC(15);
+				os.writeH(getItem().getResistBlind() + getResistBlind());
+				os.writeC(33);
+				os.writeC(4);
+			}
+			if (getItem().getResistStun() != 0 || getResistStun() != 0) {
+				os.writeC(15);
+				os.writeH(getItem().getResistStun() + getResistStun());
+				os.writeC(33);
+				os.writeC(5);
+			}
+			if (getItem().getResistHold() != 0 || getResistHold() != 0) {
+				os.writeC(15);
+				os.writeH(getItem().getResistHold() + getResistHold());
+				os.writeC(33);
+				os.writeC(6);
+			}
+			// MR
+			if (getItem().getMr() != 0 || getMr() != 0) {
+				os.writeC(15);
+				os.writeH(getItem().getMr() + getMr());
+			}
+			if (getItem().getExpBonus() != 0 || getExpBonus() != 0) {
+				os.writeC(36);
+				os.writeC(getItem().getExpBonus() + getExpBonus());
+			}
+            if (getItem().getHp() != 0) {
                 os.writeC(37);
-                os.writeC(getItem().get_addhpr());
+                os.writeC(getItem().getHp());
             }
-            if (getItem().get_addmpr() != 0) {
+            if (getItem().getMpr() != 0) {
                 os.writeC(38);
-                os.writeC(getItem().get_addmpr());
+                os.writeC(getItem().getMpr());
             }
         }
 		return os.getBytes();
 	 }
 
 	private void onDelete() {
-        int itemId = getItem().getItemId();
-        if (itemId == 40314 || itemId == 40316) {
-                PetTable.getInstance().deletePet(getId());
-        } else if (itemId >= 49016 && itemId <= 49025) {
-                LetterTable lettertable = new LetterTable();
-                lettertable.deleteLetter(getId());
-        } else if (itemId >= 41383 && itemId <= 41400) {
-                for (L1Object l1object : L1World.getInstance().getObject()) {
-                        if (l1object instanceof L1FurnitureInstance) {
-                            L1FurnitureInstance furniture = (L1FurnitureInstance) l1object;
-                        if (furniture.getItemObjId() == getId()) {
-                            FurnitureSpawnTable.getInstance().deleteFurniture(furniture);
-                            }
-                     }
-              }
-        } else if (getItem().getItemId() == 40312) {
-                InnKeyTable.DeleteKey(this);
-        }
-    }
-
+		int itemId = getItem().getItemId();
+		if (itemId == 40314 || itemId == 40316) {
+			PetTable.getInstance().deletePet(getId());
+		} else if (itemId >= 49016 && itemId <= 49025) {
+			LetterTable lettertable = new LetterTable();
+			lettertable.deleteLetter(getId());
+		} else if (itemId >= 41383 && itemId <= 41400) {
+			for (L1Object l1object : L1World.getInstance().getObject()) {
+				if (l1object instanceof L1FurnitureInstance) {
+					L1FurnitureInstance furniture = (L1FurnitureInstance) l1object;
+					if (furniture.getItemObjId() == getId()) {
+						FurnitureSpawnTable.getInstance().deleteFurniture(
+								furniture);
+					}
+				}
+			}
+		} else if (getItem().getItemId() == 40312) {
+			InnKeyTable.DeleteKey(this);
+		}
+	}
+	
 	class EnchantTimer extends TimerTask {
 
 	    public EnchantTimer() {

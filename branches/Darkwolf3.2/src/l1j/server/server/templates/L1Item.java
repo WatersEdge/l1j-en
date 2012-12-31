@@ -19,15 +19,24 @@
 package l1j.server.server.templates;
 
 import java.io.Serializable;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public abstract class L1Item implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	public L1Item() {
+	public Object clone() {
+		try {
+			return super.clone();
+		} catch (CloneNotSupportedException e) {
+			// throw (new InternalError(e.getMessage()));
+			return null;
+		}
 	}
 
-	// L1EtcItem,L1Weapon,L1Armor
+	public L1Item() {
+	}
 
 	private int _type2; // 0=L1EtcItem, 1=L1Weapon, 2=L1Armor
 
@@ -42,7 +51,7 @@ public abstract class L1Item implements Serializable {
 		_type2 = type;
 	}
 
-	private int _itemId; //
+	private int _itemId;
 
 	public int getItemId() {
 		return _itemId;
@@ -85,20 +94,25 @@ public abstract class L1Item implements Serializable {
 	private int _type;
 
 	/**
-	 * getType<br>
-	 * 
-	 * @return
-	 * <p>[etcitem]<br>
-	 * 0:arrow, 1:wand, 2:light, 3:gem, 4:totem, 5:firecracker, 6:potion, 
-	 * 7:food, 8:scroll, 9:questitem, 10:spellbook, 11:petitem, 12:other, 
-	 * 13:material, 14:event, 15:sting</p>
-	 * <p>[weapon]<br>
-	 * 1:sword, 2:dagger, 3:tohandsword, 4:bow, 5:spear, 6:blunt, 7:staff, 
-	 * 8:throwingknife, 9:arrow, 10:gauntlet, 11:claw, 12:edoryu, 13:singlebow, 
-	 * 14:singlespear, 15:tohandblunt, 16:tohandstaff</p>
-	 * <p>[armor]<br>
-	 * 1:helm, 2:armor, 3:T, 4:cloak, 5:glove, 6:boots, 
-	 * 7:shield, 8:amulet, 9:ring, 10:belt, 11:ring2, 12:earring
+	 * @return <p>
+	 *         [etcitem]<br>
+	 *         0:arrow, 1:wand, 2:light, 3:gem, 4:totem, 5:firecracker,
+	 *         6:potion, 7:food, 8:scroll, 9:questitem, 10:spellbook,
+	 *         11:petitem, 12:other, 13:material, 14:event, 15:sting,
+	 *		   16:treasure_box, 17:magic_doll
+	 *         </p>
+	 *         <p>
+	 *         [weapon]<br>
+	 *         1:sword, 2:twohandsword, 3:dagger, 4:bow, 5:arrow, 6:spear,
+	 *		   7:blunt, 8:staff, 9:claw, 10:dualsword, 11:gauntlet, 12:sting,
+	 *		   13:chainsword, 14:kiringku
+	 *         </p>
+	 *         <p>
+	 *         [armor]<br>
+	 *         1:helm, 2:t_shirts, 3:armor, 4:cloak, 5:glove, 6:boots, 7:shield,
+	 *         8:guarder, 10:amulet, 11:ring, 12:earring, 13:belt, 
+	 *		   14:pattern_back, 15:pattern_left, 16:pattern_right,
+	 *		   17:talisman_left, 18:talisman_right
 	 */
 	public int getType() {
 		return _type;
@@ -111,14 +125,12 @@ public abstract class L1Item implements Serializable {
 	private int _type1;
 
 	/**
-	 * getType1<br>
-	 * 
-	 * @return
-	 * <p>[weapon]<br>
-	 * sword:4, dagger:46, tohandsword:50, bow:20, blunt:11, spear:24, 
-	 * staff:40, throwingknife:2922, arrow:66, gauntlet:62, claw:58, 
-	 * edoryu:54, singlebow:20, singlespear:24, tohandblunt:11, 
-	 * tohandstaff:40</p>
+	 * @return <p>
+	 *         [weapon]<br>
+	 *         4:sword, 50:twohandsword, 46:dagger, 20:bow, 66:arrow, 24:spear,
+	 *		   11:blunt, 40:staff, 58:claw, 54:dualsword, 62:gauntlet, 2922:sting,
+	 *		   24:chainsword, 58:kiringku
+	 *         </p>
 	 */
 	public int getType1() {
 		return _type1;
@@ -136,6 +148,16 @@ public abstract class L1Item implements Serializable {
 
 	public void setMaterial(int material) {
 		_material = material;
+	}
+
+	private int _grade;
+
+	public int getGrade() {
+		return _grade;
+	}
+
+	public void setGrade(int grade) {
+		_grade = grade;
 	}
 
 	private int _weight;
@@ -218,24 +240,24 @@ public abstract class L1Item implements Serializable {
 		_tradable = flag;
 	}
 
-	private boolean _cantDelete; //
+	private boolean _deletable;
 
-	public boolean isCantDelete() {
-		return _cantDelete;
+	public boolean isDeletable() {
+		return _deletable;
 	}
 
-	public void setCantDelete(boolean flag) {
-		_cantDelete = flag;
+	public void setDeletable(boolean flag) {
+		_deletable = flag;
 	}
 
-	private boolean _save_at_once;
+	private boolean _saveAtOnce;
 
 	public boolean isToBeSavedAtOnce() {
-		return _save_at_once;
+		return _saveAtOnce;
 	}
 
 	public void setToBeSavedAtOnce(boolean flag) {
-		_save_at_once = flag;
+		_saveAtOnce = flag;
 	}
 
 	private int _dmgSmall = 0;
@@ -258,18 +280,14 @@ public abstract class L1Item implements Serializable {
 		_dmgLarge = dmgLarge;
 	}
 
-	// L1EtcItem,L1Armor
+	private int _safeEnchant = 0;
 
-	// L1Weapon,L1Armor
-
-	private int _safeEnchant = 0; 
-
-	public int get_safeenchant() {
+	public int getSafeEnchant() {
 		return _safeEnchant;
 	}
 
-	public void set_safeenchant(int safeenchant) {
-		_safeEnchant = safeenchant;
+	public void setSafeEnchant(int safeEnchant) {
+		_safeEnchant = safeEnchant;
 	}
 
 	private boolean _useRoyal = false;
@@ -342,146 +360,190 @@ public abstract class L1Item implements Serializable {
 		_useIllusionist = flag;
 	}
 
-	private byte _addstr = 0;
+	private byte _str = 0;
 
-	public byte get_addstr() {
-		return _addstr;
+	public byte getStr() {
+		return _str;
 	}
 
-	public void set_addstr(byte addstr) {
-		_addstr = addstr;
+	public void setStr(byte addStr) {
+		_str = addStr;
 	}
 
-	private byte _adddex = 0;
+	private byte _dex = 0;
 
-	public byte get_adddex() {
-		return _adddex;
+	public byte getDex() {
+		return _dex;
 	}
 
-	public void set_adddex(byte adddex) {
-		_adddex = adddex;
+	public void setDex(byte addDex) {
+		_dex = addDex;
 	}
 
-	private byte _addcon = 0;
+	private byte _con = 0;
 
-	public byte get_addcon() {
-		return _addcon;
+	public byte getCon() {
+		return _con;
 	}
 
-	public void set_addcon(byte addcon) {
-		_addcon = addcon;
+	public void setCon(byte addCon) {
+		_con = addCon;
 	}
 
-	private byte _addint = 0;
+	private byte _int = 0;
 
-	public byte get_addint() {
-		return _addint;
+	public byte getInt() {
+		return _int;
 	}
 
-	public void set_addint(byte addint) {
-		_addint = addint;
+	public void setInt(byte addInt) {
+		_int = addInt;
 	}
 
-	private byte _addwis = 0;
+	private byte _wis = 0;
 
-	public byte get_addwis() {
-		return _addwis;
+	public byte getWis() {
+		return _wis;
 	}
 
-	public void set_addwis(byte addwis) {
-		_addwis = addwis;
+	public void setWis(byte addWis) {
+		_wis = addWis;
 	}
 
-	private byte _addcha = 0;
+	private byte _cha = 0;
 
-	public byte get_addcha() {
-		return _addcha;
+	public byte getCha() {
+		return _cha;
 	}
 
-	public void set_addcha(byte addcha) {
-		_addcha = addcha;
+	public void setCha(byte addCha) {
+		_cha = addCha;
 	}
 
-	private int _addhp = 0;
+	private int _hp = 0;
 
-	public int get_addhp() {
-		return _addhp;
+	public int getHp() {
+		return _hp;
 	}
 
-	public void set_addhp(int addhp) {
-		_addhp = addhp;
+	public void setHp(int addHp) {
+		_hp = addHp;
 	}
 
-	private int _addmp = 0;
+	private int _mp = 0;
 
-	public int get_addmp() {
-		return _addmp;
+	public int getMp() {
+		return _mp;
 	}
 
-	public void set_addmp(int addmp) {
-		_addmp = addmp;
+	public void setMp(int addMp) {
+		_mp = addMp;
 	}
 
-	private int _addhpr = 0;
+	private int _hpr = 0;
 
-	public int get_addhpr() {
-		return _addhpr;
+	public int getHpr() {
+		return _hpr;
 	}
 
-	public void set_addhpr(int addhpr) {
-		_addhpr = addhpr;
+	public void setHpr(int addHpr) {
+		_hpr = addHpr;
 	}
 
-	private int _addmpr = 0;
+	private int _mpr = 0;
 
-	public int get_addmpr() {
-		return _addmpr;
+	public int getMpr() {
+		return _mpr;
 	}
 
-	public void set_addmpr(int addmpr) {
-		_addmpr = addmpr;
+	public void setMpr(int addMpr) {
+		_mpr = addMpr;
 	}
 
-	private int _addsp = 0;
+	private int _sp = 0;
 
-	public int get_addsp() {
-		return _addsp;
+	public int getSp() {
+		return _sp;
 	}
 
-	public void set_addsp(int addsp) {
-		_addsp = addsp;
+	public void setSp(int addSp) {
+		_sp = addSp;
 	}
 
-	private int _mdef = 0;
+	private int _mr = 0;
 
-	public int get_mdef() {
-		return _mdef;
+	public int getMr() {
+		return _mr;
 	}
 
-	public void set_mdef(int i) {
-		this._mdef = i;
+	public void setMr(int i) {
+		this._mr = i;
 	}
 
-	private boolean _isHasteItem = false;
+	private boolean _isHaste = false;
 
-	public boolean isHasteItem() {
-		return _isHasteItem;
+	public boolean isHaste() {
+		return _isHaste;
 	}
 
-	public void setHasteItem(boolean flag) {
-		_isHasteItem = flag;
+	public void setIsHaste(boolean flag) {
+		_isHaste = flag;
 	}
 
-	private int _maxUseTime = 0; // 
+	private int _chargeTime = 0;
 
-	public int getMaxUseTime() {
-		return _maxUseTime;
+	public int getChargeTime() {
+		return _chargeTime;
 	}
 
-	public void setMaxUseTime(int i) {
-		_maxUseTime = i;
+	public void setChargeTime(int i) {
+		_chargeTime = i;
 	}
 
+	private int _expirationTime = 0;
+	
+	public int getExpirationTime() {
+		return _expirationTime;
+	}
+	
+	public void setExpirationTime(String s) {
+		int _day = getTimeParse(s, "d");
+		int _hour = getTimeParse(s, "h");
+		int _minute = getTimeParse(s, "m");
+		int _time = ((_day * 60 * 60 * 24) + (_hour * 60 * 60)
+				+ (_minute * 60));
+		_expirationTime = _time;
+	}
+
+	private static int getTimeParse(String target, String search) {
+		if (target == null) {
+			return 0;
+		}
+		int n = 0;
+		Matcher matcher = Pattern.compile("\\d+" + search).matcher(target);
+		if (matcher.find()) {
+			String match = matcher.group();
+			n = Integer.parseInt(match.replace(search, ""));
+		}
+		return n;
+	}
+	
+	public int getLightFuel() {
+		if (_itemId == 40001) {
+			return 6000;
+		} else if (_itemId == 40002) {
+			return 12000;
+		} else if (_itemId == 40003) {
+			return 12000;
+		} else if (_itemId == 40004) {
+			return 0;
+		} else if (_itemId == 40005) {
+			return 600;
+		} else {
+			return 0;
+		}
+	}
+	
 	private int _useType;
 
 	public int getUseType() {
@@ -503,60 +565,40 @@ public abstract class L1Item implements Serializable {
 	}
 
 	public int getLightRange() {
-		if (_itemId == 40001) { //lamp
+		if (_itemId == 40001) {
 			return 11;
-		} else if (_itemId == 40002) { //lantern
+		} else if (_itemId == 40002) {
 			return 14;
-		} else if (_itemId == 40004) { // 
+		} else if (_itemId == 40004) {
 			return 14;
-		} else if (_itemId == 40005) { //candle
+		} else if (_itemId == 40005) {
 			return 8;
 		} else {
 			return 0;
 		}
 	}
 
-	/**
-	 * 
-	 */
-	public int getLightFuel() {
-		if (_itemId == 40001) { // 
-			return 6000;
-		} else if (_itemId == 40002) { // 
-			return 12000;
-		} else if (_itemId == 40003) { // 
-			return 12000;
-		} else if (_itemId == 40004) { // 
-			return 0;
-		} else if (_itemId == 40005) { // 
-			return 600;
-		} else {
-			return 0;
-		}
-	}
-
-	// L1EtcItem
 	public boolean isStackable() {
 		return false;
 	}
 
-	public int get_locx() {
+	public int getLocX() {
 		return 0;
 	}
 
-	public int get_locy() {
+	public int getLocY() {
 		return 0;
 	}
 
-	public short get_mapid() {
+	public short getMapId() {
 		return 0;
 	}
 
-	public int get_delayid() {
+	public int getDelayId() {
 		return 0;
 	}
 
-	public int get_delaytime() {
+	public int getDelayTime() {
 		return 0;
 	}
 
@@ -564,7 +606,7 @@ public abstract class L1Item implements Serializable {
 		return 0;
 	}
 
-	public boolean isCanSeal() {
+	public boolean isSealable() {
 		return false;
 	}
 
@@ -588,16 +630,19 @@ public abstract class L1Item implements Serializable {
 		return 0;
 	}
 
-	public int get_canbedmg() {
-		return 0;
-	}
-
-	public boolean isTwohandedWeapon() {
+	public boolean getCanbeDmg() {
 		return false;
 	}
 
-	// L1Armor
-	public int get_ac() {
+	public boolean isTwohanded() {
+		return false;
+	}
+
+	public int getWeaknessExposure() {
+		return 0;
+	}
+
+	public int getAc() {
 		return 0;
 	}
 
@@ -625,44 +670,51 @@ public abstract class L1Item implements Serializable {
 		return 0;
 	}
 
-	public int get_defense_water() {
+	public int getDefenseWater() {
 		return 0;
 	}
 
-	public int get_defense_fire() {
+	public int getDefenseFire() {
 		return 0;
 	}
 
-	public int get_defense_earth() {
+	public int getDefenseEarth() {
 		return 0;
 	}
 
-	public int get_defense_wind() {
+	public int getDefenseWind() {
 		return 0;
 	}
 
-	public int get_regist_stun() {
+	public int getResistStun() {
 		return 0;
 	}
 
-	public int get_regist_stone() {
+	public int getResistStone() {
 		return 0;
 	}
 
-	public int get_regist_sleep() {
+	public int getResistSleep() {
 		return 0;
 	}
 
-	public int get_regist_freeze() {
+	public int getResistFreeze() {
 		return 0;
 	}
 
-	public int get_regist_sustain() {
+	public int getResistHold() {
 		return 0;
 	}
 
-	public int get_regist_blind() {
+	public int getResistBlind() {
 		return 0;
 	}
 
+	public int getExpBonus() {
+		return 0;
+	}
+
+	public int getPotionRecoveryRate() {
+		return 0;
+	}
 }

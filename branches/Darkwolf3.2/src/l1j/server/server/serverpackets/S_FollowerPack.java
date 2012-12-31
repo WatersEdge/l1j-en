@@ -47,7 +47,7 @@ public class S_FollowerPack extends ServerBasePacket {
 		writeH(follower.getGfxId());
 		writeC(follower.getStatus());
 		writeC(follower.getHeading());
-		writeC(follower.getChaLightSize());
+		writeC(follower.getLightSize());
 		writeC(follower.getMoveSpeed());
 		writeD(0);
 		writeH(0);

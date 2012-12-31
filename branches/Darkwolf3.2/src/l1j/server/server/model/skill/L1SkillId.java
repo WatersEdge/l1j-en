@@ -246,8 +246,11 @@ public class L1SkillId {
 	public static final int BRAVE_AURA = 117;
 
 	public static final int RUN_CLAN = 118;
+	
+	public static final int DIVINE_SACRIFICE = 119;
+	
+	public static final int AVATAR = 120;
 
-	// unknown = 119 - 120
 	// none = 121 - 128
 	/*
 	 * Spirit Magic
@@ -414,6 +417,11 @@ public class L1SkillId {
 
 	public static final int SKILLS_END = 220;
 
+	public static final int MASS_SHOCK_STUN = 500;
+
+	public static final int MASS_CANCELLATION = 501;
+
+	public static final int AREA_POISON = 502;
 	/*
 	 * Status
 	 */
@@ -471,8 +479,62 @@ public class L1SkillId {
 
 	public static final int STATUS_CUBE_BALANCE = 1025;
 
-	public static final int STATUS_END = 1025;
+	public static final int STATUS_THIRD_SPEED = 1026;
 
+	public static final int STATUS_FLORA_POTION_STR = 1027;
+
+	public static final int STATUS_FLORA_POTION_DEX = 1028;
+
+	public static final int STATUS_FREEZE = 1029;
+
+	public static final int STATUS_CURSE_BARLOG = 1030;
+
+	public static final int STATUS_CURSE_YAHEE = 1031;
+	
+	public static final int STATUS_WEAKNESS_EXPOSURE_LV1 = 1032;
+
+	public static final int STATUS_WEAKNESS_EXPOSURE_LV2 = 1033;
+
+	public static final int STATUS_WEAKNESS_EXPOSURE_LV3 = 1034;
+
+	public static final int STATUS_DESTRUCTION_NOSTRUM = 1035;
+
+	public static final int STATUS_HOLD = 1036;
+	
+	public static final int STATUS_END = 1037;
+	
+	public static final int STATUS_EXP_UP =1100;
+
+	public static final int STATUS_EXP_UP_II =1101;
+
+	public static final int POTION_OF_SWORDMAN = 1102;
+
+	public static final int POTION_OF_MAGICIAN = 1103;
+
+	public static final int POTION_OF_RECOVERY = 1104;
+
+	public static final int POTION_OF_MEDITATION = 1105;
+
+	public static final int POTION_OF_LIFE = 1106;
+
+	public static final int POTION_OF_MAGIC = 1107;
+
+	public static final int POTION_OF_MAGIC_RESIST = 1108;
+
+	public static final int POTION_OF_STR = 1109;
+
+	public static final int POTION_OF_DEX = 1110;
+
+	public static final int POTION_OF_CON = 1111;
+
+	public static final int POTION_OF_INT = 1112;
+
+	public static final int POTION_OF_WIS = 1113;
+
+	public static final int POTION_OF_RAGE = 1114;
+
+	public static final int POTION_OF_CONCENTRATION = 1115;
+	
 	public static final int GMSTATUS_BEGIN = 2000;
 
 	public static final int GMSTATUS_INVISIBLE = 2000;
@@ -585,23 +647,13 @@ public class L1SkillId {
 
 	public static final int COOKING_3_7_S = 3047;
 
-	public static final int COOKING_END = 3047;
-
-	public static final int STATUS_FREEZE = 10071;
+	public static final int ELIXIR_OF_IVORY_TOWER = 3048;
+	
+	public static final int COOKING_END = 3048;
 
 	public static final int CURSE_PARALYZE2 = 10101;
 
-	public static final int STATUS_CURSE_BARLOG = 1015;
-
-	public static final int STATUS_CURSE_YAHEE = 1014;
-
 	public static final int STATUS_BRAVE2 = 20001;
-	
-	public static final int EFFECT_BLOODSTAIN_OF_ANTHARAS = 4011;
-	
-	public static final int EFFECT_BLESS_OF_CRAY = 4056;
-
-	public static final int EFFECT_BLESS_OF_SAELL = 4057;
 	
 	public static final int COCKATRICE_STONE = 12001;
 	
@@ -612,4 +664,38 @@ public class L1SkillId {
 	public static final int FLOATINGEYE_STONE = 12002;
 	
 	public static final int BEHOLDER_STONE = 12003;
+	
+	public static final int BLOODSTAIN_OF_ANTHARAS = 4011;
+
+	public static final int BLOODSTAIN_OF_FAFURION = 4012;
+
+	public static final int BLOODSTAIN_OF_LINDVIOR = 4013;
+
+	public static final int BLOODSTAIN_OF_VALAKAS = 4014;
+
+	public static final int BLESS_OF_CRAY = 4056;
+
+	public static final int BLESS_OF_SAEL = 4057;
+
+	public static final int MAGIC_EYE_OF_ANTHARAS = 4060;
+
+	public static final int MAGIC_EYE_OF_FAFURION = 4061;
+
+	public static final int MAGIC_EYE_OF_LINDVIOR = 4062;
+
+	public static final int MAGIC_EYE_OF_VALAKAS = 4063;
+
+	public static final int MAGIC_EYE_OF_BIRTH = 4064;
+
+	public static final int MAGIC_EYE_OF_SHAPE = 4065;
+
+	public static final int MAGIC_EYE_OF_LIFE = 4066;
+
+	public static final int STONE_OF_DRAGON = 4071;
+
+	public static final int BLESS_OF_COMA1 = 11018;
+
+	public static final int BLESS_OF_COMA2 = 11019;
+
+	public static final int BLESS_OF_SAMURAI = 11020;
 }

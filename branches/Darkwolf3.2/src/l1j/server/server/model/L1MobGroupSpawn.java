@@ -112,7 +112,7 @@ public class L1MobGroupSpawn {
 					mob.onNpcAI();
 				}
 			}
-			mob.turnOnOffLight();
+			mob.updateLight();
 			mob.startChat(L1NpcInstance.CHAT_TIMING_APPEARANCE);
 		} catch (Exception e) {
 			_log.log(Level.SEVERE, e.getLocalizedMessage(), e);

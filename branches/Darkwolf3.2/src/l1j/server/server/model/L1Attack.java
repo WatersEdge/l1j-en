@@ -70,7 +70,6 @@ public class L1Attack {
 	private int _drainHp = 0;
 	private int _attckGrfxId = 0;
 	private int _attckActId = 0;
-	private L1ItemInstance weapon = null;
 	private int _weaponId = 0;
 	private int _weaponType = 0;
 	private int _weaponType2 = 0;
@@ -87,6 +86,7 @@ public class L1Attack {
 	private int _weaponAttrEnchantLevel = 0;
 	private L1ItemInstance _arrow = null;
 	private L1ItemInstance _sting = null;
+	private L1ItemInstance weapon = null;
 	private int _leverage = 10;
 
 	public void setLeverage(int i) {
@@ -826,7 +826,7 @@ public class L1Attack {
 		} else if (_weaponId == 261) {
 			L1WeaponSkill.giveArkMageDiseaseEffect(_pc, _target);
 		} else {
-			dmg += L1WeaponSkill.getWeaponSkillDamage(_pc, _target, _weaponId);
+			dmg += L1WeaponSkill.getWeaponSkillDamage(_pc, _target, _weaponId, _weaponEnchant);
 		}
 		if (_weaponType == 0) { // bare hands
 			dmg = (_random.nextInt(5) + 4) / 4;
@@ -1041,7 +1041,7 @@ public class L1Attack {
 		} else if (_weaponId == 261) {
 			L1WeaponSkill.giveArkMageDiseaseEffect(_pc, _target);
 		} else {
-			dmg += L1WeaponSkill.getWeaponSkillDamage(_pc, _target, _weaponId);
+			dmg += L1WeaponSkill.getWeaponSkillDamage(_pc, _target, _weaponId, _weaponEnchant);
 		}
 		if (_weaponType == 0) {
 			dmg = (_random.nextInt(5) + 4) / 4;
@@ -1772,7 +1772,7 @@ public class L1Attack {
 		 */
 		if (_calcType != PC_NPC
 				|| _targetNpc.getNpcTemplate().is_hard() == false
-				|| _weaponType == 0 || weapon.getItem().get_canbedmg() == 0
+				|| _weaponType == 0 || weapon.getCanBeDmg() == false
 				|| _pc.hasSkillEffect(SOUL_OF_FLAME)) {
 			return;
 		}

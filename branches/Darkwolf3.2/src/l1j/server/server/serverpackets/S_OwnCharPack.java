@@ -22,6 +22,7 @@ import java.util.logging.Logger;
 
 import l1j.server.server.encryptions.Opcodes;
 import l1j.server.server.model.Instance.L1PcInstance;
+import static l1j.server.server.model.skill.L1SkillId.STATUS_THIRD_SPEED;
 
 // Referenced classes of package l1j.server.server.serverpackets:
 // ServerBasePacket
@@ -50,8 +51,7 @@ public class S_OwnCharPack extends ServerBasePacket {
 		if (pc.isBrave()) {
 			status |= STATUS_BRAVE;
 			}
-		if (pc.isElfBrave()) {	
-		//need to be tested
+		if (pc.isElfBrave()) {
 			status |= STATUS_BRAVE;
 			status |= STATUS_ELFBRAVE;
 		}
@@ -65,16 +65,8 @@ public class S_OwnCharPack extends ServerBasePacket {
 		writeH(pc.getX());
 		writeH(pc.getY());
 		writeD(pc.getId());
-		if (pc.isDead()) {
-			writeH(pc.getTempCharGfxAtDead());
-		} else {
-			writeH(pc.getTempCharGfx());
-		}
-		if (pc.isDead()) {
-			writeC(pc.getStatus());
-		} else {
-			writeC(pc.getCurrentWeapon());
-		}
+		writeH(pc.isDead() ? pc.getTempCharGfxAtDead() : pc.getTempCharGfx());
+		writeC(pc.isDead() ? pc.getStatus() : pc.getCurrentWeapon());
 		writeC(pc.getHeading());
 		writeC(pc.getOwnLightSize());
 		writeC(pc.getMoveSpeed());
@@ -87,13 +79,17 @@ public class S_OwnCharPack extends ServerBasePacket {
 		writeS(pc.getClanname()); 
 		writeS(null); 
 		writeC(0); 
-		if (pc.isInParty()) 
+		if (pc.isInParty())
 		{
 			writeC(100 * pc.getCurrentHp() / pc.getMaxHp());
 		} else {
 			writeC(0xFF);
 		}
-		writeC(0);
+		if (pc.hasSkillEffect(STATUS_THIRD_SPEED)) {
+			writeC(0x08);
+		} else {
+			writeC(0);
+		}
 		writeC(0); 
 		writeC(0); 
 		writeC(0xFF);

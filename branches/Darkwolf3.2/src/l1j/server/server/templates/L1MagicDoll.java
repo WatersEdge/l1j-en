@@ -18,24 +18,33 @@
  */
 package l1j.server.server.templates;
 
-import java.util.Random;
-
-import l1j.server.server.utils.RandomArrayList;
 import l1j.server.server.datatables.ItemTable;
 import l1j.server.server.datatables.MagicDollTable;
-import l1j.server.server.model.L1Character;
 import l1j.server.server.model.Instance.L1DollInstance;
 import l1j.server.server.model.Instance.L1PcInstance;
+import l1j.server.server.model.L1Character;
 import l1j.server.server.serverpackets.S_SkillSound;
+import l1j.server.server.RandomGenerator.RandomGenerator;
+import l1j.server.server.RandomGenerator.RandomGeneratorFactory;
 
 public class L1MagicDoll {
+	private static RandomGenerator _random = RandomGeneratorFactory.newRandom();
 	private int _itemId;
 	private int _dollId;
 	private int _ac;
+	private int _str;
+	private int _con;
+	private int _dex;
+	private int _int;
+	private int _wis;
+	private int _cha;
+	private int _hp;
+	private int _mp;
 	private int _hpr;
 	private int _mpr;
 	private boolean _hprTime;
 	private boolean _mprTime;
+	private int _mr;
 	private int _dmg;
 	private int _bowDmg;
 	private int _dmgChance;
@@ -45,15 +54,17 @@ public class L1MagicDoll {
 	private int _dmgReductionChance;
 	private int _dmgEvasionChance;
 	private int _weightReduction;
-	private int _registStun;
-	private int _registStone;
-	private int _registSleep;
-	private int _registFreeze;
-	private int _registSustain;
-	private int _registBlind;
+	private int _resistStun;
+	private int _resistStone;
+	private int _resistSleep;
+	private int _resistFreeze;
+	private int _resistHold;
+	private int _resistBlind;
+	private int _expBonus;
 	private int _makeItemId;
-	private byte _effect;
-	
+	private int _skillId;
+	private int _skillChance;
+
 	public int getItemId() {
 		return _itemId;
 	}
@@ -76,6 +87,70 @@ public class L1MagicDoll {
 
 	public void setAc(int i) {
 		_ac = i;
+	}
+
+	public int getStr() {
+		return _str;
+	}
+
+	public void setStr(int i) {
+		_str = i;
+	}
+
+	public int getCon() {
+		return _con;
+	}
+
+	public void setCon(int i) {
+		_con = i;
+	}
+
+	public int getDex() {
+		return _dex;
+	}
+
+	public void setDex(int i) {
+		_dex = i;
+	}
+
+	public int getInt() {
+		return _int;
+	}
+
+	public void setInt(int i) {
+		_int = i;
+	}
+
+	public int getWis() {
+		return _wis;
+	}
+
+	public void setWis(int i) {
+		_wis = i;
+	}
+
+	public int getCha() {
+		return _cha;
+	}
+
+	public void setCha(int i) {
+		_cha = i;
+	}
+
+	public int getHp() {
+		return _hp;
+	}
+
+	public void setHp(int i) {
+		_hp = i;
+	}
+
+	public int getMp() {
+		return _mp;
+	}
+
+	public void setMp(int i) {
+		_mp = i;
 	}
 
 	public int getHpr() {
@@ -108,6 +183,14 @@ public class L1MagicDoll {
 
 	public void setMprTime(boolean i) {
 		_mprTime = i;
+	}
+
+	public int getMr() {
+		return _mr;
+	}
+
+	public void setMr(int i) {
+		_mr = i;
 	}
 
 	public int getDmg() {
@@ -182,74 +265,91 @@ public class L1MagicDoll {
 		_weightReduction = i;
 	}
 
-	public int getRegistStun() {
-		return _registStun;
+	public int getResistStun() {
+		return _resistStun;
 	}
 
-	public void setRegistStun(int i) {
-		_registStun = i;
+	public void setResistStun(int i) {
+		_resistStun = i;
 	}
 
-	public int getRegistStone() {
-		return _registStone;
+	public int getResistStone() {
+		return _resistStone;
 	}
 
-	public void setRegistStone(int i) {
-		_registStone = i;
+	public void setResistStone(int i) {
+		_resistStone = i;
 	}
 
-	public int getRegistSleep() {
-		return _registSleep;
+	public int getResistSleep() {
+		return _resistSleep;
 	}
 
-	public void setRegistSleep(int i) {
-		_registSleep = i;
+	public void setResistSleep(int i) {
+		_resistSleep = i;
 	}
 
-	public int getRegistFreeze() {
-		return _registFreeze;
+	public int getResistFreeze() {
+		return _resistFreeze;
 	}
 
-	public void setRegistFreeze(int i) {
-		_registFreeze = i;
+	public void setResistFreeze(int i) {
+		_resistFreeze = i;
 	}
 
-	public int getRegistSustain() {
-		return _registSustain;
+	public int getResistHold() {
+		return _resistHold;
 	}
 
-	public void setRegistSustain(int i) {
-		_registSustain = i;
+	public void setResistHold(int i) {
+		_resistHold = i;
 	}
 
-	public int getRegistBlind() {
-		return _registBlind;
+	public int getResistBlind() {
+		return _resistBlind;
 	}
 
-	public void setRegistBlind(int i) {
-		_registBlind = i;
+	public void setResistBlind(int i) {
+		_resistBlind = i;
 	}
 
 	public int getMakeItemId() {
 		return _makeItemId;
 	}
 
+	public int getExpBonus() {
+		return _expBonus;
+	}
+
+	public void setExpBonus(int i) {
+		_expBonus = i;
+	}
+
 	public void setMakeItemId(int i) {
 		_makeItemId = i;
 	}
 
-	public byte getEffect() {
-		return _effect;
+	public int getSkillId() {
+		return _skillId;
 	}
 
-	public void setEffect(byte i) {
-		_effect = i;
+	public void setSkillId(int i) {
+		_skillId = i;
+	}
+
+	public int getSkillChance() {
+		return _skillChance;
+	}
+
+	public void setSkillChance(int i) {
+		_skillChance = i;
 	}
 	
 	public static int getHitAddByDoll(L1Character _master) {
 		int s = 0;
 		for (Object obj : _master.getDollList().values().toArray()) {
-			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(((L1DollInstance) obj).getItemId());
+			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(
+					((L1DollInstance) obj).getItemId());
 			if (doll != null) {
 				s += doll.getHit();
 			}
@@ -259,10 +359,11 @@ public class L1MagicDoll {
 
 	public static int getDamageAddByDoll(L1Character _master) {
 		int s = 0;
-		int chance = RandomArrayList.nextInt(100) + 1;
+		int chance = _random.nextInt(100) + 1;
 		boolean isAdd = false;
 		for (Object obj : _master.getDollList().values().toArray()) {
-			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(((L1DollInstance) obj).getItemId());
+			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(
+					((L1DollInstance) obj).getItemId());
 			if (doll != null) {
 				if (doll.getDmgChance() > 0 && !isAdd) {
 					if (doll.getDmgChance() >= chance) {
@@ -286,10 +387,11 @@ public class L1MagicDoll {
 
 	public static int getDamageReductionByDoll(L1Character _master) {
 		int s = 0;
-		int chance = RandomArrayList.nextInt(100) + 1;
+		int chance = _random.nextInt(100) + 1;
 		boolean isReduction = false;
 		for (Object obj : _master.getDollList().values().toArray()) {
-			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(((L1DollInstance) obj).getItemId());
+			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(
+					((L1DollInstance) obj).getItemId());
 			if (doll != null) {
 				if (doll.getDmgReductionChance() > 0 && !isReduction) {
 					if (doll.getDmgReductionChance() >= chance) {
@@ -301,7 +403,7 @@ public class L1MagicDoll {
 				}
 			}
 		}
-		if (isReduction ) {
+		if (isReduction) {
 			if (_master instanceof L1PcInstance) {
 				L1PcInstance pc = (L1PcInstance) _master;
 				pc.sendPackets(new S_SkillSound(_master.getId(), 6320));
@@ -312,16 +414,18 @@ public class L1MagicDoll {
 	}
 
 	public static int getDamageEvasionByDoll(L1Character _master) {
-		int chance = RandomArrayList.nextInt(100) + 1;
+		int chance = _random.nextInt(100) + 1;
 		for (Object obj : _master.getDollList().values().toArray()) {
-			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(((L1DollInstance) obj).getItemId());
+			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(
+					((L1DollInstance) obj).getItemId());
 			if (doll != null) {
 				if (doll.getDmgEvasionChance() >= chance) {
 					if (_master instanceof L1PcInstance) {
 						L1PcInstance pc = (L1PcInstance) _master;
 						pc.sendPackets(new S_SkillSound(_master.getId(), 6320));
 					}
-					_master.broadcastPacket(new S_SkillSound(_master.getId(), 6320));
+					_master.broadcastPacket(new S_SkillSound(_master.getId(),
+							6320));
 					return 1;
 				}
 			}
@@ -332,7 +436,8 @@ public class L1MagicDoll {
 	public static int getBowHitAddByDoll(L1Character _master) {
 		int s = 0;
 		for (Object obj : _master.getDollList().values().toArray()) {
-			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(((L1DollInstance) obj).getItemId());
+			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(
+					((L1DollInstance) obj).getItemId());
 			if (doll != null) {
 				s += doll.getBowHit();
 			}
@@ -343,7 +448,8 @@ public class L1MagicDoll {
 	public static int getBowDamageByDoll(L1Character _master) {
 		int s = 0;
 		for (Object obj : _master.getDollList().values().toArray()) {
-			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(((L1DollInstance) obj).getItemId());
+			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(
+					((L1DollInstance) obj).getItemId());
 			if (doll != null) {
 				s += doll.getBowDmg();
 			}
@@ -351,98 +457,11 @@ public class L1MagicDoll {
 		return s;
 	}
 
-	public static int isAcByDoll(L1Character _master) {
-		int s = 3;
-		for (Object obj : _master.getDollList().values().toArray()) {
-			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(((L1DollInstance) obj).getItemId());
-			if (doll != null) {
-				s += doll.getAc();
-			}
-		}
-		return s;
-	}
-	
-	public static int isRegistFreezeByDoll(L1Character _master) {
-		int s = 7;
-		for (Object obj : _master.getDollList().values().toArray()) {
-			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(((L1DollInstance) obj).getItemId());
-			if (doll != null) {
-				s += doll.getRegistFreeze();
-			}
-		}
-		return s;
-	}
-	
-	public static int isDamageByDoll(L1Character _master) {
-		int s = 15;
-		for (Object obj : _master.getDollList().values().toArray()) {
-			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(((L1DollInstance) obj).getItemId());
-			if (doll != null) {
-				s += doll.getDmgChance();
-			}
-		}
-		return s;
-	}
-	
-	public static int isDamageReductionByDoll(L1Character _master) {
-		int s = 15;
-		for (Object obj : _master.getDollList().values().toArray()) {
-			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(((L1DollInstance) obj).getItemId());
-			if (doll != null) {
-				s += doll.getDmgReductionChance();
-			}
-		}
-		return s;
-	}
-	
-	public static int isDamageEvasionByDoll(L1Character _master) {
-		int s = 1;
-		for (Object obj : _master.getDollList().values().toArray()) {
-			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(((L1DollInstance) obj).getItemId());
-			if (doll != null) {
-				s += doll.getDmgEvasionChance();
-			}
-		}
-		return s;
-	}
-	
-	public static int isBowHitAddByDoll(L1Character _master) {
-		int s = 1;
-		for (Object obj : _master.getDollList().values().toArray()) {
-			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(((L1DollInstance) obj).getItemId());
-			if (doll != null) {
-				s += doll.getBowHit();
-			}
-		}
-		return s;
-	}
-	
-	public static int isBowDamageByDoll(L1Character _master) {
-		int s = 1;
-		for (Object obj : _master.getDollList().values().toArray()) {
-			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(((L1DollInstance) obj).getItemId());
-			if (doll != null) {
-				s += doll.getBowDmg();
-			}
-		}
-		return s;
-	}
-	
-	public static int isWeightReductionByDoll(L1Character _master) {
-		int s = 20;
-		for (Object obj : _master.getDollList().values().toArray()) {
-			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(((L1DollInstance) obj).getItemId());
-			if (doll != null) {
-				s += doll.getWeightReduction();
-			}
-		}
-		return s;
-	}
-	
 	public static int getAcByDoll(L1Character _master) {
 		int s = 0;
 		for (Object obj : _master.getDollList().values().toArray()) {
-			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(((L1DollInstance) obj).getItemId());
+			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(
+					((L1DollInstance) obj).getItemId());
 			if (doll != null) {
 				s += doll.getAc();
 			}
@@ -450,67 +469,145 @@ public class L1MagicDoll {
 		return s;
 	}
 
-	public static int getRegistStoneByDoll(L1Character _master) {
+	public static int getStrByDoll(L1Character _master) {
 		int s = 0;
 		for (Object obj : _master.getDollList().values().toArray()) {
-			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(((L1DollInstance) obj).getItemId());
+			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(
+					((L1DollInstance) obj).getItemId());
 			if (doll != null) {
-				s += doll.getRegistStone();
+				s += doll.getStr();
 			}
 		}
 		return s;
 	}
 
-	public static int getRegistStunByDoll(L1Character _master) {
+	public static int getConByDoll(L1Character _master) {
 		int s = 0;
 		for (Object obj : _master.getDollList().values().toArray()) {
-			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(((L1DollInstance) obj).getItemId());
+			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(
+					((L1DollInstance) obj).getItemId());
 			if (doll != null) {
-				s += doll.getRegistStun();
+				s += doll.getCon();
 			}
 		}
 		return s;
 	}
 
-	public static int getRegistSustainByDoll(L1Character _master) {
+	public static int getDexByDoll(L1Character _master) {
 		int s = 0;
 		for (Object obj : _master.getDollList().values().toArray()) {
-			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(((L1DollInstance) obj).getItemId());
+			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(
+					((L1DollInstance) obj).getItemId());
 			if (doll != null) {
-				s += doll.getRegistSustain();
+				s += doll.getDex();
 			}
 		}
 		return s;
 	}
 
-	public static int getRegistBlindByDoll(L1Character _master) {
+	public static int getIntByDoll(L1Character _master) {
 		int s = 0;
 		for (Object obj : _master.getDollList().values().toArray()) {
-			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(((L1DollInstance) obj).getItemId());
+			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(
+					((L1DollInstance) obj).getItemId());
 			if (doll != null) {
-				s += doll.getRegistBlind();
+				s += doll.getInt();
 			}
 		}
 		return s;
 	}
 
-	public static int getRegistFreezeByDoll(L1Character _master) {
+	public static int getWisByDoll(L1Character _master) {
 		int s = 0;
 		for (Object obj : _master.getDollList().values().toArray()) {
-			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(((L1DollInstance) obj).getItemId());
+			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(
+					((L1DollInstance) obj).getItemId());
 			if (doll != null) {
-				s += doll.getRegistFreeze();
+				s += doll.getWis();
 			}
 		}
 		return s;
 	}
 
-	public static int getRegistSleepByDoll(L1Character _master) {
+	public static int getChaByDoll(L1Character _master) {
 		int s = 0;
 		for (Object obj : _master.getDollList().values().toArray()) {
-			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(((L1DollInstance) obj).getItemId());
+			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(
+					((L1DollInstance) obj).getItemId());
 			if (doll != null) {
-				s += doll.getRegistSleep();
+				s += doll.getCha();
+			}
+		}
+		return s;
+	}
+
+	public static int getResistStoneByDoll(L1Character _master) {
+		int s = 0;
+		for (Object obj : _master.getDollList().values().toArray()) {
+			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(
+					((L1DollInstance) obj).getItemId());
+			if (doll != null) {
+				s += doll.getResistStone();
+			}
+		}
+		return s;
+	}
+
+	public static int getResistStunByDoll(L1Character _master) {
+		int s = 0;
+		for (Object obj : _master.getDollList().values().toArray()) {
+			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(
+					((L1DollInstance) obj).getItemId());
+			if (doll != null) {
+				s += doll.getResistStun();
+			}
+		}
+		return s;
+	}
+
+	public static int getResistHoldByDoll(L1Character _master) {
+		int s = 0;
+		for (Object obj : _master.getDollList().values().toArray()) {
+			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(
+					((L1DollInstance) obj).getItemId());
+			if (doll != null) {
+				s += doll.getResistHold();
+			}
+		}
+		return s;
+	}
+
+	public static int getResistBlindByDoll(L1Character _master) {
+		int s = 0;
+		for (Object obj : _master.getDollList().values().toArray()) {
+			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(
+					((L1DollInstance) obj).getItemId());
+			if (doll != null) {
+				s += doll.getResistBlind();
+			}
+		}
+		return s;
+	}
+
+	public static int getResistFreezeByDoll(L1Character _master) {
+		int s = 0;
+		for (Object obj : _master.getDollList().values().toArray()) {
+			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(
+					((L1DollInstance) obj).getItemId());
+			if (doll != null) {
+				s += doll.getResistFreeze();
+			}
+		}
+		return s;
+	}
+
+	public static int getResistSleepByDoll(L1Character _master) {
+		int s = 0;
+		for (Object obj : _master.getDollList().values().toArray()) {
+			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(
+					((L1DollInstance) obj).getItemId());
+			if (doll != null) {
+				s += doll.getResistSleep();
 			}
 		}
 		return s;
@@ -519,7 +616,8 @@ public class L1MagicDoll {
 	public static int getWeightReductionByDoll(L1Character _master) {
 		int s = 0;
 		for (Object obj : _master.getDollList().values().toArray()) {
-			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(((L1DollInstance) obj).getItemId());
+			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(
+					((L1DollInstance) obj).getItemId());
 			if (doll != null) {
 				s += doll.getWeightReduction();
 			}
@@ -527,27 +625,37 @@ public class L1MagicDoll {
 		return s;
 	}
 
-	public static int getHprByDoll(L1Character _master) {
+	public static int getHpByDoll(L1Character _master) {
 		int s = 0;
 		for (Object obj : _master.getDollList().values().toArray()) {
-			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(((L1DollInstance) obj).getItemId());
+			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(
+					((L1DollInstance) obj).getItemId());
 			if (doll != null) {
-				if (!doll.getHprTime() && doll.getHpr() != 0) {
-					s += doll.getHpr();
-				}
+				s += doll.getHp();
 			}
 		}
 		return s;
 	}
 
-	public static int getMprByDoll(L1Character _master) {
+	public static int getMpByDoll(L1Character _master) {
 		int s = 0;
 		for (Object obj : _master.getDollList().values().toArray()) {
-			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(((L1DollInstance) obj).getItemId());
+			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(
+					((L1DollInstance) obj).getItemId());
 			if (doll != null) {
-				if (!doll.getMprTime() && doll.getMpr() != 0) {
-					s += doll.getMpr();
-				}
+				s += doll.getMp();
+			}
+		}
+		return s;
+	}
+
+	public static int getMrByDoll(L1Character _master) {
+		int s = 0;
+		for (Object obj : _master.getDollList().values().toArray()) {
+			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(
+					((L1DollInstance) obj).getItemId());
+			if (doll != null) {
+				s += doll.getMr();
 			}
 		}
 		return s;
@@ -555,9 +663,11 @@ public class L1MagicDoll {
 
 	public static boolean isItemMake(L1Character _master) {
 		for (Object obj : _master.getDollList().values().toArray()) {
-			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(((L1DollInstance) obj).getItemId());
+			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(
+					((L1DollInstance) obj).getItemId());
 			if (doll != null) {
-				L1Item item = ItemTable.getInstance().getTemplate((doll.getMakeItemId()));
+				L1Item item = ItemTable.getInstance().getTemplate(
+						(doll.getMakeItemId()));
 				if (item != null) {
 					return true;
 				}
@@ -566,11 +676,25 @@ public class L1MagicDoll {
 		return false;
 	}
 
+	public static int getExpBonusByDoll(L1Character _master) {
+		int s = 0;
+		for (Object obj : _master.getDollList().values().toArray()) {
+			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(
+					((L1DollInstance) obj).getItemId());
+			if (doll != null) {
+				s += doll.getExpBonus();
+			}
+		}
+		return s;
+	}
+
 	public static int getMakeItemId(L1Character _master) {
 		for (Object obj : _master.getDollList().values().toArray()) {
-			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(((L1DollInstance) obj).getItemId());
+			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(
+					((L1DollInstance) obj).getItemId());
 			if (doll != null) {
-				L1Item item = ItemTable.getInstance().getTemplate((doll.getMakeItemId()));
+				L1Item item = ItemTable.getInstance().getTemplate(
+						(doll.getMakeItemId()));
 				if (item != null) {
 					return item.getItemId();
 				}
@@ -581,7 +705,8 @@ public class L1MagicDoll {
 
 	public static boolean isHpRegeneration(L1Character _master) {
 		for (Object obj : _master.getDollList().values().toArray()) {
-			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(((L1DollInstance) obj).getItemId());
+			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(
+					((L1DollInstance) obj).getItemId());
 			if (doll != null) {
 				if (doll.getHprTime() && doll.getHpr() != 0) {
 					return true;
@@ -591,10 +716,11 @@ public class L1MagicDoll {
 		return false;
 	}
 
-	public static int getHpByDoll(L1Character _master) {
+	public static int getHprByDoll(L1Character _master) {
 		int s = 0;
 		for (Object obj : _master.getDollList().values().toArray()) {
-			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(((L1DollInstance) obj).getItemId());
+			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(
+					((L1DollInstance) obj).getItemId());
 			if (doll != null) {
 				if (doll.getHprTime() && doll.getHpr() != 0) {
 					s += doll.getHpr();
@@ -606,7 +732,8 @@ public class L1MagicDoll {
 
 	public static boolean isMpRegeneration(L1Character _master) {
 		for (Object obj : _master.getDollList().values().toArray()) {
-			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(((L1DollInstance) obj).getItemId());
+			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(
+					((L1DollInstance) obj).getItemId());
 			if (doll != null) {
 				if (doll.getMprTime() && doll.getMpr() != 0) {
 					return true;
@@ -616,10 +743,11 @@ public class L1MagicDoll {
 		return false;
 	}
 
-	public static int getMpByDoll(L1Character _master) {
+	public static int getMprByDoll(L1Character _master) {
 		int s = 0;
 		for (Object obj : _master.getDollList().values().toArray()) {
-			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(((L1DollInstance) obj).getItemId());
+			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(
+					((L1DollInstance) obj).getItemId());
 			if (doll != null) {
 				if (doll.getMprTime() && doll.getMpr() != 0) {
 					s += doll.getMpr();
@@ -629,114 +757,45 @@ public class L1MagicDoll {
 		return s;
 	}
 
-	public static boolean isAc(L1Character _master) {
+	public static int getEffectByDoll(L1Character _master, int type) {
+		int chance = _random.nextInt(100) + 1;
 		for (Object obj : _master.getDollList().values().toArray()) {
-			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(((L1DollInstance) obj).getItemId());
+			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(
+					((L1DollInstance) obj).getItemId());
 			if (doll != null) {
-				if (doll.getAcByDoll(_master) != 0) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-	
-	public static boolean isRegistFreeze(L1Character _master) {
-		for (Object obj : _master.getDollList().values().toArray()) {
-			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(((L1DollInstance) obj).getItemId());
-			if (doll != null) {
-				if (doll.getRegistFreezeByDoll(_master) != 0) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-	
-	public static boolean isDamage(L1Character _master) {
-		for (Object obj : _master.getDollList().values().toArray()) {
-			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(((L1DollInstance) obj).getItemId());
-			if (doll != null) {
-				if (doll.getDamageAddByDoll(_master) != 0) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-	
-	public static boolean isDamageReduction(L1Character _master) {
-		for (Object obj : _master.getDollList().values().toArray()) {
-			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(((L1DollInstance) obj).getItemId());
-			if (doll != null) {
-				if (doll.getDamageReductionByDoll(_master) != 0) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-	
-	public static boolean isDamageEvasion(L1Character _master) {
-		for (Object obj : _master.getDollList().values().toArray()) {
-			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(((L1DollInstance) obj).getItemId());
-			if (doll != null) {
-				if (doll.getDamageEvasionByDoll(_master) != 0) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-	
-	public static boolean isWeightReduction(L1Character _master) {
-		for (Object obj : _master.getDollList().values().toArray()) {
-			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(((L1DollInstance) obj).getItemId());
-			if (doll != null) {
-				if (doll.getWeightReductionByDoll(_master) != 0) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-	
-	public static boolean isBowHit(L1Character _master) {
-		for (Object obj : _master.getDollList().values().toArray()) {
-			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(((L1DollInstance) obj).getItemId());
-			if (doll != null) {
-				if (doll.getBowHitAddByDoll(_master) != 0) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-	
-	public static boolean isBowDamage(L1Character _master) {
-		for (Object obj : _master.getDollList().values().toArray()) {
-			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(((L1DollInstance) obj).getItemId());
-			if (doll != null) {
-				if (doll.getBowDamageByDoll(_master) != 0) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-	
-	public static int getEffectByDoll(L1Character _master, byte type) {
-		int chance = RandomArrayList.nextInt(100) + 1;
-		for (Object obj : _master.getDollList().values().toArray()) {
-			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(((L1DollInstance) obj).getItemId());
-			if (doll != null) {
-				if (doll.getEffect() == type) {
-					if (chance <= 5) {
+				if (doll.getSkillId() == type) {
+					if (doll.getSkillChance() >= chance) {
 						return type;
 					}
 				}
 			}
 		}
 		return 0;
+	}
+
+	public static boolean isBlessOfEva(L1Character _master) {
+		for (Object obj : _master.getDollList().values().toArray()) {
+			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(
+					((L1DollInstance) obj).getItemId());
+			if (doll != null) {
+				if (doll.getDollId() >= 80226 && doll.getDollId() <= 80231) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	public static boolean isHaste(L1Character _master) {
+		for (Object obj : _master.getDollList().values().toArray()) {
+			L1MagicDoll doll = MagicDollTable.getInstance().getTemplate(
+					((L1DollInstance) obj).getItemId());
+			if (doll != null) {
+				if (doll.getDollId() >= 80232 && doll.getDollId() <= 80237) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 }

@@ -916,7 +916,7 @@ public class L1MonsterInstance extends L1NpcInstance {
 
 				L1World.getInstance().storeObject(npc);
 				L1World.getInstance().addVisibleObject(npc);
-				npc.turnOnOffLight();
+				npc.updateLight();
 				npc.startChat(L1NpcInstance.CHAT_TIMING_APPEARANCE);
 				setNextDragonStepRunning(false);
 			}

@@ -57,7 +57,7 @@ public class IdFactory {
 
 		try {
 			con = L1DatabaseFactory.getInstance().getConnection();
-			pstm = con.prepareStatement("select max(id)+1 as nextid from (select id from character_items union all select id from character_teleport union all select id from character_warehouse union all select id from character_elf_warehouse union all select objid as id from characters union all select clan_id as id from clan_data union all select id from clan_warehouse union all select objid as id from pets) t");
+			pstm = con.prepareStatement("SELECT MAX(id) + 1 AS nextid FROM (SELECT id FROM character_items UNION ALL SELECT id FROM character_teleport UNION ALL SELECT id FROM characters UNION ALL SELECT clan_id AS id FROM clan_data UNION ALL SELECT objid AS id FROM pets) t");
 			rs = pstm.executeQuery();
 			int id = 0;
 			if (rs.next()) {
@@ -67,7 +67,7 @@ public class IdFactory {
 				id = FIRST_ID;
 			}
 			_curId = id;
-			_log.info("IDFactory current max ID: " + _curId);
+			_log.info("Id-Factory Current Max Id's Available : " + _curId);
 		} catch (SQLException e) {
 			_log.log(Level.SEVERE, e.getLocalizedMessage(), e);
 		} finally {

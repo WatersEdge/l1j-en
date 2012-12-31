@@ -71,13 +71,13 @@ public class C_CommonClick extends ClientBasePacket {
 		
 		try {
 			conn = L1DatabaseFactory.getInstance().getConnection();
-			pstm = conn.prepareStatement("SELECT * FROM characters WHERE account_name=? ORDER BY objid");
+			pstm = conn.prepareStatement("SELECT * FROM characters WHERE name=? ORDER BY id");
 			pstm.setString(1, client.getAccountName());
 			rs = pstm.executeQuery();
 			while (rs.next()) {
-				String name = rs.getString("char_name");
-				String clanname = rs.getString("Clanname");
-				Timestamp deleteTime = rs.getTimestamp("DeleteTime");
+				String name = rs.getString("name");
+				String clanname = rs.getString("clan_name");
+				Timestamp deleteTime = rs.getTimestamp("delete_time");
 				if (deleteTime != null) {
 					Calendar cal = Calendar.getInstance();
 					long checkDeleteTime = ((cal.getTimeInMillis() - deleteTime.getTime()) / 1000) / 3600;
@@ -106,22 +106,22 @@ public class C_CommonClick extends ClientBasePacket {
 		
 		try {
 			conn = L1DatabaseFactory.getInstance().getConnection();
-			pstm = conn.prepareStatement("SELECT * FROM characters WHERE account_name=? ORDER BY objid");
+			pstm = conn.prepareStatement("SELECT * FROM characters WHERE name=? ORDER BY id");
 			pstm.setString(1, client.getAccountName());
 			rs = pstm.executeQuery();
 			while (rs.next()) {
-				String name = rs.getString("char_name");
-				String clanname = rs.getString("Clanname");
-				int type = rs.getInt("Type");
-				byte sex = rs.getByte("Sex");
-				int lawful = rs.getInt("Lawful");
-				int currenthp = rs.getInt("CurHp");
+				String name = rs.getString("name");
+				String clanname = rs.getString("clan_name");
+				int type = rs.getInt("type");
+				byte sex = rs.getByte("sex");
+				int lawful = rs.getInt("lawful");
+				int currenthp = rs.getInt("cur_hp");
 				if (currenthp < 1) {
 					currenthp = 1;
 				} else if (currenthp > 32767) {
 					currenthp = 32767;
 				}
-				int currentmp = rs.getInt("CurMp");
+				int currentmp = rs.getInt("cur_mp");
 				if (currentmp < 1) {
 					currentmp = 1;
 				} else if (currentmp > 32767) {
@@ -139,14 +139,14 @@ public class C_CommonClick extends ClientBasePacket {
 					lvl = 1;
 				}
 				
-				int ac = rs.getByte("Ac");
-				int str = rs.getByte("Str");
-				int dex = rs.getByte("Dex");
-				int con = rs.getByte("Con");
-				int wis = rs.getByte("Wis");
-				int cha = rs.getByte("Cha");
-				int intel = rs.getByte("Intel");
-				int accessLevel = rs.getShort("AccessLevel");
+				int ac = rs.getByte("ac");
+				int str = rs.getByte("str");
+				int dex = rs.getByte("dex");
+				int con = rs.getByte("con");
+				int wis = rs.getByte("wis");
+				int cha = rs.getByte("cha");
+				int intel = rs.getByte("int");
+				int accessLevel = rs.getShort("access_level");
 				
 				Timestamp _birthday = rs.getTimestamp("birthday");
 	            SimpleDateFormat SimpleDate = new SimpleDateFormat("yyyyMMdd");

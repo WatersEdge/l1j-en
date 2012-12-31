@@ -31,11 +31,9 @@ import l1j.server.server.model.L1WeaponSkill;
 import l1j.server.server.utils.SQLUtil;
 
 public class WeaponSkillTable {
-	private static Logger _log = Logger.getLogger(WeaponSkillTable.class
-			.getName());
+	private static Logger _log = Logger.getLogger(WeaponSkillTable.class.getName());
 	private static WeaponSkillTable _instance;
-	private final HashMap<Integer, L1WeaponSkill> _weaponIdIndex = 
-		new HashMap<Integer, L1WeaponSkill>();
+	private final HashMap<Integer, L1WeaponSkill> _weaponIdIndex = new HashMap<Integer, L1WeaponSkill>();
 
 	public static WeaponSkillTable getInstance() {
 		if (_instance == null) {

@@ -34,11 +34,9 @@ import l1j.server.server.storage.TrapStorage;
 import l1j.server.server.utils.SQLUtil;
 
 public class TrapTable {
-	private static Logger _log = Logger.getLogger(TrapTable.class
-			.getName());
+	private static Logger _log = Logger.getLogger(TrapTable.class.getName());
 	private static TrapTable _instance;
-	private Map<Integer, L1Trap> _traps = 
-		new HashMap<Integer, L1Trap>();
+	private Map<Integer, L1Trap> _traps = new HashMap<Integer, L1Trap>();
 
 	private TrapTable() {
 		initialize();
@@ -46,8 +44,7 @@ public class TrapTable {
 
 	private L1Trap createTrapInstance(String name, TrapStorage storage) throws Exception {
 		final String packageName = "l1j.server.server.model.trap.";
-		Constructor con = Class.forName(packageName + name).getConstructor(
-				new Class[] { TrapStorage.class });
+		Constructor con = Class.forName(packageName + name).getConstructor(new Class[] { TrapStorage.class });
 		return (L1Trap) con.newInstance(storage);
 	}
 

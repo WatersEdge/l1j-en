@@ -76,7 +76,7 @@ class L1SkillStop {
 			if (cha instanceof L1PcInstance) {
 				if (!cha.isInvisble()) {
 					L1PcInstance pc = (L1PcInstance) cha;
-					pc.turnOnOffLight();
+					pc.updateLight();
 				}
 			}
 		} else if (skillId == GLOWING_AURA) { 

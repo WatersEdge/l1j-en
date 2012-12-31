@@ -55,7 +55,7 @@ public class MagicDollTable {
 		ResultSet rs = null;
 		try {
 			con = L1DatabaseFactory.getInstance().getConnection();
-			pstm = con.prepareStatement("SELECT * FROM MagicDoll");
+			pstm = con.prepareStatement("SELECT * FROM magic_doll");
 			rs = pstm.executeQuery();
 			while (rs.next()) {
 				L1MagicDoll doll = new L1MagicDoll();
@@ -63,10 +63,19 @@ public class MagicDollTable {
 				doll.setItemId(itemId);
 				doll.setDollId(rs.getInt("doll_id"));
 				doll.setAc(rs.getInt("ac"));
+				doll.setStr(rs.getInt("str"));
+				doll.setCon(rs.getInt("con"));
+				doll.setDex(rs.getInt("dex"));
+				doll.setInt(rs.getInt("int"));
+				doll.setWis(rs.getInt("wis"));
+				doll.setCha(rs.getInt("cha"));
+				doll.setHp(rs.getInt("hp"));
 				doll.setHpr(rs.getInt("hpr"));
 				doll.setHprTime(rs.getBoolean("hpr_time"));
+				doll.setMp(rs.getInt("mp"));
 				doll.setMpr(rs.getInt("mpr"));
 				doll.setMprTime(rs.getBoolean("mpr_time"));
+				doll.setMr(rs.getInt("mr"));
 				doll.setHit(rs.getInt("hit"));
 				doll.setDmg(rs.getInt("dmg"));
 				doll.setDmgChance(rs.getInt("dmg_chance"));
@@ -76,15 +85,17 @@ public class MagicDollTable {
 				doll.setDmgReductionChance(rs.getInt("dmg_reduction_chance"));
 				doll.setDmgEvasionChance(rs.getInt("dmg_evasion_chance"));
 				doll.setWeightReduction(rs.getInt("weight_reduction"));
-				doll.setRegistStun(rs.getInt("regist_stun"));
-				doll.setRegistStone(rs.getInt("regist_stone"));
-				doll.setRegistSleep(rs.getInt("regist_sleep"));
-				doll.setRegistFreeze(rs.getInt("regist_freeze"));
-				doll.setRegistSustain(rs.getInt("regist_sustain"));
-				doll.setRegistBlind(rs.getInt("regist_blind"));
-				doll.setMakeItemId(rs.getInt("make_itemid"));
-				doll.setEffect(rs.getByte("effect"));
-			   _dolls.put(new Integer(itemId), doll);
+				doll.setResistStun(rs.getInt("resist_stun"));
+				doll.setResistStone(rs.getInt("resist_stone"));
+				doll.setResistSleep(rs.getInt("resist_sleep"));
+				doll.setResistFreeze(rs.getInt("resist_freeze"));
+				doll.setResistHold(rs.getInt("resist_hold"));
+				doll.setResistBlind(rs.getInt("resist_blind"));
+				doll.setExpBonus(rs.getInt("exp_bonus"));
+				doll.setMakeItemId(rs.getInt("make_item_id"));
+				doll.setSkillId(rs.getByte("skill_id"));
+				doll.setSkillChance(rs.getByte("skill_chance"));
+				_dolls.put(new Integer(itemId), doll);
 			}
 		} catch (SQLException e) {
 			_log.log(Level.SEVERE, e.getLocalizedMessage(), e);

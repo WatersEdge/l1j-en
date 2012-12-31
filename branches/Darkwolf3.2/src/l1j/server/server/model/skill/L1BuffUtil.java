@@ -99,7 +99,7 @@ public class L1BuffUtil {
 			pc.broadcastPacket(new S_SkillSound(pc.getId(), 7783));
 		}
 
-		int skillId = EFFECT_BLOODSTAIN_OF_ANTHARAS;
+		int skillId = BLOODSTAIN_OF_ANTHARAS;
 		int iconType = 0;
 		if (type == 0) {
 			if (!pc.hasSkillEffect(skillId)) {
@@ -121,9 +121,9 @@ public class L1BuffUtil {
 
 		if (!pc.hasSkillEffect(skillId)) {
 			switch (skillId) {
-				case EFFECT_BLESS_OF_CRAY:
-					if (pc.hasSkillEffect(EFFECT_BLESS_OF_SAELL)) {
-						pc.removeSkillEffect(EFFECT_BLESS_OF_SAELL);
+				case BLESS_OF_CRAY:
+					if (pc.hasSkillEffect(BLESS_OF_SAEL)) {
+						pc.removeSkillEffect(BLESS_OF_SAEL);
 					}
 					pc.addMaxHp(100);
 					pc.addMaxMp(50);
@@ -134,9 +134,9 @@ public class L1BuffUtil {
 					pc.addHitup(5);
 					pc.addWeightReduction(40);
 					break;
-				case EFFECT_BLESS_OF_SAELL:
-					if (pc.hasSkillEffect(EFFECT_BLESS_OF_CRAY)) {
-						pc.removeSkillEffect(EFFECT_BLESS_OF_CRAY);
+				case BLESS_OF_SAEL:
+					if (pc.hasSkillEffect(BLESS_OF_CRAY)) {
+						pc.removeSkillEffect(BLESS_OF_CRAY);
 					}
 					pc.addMaxHp(80);
 					pc.addMaxMp(10);

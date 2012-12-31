@@ -126,7 +126,7 @@ public class L1SpawnUtil {
                     npc.broadcastPacket(new S_CharVisualUpdate(npc, npc.getStatus()));
             }
 
-            npc.turnOnOffLight();
+            npc.updateLight();
             npc.startChat(L1NpcInstance.CHAT_TIMING_APPEARANCE);
             if (0 < timeMillisToDelete) {
                     L1NpcDeleteTimer timer = new L1NpcDeleteTimer(npc,

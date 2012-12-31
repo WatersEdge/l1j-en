@@ -150,9 +150,8 @@ public class C_Result extends ClientBasePacket {
                         break;
                     }
                     if (tradable) {
-                        pc.getInventory().tradeItem(objectId, count,
-                                pc.getDwarfInventory());
-                        pc.turnOnOffLight();
+                        pc.getInventory().tradeItem(objectId, count, pc.getDwarfInventory());
+                        pc.updateLight();
                     }
                 }
             } else if (resultType == 3 && size != 0
@@ -166,8 +165,7 @@ public class C_Result extends ClientBasePacket {
                     if (pc.getInventory().checkAddItem(item, count) == L1Inventory.OK)
                     {
                         if (pc.getInventory().consumeItem(L1ItemId.ADENA, 30)) {
-                            pc.getDwarfInventory().tradeItem(item, count,
-                                    pc.getInventory());
+                            pc.getDwarfInventory().tradeItem(item, count, pc.getInventory());
                         } else {
                             pc.sendPackets(new S_ServerMessage(189));
                             break;
@@ -225,16 +223,14 @@ public class C_Result extends ClientBasePacket {
                                     }
                                 }
                             }
-                            if (clan.getDwarfForClanInventory()
-                                    .checkAddItemToWarehouse(item, count,
-                                            L1Inventory.WAREHOUSE_TYPE_CLAN) == L1Inventory.SIZE_OVER) {
+                            if (clan.getDwarfForClanInventory().checkAddItemToWarehouse(item, count,
+                            	 L1Inventory.WAREHOUSE_TYPE_CLAN) == L1Inventory.SIZE_OVER) {
                                 pc.sendPackets(new S_ServerMessage(75));
                                 break;
                             }
                             if (tradable) {
-                                pc.getInventory().tradeItem(objectId, count,
-                                        clan.getDwarfForClanInventory());
-                                pc.turnOnOffLight();
+                                pc.getInventory().tradeItem(objectId, count, clan.getDwarfForClanInventory());
+                                pc.updateLight();
                             }
                         }
                     }
@@ -251,13 +247,10 @@ public class C_Result extends ClientBasePacket {
                     for (int i = 0; i < size; i++) {
                         objectId = readD();
                         count = readD();
-                        item = clan.getDwarfForClanInventory()
-                                .getItem(objectId);
+                        item = clan.getDwarfForClanInventory().getItem(objectId);
                         if (pc.getInventory().checkAddItem(item, count) == L1Inventory.OK) {
-                            if (pc.getInventory().consumeItem(L1ItemId.ADENA,
-                                    30)) {
-                                clan.getDwarfForClanInventory().tradeItem(item,
-                                        count, pc.getInventory());
+                            if (pc.getInventory().consumeItem(L1ItemId.ADENA, 30)) {
+                                clan.getDwarfForClanInventory().tradeItem(item, count, pc.getInventory());
                             } else {
                                 pc.sendPackets(new S_ServerMessage(189));
                                 break;
@@ -287,8 +280,7 @@ public class C_Result extends ClientBasePacket {
                     L1ItemInstance item = (L1ItemInstance) object;
                     if (!item.getItem().isTradable()) {
                         tradable = false;
-                        pc.sendPackets(new S_ServerMessage(210, item.getItem()
-                                .getName()));
+                        pc.sendPackets(new S_ServerMessage(210, item.getItem().getName()));
                     }
                     Object[] petlist = pc.getPetList().values().toArray();
                     for (Object petObject : petlist) {
@@ -319,14 +311,12 @@ public class C_Result extends ClientBasePacket {
                         break;
                     }
                     if (tradable) {
-                        pc.getInventory().tradeItem(objectId, count,
-                                pc.getDwarfForElfInventory());
-                        pc.turnOnOffLight();
+                        pc.getInventory().tradeItem(objectId, count,  pc.getDwarfForElfInventory());
+                        pc.updateLight();
                     }
                 }
             } else if (resultType == 9 && size != 0
-                    && npcImpl.equalsIgnoreCase("L1Dwarf") && level >= 5
-                    && pc.isElf()) {
+                    && npcImpl.equalsIgnoreCase("L1Dwarf") && level >= 5 && pc.isElf()) {
                 int objectId, count;
                 L1ItemInstance item;
                 for (int i = 0; i < size; i++) {

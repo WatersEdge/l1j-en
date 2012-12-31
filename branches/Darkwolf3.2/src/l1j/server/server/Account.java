@@ -32,10 +32,13 @@ import java.util.logging.Logger;
 import l1j.server.L1DatabaseFactory;
 import l1j.server.server.encryptions.Base64;
 import l1j.server.server.utils.SQLUtil;
+import l1j.server.server.utils.L1QueryUtil;
+import l1j.server.server.utils.L1QueryUtil.EntityFactory;
 
 public class Account {
 	private String _name;
 	private String _ip;
+	private int _id;
 	private String _password;
 	private Timestamp _lastActive;
 	private int _accessLevel;
@@ -48,6 +51,37 @@ public class Account {
 	private Account() {
 	}
 
+	public int getId() {
+		return _id;
+	}
+	
+	public static Account findById(int id) {
+		return L1QueryUtil.selectFirst(new Factory(), "SELECT * FROM accounts WHERE login = ?", id);
+	}
+	
+	private static class CountFactory implements EntityFactory<Integer> {
+		@Override
+		public Integer fromResultSet(ResultSet rs) throws SQLException {
+			return rs.getInt("cnt");
+		}
+	}
+
+	private static class Factory implements EntityFactory<Account> {
+		@Override
+		public Account fromResultSet(ResultSet rs) throws SQLException {
+			Account result = new Account();
+			result._name = rs.getString("login");
+			result._password = rs.getString("password");
+			result._lastActive = rs.getTimestamp("lastactive");
+			result._accessLevel = rs.getInt("access_level");
+			result._ip = rs.getString("ip");
+			result._host = rs.getString("host");
+			result._banned = rs.getBoolean("banned");
+			result._characterSlot = rs.getInt("character_slot");
+			return result;
+		}
+	}
+	
 	private static String encodePassword(final String rawPassword) throws NoSuchAlgorithmException, 
 	UnsupportedEncodingException {
 		byte[] buf = rawPassword.getBytes("UTF-8");
@@ -80,7 +114,7 @@ public class Account {
 			pstm.setInt(7, account._banned ? 1 : 0);
 			pstm.setInt(8, 0);
 			pstm.execute();
-			_log.info("New account created for: " + name);
+			_log.info("New Account Created For: " + name);
 			return account;
 		} catch (SQLException e) {
 			_log.log(Level.SEVERE, e.getLocalizedMessage(), e);
@@ -118,7 +152,7 @@ public class Account {
 			account._host = rs.getString("host");
 			account._banned = rs.getInt("banned") == 0 ? false : true;
 			account._characterSlot = rs.getInt("character_slot");
-			_log.fine("Account already exists.");
+			_log.fine("Account Allready Excists.");
 		} catch (SQLException e) {
 			_log.log(Level.SEVERE, e.getLocalizedMessage(), e);
 		} finally {
@@ -141,7 +175,7 @@ public class Account {
 			pstm.setString(2, account.getName());
 			pstm.execute();
 			account._lastActive = ts;
-			_log.fine("Update lastactive for: " + account.getName());
+			_log.fine("Updated Lastactive For : " + account.getName());
 		} catch (Exception e) {
 			_log.log(Level.SEVERE, e.getLocalizedMessage(), e);
 		} finally {
@@ -161,7 +195,7 @@ public class Account {
 			pstm.setString(2, account.getName());
 			pstm.execute();
 			account._characterSlot = account.getCharacterSlot();
-			_log.fine("Update CharacterSlot for: " + account.getName());
+			_log.fine("Updated CharacterSlot For : " + account.getName());
 		} catch (Exception e) {
 			_log.log(Level.SEVERE, e.getLocalizedMessage(), e);
 		} finally {
@@ -177,7 +211,7 @@ public class Account {
 		ResultSet rs = null;
 		try {
 			con = L1DatabaseFactory.getInstance().getConnection();
-			String sqlstr = "SELECT count(*) as cnt FROM characters WHERE account_name=?";
+			String sqlstr = "SELECT count(*) as cnt FROM characters WHERE name=?";
 			pstm = con.prepareStatement(sqlstr);
 			pstm.setString(1, _name);
 			rs = pstm.executeQuery();
@@ -225,7 +259,7 @@ public class Account {
 			pstm.setString(2, _name);
 			pstm.execute();
 
-			_log.info("Rehashed password for " + _name + ".");
+			_log.info("Rehashed Password For :" + _name + ".");
 		} catch (SQLException e) {
 			_log.log(Level.SEVERE, e.getLocalizedMessage(), e);
 		} finally {

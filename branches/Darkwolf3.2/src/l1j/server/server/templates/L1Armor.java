@@ -27,17 +27,28 @@ public class L1Armor extends L1Item {
 	public L1Armor() {
 	}
 
-	private int _ac = 0; // AC
+	private int _ac = 0;
 
 	@Override
-	public int get_ac() {
+	public int getAc() {
 		return _ac;
 	}
 
-	public void set_ac(int i) {
+	public void setAc(int i) {
 		this._ac = i;
 	}
 
+	private int _grade;
+
+	@Override
+	public int getGrade() {
+		return _grade;
+	}
+
+	public void setGrade(int i) {
+		_grade = i;
+	}
+	
 	private int _damageReduction = 0; // damage
 
 	@Override
@@ -104,114 +115,135 @@ public class L1Armor extends L1Item {
 		_bowDmgModifierByArmor = i;
 	}
 
-	private int _defense_water = 0;
+	private int _defenseWater = 0;
 
-	public void set_defense_water(int i) {
-		_defense_water = i;
+	public void setDefenseWater(int i) {
+		_defenseWater = i;
 	}
 
 	@Override
-	public int get_defense_water() {
-		return this._defense_water;
+	public int getDefenseWater() {
+		return this._defenseWater;
 	}
 
-	private int _defense_wind = 0; 
+	private int _defenseWind = 0;
 
-	public void set_defense_wind(int i) {
-		_defense_wind = i;
-	}
-
-	@Override
-	public int get_defense_wind() {
-		return this._defense_wind;
-	}
-
-	private int _defense_fire = 0; 
-
-	public void set_defense_fire(int i) {
-		_defense_fire = i;
+	public void setDefenseWind(int i) {
+		_defenseWind = i;
 	}
 
 	@Override
-	public int get_defense_fire() {
-		return this._defense_fire;
+	public int getDefenseWind() {
+		return this._defenseWind;
 	}
 
-	private int _defense_earth = 0; 
+	private int _defenseFire = 0;
 
-	public void set_defense_earth(int i) {
-		_defense_earth = i;
-	}
-
-	@Override
-	public int get_defense_earth() {
-		return this._defense_earth;
-	}
-
-	private int _regist_stun = 0; 
-
-	public void set_regist_stun(int i) {
-		_regist_stun = i;
+	public void setDefenseFire(int i) {
+		_defenseFire = i;
 	}
 
 	@Override
-	public int get_regist_stun() {
-		return this._regist_stun;
+	public int getDefenseFire() {
+		return this._defenseFire;
 	}
 
-	private int _regist_stone = 0; 
+	private int _defenseEarth = 0;
 
-	public void set_regist_stone(int i) {
-		_regist_stone = i;
-	}
-
-	@Override
-	public int get_regist_stone() {
-		return this._regist_stone;
-	}
-
-	private int _regist_sleep = 0;
-
-	public void set_regist_sleep(int i) {
-		_regist_sleep = i;
+	public void setDefenseEarth(int i) {
+		_defenseEarth = i;
 	}
 
 	@Override
-	public int get_regist_sleep() {
-		return this._regist_sleep;
+	public int getDefenseEarth() {
+		return this._defenseEarth;
 	}
 
-	private int _regist_freeze = 0; 
+	private int _resistStun = 0;
 
-	public void set_regist_freeze(int i) {
-		_regist_freeze = i;
-	}
-
-	@Override
-	public int get_regist_freeze() {
-		return this._regist_freeze;
-	}
-
-	private int _regist_sustain = 0; //
-
-	public void set_regist_sustain(int i) {
-		_regist_sustain = i;
+	public void setResistStun(int i) {
+		_resistStun = i;
 	}
 
 	@Override
-	public int get_regist_sustain() {
-		return this._regist_sustain;
+	public int getResistStun() {
+		return this._resistStun;
 	}
 
-	private int _regist_blind = 0; // 
+	private int _resistStone = 0;
 
-	public void set_regist_blind(int i) {
-		_regist_blind = i;
+	public void setResistStone(int i) {
+		_resistStone = i;
 	}
 
 	@Override
-	public int get_regist_blind() {
-		return this._regist_blind;
+	public int getResistStone() {
+		return this._resistStone;
 	}
 
+	private int _resistSleep = 0;
+
+	public void setResistSleep(int i) {
+		_resistSleep = i;
+	}
+
+	@Override
+	public int getResistSleep() {
+		return this._resistSleep;
+	}
+
+	private int _resistFreeze = 0;
+
+	public void setResistFreeze(int i) {
+		_resistFreeze = i;
+	}
+
+	@Override
+	public int getResistFreeze() {
+		return this._resistFreeze;
+	}
+
+	private int _resistHold = 0;
+
+	public void setResistHold(int i) {
+		_resistHold = i;
+	}
+
+	@Override
+	public int getResistHold() {
+		return this._resistHold;
+	}
+
+	private int _resistBlind = 0;
+
+	public void setResistBlind(int i) {
+		_resistBlind = i;
+	}
+
+	@Override
+	public int getResistBlind() {
+		return this._resistBlind;
+	}
+	
+	private int _expBonus = 0;
+
+	public void setExpBonus(int i) {
+		_expBonus = i;
+	}
+
+	@Override
+	public int getExpBonus() {
+		return this._expBonus;
+	}
+
+	private int _potionRecoveryRate = 0;
+
+	public void setPotionRecoveryRate(int i) {
+		_potionRecoveryRate = i;
+	}
+
+	@Override
+	public int getPotionRecoveryRate() {
+		return this._potionRecoveryRate;
+	}
 }

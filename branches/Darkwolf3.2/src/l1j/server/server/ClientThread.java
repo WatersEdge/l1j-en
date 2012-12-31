@@ -546,7 +546,8 @@ public class ClientThread implements Runnable, PacketOutput {
 		if (pc.getPortalNumber() != -1) { 
 			L1DragonSlayer.getInstance().removePlayer(pc, pc.getPortalNumber()); 
 		}
-		CharBuffTable.SaveBuff(pc);
+		CharBuffTable.delete(pc.getId());
+		CharBuffTable.save(pc);
 		pc.clearSkillEffectTimer();
 		pc.stopEtcMonitor();
 		pc.setOnlineStatus(0);

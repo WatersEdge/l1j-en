@@ -21,7 +21,6 @@ package l1j.server.server.model;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Logger;
 
@@ -53,8 +52,7 @@ public class L1Character extends L1Object {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final Logger _log = Logger.getLogger(L1Character.class
-			.getName());
+	private static final Logger _log = Logger.getLogger(L1Character.class.getName());
 
 	private L1Poison _poison = null;
 	private boolean _paralyzed;
@@ -867,111 +865,111 @@ public class L1Character extends L1Object {
 		_addAttrKind = i;
 	}
 
-	private int _registStun = 0;
-	private int _trueRegistStun = 0;
+	private int _resistStun = 0;
+	private int _trueResistStun = 0;
 
-	public int getRegistStun() {
-		return (_registStun + L1MagicDoll.getRegistStunByDoll(this));
+	public int getResistStun() {
+		return (_resistStun + L1MagicDoll.getResistStunByDoll(this));
 	}
 
-	public void addRegistStun(int i) {
-		_trueRegistStun += i;
-		if (_trueRegistStun > 127) {
-			_registStun = 127;
-		} else if (_trueRegistStun < -128) {
-			_registStun = -128;
+	public void addResistStun(int i) {
+		_trueResistStun += i;
+		if (_trueResistStun > 127) {
+			_resistStun = 127;
+		} else if (_trueResistStun < -128) {
+			_resistStun = -128;
 		} else {
-			_registStun = _trueRegistStun;
+			_resistStun = _trueResistStun;
 		}
 	}
 
-	private int _registStone = 0;
-	private int _trueRegistStone = 0;
+	private int _resistStone = 0;
+	private int _trueResistStone = 0;
 
-	public int getRegistStone() {
-		return (_registStone + L1MagicDoll.getRegistStoneByDoll(this));
-	} 
+	public int getResistStone() {
+		return (_resistStone + L1MagicDoll.getResistStoneByDoll(this));
+	}
 
-	public void addRegistStone(int i) {
-		_trueRegistStone += i;
-		if (_trueRegistStone > 127) {
-			_registStone = 127;
-		} else if (_trueRegistStone < -128) {
-			_registStone = -128;
+	public void addResistStone(int i) {
+		_trueResistStone += i;
+		if (_trueResistStone > 127) {
+			_resistStone = 127;
+		} else if (_trueResistStone < -128) {
+			_resistStone = -128;
 		} else {
-			_registStone = _trueRegistStone;
+			_resistStone = _trueResistStone;
 		}
 	}
 
-	private int _registSleep = 0;
-	private int _trueRegistSleep = 0;
+	private int _resistSleep = 0;
+	private int _trueResistSleep = 0;
 
-	public int getRegistSleep() {
-		return (_registSleep + L1MagicDoll.getRegistSleepByDoll(this));
-	} 
+	public int getResistSleep() {
+		return (_resistSleep + L1MagicDoll.getResistSleepByDoll(this));
+	}
 
-	public void addRegistSleep(int i) {
-		_trueRegistSleep += i;
-		if (_trueRegistSleep > 127) {
-			_registSleep = 127;
-		} else if (_trueRegistSleep < -128) {
-			_registSleep = -128;
+	public void addResistSleep(int i) {
+		_trueResistSleep += i;
+		if (_trueResistSleep > 127) {
+			_resistSleep = 127;
+		} else if (_trueResistSleep < -128) {
+			_resistSleep = -128;
 		} else {
-			_registSleep = _trueRegistSleep;
+			_resistSleep = _trueResistSleep;
 		}
 	}
 
-	private int _registFreeze = 0;
-	private int _trueRegistFreeze = 0;
+	private int _resistFreeze = 0;
+	private int _trueResistFreeze = 0;
 
-	public int getRegistFreeze() {
-		return (_registFreeze + L1MagicDoll.getRegistFreezeByDoll(this));
-	} 
+	public int getResistFreeze() {
+		return (_resistFreeze + L1MagicDoll.getResistFreezeByDoll(this));
+	}
 
-	public void add_regist_freeze(int i) {
-		_trueRegistFreeze += i;
-		if (_trueRegistFreeze > 127) {
-			_registFreeze = 127;
-		} else if (_trueRegistFreeze < -128) {
-			_registFreeze = -128;
+	public void addResistFreeze(int i) {
+		_trueResistFreeze += i;
+		if (_trueResistFreeze > 127) {
+			_resistFreeze = 127;
+		} else if (_trueResistFreeze < -128) {
+			_resistFreeze = -128;
 		} else {
-			_registFreeze = _trueRegistFreeze;
+			_resistFreeze = _trueResistFreeze;
 		}
 	}
 
-	private int _registSustain = 0;
-	private int _trueRegistSustain = 0;
+	private int _resistHold = 0;
+	private int _trueResistHold = 0;
 
-	public int getRegistSustain() {
-		return (_registSustain + L1MagicDoll.getRegistSustainByDoll(this));
+	public int getResistHold() {
+		return (_resistHold + L1MagicDoll.getResistHoldByDoll(this));
 	}
 
-	public void addRegistSustain(int i) {
-		_trueRegistSustain += i;
-		if (_trueRegistSustain > 127) {
-			_registSustain = 127;
-		} else if (_trueRegistSustain < -128) {
-			_registSustain = -128;
+	public void addResistHold(int i) {
+		_trueResistHold += i;
+		if (_trueResistHold > 127) {
+			_resistHold = 127;
+		} else if (_trueResistHold < -128) {
+			_resistHold = -128;
 		} else {
-			_registSustain = _trueRegistSustain;
+			_resistHold = _trueResistHold;
 		}
 	}
 
-	private int _registBlind = 0;
-	private int _trueRegistBlind = 0;
+	private int _resistBlind = 0;
+	private int _trueResistBlind = 0;
 
-	public int getRegistBlind() {
-		return (_registBlind + L1MagicDoll.getRegistBlindByDoll(this));
+	public int getResistBlind() {
+		return (_resistBlind + L1MagicDoll.getResistBlindByDoll(this));
 	}
 
-	public void addRegistBlind(int i) {
-		_trueRegistBlind += i;
-		if (_trueRegistBlind > 127) {
-			_registBlind = 127;
-		} else if (_trueRegistBlind < -128) {
-			_registBlind = -128;
+	public void addResistBlind(int i) {
+		_trueResistBlind += i;
+		if (_trueResistBlind > 127) {
+			_resistBlind = 127;
+		} else if (_trueResistBlind < -128) {
+			_resistBlind = -128;
 		} else {
-			_registBlind = _trueRegistBlind;
+			_resistBlind = _trueResistBlind;
 		}
 	}
 
@@ -1071,7 +1069,7 @@ public class L1Character extends L1Object {
 		}
 	}
 
-	private int _sp = 0; // 
+	private int _sp = 0;
 
 	public int getSp() {
 		return getTrueSp() + _sp;
@@ -1144,6 +1142,25 @@ public class L1Character extends L1Object {
 		}
 	}
 
+	public boolean isFreeze() {
+		if (hasSkillEffect(ABSOLUTE_BARRIER)) {
+			return true;
+		}
+		if (hasSkillEffect(ICE_LANCE)) {
+			return true;
+		}
+		if (hasSkillEffect(FREEZING_BLIZZARD)) {
+			return true;
+		}
+		if (hasSkillEffect(FREEZING_BREATH)) {
+			return true;
+		}
+		if (hasSkillEffect(EARTH_BIND)) {
+			return true;
+		}
+		return false;
+	}
+	
 	private int _heading; 
 
 	public int getHeading() {
@@ -1174,6 +1191,64 @@ public class L1Character extends L1Object {
 		_braveSpeed = i;
 	}
 
+	private int calcLightSize() {
+		
+		int lightSize = 0;
+		
+		if (this instanceof L1NpcInstance) {
+			L1NpcInstance npc = (L1NpcInstance) this;
+			lightSize = npc.getNpcTemplate().getLightSize(); // npc.sql
+		}
+		if (hasSkillEffect(LIGHT)) {
+			lightSize = 14;
+		}
+
+		for (L1ItemInstance item : getInventory().getItems()) {
+			if (item.getItem().getType2() == 0 && item.getItem().getType() == 2) { // light
+				if (item.isNowLighting()) {
+					int itemLightSize = item.getItem().getLightRange();
+					lightSize = Math.max(lightSize, itemLightSize);
+				}
+			}
+		}
+		if (lightSize > 14) {
+			_log.severe("lightSize too large: " + lightSize);
+		}
+		return lightSize;
+	}
+	
+	public void updateLight() {
+		int lightSize = calcLightSize();
+
+		if (this instanceof L1PcInstance) {
+			L1PcInstance pc = (L1PcInstance) this;
+			pc.sendPackets(new S_Light(pc.getId(), lightSize));
+		}
+		if (!isInvisble()) {
+			broadcastPacket(new S_Light(getId(), lightSize));
+		}
+
+		setLightSize(lightSize);
+	}
+	
+	private int _lightSize;
+
+	public int getLightSize() {
+		if (isInvisble()) {
+			return 0;
+		}
+		return _lightSize;
+	}
+
+	public int getOwnLightSize() { // S_OwnCharPack
+		return 0;
+		// return _lightSize;
+	}
+
+	private void setLightSize(int i) {
+		_lightSize = i;
+	}
+	
 	private int _tempCharGfx; 
 
 	public int getTempCharGfx() {
@@ -1259,63 +1334,6 @@ public class L1Character extends L1Object {
 		}
 	}
 
-	public void turnOnOffLight() {
-		int lightSize = 0;
-		if (this instanceof L1NpcInstance) {
-			L1NpcInstance npc = (L1NpcInstance) this;
-			lightSize = npc.getLightSize(); // 
-		}
-		if (hasSkillEffect(L1SkillId.LIGHT)) {
-			lightSize = 14;
-		}
-
-		for (L1ItemInstance item : getInventory().getItems()) {
-			if (item.getItem().getType2() == 0 && item.getItem()
-					.getType() == 2) { // 
-				int itemlightSize = item.getItem().getLightRange();
-				if (itemlightSize != 0 && item.isNowLighting()) {
-					if (itemlightSize > lightSize) {
-						lightSize = itemlightSize;
-					}
-				}
-			}
-		}
-
-		if (this instanceof L1PcInstance) {
-			L1PcInstance pc = (L1PcInstance) this;
-			pc.sendPackets(new S_Light(pc.getId(), lightSize));
-		}
-		if (!isInvisble()) {
-			broadcastPacket(new S_Light(getId(), lightSize));
-		}
-
-		setOwnLightSize(lightSize); // 
-		setChaLightSize(lightSize); // 
-	}
-
-	private int _chaLightSize; // 
-
-	public int getChaLightSize() {
-		if (isInvisble()) {
-			return 0;
-		}
-		return _chaLightSize;
-	}
-
-	public void setChaLightSize(int i) {
-		_chaLightSize = i;
-	}
-
-	private int _ownLightSize;
-
-	public int getOwnLightSize() {
-		return _ownLightSize;
-	}
-
-	public void setOwnLightSize(int i) {
-		_ownLightSize = i;
-	}
-
 	// put here the npc spells that need tobe miss sometimes.
 	public boolean isAttackMiss(L1Character cha, int npcId) {
         switch (npcId) {
@@ -1383,4 +1401,18 @@ public class L1Character extends L1Object {
                 return false;
         }
     }
+
+	public boolean isCookingReduction() {
+		return (hasSkillEffect(COOKING_1_0_S) || hasSkillEffect(COOKING_1_1_S) ||
+				hasSkillEffect(COOKING_1_2_S) || hasSkillEffect(COOKING_1_3_S) ||
+				hasSkillEffect(COOKING_1_4_S) || hasSkillEffect(COOKING_1_5_S) ||
+				hasSkillEffect(COOKING_1_6_S) || hasSkillEffect(COOKING_2_0_S) ||
+				hasSkillEffect(COOKING_2_1_S) || hasSkillEffect(COOKING_2_2_S) ||
+				hasSkillEffect(COOKING_2_3_S) || hasSkillEffect(COOKING_2_4_S) ||
+				hasSkillEffect(COOKING_2_5_S) || hasSkillEffect(COOKING_2_6_S) ||
+				hasSkillEffect(COOKING_3_0_S) || hasSkillEffect(COOKING_3_1_S) ||
+				hasSkillEffect(COOKING_3_2_S) || hasSkillEffect(COOKING_3_3_S) ||
+				hasSkillEffect(COOKING_3_4_S) || hasSkillEffect(COOKING_3_5_S) ||
+				hasSkillEffect(COOKING_3_6_S));
+	}
 }

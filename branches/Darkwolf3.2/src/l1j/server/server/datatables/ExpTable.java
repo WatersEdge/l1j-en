@@ -19,6 +19,8 @@
 package l1j.server.server.datatables;
 
 import l1j.server.Config;
+import l1j.server.server.utils.IntRange;
+
 /**
  * Experience to provide value-class table
  */
@@ -27,7 +29,7 @@ public final class ExpTable {
 	}
 
 	public static final int MAX_LEVEL = 99;
-	public static final int MAX_EXP = 0x6ecf16da;
+	public static final IntRange EXP_RANGE = new IntRange(0, 0x6ecf16da);
 
 	/**
 	 * The level required to become a cumulative experience of value.

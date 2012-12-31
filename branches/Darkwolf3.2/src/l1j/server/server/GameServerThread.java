@@ -31,6 +31,7 @@ import l1j.server.server.controllers.NpcChatTimeController;
 import l1j.server.server.controllers.UbTimeController;
 import l1j.server.server.controllers.WarTimeController;
 import l1j.server.server.datatables.CastleTable;
+import l1j.server.server.datatables.CookingRecipeTable;
 import l1j.server.server.datatables.CheckWarTime;
 import l1j.server.server.datatables.CharacterTable;
 import l1j.server.server.datatables.ChatLogTable;
@@ -258,6 +259,7 @@ public GameServerThread() throws Exception {
 	ChatLogTable.getInstance();
 	WeaponSkillTable.getInstance();
 	MagicDollTable.getInstance();
+	CookingRecipeTable.initialize();
 	NpcActionTable.load();
 	GMCommandsConfig.load();
 	Getback.loadGetBack();

@@ -130,7 +130,7 @@ public class C_DropItem extends ClientBasePacket {
 				return;
 			}
 			pc.getInventory().tradeItem(item, count, L1World.getInstance().getInventory(x, y, pc.getMapId()));
-			pc.turnOnOffLight();
+			pc.updateLight();
 		 }
         } catch (final Exception e) {
             _log.log(Level.SEVERE, e.getLocalizedMessage(), e);

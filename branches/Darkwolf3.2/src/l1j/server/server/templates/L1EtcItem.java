@@ -19,92 +19,80 @@
 package l1j.server.server.templates;
 
 public class L1EtcItem extends L1Item {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
-
+	private boolean _stackable;
+	private int _locX;
+	private int _locY;
+	private short _mapId;
+	private int _delayId;
+	private int _delayTime;
+	private int _delayEffect;
+	private int _maxChargeCount;
+	private boolean _isSealable;
+	
 	public L1EtcItem() {
 	}
-
-	private boolean _stackable;
-
-	private int _locx;
-
-	private int _locy;
-
-	private short _mapid;
-
-	private int _delay_id;
-
-	private int _delay_time;
-
-	private int _delay_effect;
-
-	private int _maxChargeCount;
-
-	private boolean _isCanSeal;
 
 	@Override
 	public boolean isStackable() {
 		return _stackable;
 	}
 
-	public void set_stackable(boolean stackable) {
+	public void setStackable(boolean stackable) {
 		_stackable = stackable;
 	}
 
-	public void set_locx(int locx) {
-		_locx = locx;
+	public void setLocX(int locX) {
+		_locX = locX;
 	}
 
 	@Override
-	public int get_locx() {
-		return _locx;
+	public int getLocX() {
+		return _locX;
 	}
 
-	public void set_locy(int locy) {
-		_locy = locy;
-	}
-
-	@Override
-	public int get_locy() {
-		return _locy;
-	}
-
-	public void set_mapid(short mapid) {
-		_mapid = mapid;
+	public void setLocY(int locY) {
+		_locY = locY;
 	}
 
 	@Override
-	public short get_mapid() {
-		return _mapid;
+	public int getLocY() {
+		return _locY;
 	}
 
-	public void set_delayid(int delay_id) {
-		_delay_id = delay_id;
-	}
-
-	@Override
-	public int get_delayid() {
-		return _delay_id;
-	}
-
-	public void set_delaytime(int delay_time) {
-		_delay_time = delay_time;
+	public void setMapId(short mapId) {
+		_mapId = mapId;
 	}
 
 	@Override
-	public int get_delaytime() {
-		return _delay_time;
+	public short getMapId() {
+		return _mapId;
 	}
 
-	public void set_delayEffect(int delay_effect) {
-		_delay_effect = delay_effect;
+	public void setDelayId(int delayId) {
+		_delayId = delayId;
 	}
 
-	public int get_delayEffect() {
-		return _delay_effect;
+	@Override
+	public int getDelayId() {
+		return _delayId;
+	}
+
+	public void setDelayTime(int delayTime) {
+		_delayTime = delayTime;
+	}
+
+	@Override
+	public int getDelayTime() {
+		return _delayTime;
+	}
+
+	public void setDelayEffect(int delayEffect) {
+		_delayEffect = delayEffect;
+	}
+
+	public int getDelayEffect() {
+		return _delayEffect;
 	}
 
 	public void setMaxChargeCount(int i) {
@@ -117,13 +105,11 @@ public class L1EtcItem extends L1Item {
 	}
 
 	@Override
-	public boolean isCanSeal() {
-		return _isCanSeal;
+	public boolean isSealable() {
+		return _isSealable;
 	}
 
-	public void setCanSeal(boolean flag) {
-		_isCanSeal = flag;
+	public void setSealable(boolean flag) {
+		_isSealable = flag;
 	}
-
-
 }

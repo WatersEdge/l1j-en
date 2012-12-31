@@ -18,7 +18,7 @@
  */
 package l1j.server.server.model.Instance;
 
-import static l1j.server.server.model.skill.L1SkillId.EFFECT_BLOODSTAIN_OF_ANTHARAS;
+import static l1j.server.server.model.skill.L1SkillId.BLOODSTAIN_OF_ANTHARAS;
 
 import l1j.server.server.datatables.NPCTalkDataTable;
 import l1j.server.server.model.L1DragonSlayer;
@@ -60,7 +60,7 @@ public class L1DragonPortalInstance extends L1NpcInstance {
 				player.sendPackets(new S_ServerMessage(1537));
 			} else {
 				if (portalNumber >= 0 && portalNumber <= 5) {
-					if (player.hasSkillEffect(EFFECT_BLOODSTAIN_OF_ANTHARAS)) {
+					if (player.hasSkillEffect(BLOODSTAIN_OF_ANTHARAS)) {
 						player.sendPackets(new S_ServerMessage(1626));
 						return;
 					}

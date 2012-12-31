@@ -65,8 +65,8 @@ public class L1ItemDelay {
 		L1PcInstance pc = client.getActiveChar();
 
 		if (item.getItem().getType2() == 0) {
-			delayId = ((L1EtcItem) item.getItem()).get_delayid();
-			delayTime = ((L1EtcItem) item.getItem()).get_delaytime();
+			delayId = ((L1EtcItem) item.getItem()).getDelayId();
+			delayTime = ((L1EtcItem) item.getItem()).getDelayTime();
 		} else if (item.getItem().getType2() == 1) {
 			return;
 		} else if (item.getItem().getType2() == 2) {

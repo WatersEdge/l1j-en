@@ -138,7 +138,7 @@ public class Teleportation {
 					int nx = loc.getX();
 					int ny = loc.getY();
 					teleport(doll, nx, ny, mapId, head);
-					pc.sendPackets(new S_DollPack(doll));
+					pc.sendPackets(new S_DollPack(doll, pc));
 
 					for (L1PcInstance visiblePc : L1World.getInstance()
 							.getVisiblePlayer(doll)) {
@@ -152,10 +152,9 @@ public class Teleportation {
 					int nx = loc.getX();
 					int ny = loc.getY();
 					teleport(doll, nx, ny, mapId, head);
-					pc.sendPackets(new S_DollPack(doll));
+					pc.sendPackets(new S_DollPack(doll, pc));
 
-					for (L1PcInstance visiblePc : L1World.getInstance()
-							.getVisiblePlayer(doll)) {
+					for (L1PcInstance visiblePc : L1World.getInstance().getVisiblePlayer(doll)) {
 						visiblePc.removeKnownObject(doll);
 						subjects.add(visiblePc);
 					}
@@ -171,8 +170,7 @@ public class Teleportation {
 			pc.sendPackets(new S_SkillIconWindShackle(pc.getId(),
 					pc.getSkillEffectTimeSec(WIND_SHACKLE)));
 		}
-		if (pc.getPortalNumber() != -1 
-				 && (pc.getMapId() !=  (1005 + pc.getPortalNumber()))) { 
+		if (pc.getPortalNumber() != -1 && (pc.getMapId() !=  (1005 + pc.getPortalNumber()))) { 
 			 L1DragonSlayer.getInstance().removePlayer(pc, pc.getPortalNumber()); 
 			 pc.setPortalNumber(-1); 
 		}
@@ -181,17 +179,14 @@ public class Teleportation {
 			}
 	}
 
-	private static void teleport(L1NpcInstance npc, int x, int y, short map,
-			int head) {
+	private static void teleport(L1NpcInstance npc, int x, int y, short map, int head) {
 		L1World.getInstance().moveVisibleObject(npc, map);
 
-		L1WorldMap.getInstance().getMap(npc.getMapId()).setPassable(npc.getX(),
-				npc.getY(), true);
+		L1WorldMap.getInstance().getMap(npc.getMapId()).setPassable(npc.getX(), npc.getY(), true);
 		npc.setX(x);
 		npc.setY(y);
 		npc.setMap(map);
 		npc.setHeading(head);
-		L1WorldMap.getInstance().getMap(npc.getMapId()).setPassable(npc.getX(),
-				npc.getY(), false);
+		L1WorldMap.getInstance().getMap(npc.getMapId()).setPassable(npc.getX(), npc.getY(), false);
 	}
 }

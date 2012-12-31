@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Logger;
@@ -52,9 +53,211 @@ public class L1Inventory extends L1Object {
 	public static final int WAREHOUSE_TYPE_PERSONAL = 0;
 	public static final int WAREHOUSE_TYPE_CLAN = 1;
 	
+	private int _storedId = 0;
+	private int _id;
+	private int _ownerId;
+	private int _location;
+	private int _itemId;
+	private int _itemCount;
+	private boolean _isEquipped;
+	private int _enchantLevel;
+	private boolean _isIdentified;
+	private int _durability;
+	private int _chargeCount;
+	private int _chargeTime;
+	private Timestamp _expirationTime;
+	private Timestamp _lastUsed;
+	private boolean _isSealed;
+	private int _attrEnchantKind;
+	private int _attrEnchantLevel;
+	private int _ac;
+	private int _str;
+	private int _con;
+	private int _dex;
+	private int _wis;
+	private int _cha;
+	private int _int;
+	private int _hp;
+	private int _hpr;
+	private int _mp;
+	private int _mpr;
+	private int _sp;
+	private int _mr;
+	private int _hitModifier;
+	private int _dmgModifier;
+	private int _bowHitModifier;
+	private int _bowDmgModifier;
+	private int _defenseWater;
+	private int _defenseWind;
+	private int _defenseFire;
+	private int _defenseEarth;
+	private int _resistStun;
+	private int _resistStone;
+	private int _resistSleep;
+	private int _resistFreeze;
+	private int _resistHold;
+	private int _resistBlind;
+	private int _expBonus;
+	private int _potionRecoveryRate;
+	private boolean _isHaste;
+	private boolean _canBeDmg;
+	private boolean _isUnique;
+	
 	public L1Inventory() {
 	}
 
+	public int getAc() {
+		return _ac;
+	}
+
+	public void setAc(int _ac) {
+		this._ac = _ac;
+	}
+	
+	public int getStr() {
+		return _str;
+	}
+
+	public void setStr(int _str) {
+		this._str = _str;
+	}
+	
+	public int getCon() {
+		return _con;
+	}
+
+	public void setCon(int _con) {
+		this._con = _con;
+	}
+	
+	public int getDex() {
+		return _dex;
+	}
+
+	public void setDex(int _dex) {
+		this._dex = _dex;
+	}
+	
+	public int getWis() {
+		return _wis;
+	}
+
+	public void setWis(int _wis) {
+		this._wis = _wis;
+	}
+	
+	public int getCha() {
+		return _cha;
+	}
+
+	public void setCha(int _cha) {
+		this._cha = _cha;
+	}
+	
+	public int getInt() {
+		return _int;
+	}
+
+	public void setInt(int _int) {
+		this._int = _int;
+	}
+	
+	public int getHp() {
+		return _hp;
+	}
+
+	public void setHp(int _hp) {
+		this._hp = _hp;
+	}
+	
+	public int getHpr() {
+		return _hpr;
+	}
+
+	public void setHpr(int _hpr) {
+		this._hpr = _hpr;
+	}
+	
+	public int getMp() {
+		return _mp;
+	}
+
+	public void setMp(int _mp) {
+		this._mp = _mp;
+	}
+	
+	public int getMpr() {
+		return _mpr;
+	}
+
+	public void setMpr(int _mpr) {
+		this._mpr = _mpr;
+	}
+	
+	public int getSp() {
+		return _sp;
+	}
+
+	public void setSp(int _sp) {
+		this._sp = _sp;
+	}
+	
+	public int getMr() {
+		return _mr;
+	}
+
+	public void setMr(int _mr) {
+		this._mr = _mr;
+	}
+	
+	public boolean getCanBeDmg() {
+		return _canBeDmg;
+	}
+	
+	public void setCanBeDmg(boolean _canBeDmg) {
+		this._canBeDmg = _canBeDmg;
+	}
+	
+	public int getChargeTime() {
+		return _chargeTime;
+	}
+
+	public void setChargeTime(int chargeTime) {
+		_chargeTime = chargeTime;
+	}
+	
+	public int getHitModifier() {
+		return _hitModifier;
+	}
+
+	public void setHitModifier(int _hitModifier) {
+		this._hitModifier = _hitModifier;
+	}
+	
+	public int getDmgModifier() {
+		return _dmgModifier;
+	}
+
+	public void setDmgModifier(int _dmgModifier) {
+		this._dmgModifier = _dmgModifier;
+	}
+
+	public int getBowHitModifier() {
+		return _bowHitModifier;
+	}
+
+	public void setBowHitModifier(int _bowHitModifier) {
+		this._bowHitModifier = _bowHitModifier;
+	}
+	
+	public int getBowDmgModifier() {
+		return _bowDmgModifier;
+	}
+
+	public void setBowDmgModifier(int _bowDmgModifier) {
+		this._bowDmgModifier = _bowDmgModifier;
+	}
+	
 	public int getSize() {
 		return _items.size();
 	}
@@ -195,7 +398,7 @@ public class L1Inventory extends L1Object {
 		if (item.getItem().getType2() == 0 && item.getItem().getType() == 2) {
 			item.setRemainingTime(item.getItem().getLightFuel());
 		} else {
-			item.setRemainingTime(item.getItem().getMaxUseTime());
+			item.setRemainingTime(item.getItem().getExpirationTime());
 		}
 		item.setBless(item.getItem().getBless());
 		_items.add(item);

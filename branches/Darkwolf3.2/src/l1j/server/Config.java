@@ -664,6 +664,600 @@ public final class Config {
 	@Configure(file = CHARSETTINGS, key = "Lv99Exp")
 	public static int LV99_EXP = 16777216;
 	
+	@Configure(file = CHARSETTINGS, key = "Lv1ExpBonus")
+	public static int LV1_EXP_BONUS = 1;
+
+	@Configure(file = CHARSETTINGS, key = "Lv2ExpBonus")
+	public static int LV2_EXP_BONUS = 1;
+
+	@Configure(file = CHARSETTINGS, key = "Lv3ExpBonus")
+	public static int LV3_EXP_BONUS = 1;
+
+	@Configure(file = CHARSETTINGS, key = "Lv4ExpBonus")
+	public static int LV4_EXP_BONUS = 1;
+
+	@Configure(file = CHARSETTINGS, key = "Lv5ExpBonus")
+	public static int LV5_EXP_BONUS = 1;
+
+	@Configure(file = CHARSETTINGS, key = "Lv6ExpBonus")
+	public static int LV6_EXP_BONUS = 1;
+
+	@Configure(file = CHARSETTINGS, key = "Lv7ExpBonus")
+	public static int LV7_EXP_BONUS = 1;
+
+	@Configure(file = CHARSETTINGS, key = "Lv8ExpBonus")
+	public static int LV8_EXP_BONUS = 1;
+
+	@Configure(file = CHARSETTINGS, key = "Lv9ExpBonus")
+	public static int LV9_EXP_BONUS = 1;
+
+	@Configure(file = CHARSETTINGS, key = "Lv10ExpBonus")
+	public static int LV10_EXP_BONUS = 2;
+
+	@Configure(file = CHARSETTINGS, key = "Lv11ExpBonus")
+	public static int LV11_EXP_BONUS = 2;
+
+	@Configure(file = CHARSETTINGS, key = "Lv12ExpBonus")
+	public static int LV12_EXP_BONUS = 2;
+
+	@Configure(file = CHARSETTINGS, key = "Lv13ExpBonus")
+	public static int LV13_EXP_BONUS = 2;
+
+	@Configure(file = CHARSETTINGS, key = "Lv14ExpBonus")
+	public static int LV14_EXP_BONUS = 2;
+
+	@Configure(file = CHARSETTINGS, key = "Lv15ExpBonus")
+	public static int LV15_EXP_BONUS = 2;
+
+	@Configure(file = CHARSETTINGS, key = "Lv16ExpBonus")
+	public static int LV16_EXP_BONUS = 2;
+
+	@Configure(file = CHARSETTINGS, key = "Lv17ExpBonus")
+	public static int LV17_EXP_BONUS = 2;
+
+	@Configure(file = CHARSETTINGS, key = "Lv18ExpBonus")
+	public static int LV18_EXP_BONUS = 2;
+
+	@Configure(file = CHARSETTINGS, key = "Lv19ExpBonus")
+	public static int LV19_EXP_BONUS = 2;
+
+	@Configure(file = CHARSETTINGS, key = "Lv20ExpBonus")
+	public static int LV20_EXP_BONUS = 3;
+
+	@Configure(file = CHARSETTINGS, key = "Lv21ExpBonus")
+	public static int LV21_EXP_BONUS = 3;
+
+	@Configure(file = CHARSETTINGS, key = "Lv22ExpBonus")
+	public static int LV22_EXP_BONUS = 3;
+
+	@Configure(file = CHARSETTINGS, key = "Lv23ExpBonus")
+	public static int LV23_EXP_BONUS = 3;
+
+	@Configure(file = CHARSETTINGS, key = "Lv24ExpBonus")
+	public static int LV24_EXP_BONUS = 3;
+
+	@Configure(file = CHARSETTINGS, key = "Lv25ExpBonus")
+	public static int LV25_EXP_BONUS = 3;
+
+	@Configure(file = CHARSETTINGS, key = "Lv26ExpBonus")
+	public static int LV26_EXP_BONUS = 3;
+
+	@Configure(file = CHARSETTINGS, key = "Lv27ExpBonus")
+	public static int LV27_EXP_BONUS = 3;
+
+	@Configure(file = CHARSETTINGS, key = "Lv28ExpBonus")
+	public static int LV28_EXP_BONUS = 3;
+
+	@Configure(file = CHARSETTINGS, key = "Lv29ExpBonus")
+	public static int LV29_EXP_BONUS = 3;
+
+	@Configure(file = CHARSETTINGS, key = "Lv30ExpBonus")
+	public static int LV30_EXP_BONUS = 4;
+
+	@Configure(file = CHARSETTINGS, key = "Lv31ExpBonus")
+	public static int LV31_EXP_BONUS = 4;
+
+	@Configure(file = CHARSETTINGS, key = "Lv32ExpBonus")
+	public static int LV32_EXP_BONUS = 4;
+
+	@Configure(file = CHARSETTINGS, key = "Lv33ExpBonus")
+	public static int LV33_EXP_BONUS = 4;
+
+	@Configure(file = CHARSETTINGS, key = "Lv34ExpBonus")
+	public static int LV34_EXP_BONUS = 4;
+
+	@Configure(file = CHARSETTINGS, key = "Lv35ExpBonus")
+	public static int LV35_EXP_BONUS = 4;
+
+	@Configure(file = CHARSETTINGS, key = "Lv36ExpBonus")
+	public static int LV36_EXP_BONUS = 4;
+
+	@Configure(file = CHARSETTINGS, key = "Lv37ExpBonus")
+	public static int LV37_EXP_BONUS = 4;
+
+	@Configure(file = CHARSETTINGS, key = "Lv38ExpBonus")
+	public static int LV38_EXP_BONUS = 4;
+
+	@Configure(file = CHARSETTINGS, key = "Lv39ExpBonus")
+	public static int LV39_EXP_BONUS = 4;
+
+	@Configure(file = CHARSETTINGS, key = "Lv40ExpBonus")
+	public static int LV40_EXP_BONUS = 5;
+
+	@Configure(file = CHARSETTINGS, key = "Lv41ExpBonus")
+	public static int LV41_EXP_BONUS = 5;
+
+	@Configure(file = CHARSETTINGS, key = "Lv42ExpBonus")
+	public static int LV42_EXP_BONUS = 5;
+
+	@Configure(file = CHARSETTINGS, key = "Lv43ExpBonus")
+	public static int LV43_EXP_BONUS = 5;
+
+	@Configure(file = CHARSETTINGS, key = "Lv44ExpBonus")
+	public static int LV44_EXP_BONUS = 5;
+
+	@Configure(file = CHARSETTINGS, key = "Lv45ExpBonus")
+	public static int LV45_EXP_BONUS = 5;
+
+	@Configure(file = CHARSETTINGS, key = "Lv46ExpBonus")
+	public static int LV46_EXP_BONUS = 5;
+
+	@Configure(file = CHARSETTINGS, key = "Lv47ExpBonus")
+	public static int LV47_EXP_BONUS = 5;
+
+	@Configure(file = CHARSETTINGS, key = "Lv48ExpBonus")
+	public static int LV48_EXP_BONUS = 5;
+
+	@Configure(file = CHARSETTINGS, key = "Lv49ExpBonus")
+	public static int LV49_EXP_BONUS = 15;
+
+	@Configure(file = CHARSETTINGS, key = "Lv50ExpBonus")
+	public static int LV50_EXP_BONUS = 14;
+
+	@Configure(file = CHARSETTINGS, key = "Lv51ExpBonus")
+	public static int LV51_EXP_BONUS = 13;
+
+	@Configure(file = CHARSETTINGS, key = "Lv52ExpBonus")
+	public static int LV52_EXP_BONUS = 12;
+
+	@Configure(file = CHARSETTINGS, key = "Lv53ExpBonus")
+	public static int LV53_EXP_BONUS = 11;
+
+	@Configure(file = CHARSETTINGS, key = "Lv54ExpBonus")
+	public static int LV54_EXP_BONUS = 10;
+
+	@Configure(file = CHARSETTINGS, key = "Lv55ExpBonus")
+	public static int LV55_EXP_BONUS = 9;
+
+	@Configure(file = CHARSETTINGS, key = "Lv56ExpBonus")
+	public static int LV56_EXP_BONUS = 8;
+
+	@Configure(file = CHARSETTINGS, key = "Lv57ExpBonus")
+	public static int LV57_EXP_BONUS = 7;
+
+	@Configure(file = CHARSETTINGS, key = "Lv58ExpBonus")
+	public static int LV58_EXP_BONUS = 6;
+
+	@Configure(file = CHARSETTINGS, key = "Lv59ExpBonus")
+	public static int LV59_EXP_BONUS = 5;
+
+	@Configure(file = CHARSETTINGS, key = "Lv60ExpBonus")
+	public static int LV60_EXP_BONUS = 4;
+
+	@Configure(file = CHARSETTINGS, key = "Lv61ExpBonus")
+	public static int LV61_EXP_BONUS = 3;
+
+	@Configure(file = CHARSETTINGS, key = "Lv62ExpBonus")
+	public static int LV62_EXP_BONUS = 2;
+
+	@Configure(file = CHARSETTINGS, key = "Lv63ExpBonus")
+	public static int LV63_EXP_BONUS = 1;
+
+	@Configure(file = CHARSETTINGS, key = "Lv64ExpBonus")
+	public static int LV64_EXP_BONUS = 1;
+
+	@Configure(file = CHARSETTINGS, key = "Lv65ExpBonus")
+	public static int LV65_EXP_BONUS = 0;
+
+	@Configure(file = CHARSETTINGS, key = "Lv66ExpBonus")
+	public static int LV66_EXP_BONUS = 0;
+
+	@Configure(file = CHARSETTINGS, key = "Lv67ExpBonus")
+	public static int LV67_EXP_BONUS = 0;
+
+	@Configure(file = CHARSETTINGS, key = "Lv68ExpBonus")
+	public static int LV68_EXP_BONUS = 0;
+
+	@Configure(file = CHARSETTINGS, key = "Lv69ExpBonus")
+	public static int LV69_EXP_BONUS = 0;
+
+	@Configure(file = CHARSETTINGS, key = "Lv70ExpBonus")
+	public static int LV70_EXP_BONUS = 0;
+
+	@Configure(file = CHARSETTINGS, key = "Lv71ExpBonus")
+	public static int LV71_EXP_BONUS = 0;
+
+	@Configure(file = CHARSETTINGS, key = "Lv72ExpBonus")
+	public static int LV72_EXP_BONUS = 0;
+
+	@Configure(file = CHARSETTINGS, key = "Lv73ExpBonus")
+	public static int LV73_EXP_BONUS = 0;
+
+	@Configure(file = CHARSETTINGS, key = "Lv74ExpBonus")
+	public static int LV74_EXP_BONUS = 0;
+
+	@Configure(file = CHARSETTINGS, key = "Lv75ExpBonus")
+	public static int LV75_EXP_BONUS = 0;
+
+	@Configure(file = CHARSETTINGS, key = "Lv76ExpBonus")
+	public static int LV76_EXP_BONUS = 0;
+
+	@Configure(file = CHARSETTINGS, key = "Lv77ExpBonus")
+	public static int LV77_EXP_BONUS = 0;
+
+	@Configure(file = CHARSETTINGS, key = "Lv78ExpBonus")
+	public static int LV78_EXP_BONUS = 0;
+
+	@Configure(file = CHARSETTINGS, key = "Lv79ExpBonus")
+	public static int LV79_EXP_BONUS = 0;
+
+	@Configure(file = CHARSETTINGS, key = "Lv80ExpBonus")
+	public static int LV80_EXP_BONUS = 0;
+
+	@Configure(file = CHARSETTINGS, key = "Lv81ExpBonus")
+	public static int LV81_EXP_BONUS = 0;
+
+	@Configure(file = CHARSETTINGS, key = "Lv82ExpBonus")
+	public static int LV82_EXP_BONUS = 0;
+
+	@Configure(file = CHARSETTINGS, key = "Lv83ExpBonus")
+	public static int LV83_EXP_BONUS = 0;
+
+	@Configure(file = CHARSETTINGS, key = "Lv84ExpBonus")
+	public static int LV84_EXP_BONUS = 0;
+
+	@Configure(file = CHARSETTINGS, key = "Lv85ExpBonus")
+	public static int LV85_EXP_BONUS = 0;
+
+	@Configure(file = CHARSETTINGS, key = "Lv86ExpBonus")
+	public static int LV86_EXP_BONUS = 0;
+
+	@Configure(file = CHARSETTINGS, key = "Lv87ExpBonus")
+	public static int LV87_EXP_BONUS = 0;
+
+	@Configure(file = CHARSETTINGS, key = "Lv88ExpBonus")
+	public static int LV88_EXP_BONUS = 0;
+
+	@Configure(file = CHARSETTINGS, key = "Lv89ExpBonus")
+	public static int LV89_EXP_BONUS = 0;
+
+	@Configure(file = CHARSETTINGS, key = "Lv90ExpBonus")
+	public static int LV90_EXP_BONUS = 0;
+
+	@Configure(file = CHARSETTINGS, key = "Lv91ExpBonus")
+	public static int LV91_EXP_BONUS = 0;
+
+	@Configure(file = CHARSETTINGS, key = "Lv92ExpBonus")
+	public static int LV92_EXP_BONUS = 0;
+
+	@Configure(file = CHARSETTINGS, key = "Lv93ExpBonus")
+	public static int LV93_EXP_BONUS = 0;
+
+	@Configure(file = CHARSETTINGS, key = "Lv94ExpBonus")
+	public static int LV94_EXP_BONUS = 0;
+
+	@Configure(file = CHARSETTINGS, key = "Lv95ExpBonus")
+	public static int LV95_EXP_BONUS = 0;
+
+	@Configure(file = CHARSETTINGS, key = "Lv96ExpBonus")
+	public static int LV96_EXP_BONUS = 0;
+
+	@Configure(file = CHARSETTINGS, key = "Lv97ExpBonus")
+	public static int LV97_EXP_BONUS = 0;
+
+	@Configure(file = CHARSETTINGS, key = "Lv98ExpBonus")
+	public static int LV98_EXP_BONUS = 0;
+
+	@Configure(file = CHARSETTINGS, key = "Lv99ExpBonus")
+	public static int LV99_EXP_BONUS = 0;
+	
+	@Configure(file = CHARSETTINGS, key = "Lv1DeathPenalty")
+	public static int LV1_DEATH_PENALTY = 100;
+
+	@Configure(file = CHARSETTINGS, key = "Lv2DeathPenalty")
+	public static int LV2_DEATH_PENALTY = 100;
+
+	@Configure(file = CHARSETTINGS, key = "Lv3DeathPenalty")
+	public static int LV3_DEATH_PENALTY = 100;
+
+	@Configure(file = CHARSETTINGS, key = "Lv4DeathPenalty")
+	public static int LV4_DEATH_PENALTY = 100;
+
+	@Configure(file = CHARSETTINGS, key = "Lv5DeathPenalty")
+	public static int LV5_DEATH_PENALTY = 100;
+
+	@Configure(file = CHARSETTINGS, key = "Lv6DeathPenalty")
+	public static int LV6_DEATH_PENALTY = 100;
+
+	@Configure(file = CHARSETTINGS, key = "Lv7DeathPenalty")
+	public static int LV7_DEATH_PENALTY = 100;
+
+	@Configure(file = CHARSETTINGS, key = "Lv8DeathPenalty")
+	public static int LV8_DEATH_PENALTY = 100;
+
+	@Configure(file = CHARSETTINGS, key = "Lv9DeathPenalty")
+	public static int LV9_DEATH_PENALTY = 100;
+
+	@Configure(file = CHARSETTINGS, key = "Lv10DeathPenalty")
+	public static int LV10_DEATH_PENALTY = 90;
+
+	@Configure(file = CHARSETTINGS, key = "Lv11DeathPenalty")
+	public static int LV11_DEATH_PENALTY = 90;
+
+	@Configure(file = CHARSETTINGS, key = "Lv12DeathPenalty")
+	public static int LV12_DEATH_PENALTY = 90;
+
+	@Configure(file = CHARSETTINGS, key = "Lv13DeathPenalty")
+	public static int LV13_DEATH_PENALTY = 90;
+
+	@Configure(file = CHARSETTINGS, key = "Lv14DeathPenalty")
+	public static int LV14_DEATH_PENALTY = 90;
+
+	@Configure(file = CHARSETTINGS, key = "Lv15DeathPenalty")
+	public static int LV15_DEATH_PENALTY = 90;
+
+	@Configure(file = CHARSETTINGS, key = "Lv16DeathPenalty")
+	public static int LV16_DEATH_PENALTY = 90;
+
+	@Configure(file = CHARSETTINGS, key = "Lv17DeathPenalty")
+	public static int LV17_DEATH_PENALTY = 90;
+
+	@Configure(file = CHARSETTINGS, key = "Lv18DeathPenalty")
+	public static int LV18_DEATH_PENALTY = 90;
+
+	@Configure(file = CHARSETTINGS, key = "Lv19DeathPenalty")
+	public static int LV19_DEATH_PENALTY = 90;
+
+	@Configure(file = CHARSETTINGS, key = "Lv20DeathPenalty")
+	public static int LV20_DEATH_PENALTY = 80;
+
+	@Configure(file = CHARSETTINGS, key = "Lv21DeathPenalty")
+	public static int LV21_DEATH_PENALTY = 80;
+
+	@Configure(file = CHARSETTINGS, key = "Lv22DeathPenalty")
+	public static int LV22_DEATH_PENALTY = 80;
+
+	@Configure(file = CHARSETTINGS, key = "Lv23DeathPenalty")
+	public static int LV23_DEATH_PENALTY = 80;
+
+	@Configure(file = CHARSETTINGS, key = "Lv24DeathPenalty")
+	public static int LV24_DEATH_PENALTY = 80;
+
+	@Configure(file = CHARSETTINGS, key = "Lv25DeathPenalty")
+	public static int LV25_DEATH_PENALTY = 80;
+
+	@Configure(file = CHARSETTINGS, key = "Lv26DeathPenalty")
+	public static int LV26_DEATH_PENALTY = 80;
+
+	@Configure(file = CHARSETTINGS, key = "Lv27DeathPenalty")
+	public static int LV27_DEATH_PENALTY = 80;
+
+	@Configure(file = CHARSETTINGS, key = "Lv28DeathPenalty")
+	public static int LV28_DEATH_PENALTY = 80;
+
+	@Configure(file = CHARSETTINGS, key = "Lv29DeathPenalty")
+	public static int LV29_DEATH_PENALTY = 80;
+
+	@Configure(file = CHARSETTINGS, key = "Lv30DeathPenalty")
+	public static int LV30_DEATH_PENALTY = 70;
+
+	@Configure(file = CHARSETTINGS, key = "Lv31DeathPenalty")
+	public static int LV31_DEATH_PENALTY = 70;
+
+	@Configure(file = CHARSETTINGS, key = "Lv32DeathPenalty")
+	public static int LV32_DEATH_PENALTY = 70;
+
+	@Configure(file = CHARSETTINGS, key = "Lv33DeathPenalty")
+	public static int LV33_DEATH_PENALTY = 70;
+
+	@Configure(file = CHARSETTINGS, key = "Lv34DeathPenalty")
+	public static int LV34_DEATH_PENALTY = 70;
+
+	@Configure(file = CHARSETTINGS, key = "Lv35DeathPenalty")
+	public static int LV35_DEATH_PENALTY = 70;
+
+	@Configure(file = CHARSETTINGS, key = "Lv36DeathPenalty")
+	public static int LV36_DEATH_PENALTY = 70;
+
+	@Configure(file = CHARSETTINGS, key = "Lv37DeathPenalty")
+	public static int LV37_DEATH_PENALTY = 70;
+
+	@Configure(file = CHARSETTINGS, key = "Lv38DeathPenalty")
+	public static int LV38_DEATH_PENALTY = 70;
+
+	@Configure(file = CHARSETTINGS, key = "Lv39DeathPenalty")
+	public static int LV39_DEATH_PENALTY = 70;
+
+	@Configure(file = CHARSETTINGS, key = "Lv40DeathPenalty")
+	public static int LV40_DEATH_PENALTY = 60;
+
+	@Configure(file = CHARSETTINGS, key = "Lv41DeathPenalty")
+	public static int LV41_DEATH_PENALTY = 60;
+
+	@Configure(file = CHARSETTINGS, key = "Lv42DeathPenalty")
+	public static int LV42_DEATH_PENALTY = 60;
+
+	@Configure(file = CHARSETTINGS, key = "Lv43DeathPenalty")
+	public static int LV43_DEATH_PENALTY = 60;
+
+	@Configure(file = CHARSETTINGS, key = "Lv44DeathPenalty")
+	public static int LV44_DEATH_PENALTY = 60;
+
+	@Configure(file = CHARSETTINGS, key = "Lv45DeathPenalty")
+	public static int LV45_DEATH_PENALTY = 60;
+
+	@Configure(file = CHARSETTINGS, key = "Lv46DeathPenalty")
+	public static int LV46_DEATH_PENALTY = 60;
+
+	@Configure(file = CHARSETTINGS, key = "Lv47DeathPenalty")
+	public static int LV47_DEATH_PENALTY = 60;
+
+	@Configure(file = CHARSETTINGS, key = "Lv48DeathPenalty")
+	public static int LV48_DEATH_PENALTY = 60;
+
+	@Configure(file = CHARSETTINGS, key = "Lv49DeathPenalty")
+	public static int LV49_DEATH_PENALTY = 60;
+
+	@Configure(file = CHARSETTINGS, key = "Lv50DeathPenalty")
+	public static int LV50_DEATH_PENALTY = 50;
+
+	@Configure(file = CHARSETTINGS, key = "Lv51DeathPenalty")
+	public static int LV51_DEATH_PENALTY = 50;
+
+	@Configure(file = CHARSETTINGS, key = "Lv52DeathPenalty")
+	public static int LV52_DEATH_PENALTY = 50;
+
+	@Configure(file = CHARSETTINGS, key = "Lv53DeathPenalty")
+	public static int LV53_DEATH_PENALTY = 50;
+
+	@Configure(file = CHARSETTINGS, key = "Lv54DeathPenalty")
+	public static int LV54_DEATH_PENALTY = 50;
+
+	@Configure(file = CHARSETTINGS, key = "Lv55DeathPenalty")
+	public static int LV55_DEATH_PENALTY = 50;
+
+	@Configure(file = CHARSETTINGS, key = "Lv56DeathPenalty")
+	public static int LV56_DEATH_PENALTY = 50;
+
+	@Configure(file = CHARSETTINGS, key = "Lv57DeathPenalty")
+	public static int LV57_DEATH_PENALTY = 50;
+
+	@Configure(file = CHARSETTINGS, key = "Lv58DeathPenalty")
+	public static int LV58_DEATH_PENALTY = 50;
+
+	@Configure(file = CHARSETTINGS, key = "Lv59DeathPenalty")
+	public static int LV59_DEATH_PENALTY = 50;
+
+	@Configure(file = CHARSETTINGS, key = "Lv60DeathPenalty")
+	public static int LV60_DEATH_PENALTY = 40;
+
+	@Configure(file = CHARSETTINGS, key = "Lv61DeathPenalty")
+	public static int LV61_DEATH_PENALTY = 40;
+
+	@Configure(file = CHARSETTINGS, key = "Lv62DeathPenalty")
+	public static int LV62_DEATH_PENALTY = 40;
+
+	@Configure(file = CHARSETTINGS, key = "Lv63DeathPenalty")
+	public static int LV63_DEATH_PENALTY = 40;
+
+	@Configure(file = CHARSETTINGS, key = "Lv64DeathPenalty")
+	public static int LV64_DEATH_PENALTY = 40;
+
+	@Configure(file = CHARSETTINGS, key = "Lv65DeathPenalty")
+	public static int LV65_DEATH_PENALTY = 40;
+
+	@Configure(file = CHARSETTINGS, key = "Lv66DeathPenalty")
+	public static int LV66_DEATH_PENALTY = 40;
+
+	@Configure(file = CHARSETTINGS, key = "Lv67DeathPenalty")
+	public static int LV67_DEATH_PENALTY = 40;
+
+	@Configure(file = CHARSETTINGS, key = "Lv68DeathPenalty")
+	public static int LV68_DEATH_PENALTY = 40;
+
+	@Configure(file = CHARSETTINGS, key = "Lv69DeathPenalty")
+	public static int LV69_DEATH_PENALTY = 40;
+
+	@Configure(file = CHARSETTINGS, key = "Lv70DeathPenalty")
+	public static int LV70_DEATH_PENALTY = 30;
+
+	@Configure(file = CHARSETTINGS, key = "Lv71DeathPenalty")
+	public static int LV71_DEATH_PENALTY = 30;
+
+	@Configure(file = CHARSETTINGS, key = "Lv72DeathPenalty")
+	public static int LV72_DEATH_PENALTY = 30;
+
+	@Configure(file = CHARSETTINGS, key = "Lv73DeathPenalty")
+	public static int LV73_DEATH_PENALTY = 30;
+
+	@Configure(file = CHARSETTINGS, key = "Lv74DeathPenalty")
+	public static int LV74_DEATH_PENALTY = 30;
+
+	@Configure(file = CHARSETTINGS, key = "Lv75DeathPenalty")
+	public static int LV75_DEATH_PENALTY = 30;
+
+	@Configure(file = CHARSETTINGS, key = "Lv76DeathPenalty")
+	public static int LV76_DEATH_PENALTY = 30;
+
+	@Configure(file = CHARSETTINGS, key = "Lv77DeathPenalty")
+	public static int LV77_DEATH_PENALTY = 30;
+
+	@Configure(file = CHARSETTINGS, key = "Lv78DeathPenalty")
+	public static int LV78_DEATH_PENALTY = 30;
+
+	@Configure(file = CHARSETTINGS, key = "Lv79DeathPenalty")
+	public static int LV79_DEATH_PENALTY = 30;
+
+	@Configure(file = CHARSETTINGS, key = "Lv80DeathPenalty")
+	public static int LV80_DEATH_PENALTY = 20;
+
+	@Configure(file = CHARSETTINGS, key = "Lv81DeathPenalty")
+	public static int LV81_DEATH_PENALTY = 20;
+
+	@Configure(file = CHARSETTINGS, key = "Lv82DeathPenalty")
+	public static int LV82_DEATH_PENALTY = 20;
+
+	@Configure(file = CHARSETTINGS, key = "Lv83DeathPenalty")
+	public static int LV83_DEATH_PENALTY = 20;
+
+	@Configure(file = CHARSETTINGS, key = "Lv84DeathPenalty")
+	public static int LV84_DEATH_PENALTY = 20;
+
+	@Configure(file = CHARSETTINGS, key = "Lv85DeathPenalty")
+	public static int LV85_DEATH_PENALTY = 20;
+
+	@Configure(file = CHARSETTINGS, key = "Lv86DeathPenalty")
+	public static int LV86_DEATH_PENALTY = 20;
+
+	@Configure(file = CHARSETTINGS, key = "Lv87DeathPenalty")
+	public static int LV87_DEATH_PENALTY = 20;
+
+	@Configure(file = CHARSETTINGS, key = "Lv88DeathPenalty")
+	public static int LV88_DEATH_PENALTY = 20;
+
+	@Configure(file = CHARSETTINGS, key = "Lv89DeathPenalty")
+	public static int LV89_DEATH_PENALTY = 20;
+
+	@Configure(file = CHARSETTINGS, key = "Lv90DeathPenalty")
+	public static int LV90_DEATH_PENALTY = 0;
+
+	@Configure(file = CHARSETTINGS, key = "Lv91DeathPenalty")
+	public static int LV91_DEATH_PENALTY = 0;
+
+	@Configure(file = CHARSETTINGS, key = "Lv92DeathPenalty")
+	public static int LV92_DEATH_PENALTY = 0;
+
+	@Configure(file = CHARSETTINGS, key = "Lv93DeathPenalty")
+	public static int LV93_DEATH_PENALTY = 0;
+
+	@Configure(file = CHARSETTINGS, key = "Lv94DeathPenalty")
+	public static int LV94_DEATH_PENALTY = 0;
+
+	@Configure(file = CHARSETTINGS, key = "Lv95DeathPenalty")
+	public static int LV95_DEATH_PENALTY = 0;
+
+	@Configure(file = CHARSETTINGS, key = "Lv96DeathPenalty")
+	public static int LV96_DEATH_PENALTY = 0;
+
+	@Configure(file = CHARSETTINGS, key = "Lv97DeathPenalty")
+	public static int LV97_DEATH_PENALTY = 0;
+
+	@Configure(file = CHARSETTINGS, key = "Lv98DeathPenalty")
+	public static int LV98_DEATH_PENALTY = 0;
+
+	@Configure(file = CHARSETTINGS, key = "Lv99DeathPenalty")
+	public static int LV99_DEATH_PENALTY = 0;
+	
 	/** Player Command Settings */
 	@Configure(file = PCOMMANDS, key = "PlayerCommands")
 	public static boolean PLAYER_COMMANDS = true;

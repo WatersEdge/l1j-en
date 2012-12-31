@@ -19,15 +19,10 @@
 package l1j.server.server.templates;
 
 public class L1Weapon extends L1Item {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	public L1Weapon() {
 	}
 
-	private int _range = 0; // 
+	private int _range = 0;
 
 	@Override
 	public int getRange() {
@@ -38,7 +33,7 @@ public class L1Weapon extends L1Item {
 		_range = i;
 	}
 
-	private int _hitModifier = 0; // hit rate correction
+	private int _hitModifier = 0;
 
 	@Override
 	public int getHitModifier() {
@@ -49,7 +44,7 @@ public class L1Weapon extends L1Item {
 		_hitModifier = i;
 	}
 
-	private int _dmgModifier = 0; // Damage Compensation
+	private int _dmgModifier = 0;
 
 	@Override
 	public int getDmgModifier() {
@@ -60,7 +55,7 @@ public class L1Weapon extends L1Item {
 		_dmgModifier = i;
 	}
 
-	private int _doubleDmgChance; //
+	private int _doubleDmgChance;
 
 	@Override
 	public int getDoubleDmgChance() {
@@ -71,7 +66,7 @@ public class L1Weapon extends L1Item {
 		_doubleDmgChance = i;
 	}
 
-	private int _magicDmgModifier = 0; // magic attack Damage Compensation
+	private int _magicDmgModifier = 0;
 
 	@Override
 	public int getMagicDmgModifier() {
@@ -82,26 +77,36 @@ public class L1Weapon extends L1Item {
 		_magicDmgModifier = i;
 	}
 
-	private int _canbedmg = 0; //
+	private boolean _canbeDmg;
 
 	@Override
-	public int get_canbedmg() {
-		return _canbedmg;
+	public boolean getCanbeDmg() {
+		return _canbeDmg;
 	}
 
-	public void set_canbedmg(int i) {
-		_canbedmg = i;
+	public void setCanbeDmg(boolean i) {
+		_canbeDmg = i;
 	}
+
+	private int _weaknessExposure;
 
 	@Override
-	public boolean isTwohandedWeapon() {
-		int weapon_type = getType();
-		
-		boolean bool = (weapon_type == 3 || weapon_type == 4
-				|| weapon_type == 5 || weapon_type == 11
-				|| weapon_type == 12 || weapon_type == 15
-				|| weapon_type == 16 || weapon_type == 18);
+	public int getWeaknessExposure() {
+		return _weaknessExposure;
+	}
 
-		return bool;
+	public void setWeaknessExposure(int i) {
+		_weaknessExposure = i;
+	}
+
+	private boolean _isTwohanded;
+	
+	@Override
+	public boolean isTwohanded() {
+		return _isTwohanded;
+	}
+
+	public void setIsTwohanded(boolean isTwohanded) {
+		_isTwohanded = isTwohanded;
 	}
 }
