@@ -59,3 +59,11 @@ delete from spawnlist_door where id = 1140;
 delete from spawnlist_door where id = 1177;
 delete from spawnlist_door where id = 1226;
 delete from spawnlist_door where id = 1228;
+
+-- Remove incorrect item_id entries above.
+delete from droplist where mobid = 45372 and itemid = 40799;
+delete from droplist where mobid = 45479 and itemid = 40799;
+
+-- Iron Golem should drop Lump of Steel.
+INSERT INTO droplist VALUES(45372, "Iron Golem", 40779, "Lump of Steel", 1, 1, 6000);
+INSERT INTO droplist VALUES(45479, "Horrific Iron Golem", 40779, "Lump of Steel", 1, 1, 8000);
