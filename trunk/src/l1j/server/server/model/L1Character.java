@@ -282,9 +282,25 @@ public class L1Character extends L1Object {
 		// A Java implementation of Bresenham's line algorithm (with modifications).
 		int chx = getX();
 		int chy = getY();
+		
 		int dx = Math.abs(chx - tx);
 		int dy = Math.abs(chy - ty);
+		
+		// If standing on top of target, always return true.
+		if (dx == 0 && dy == 0) {
+			return true;
+		}
 
+		// If standing right next to target, return true, but only if the 
+		// direction test is passed.  Otherwise, do the normal check.  Needed 
+		// for doorways.
+		if (dx <= 1 && dy <= 1) {
+			if (getMap().isArrowPassable(chx, chy, targetDirection(tx, ty))) {
+				return true;
+			}
+		}
+		
+		
 		int sx = chx < tx ? 1 : -1;
 		int sy = chy < ty ? 1 : -1;
 
