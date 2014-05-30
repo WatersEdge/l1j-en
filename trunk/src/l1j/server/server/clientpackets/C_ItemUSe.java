@@ -4143,24 +4143,21 @@ public class C_ItemUSe extends ClientBasePacket {
 				|| itemId == 140129 || itemId == 140130) {
 			if (item.getEnchantLevel() <= 2) {
 				int j = _random.nextInt(100) + 1;
-				if (j < 32) {
+				if (j <= 33) {
 					return 1;
-				} else if (j >= 33 && j <= 76) {
+				} else if (j >= 34 && j <= 66) {
 					return 2;
-				} else if (j >= 77 && j <= 100) {
+				} else if (j >= 67 && j <= 100) {
 					return 3;
 				}
 			} else if (item.getEnchantLevel() >= 3
 					&& item.getEnchantLevel() <= 5) {
 				int j = _random.nextInt(100) + 1;
-				if (j < 50) {
+				if (j <= 50) {
 					return 2;
 				} else {
 					return 1;
 				}
-			}
-			{
-				return 1;
 			}
 		}
 		return 1;
