@@ -5,21 +5,25 @@
 
 == Introduction ==
 
-This document is an in-progress collection of information about L1J-En.
+This document is an in-progress collection of information about L1J-En.  If you know something that can be added here, let us know.
 
 == What is L1J-En? ==
 
-L1J-En is a server emulator for the MMORPG [http://www.lineage.com/ Lineage 1]. 
+L1J-En is a server emulator for the fantasy MMORPG Lineage 1.
 
-As far as MMORPG server emulators go, most projects are fairly buggy, only support a small percent of the features of their official counterparts, or don't work at all. L1J-En is one of the few emulators where this isn't the case, and is on par with efforts such as RunUO and L2J. Many hundreds of players actively play on servers using L1J-En. 
+The US servers for Lineage 1 served most of the rest of the world outside of Asia (though many Asians still played on it).  On June 29, 2011, NCSoft shut down the US Lineage 1 servers, probably due to lacking profits from its dwindling player base.  The English emulator effort was started a few years prior to this, and attempts to faithfully recreate the gameplay experience from these servers.  This codebase was made open source in an attempt to draw upon the domain knowledge of the US server player base and, of course, to enable others to relive the L1 experience that would otherwise be lost.
 
 == How does L1J-En compare to other L1J variants? ==
 
-L1J-En is the only active English language Lineage emulator, and one of only two open source ones. We also aggregate all of the features and bugfixes from Asian L1J efforts as well as add many of our own. While it may take some time for all of the features to filter down to this project, the result is arguably the most stable Lineage 1 emulator available and servers have been able to run wipe-free since its inception (something not possible until L1J-En).
+L1J-En is the only active English language Lineage emulator, and one of only two open source ones. We also aggregate all of the features and bugfixes from Asian L1J efforts as well as add many of our own. The result is arguably the most stable Lineage 1 emulator available and servers have been able to run wipe-free since its inception (something not possible until L1J-En). Stability is also greatly increased due to no longer needing to follow a moving target.
+
+As far as MMORPG server emulators go, most projects are fairly buggy, only support a small percent of the features of their official counterparts, or don't work at all. L1J-En is one of the few emulators where this mostly isn't the case, and is on par with efforts such as RunUO and L2J. Many hundreds of players actively play on servers using L1J-En or forks of its codebase.  It has also served as an upstream source of many bugfixes that have eventually propogated outward (though the majority are still exclusive to L1J-En and direct forks).
 
 == I just wanna play Lineage! Where do I go? ==
 
-Choose from one of the many servers currently running L1J-En (and various customized versions of it). Here's a list of the major publicly-available ones we know of, ordered by estimated population:
+Choose from one of the many servers currently running L1J-En (or even another version of L1J). These servers come and go regularly, and it's difficult to keep track of them.  Here's a few to get you started, but Google searches will probably turn up more current results.
+
+[http://zelgo.net/ Lineage Resurrection] - A long term stable server that just started.
 
 [http://www.lineagedc.com/ Lineage DC] - Currently the largest Lineage 1 private server. Long running with moderate rates and live-like gameplay.
 
@@ -75,51 +79,37 @@ There are several things that we could do, but won't for what we feel are valid 
 
 3. Custom features: Many private servers provide a Lineage experience that has modified rules from the live servers. While we're happy to add any custom feature if it can be toggled with a configurable setting, what we won't do is modify the basic game mechanics of Lineage itself to satisfy one server's vision of what Lineage should be. Admins who want to do this are welcome to make their own private modifications, of course.
 
+4. Monetization: Some private servers seem to exist as enterprises soley to make money (i.e. running a cash shop).  Generally, the L1J-En team frowns upon this practice, preferring the donations model if an admin needs help paying VPS bills.  Know that all L1J variants actually don't require much in the way of hardware or bandwidth to operate (though it does benefit from low latency).  For player count under a couple dozen, most people can probably get away even hosting from a consumer ISP connection.
+
 == I want to run the server, but am getting some error. What should I do? == 
 
-First, ensure that you've read all documentation available here on the site. 95% of the time, the reason this occurs is because of some missed, ignored, or misinterpreted step that is already explained here. There is additional documentation available within the repository itself. The LineageDC site also has some information available. 
-
-If still confused, scroll through some of the previous posts already made on the LineageDC forum. Chances are someone else has already made the same error you have and the answer is posted in a reply there. If you are unable to find an answer this way, feel free to post a question there. 
+Feel free to post on the [http://groups.google.com/group/l1j-en l1j-en user group] forum.  Alternatively, join #l1j on Freenode and if anyone's paying attention, they may be able to answer a question.
 
 Lastly, if you're still having problems, and are either unable to explain it properly or get an answer from other users, you can always take a look at the code itself. Experience with most any higher-level programming language should be adequate to get an understanding of what should be occurring during server initialization. If the error is occurring at an earlier step, such as compilation or getting the server to start, documentation on the tool(s) you are using will probably provide the answer to what you're doing wrong.
 
-If you've tried all of the available methods and still can't get the server running, then why not save yourself and those that will try to help you the time and take advantage of the fact that several publicly available servers (some of which are listed above) who have already done all the work for you? 
-
-As previously mentioned in this document, what you should NOT do is track down and privately message a member of this team without invitation and expect them to drop whatever they are doing to help you. Unlike NCSoft's support team, this is not a job for us, but a volunteer effort. In the rare case where there has been a bad recent check-in that hasn't yet been caught, post the problem on the issues list with as much relevant detail as possible and someone will address it in the near future. 
+If you've tried all of the available methods and still can't get the server running, then why not take advantage of the fact that several publicly available servers (some of which are listed above) and who have already done all the work for you?.
 
 == How do I report bugs? ==
 
 There's a Issues tab on the site that is open to the general public to add bug reports. Create a new issue and fill out the form fields. Please add as much detail as possible, so that whoever looks at it can recreate the bug in a test environment. Recreating the bug is almost always a necessary part of finding the bad code and fixing it. 
 
-Bugs are prioritized by severity, but are not necessarily fixed in that order. If someone only has a few minutes of free time, they may just fix a smaller issue. Also, some issues are inherent to the current design, have client-related causes, or are otherwise impossible to resolve at the current time. These may linger indefinitely.
-
-If there is a bug that really bothers you personally and it isn't being addressed quickly enough or to your satisfaction, remember that this is an open source project. We can and do accept fixes from non-members, and interested parties are welcome to join up and help. Remember, we're just fans of Lineage like yourself, who want to see Lineage emulation get better.
+You can also post issues on the GitHub fork of L1J-En, as most of the active developers read that more often.
 
 == How do I help this project? ==
 
-Are you technically capable? We want your help! As an open source project, you can assist the further progress of Lineage 1 emulation by contributing to this project. Feel free to download the code and get familiar with it. Then, if you identify something needing attention or can address something on the issues list, let us know. Continue reading for full details.
+We do want your help! As an open source project, you can assist the further progress of Lineage 1 emulation by contributing to this project. Feel free to download the code and get familiar with it. Then, if you identify something needing attention or can address something on the issues list, let us know. Continue reading for full details.
 
 == How do I submit a patch? ==
 
-If you're already on the development team, just check in via SVN. Otherwise, email your patches to one of the project owners, and if it meets at least minimal quality standards, we'll gladly add it to the project. Please test all changes locally before submitting. 
-
-== What skills are needed to help? == 
-
-Anyone with moderate Java development experience (or any high-level OOP language), database experience, knowledge of the software development process, or an ability to learn these skills will have no problems contributing here. This codebase is easy to understand and modify, but also very fragile, so attention to detail is necessary. There are no positions or openings to apply for; if you want to help, just start coding! :) If you're helping, you'll be added to the project members.
-
-You do not need to play on our production server to help this project, and we won't stop you from running your own server with your own vision of what Lineage should be. In fact, many servers have done just that, and several are now using this repository as their codebase. Contributing your changes/fixes back to this project will not just make updating easier, but help Lineage emulation for everyone.
+If you're already on the development team, just check in via SVN. Otherwise, email your patches to one of the project owners, and if it meets at least minimal quality standards, we'll gladly add it to the project. Please test all changes locally before submitting and don't assume others will do that for you.
 
 == What quality standards are in effect? ==
 
-We do reserve the right to not include patches that are of extremely poor quality or don't follow basic best design practices. We are aware of the fact that the codebase could use a ground-up refactoring, but will not do so in order to maintain L1J portability. Along those lines, in rare cases, patches may not be acceptable due to the fact that it would make L1J  merges significantly more difficult. The only other reason a patch might not be accepted is that it involves the hardcoding of gameplay mechanics that are contrary to the goals of the L1J-En server project. In that case, we will be happy to add it as an optional component or you can feel free to add it as a configurable setting. We don't want to discourage anyone, so in such an event we'll be happy to work with committers to get their submissions up to par (developer time permitting). 
-
-Database changes must be submitted in the form of SQL queries for just that change/fix (do not send us dump files).
+For architectural or project organization changes, please discuss these with the other contributors and attempt for form a consensus of some sort first.  Otherwise, you could end up doing a lot of work that will just get backed out.
 
 == I want to help, but am too unskilled and/or stupid. ==
 
-One option here would be to help out with testing, documentation, managing various aspects of this site, assisting users on the LineageDC forum, helping the community on a public server, or anything else you can think of. This kind of community help has been essential to this project (especially the testing). 
-
-The other option is to learn one of the technical skills necessary to help out. If you're starting from nothing, pick an aspect of the server that interests you to focus on. For example, the database could really use the attention of someone skilled in SQL that closely monitors the datapack. Alternatively, you could just learn Java and help out on that end. Or, master some of the tools and help monitor the build process. These are just examples. Any of these skills are valuable in other aspects of real life too. There are thousands of books and free tutorials on all of these topics, and none of the technologies in use here are exceptionally complicated, so the only thing required is time.
+One option here would be to help out with testing, documentation, managing various aspects of this site, assisting other users in the forum or on IRC, helping the community on a public server, or anything else you can think of. This kind of community help has been essential to this project (especially the testing). 
 
 == What are Milestone builds? ==
 
@@ -133,13 +123,17 @@ Milestone 3: This was an internal re-baselining milestone for correcting some of
 
 Milestone 4: This milestone has been published after the first L1J-En update completed testing and went live on the LineageDC public server.
 
-Milestone 5: Just released! This is a maintenance update with a ton of minor bugfixes.
+Milestone 5: This is a maintenance update with a ton of minor bugfixes.
 
 Milestone 6: Another maintenance update.
 
+Milestone 7: The main 3.0 update.
+
+Milestone 8: The stabilization update for all new 3.0 content.  This is already done for the most part, minus the final database milestone script.
+
 == What's the current status? ==
 
-Currently, there's not enough interest among current project members to extend L1J-en to support episodes after EpU.  Ideally, everyone would agree staying current is a good thing, but unless someone with more interest in it takes initiative, it's probably not going to happen.
+Work on Lineage 1 emulation in general slowed down quite a bit post-2012.  However, there seems to be renewed interest among key participants, so things are definitely active again.
 
 = Using L1J-En = 
 
