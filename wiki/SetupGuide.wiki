@@ -3,7 +3,7 @@
 
 = Server Setup Guide =
 
-Last updated: Nov 4, 2008 (in progress)
+The following was last updated on Nov 4, 2008, and is highly out of date.  Stay tuned for a completely rewritten version.  The existing contents are left here for now in case some or parts of it can still be useful to someone in the meantime.
 
 == Introduction ==
 
