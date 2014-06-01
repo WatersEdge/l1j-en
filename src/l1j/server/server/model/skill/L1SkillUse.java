@@ -126,7 +126,7 @@ public class L1SkillUse {
 	private int _leverage = 10;
 	private boolean _isFreeze = false;
 	private boolean _isCounterMagic = true;
-	private boolean _isGlanceCheckFail = false; // added for spell LoS. do not remove.
+	private boolean _isGlanceCheckFail = false;
 
 	private L1Character _user = null;
 	private L1Character _target = null;
@@ -1022,15 +1022,6 @@ public class L1SkillUse {
 		return true;
 	}
 
-	private boolean isEnoughHp() {
-		return false;
-	}
-
-	private boolean isEnoughMp() {
-		return false;
-	}
-
-	//
 	private boolean isHPMPConsume() {
 		_mpConsume = _skill.getMpConsume();
 		_hpConsume = _skill.getHpConsume();
@@ -1214,6 +1205,12 @@ public class L1SkillUse {
 				|| _skillId == AWAKEN_VALAKAS) {
 			return;
 		}
+		if (_skillId == CONFUSION) {
+			buffDuration = _confusionDuration;
+		}
+
+		if (IntArrays.sContains(SEPARATE_TIMERS, _skillId))
+			return;
 
 		cha.setSkillEffect(_skillId, buffDuration);
 

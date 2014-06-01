@@ -1535,7 +1535,7 @@ UPDATE mobskill SET Leverage = 0 WHERE mobid = 45273 and actNo = 0;
 UPDATE mobskill SET ActId = 0 WHERE mobid = 45273 and actNo = 0;
 
 -- Skill:None Range changed from 0 
-UPDATE mobskill SET mobskill.Range = 6 WHERE mobid = 45273 and actNo = 0;
+UPDATE mobskill SET `Range` = 6 WHERE mobid = 45273 and actNo = 0;
 
 -- Skill:None TriRange changed from 2 
 UPDATE mobskill SET TriRange = -6 WHERE mobid = 45273 and actNo = 0;
@@ -1667,7 +1667,7 @@ UPDATE npc SET atkspeed = 1000 WHERE npcid = 45297;
 UPDATE mobskill SET Leverage = 0 WHERE mobid = 45297 and actNo = 0;
 
 -- Skill:None Range changed from 1 
-UPDATE mobskill SET mobskill.Range = 2 WHERE mobid = 45297 and actNo = 0;
+UPDATE mobskill SET `Range` = 2 WHERE mobid = 45297 and actNo = 0;
 
 -- Skill:None TriRange changed from -3 
 UPDATE mobskill SET TriRange = -2 WHERE mobid = 45297 and actNo = 0;
@@ -1860,7 +1860,7 @@ UPDATE mobskill SET TriRnd = 100 WHERE mobid = 45326 and actNo = 0;
 UPDATE mobskill SET SkillId = 10093 WHERE mobid = 45326 and actNo = 0;
 
 -- Skill:None Range changed from 0 
-UPDATE mobskill SET mobskill.Range = 6 WHERE mobid = 45326 and actNo = 0;
+UPDATE mobskill SET `Range` = 6 WHERE mobid = 45326 and actNo = 0;
 
 -- Skill:None TriCount changed from 0 
 UPDATE mobskill SET TriCount = 5 WHERE mobid = 45326 and actNo = 0;
@@ -2157,7 +2157,7 @@ UPDATE mobskill SET TriRnd = 100 WHERE mobid = 45363 and actNo = 0;
 UPDATE mobskill SET ActId = 0 WHERE mobid = 45363 and actNo = 0;
 
 -- Skill:None Range changed from 0 
-UPDATE mobskill SET mobskill.Range = 3 WHERE mobid = 45363 and actNo = 0;
+UPDATE mobskill SET `Range` = 3 WHERE mobid = 45363 and actNo = 0;
 
 -- Skill:None TriCount changed from 0 
 UPDATE mobskill SET TriCount = 4 WHERE mobid = 45363 and actNo = 0;
@@ -2169,7 +2169,7 @@ UPDATE mobskill SET SummonId = 45244 WHERE mobid = 45363 and actNo = 1;
 UPDATE mobskill SET TriRnd = 5 WHERE mobid = 45363 and actNo = 1;
 
 -- Skill:None Range changed from 0 
-UPDATE mobskill SET mobskill.Range = 3 WHERE mobid = 45363 and actNo = 1;
+UPDATE mobskill SET `Range` = 3 WHERE mobid = 45363 and actNo = 1;
 
 -- Skill:None SummonMin changed from 2 
 UPDATE mobskill SET SummonMin = 1 WHERE mobid = 45363 and actNo = 1;
@@ -2211,7 +2211,7 @@ UPDATE mobskill SET Leverage = 2 WHERE mobid = 45368 and actNo = 0;
 UPDATE mobskill SET TriRnd = 50 WHERE mobid = 45368 and actNo = 0;
 
 -- Skill:None Range changed from 6 
-UPDATE mobskill SET mobskill.Range = 2 WHERE mobid = 45368 and actNo = 0;
+UPDATE mobskill SET `Range` = 2 WHERE mobid = 45368 and actNo = 0;
 
 -- Skill:None TriRange changed from 2 
 UPDATE mobskill SET TriRange = -2 WHERE mobid = 45368 and actNo = 0;
@@ -2963,7 +2963,7 @@ UPDATE mobskill SET TriRnd = 100 WHERE mobid = 45474 and actNo = 0;
 UPDATE mobskill SET SkillId = 10093 WHERE mobid = 45474 and actNo = 0;
 
 -- Skill:None Range changed from 0 
-UPDATE mobskill SET mobskill.Range = 6 WHERE mobid = 45474 and actNo = 0;
+UPDATE mobskill SET `Range` = 6 WHERE mobid = 45474 and actNo = 0;
 
 -- Skill:None TriCount changed from 0 
 UPDATE mobskill SET TriCount = 5 WHERE mobid = 45474 and actNo = 0;
@@ -3107,7 +3107,7 @@ UPDATE mobskill SET TriRnd = 40 WHERE mobid = 45487 and actNo = 0;
 UPDATE mobskill SET SkillId = 17 WHERE mobid = 45487 and actNo = 0;
 
 -- Skill:None Range changed from 0 
-UPDATE mobskill SET mobskill.Range = 6 WHERE mobid = 45487 and actNo = 0;
+UPDATE mobskill SET `Range` = 6 WHERE mobid = 45487 and actNo = 0;
 
 -- Skill:None TriRange changed from -2 
 UPDATE mobskill SET TriRange = -6 WHERE mobid = 45487 and actNo = 0;
@@ -5028,7 +5028,7 @@ UPDATE mobskill SET ActId = 18 WHERE mobid = 45732 and actNo = 0;
 UPDATE mobskill SET SkillId = 0 WHERE mobid = 45732 and actNo = 0;
 
 -- Skill:None Range changed from 0 
-UPDATE mobskill SET mobskill.Range = 2 WHERE mobid = 45732 and actNo = 0;
+UPDATE mobskill SET `Range` = 2 WHERE mobid = 45732 and actNo = 0;
 
 -- Skill:None AreaHeight changed from 0 
 UPDATE mobskill SET AreaHeight = 5 WHERE mobid = 45732 and actNo = 0;
@@ -5349,7 +5349,7 @@ UPDATE mobskill SET Leverage = 0 WHERE mobid = 45775 and actNo = 0;
 UPDATE mobskill SET ActId = 0 WHERE mobid = 45775 and actNo = 0;
 
 -- Skill:Root Attack Range changed from 0 
-UPDATE mobskill SET mobskill.Range = 6 WHERE mobid = 45775 and actNo = 0;
+UPDATE mobskill SET `Range` = 6 WHERE mobid = 45775 and actNo = 0;
 
 -- Skill:Root Attack TriRange changed from 2 
 UPDATE mobskill SET TriRange = -6 WHERE mobid = 45775 and actNo = 0;
@@ -5493,7 +5493,7 @@ UPDATE npc SET ranged = 2 WHERE npcid = 45810;
 UPDATE mobskill SET SkillId = 10096 WHERE mobid = 45812 and actNo = 0;
 
 -- Skill:Cone of Cold Range changed from 0 
-UPDATE mobskill SET mobskill.Range = 10 WHERE mobid = 45812 and actNo = 0;
+UPDATE mobskill SET `Range` = 10 WHERE mobid = 45812 and actNo = 0;
 
 -- Skill:Cone of Cold TriRange changed from -8 
 UPDATE mobskill SET TriRange = -10 WHERE mobid = 45812 and actNo = 0;
@@ -5755,7 +5755,7 @@ UPDATE mobskill SET TriRnd = 100 WHERE mobid = 45850 and actNo = 0;
 UPDATE mobskill SET SkillId = 10093 WHERE mobid = 45850 and actNo = 0;
 
 -- Skill:None Range changed from 0 
-UPDATE mobskill SET mobskill.Range = 6 WHERE mobid = 45850 and actNo = 0;
+UPDATE mobskill SET `Range` = 6 WHERE mobid = 45850 and actNo = 0;
 
 -- Skill:None TriCount changed from 0 
 UPDATE mobskill SET TriCount = 5 WHERE mobid = 45850 and actNo = 0;
@@ -5776,7 +5776,7 @@ UPDATE mobskill SET TriRnd = 100 WHERE mobid = 45851 and actNo = 0;
 UPDATE mobskill SET SkillId = 10093 WHERE mobid = 45851 and actNo = 0;
 
 -- Skill:None Range changed from 0 
-UPDATE mobskill SET mobskill.Range = 6 WHERE mobid = 45851 and actNo = 0;
+UPDATE mobskill SET `Range` = 6 WHERE mobid = 45851 and actNo = 0;
 
 -- Skill:None TriCount changed from 0 
 UPDATE mobskill SET TriCount = 5 WHERE mobid = 45851 and actNo = 0;
@@ -6010,7 +6010,7 @@ UPDATE mobskill SET TriRnd = 100 WHERE mobid = 45907 and actNo = 0;
 UPDATE mobskill SET ActId = 0 WHERE mobid = 45907 and actNo = 0;
 
 -- Skill:None Range changed from 0 
-UPDATE mobskill SET mobskill.Range = 3 WHERE mobid = 45907 and actNo = 0;
+UPDATE mobskill SET `Range` = 3 WHERE mobid = 45907 and actNo = 0;
 
 -- Skill:None TriCount changed from 0 
 UPDATE mobskill SET TriCount = 4 WHERE mobid = 45907 and actNo = 0;
@@ -6019,7 +6019,7 @@ UPDATE mobskill SET TriCount = 4 WHERE mobid = 45907 and actNo = 0;
 UPDATE mobskill SET TriRnd = 5 WHERE mobid = 45907 and actNo = 1;
 
 -- Skill:None Range changed from 0 
-UPDATE mobskill SET mobskill.Range = 3 WHERE mobid = 45907 and actNo = 1;
+UPDATE mobskill SET `Range` = 3 WHERE mobid = 45907 and actNo = 1;
 
 -- Skill:None SummonMin changed from 2 
 UPDATE mobskill SET SummonMin = 1 WHERE mobid = 45907 and actNo = 1;
@@ -6343,7 +6343,7 @@ UPDATE mobskill SET Leverage = 0 WHERE mobid = 45978 and actNo = 0;
 UPDATE mobskill SET ActId = 0 WHERE mobid = 45978 and actNo = 0;
 
 -- Skill:Root Attack Range changed from 0 
-UPDATE mobskill SET mobskill.Range = 6 WHERE mobid = 45978 and actNo = 0;
+UPDATE mobskill SET `Range` = 6 WHERE mobid = 45978 and actNo = 0;
 
 -- Skill:Root Attack TriRange changed from 2 
 UPDATE mobskill SET TriRange = -6 WHERE mobid = 45978 and actNo = 0;
