@@ -25,17 +25,19 @@ Choose from one of the many servers currently running L1J-En (or even another ve
 
 [http://zelgo.net/ Lineage Resurrection] - A long term stable server that just started.
 
-[http://www.lineagedc.com/ Lineage DC] - Currently the largest Lineage 1 private server. Long running with moderate rates and live-like gameplay.
+[http://www.lineagedc.com/ Lineage DC] - Previously the largest Lineage 1 private server. Long running with moderate rates and live-like gameplay.  Currently down.
+
+[http://www.westknights.com/ Westknights Lineage 1] - Mid rate English server.  Extended L1J-En with 3.58 (I think).
 
 [http://friskycow.co.cc/ Frisky Cow] - Oldest L1 server, recently switched to L1J-En. Includes some of the latest features from Asian L1J teams.
+
+[http://forgottengamers.ucoz.com/ Forgotten Gamers] - Another long-running server.
 
 [http://risenserver.com/news.php Risen Server] - Fast leveling and lots of custom items.
 
 [http://www.dlirk.com/ Dlirk's Private Server] - Semi-high rate with a fair amount of regular users.
 
 [http://epicl1.ucoz.com/ EpicL1] - A primarily Spanish language server.
-
-[http://www.westknights.com/ Westknights Lineage 1] - Mid rate English server.
 
 [http://linpride1337.ucoz.com/ Linpride1337] - Mid rate server.
 
