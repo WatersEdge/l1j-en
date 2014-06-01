@@ -10,7 +10,6 @@ import l1j.server.server.serverpackets.S_OwnCharStatus;
 import l1j.server.server.serverpackets.S_PacketBox;
 import l1j.server.server.serverpackets.S_SPMR;
 
-// XXX ã�¨ã‚Šã�‚ã�ˆã�šæ–™ç�†æŠ½å‡ºã€‚ã�¾ã� æ”¹å–„ã�®ä½™åœ°ã�‚ã‚Šã€‚
 public class L1DishBuff extends L1BuffSkillExecutorImpl {
 
 	@Override
@@ -117,7 +116,7 @@ public class L1DishBuff extends L1BuffSkillExecutorImpl {
 			cookingType = 22;
 			pc.addMaxHp(30);
 			pc.sendPackets(new S_HPUpdate(pc.getCurrentHp(), pc.getMaxHp()));
-			if (pc.isInParty()) { // ãƒ‘ãƒ¼ãƒ†ã‚£ãƒ¼ä¸­
+			if (pc.isInParty()) {
 				pc.getParty().updateMiniHP(pc);
 			}
 		} else if (cookingId == COOKING_3_7_N || cookingId == COOKING_3_7_S) {
