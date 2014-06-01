@@ -51,7 +51,7 @@
                encoding="UTF-8">
             <src path="${src.dir}" />
             <classpath refid="classpath" />
-        </javac>
+		</javac>
     </target>
 
     <!-- jar Target -->

@@ -85,13 +85,17 @@ public class C_PickUpItem extends ClientBasePacket {
 
 		if (object != null && !pc.isDead()) {
 			L1ItemInstance item = (L1ItemInstance) object;
-			if (objectId != item.getId() || (!item.isStackable() && pickupCount != 1) || item.getCount() <= 0 || pickupCount <= 0 || pickupCount > 2000000000 || pickupCount > item.getCount()) {
-			Account.ban(pc.getAccountName());
-			IpTable.getInstance().banIp(pc.getNetConnection().getIp());
-			_log.info(pc.getName() + " Attempted Dupe Exploit (C_PickUpItem).");
-			L1World.getInstance().broadcastServerMessage("Player " + pc.getName() + " Attempted A Dupe exploit!");
-			pc.sendPackets(new S_Disconnect());
-			return;
+			if ((!item.isStackable() && pickupCount != 1) || item.getCount() <= 0 || pickupCount <= 0 || pickupCount > 2000000000 || pickupCount > item.getCount()) {
+				Account.ban(pc.getAccountName());
+				IpTable.getInstance().banIp(pc.getNetConnection().getIp());
+				_log.info(pc.getName() + " Attempted Dupe Exploit (C_PickUpItem).");
+				L1World.getInstance().broadcastServerMessage("Player " + pc.getName() + " Attempted A Dupe exploit!");
+				pc.sendPackets(new S_Disconnect());
+				return;
+			}
+			if (objectId != item.getId()) {
+				_log.warning(pc.getName() + " had item " +
+						Integer.toString(objectId) + " not match.");
 			}
 
 			if (item.getItemOwnerId() != 0 && pc.getId() != item.getItemOwnerId()) {

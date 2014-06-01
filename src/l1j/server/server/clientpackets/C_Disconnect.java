@@ -20,6 +20,7 @@ package l1j.server.server.clientpackets;
 
 import java.util.logging.Logger;
 
+import l1j.server.Config;
 import l1j.server.server.ClientThread;
 import l1j.server.server.model.Instance.L1PcInstance;
 
@@ -33,14 +34,21 @@ public class C_Disconnect extends ClientBasePacket {
 		L1PcInstance pc = client.getActiveChar();
 		
 		if (pc != null) {
-			_log.fine("Disconnect From: " + pc.getName());
+			_log.info("Disconnect From: " + pc.getName());
+			
+			if (Config.DELAY_DISCONNECT > 0) {
+				try {
+					Thread.sleep(Config.DELAY_DISCONNECT * 1000);
+				} catch (InterruptedException e) { /* Sad panda. */ }
+			}
+			
 			ClientThread.quitGame(pc);
 			synchronized (pc) {
 				pc.logout();
 				client.setActiveChar(null);
 			}
 		} else {
-			_log.fine("Disconnect Request From Account : " + client.getAccountName());
+			_log.info("Disconnect Request From Account : " + client.getAccountName());
 		}
 	}
 

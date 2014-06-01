@@ -1,4 +1,4 @@
-Welcome to the L1J-En Lineage server emulator (the project formerly known as LinDC).
+Welcome to the L1J-En Lineage server emulator.
 
 Thanks for using L1J-En. Please report any bugs on the L1J-En project site at:
 

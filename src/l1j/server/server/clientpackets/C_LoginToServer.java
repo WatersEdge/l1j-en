@@ -22,6 +22,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -32,7 +34,8 @@ import l1j.server.server.ClientThread;
 import l1j.server.server.controllers.WarTimeController;
 import l1j.server.server.datatables.CharacterTable;
 import l1j.server.server.datatables.GetBackRestartTable;
-import l1j.server.server.datatables.SkillsTable;
+import l1j.server.server.datatables.SkillTable;
+import l1j.server.server.log.LogIP;
 import l1j.server.server.model.Getback;
 import l1j.server.server.model.L1CastleLocation;
 import l1j.server.server.model.L1Clan;
@@ -58,14 +61,16 @@ import l1j.server.server.serverpackets.S_SkillBrave;
 import l1j.server.server.serverpackets.S_SkillHaste;
 import l1j.server.server.serverpackets.S_SkillIconGFX;
 import l1j.server.server.serverpackets.S_SummonPack;
+import l1j.server.server.serverpackets.S_SystemMessage;
 import l1j.server.server.serverpackets.S_Unknown1;
 import l1j.server.server.serverpackets.S_Unknown2;
 import l1j.server.server.serverpackets.S_War;
 import l1j.server.server.serverpackets.S_Weather;
 import l1j.server.server.serverpackets.S_bonusstats;
+import l1j.server.server.serverpackets.S_Emblem;
 import l1j.server.server.templates.L1BookMark;
 import l1j.server.server.templates.L1GetBackRestart;
-import l1j.server.server.templates.L1Skills;
+import l1j.server.server.templates.L1Skill;
 import l1j.server.server.utils.SQLUtil;
 import static l1j.server.server.model.skill.L1SkillId.*;
 
@@ -74,6 +79,8 @@ import static l1j.server.server.model.skill.L1SkillId.*;
 public class C_LoginToServer extends ClientBasePacket {
 	private static final String C_LOGIN_TO_SERVER = "[C] C_LoginToServer";
 	private static Logger _log = Logger.getLogger(C_LoginToServer.class.getName());
+	// See note on updateIcons()
+	private static List<String> accountsWithIcons = new ArrayList<String>(); 
 
 	public C_LoginToServer(byte abyte0[], ClientThread client) throws FileNotFoundException, Exception {
 		super(abyte0);
@@ -101,6 +108,8 @@ public class C_LoginToServer extends ClientBasePacket {
 			}
 		}
 		_log.info("Character login: char=" + charName + " account=" + login + " host=" + client.getHostname());
+		LogIP li = new LogIP();
+		li.storeLogIP(pc, client.getHostname());
 
 		int currentHpAtLoad = pc.getCurrentHp();
 		int currentMpAtLoad = pc.getCurrentMp();
@@ -268,6 +277,50 @@ public class C_LoginToServer extends ClientBasePacket {
 		if (pc.getHellTime() > 0) {
 			pc.beginHell(false);
 		}
+		checkUnreadMail(pc);
+		updateIcons(pc);
+	}
+
+
+	private void checkUnreadMail(final L1PcInstance character) {
+		Connection connection = null;
+		PreparedStatement statement = null;
+		ResultSet result = null;
+		
+		try {
+			connection = L1DatabaseFactory.getInstance().getConnection();
+			statement = connection.prepareStatement("SELECT COUNT(*) FROM mail WHERE receiver=? AND read_status=?");
+			statement.setString(1, character.getName());
+			statement.setInt(2, 0);
+
+			result = statement.executeQuery();
+			result.next();
+			int count = result.getInt(1);
+			if (count > 0) {
+				String message = String.format("You've got %d unread %s!", 
+						count, count == 1 ? "message" : "messages");
+				character.sendPackets(new S_SystemMessage(message));
+			}
+		} catch (SQLException e) {
+			_log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+		} finally {
+			SQLUtil.close(statement);
+			SQLUtil.close(connection);
+		}
+	}
+
+	// Updates the given client with all pledge icons.
+	// Keeps a cache of seen account names - it's a slow leak, but seems better
+	// than bombarding each client every time a character logs on.
+	private void updateIcons(final L1PcInstance character) {
+		if (accountsWithIcons.contains(character.getAccountName()))
+			return;
+
+		accountsWithIcons.add(character.getAccountName());
+
+		for (L1Clan clan : L1World.getInstance().getAllClans()) {
+			character.sendPackets(new S_Emblem(clan.getClanId()));
+		}
 	}
 
 	private void items(L1PcInstance pc) {
@@ -348,7 +401,7 @@ public class C_LoginToServer extends ClientBasePacket {
 			int lv28 = 0;
 			while (rs.next()) {
 				int skillId = rs.getInt("skill_id");
-				L1Skills l1skills = SkillsTable.getInstance().getTemplate(skillId);
+				L1Skill l1skills = SkillTable.getInstance().findBySkillId(skillId);
 				if (l1skills.getSkillLevel() == 1) {
 					lv1 |= l1skills.getId();
 				}
