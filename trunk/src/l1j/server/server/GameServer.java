@@ -25,8 +25,12 @@ import java.net.Socket;
 import java.util.Collection;
 import java.util.logging.Logger;
 
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ConcurrentHashMap;
+
 import l1j.server.Config;
 import l1j.server.server.datatables.IpTable;
+import l1j.server.server.datatables.SkillTable;
 import l1j.server.server.model.MpBugTest;
 import l1j.server.server.model.L1World;
 import l1j.server.server.model.Instance.L1PcInstance;
@@ -37,6 +41,21 @@ public class GameServer extends Thread {
 	private static Logger _log = Logger.getLogger(GameServer.class.getName());
 	private int _port;
 
+	// Naive denial of service defense.
+	private static final int CONNECTION_LIMIT = 6;
+	private static final int CACHE_REFRESH = 1000 * 60 * 4;
+	// Might be overkill, but hard to test. =\
+	private static final ConcurrentMap<String, Integer> connectionCache =
+		new ConcurrentHashMap<String, Integer>();
+
+	static {
+		GeneralThreadPool.getInstance().scheduleAtFixedRate(new Runnable() {
+			@Override public void run() {
+				connectionCache.clear();
+			}
+		}, CACHE_REFRESH, CACHE_REFRESH);
+	}
+
 	@Override
 	public void run() {
 		System.out.println("Server started. Memory used: " + SystemUtil.getUsedMemoryMB() + "MB");
@@ -46,11 +65,19 @@ public class GameServer extends Thread {
 				Socket socket = _serverSocket.accept();
 				System.out.println("Accepted connection from IP: "+ socket.getInetAddress());
 				String host = socket.getInetAddress().getHostAddress();
-				if (IpTable.getInstance().isBannedIp(host)) {
+
+				connectionCache.putIfAbsent(host, 1);
+				if (connectionCache.get(host) > CONNECTION_LIMIT) {
+					// Don't log in production, since that effectively
+					// recreates the DOS.
+					// _log.log(Level.WARNING, 
+					// "GameServer::run: " + host + " hit connection limit.");
+				} else if (IpTable.getInstance().isBannedIp(host)) {
 					_log.info("Banned IP(" + host + ")");
 				} else {
 					ClientThread client = new ClientThread(socket);
 					GeneralThreadPool.getInstance().execute(client);
+					connectionCache.replace(host, connectionCache.get(host) + 1);
 				}
 			} catch (IOException ioexception) {
 			}
@@ -89,6 +116,7 @@ public class GameServer extends Thread {
 		}
 		MpBugTest mpbug = new MpBugTest();
 		mpbug.initialize();
+		SkillTable.initialize();
         GameServerThread.getInstance();
 		Runtime.getRuntime().addShutdownHook(Shutdown.getInstance());
 		this.start();

@@ -18,12 +18,14 @@
  */
 package l1j.server.server.model.skill;
 
+import static l1j.server.server.model.skill.L1SkillId.*;
+
 import java.util.concurrent.ScheduledFuture;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import l1j.server.server.GeneralThreadPool;
-import l1j.server.server.datatables.SkillsTable;
+import l1j.server.server.datatables.SkillTable;
 import l1j.server.server.model.L1Character;
 import l1j.server.server.model.L1PolyMorph;
 import l1j.server.server.model.Instance.L1MonsterInstance;
@@ -31,13 +33,13 @@ import l1j.server.server.model.Instance.L1NpcInstance;
 import l1j.server.server.model.Instance.L1PcInstance;
 import l1j.server.server.model.Instance.L1PetInstance;
 import l1j.server.server.model.Instance.L1SummonInstance;
+import l1j.server.server.model.skill.executor.L1BuffSkillExecutor;
 import l1j.server.server.serverpackets.S_CurseBlind;
 import l1j.server.server.serverpackets.S_Dexup;
 import l1j.server.server.serverpackets.S_HPUpdate;
 import l1j.server.server.serverpackets.S_MPUpdate;
 import l1j.server.server.serverpackets.S_OwnCharAttrDef;
 import l1j.server.server.serverpackets.S_OwnCharStatus;
-import l1j.server.server.serverpackets.S_PacketBox;
 import l1j.server.server.serverpackets.S_Paralysis;
 import l1j.server.server.serverpackets.S_Poison;
 import l1j.server.server.serverpackets.S_SPMR;
@@ -47,11 +49,9 @@ import l1j.server.server.serverpackets.S_SkillHaste;
 import l1j.server.server.serverpackets.S_SkillIconAura;
 import l1j.server.server.serverpackets.S_SkillIconBlessOfEva;
 import l1j.server.server.serverpackets.S_SkillIconShield;
-import l1j.server.server.serverpackets.S_SkillIconWindShackle;
 import l1j.server.server.serverpackets.S_SkillIconWisdomPotion;
 import l1j.server.server.serverpackets.S_Strup;
-import l1j.server.server.templates.L1Skills;
-import static l1j.server.server.model.skill.L1SkillId.*;
+import l1j.server.server.templates.L1Skill;
 
 public interface L1SkillTimer {
 	public int getRemainingTime();
@@ -66,18 +66,35 @@ public interface L1SkillTimer {
 /*
  */
 class L1SkillStop {
-	private static Logger _log = Logger.getLogger(L1SkillStop.class
-			.getName());
+	private static boolean stopSkillByExecutor(L1Character cha, int skillId) {
+		L1Skill skill = SkillTable.getInstance().findBySkillId(skillId);
+		if (skill == null) {
+			return false;
+		}
+		L1BuffSkillExecutor exe = skill.newBuffSkillExecutor();
+		if (exe == null) {
+			return false;
+		}
+		exe.removeEffect(cha);
+
+		sendPacket(cha, skillId);
+		return true;
+	}
+
+	private static void sendPacket(L1Character cha, int skillId) {
+		if (cha instanceof L1PcInstance) {
+			L1PcInstance pc = (L1PcInstance) cha;
+			sendStopMessage(pc, skillId);
+			pc.sendPackets(new S_OwnCharStatus(pc));
+		}
+	}
 
 	public static void stopSkill(L1Character cha, int skillId) {
-		if (skillId == LIGHT) { 
-			if (cha instanceof L1PcInstance) {
-				if (!cha.isInvisble()) {
-					L1PcInstance pc = (L1PcInstance) cha;
-					pc.turnOnOffLight();
-				}
-			}
-		} else if (skillId == GLOWING_AURA) { 
+		if (stopSkillByExecutor(cha, skillId)) {
+			return;
+		}
+
+		if (skillId == GLOWING_AURA) {
 			cha.addHitup(-5);
 			cha.addBowHitup(-5);
 			cha.addMr(-20);
@@ -325,15 +342,7 @@ class L1SkillStop {
 				pc.sendPackets(new S_SkillBrave(pc.getId(), 0, 0));
 				pc.broadcastPacket(new S_SkillBrave(pc.getId(), 0, 0));
 			}
-		} else if (skillId == ILLUSION_OGRE) { 
-			if (cha instanceof L1PcInstance) {
-				L1PcInstance pc = (L1PcInstance) cha;
-				pc.addDmgup(-4);
-				pc.addHitup(-4);
-				pc.addBowDmgup(-4);
-				pc.addBowHitup(-4);
-			}
-		} else if (skillId == ILLUSION_LICH) { 
+		} else if (skillId == ILLUSION_LICH) {
 			if (cha instanceof L1PcInstance) {
 				L1PcInstance pc = (L1PcInstance) cha;
 				pc.addSp(-2);
@@ -415,7 +424,7 @@ class L1SkillStop {
 				npc.broadcastPacket(new S_Poison(npc.getId(), 0));
 				npc.setParalyzed(false);
 			}
-		} else if (skillId == SHOCK_STUN) { 
+		} else if (skillId == SHOCK_STUN || skillId == MASS_SHOCK_STUN) {
 			if (cha instanceof L1PcInstance) {
 				L1PcInstance pc = (L1PcInstance) cha;
 				pc.sendPackets(new S_Paralysis(S_Paralysis.TYPE_STUN, false));
@@ -431,18 +440,6 @@ class L1SkillStop {
 				L1PcInstance pc = (L1PcInstance) cha;
 				pc.sendPackets(new S_Paralysis(S_Paralysis.TYPE_SLEEP, false));
 				pc.sendPackets(new S_OwnCharStatus(pc));
-			}
-		} else if (skillId == ABSOLUTE_BARRIER) { 
-			if (cha instanceof L1PcInstance) {
-				L1PcInstance pc = (L1PcInstance) cha;
-				pc.startHpRegeneration();
-				pc.startMpRegeneration();
-				pc.startMpRegenerationByDoll();
-			}
-		} else if (skillId == WIND_SHACKLE) { 
-			if (cha instanceof L1PcInstance) {
-				L1PcInstance pc = (L1PcInstance) cha;
-				pc.sendPackets(new S_SkillIconWindShackle(pc.getId(), 0));
 			}
 		} else if (skillId == SLOW || skillId == ENTANGLE
 				|| skillId == MASS_SLOW) { 
@@ -461,17 +458,6 @@ class L1SkillStop {
 					|| cha instanceof L1PetInstance) {
 				L1NpcInstance npc = (L1NpcInstance) cha;
 				npc.setParalyzed(false);
-			}
-		} else if (skillId == GUARD_BRAKE) { 
-			if (cha instanceof L1PcInstance) {
-				L1PcInstance pc = (L1PcInstance) cha;
-				pc.addAc(-15);
-			}
-		} else if (skillId == HORROR_OF_DEATH) { 
-			if (cha instanceof L1PcInstance) {
-				L1PcInstance pc = (L1PcInstance) cha;
-				pc.addStr(5);
-				pc.addInt(5);
 			}
 		} else if (skillId == STATUS_CUBE_IGNITION_TO_ALLY) { 
 			cha.addFire(-30);
@@ -492,20 +478,30 @@ class L1SkillStop {
 				pc.sendPackets(new S_OwnCharAttrDef(pc));
 			}
 		} else if (skillId == STATUS_CUBE_IGNITION_TO_ENEMY) { 
-		} else if (skillId == STATUS_CUBE_QUAKE_TO_ENEMY) {
+		} else if (skillId == STATUS_CUBE_QUAKE_TO_ENEMY) { 
 		} else if (skillId == STATUS_CUBE_SHOCK_TO_ENEMY) { 
-		} else if (skillId == STATUS_MR_REDUCTION_BY_CUBE_SHOCK) {
-// cha.addMr(10);
-// if (cha instanceof L1PcInstance) {
-// L1PcInstance pc = (L1PcInstance) cha;
-// pc.sendPackets(new S_SPMR(pc));
-// }
+		} else if (skillId == STATUS_MR_REDUCTION_BY_CUBE_SHOCK) { 
+			// cha.addMr(10);
+			// if (cha instanceof L1PcInstance) {
+			// L1PcInstance pc = (L1PcInstance) cha;
+			// pc.sendPackets(new S_SPMR(pc));
+			// }
 		} else if (skillId == STATUS_CUBE_BALANCE) { 
+		} else if (skillId == BONE_BREAK) { // 
+			if (cha instanceof L1PcInstance) {
+				L1PcInstance pc = (L1PcInstance) cha;
+				pc.sendPackets(new S_Paralysis(S_Paralysis.TYPE_STUN, false));
+			} else if (cha instanceof L1MonsterInstance
+					|| cha instanceof L1SummonInstance
+					|| cha instanceof L1PetInstance) {
+				L1NpcInstance npc = (L1NpcInstance) cha;
+				npc.setParalyzed(false);
+			}
+		} else if (skillId == ARM_BREAKER) {
+			cha.addHitup(5);
 		}
-
-
-		else if (skillId == STATUS_BRAVE || skillId == STATUS_ELFBRAVE 
-				|| skillId == STATUS_BRAVE2) { 
+		else if (skillId == STATUS_BRAVE || skillId == STATUS_ELFBRAVE
+				|| skillId == STATUS_BRAVE2) {
 			if (cha instanceof L1PcInstance) {
 				L1PcInstance pc = (L1PcInstance) cha;
 				pc.sendPackets(new S_SkillBrave(pc.getId(), 0, 0));
@@ -549,219 +545,12 @@ class L1SkillStop {
 			cha.curePoison();
 		}
 
-
-		else if (skillId == COOKING_1_0_N || skillId == COOKING_1_0_S) { 
-			if (cha instanceof L1PcInstance) {
-				L1PcInstance pc = (L1PcInstance) cha;
-				pc.addWind(-10);
-				pc.addWater(-10);
-				pc.addFire(-10);
-				pc.addEarth(-10);
-				pc.sendPackets(new S_OwnCharAttrDef(pc));
-				pc.sendPackets(new S_PacketBox(53, 0, 0));
-				pc.setCookingId(0);
-			}
-		} else if (skillId == COOKING_1_1_N || skillId == COOKING_1_1_S) { 
-			if (cha instanceof L1PcInstance) {
-				L1PcInstance pc = (L1PcInstance) cha;
-				pc.addMaxHp(-30);
-				pc.sendPackets(new S_HPUpdate(pc.getCurrentHp(),
-						pc.getMaxHp()));
-				if (pc.isInParty()) { 
-					pc.getParty().updateMiniHP(pc);
-				}
-				pc.sendPackets(new S_PacketBox(53, 1, 0));
-				pc.setCookingId(0);
-			}
-		} else if (skillId == COOKING_1_2_N || skillId == COOKING_1_2_S) { 
-			if (cha instanceof L1PcInstance) {
-				L1PcInstance pc = (L1PcInstance) cha;
-				pc.sendPackets(new S_PacketBox(53, 2, 0));
-				pc.setCookingId(0);
-			}
-		} else if (skillId == COOKING_1_3_N || skillId == COOKING_1_3_S) { 
-			if (cha instanceof L1PcInstance) {
-				L1PcInstance pc = (L1PcInstance) cha;
-				pc.addAc(1);
-				pc.sendPackets(new S_PacketBox(53, 3, 0));
-				pc.setCookingId(0);
-			}
-		} else if (skillId == COOKING_1_4_N || skillId == COOKING_1_4_S) { 
-			if (cha instanceof L1PcInstance) {
-				L1PcInstance pc = (L1PcInstance) cha;
-				pc.addMaxMp(-20);
-				pc.sendPackets(new S_MPUpdate(pc.getCurrentMp(),
-						pc.getMaxMp()));
-				pc.sendPackets(new S_PacketBox(53, 4, 0));
-				pc.setCookingId(0);
-			}
-		} else if (skillId == COOKING_1_5_N || skillId == COOKING_1_5_S) { 
-			if (cha instanceof L1PcInstance) {
-				L1PcInstance pc = (L1PcInstance) cha;
-				pc.sendPackets(new S_PacketBox(53, 5, 0));
-				pc.setCookingId(0);
-			}
-		} else if (skillId == COOKING_1_6_N || skillId == COOKING_1_6_S) { 
-			if (cha instanceof L1PcInstance) {
-				L1PcInstance pc = (L1PcInstance) cha;
-				pc.addMr(-5);
-				pc.sendPackets(new S_SPMR(pc));
-				pc.sendPackets(new S_PacketBox(53, 6, 0));
-				pc.setCookingId(0);
-			}
-		} else if (skillId == COOKING_1_7_N || skillId == COOKING_1_7_S) { 
-			if (cha instanceof L1PcInstance) {
-				L1PcInstance pc = (L1PcInstance) cha;
-				pc.sendPackets(new S_PacketBox(53, 7, 0));
-				pc.setDessertId(0);
-			}
-		} else if (skillId == COOKING_2_0_N || skillId == COOKING_2_0_S) { 
-			if (cha instanceof L1PcInstance) {
-				L1PcInstance pc = (L1PcInstance) cha;
-				pc.sendPackets(new S_PacketBox(53, 8, 0));
-				pc.setCookingId(0);
-			}
-		} else if (skillId == COOKING_2_1_N || skillId == COOKING_2_1_S) { 
-			if (cha instanceof L1PcInstance) {
-				L1PcInstance pc = (L1PcInstance) cha;
-				pc.addMaxHp(-30);
-				pc.sendPackets(new S_HPUpdate(pc.getCurrentHp(),
-						pc.getMaxHp()));
-				if (pc.isInParty()) { 
-					pc.getParty().updateMiniHP(pc);
-				}
-				pc.addMaxMp(-30);
-				pc.sendPackets(new S_MPUpdate(pc.getCurrentMp(),
-						pc.getMaxMp()));
-				pc.sendPackets(new S_PacketBox(53, 9, 0));
-				pc.setCookingId(0);
-			}
-		} else if (skillId == COOKING_2_2_N || skillId == COOKING_2_2_S) { 
-			if (cha instanceof L1PcInstance) {
-				L1PcInstance pc = (L1PcInstance) cha;
-				pc.addAc(2);
-				pc.sendPackets(new S_PacketBox(53, 10, 0));
-				pc.setCookingId(0);
-			}
-		} else if (skillId == COOKING_2_3_N || skillId == COOKING_2_3_S) { 
-			if (cha instanceof L1PcInstance) {
-				L1PcInstance pc = (L1PcInstance) cha;
-				pc.sendPackets(new S_PacketBox(53, 11, 0));
-				pc.setCookingId(0);
-			}
-		} else if (skillId == COOKING_2_4_N || skillId == COOKING_2_4_S) { 
-			if (cha instanceof L1PcInstance) {
-				L1PcInstance pc = (L1PcInstance) cha;
-				pc.sendPackets(new S_PacketBox(53, 12, 0));
-				pc.setCookingId(0);
-			}
-		} else if (skillId == COOKING_2_5_N || skillId == COOKING_2_5_S) {
-			if (cha instanceof L1PcInstance) {
-				L1PcInstance pc = (L1PcInstance) cha;
-				pc.addMr(-10);
-				pc.sendPackets(new S_SPMR(pc));
-				pc.sendPackets(new S_PacketBox(53, 13, 0));
-				pc.setCookingId(0);
-			}
-		} else if (skillId == COOKING_2_6_N || skillId == COOKING_2_6_S) {
-			if (cha instanceof L1PcInstance) {
-				L1PcInstance pc = (L1PcInstance) cha;
-				pc.addSp(-1);
-				pc.sendPackets(new S_SPMR(pc));
-				pc.sendPackets(new S_PacketBox(53, 14, 0));
-				pc.setCookingId(0);
-			}
-		} else if (skillId == COOKING_2_7_N || skillId == COOKING_2_7_S) {
-			if (cha instanceof L1PcInstance) {
-				L1PcInstance pc = (L1PcInstance) cha;
-				pc.sendPackets(new S_PacketBox(53, 15, 0));
-				pc.setDessertId(0);
-			}
-		} else if (skillId == COOKING_3_0_N || skillId == COOKING_3_0_S) { 
-			if (cha instanceof L1PcInstance) {
-				L1PcInstance pc = (L1PcInstance) cha;
-				pc.sendPackets(new S_PacketBox(53, 16, 0));
-				pc.setCookingId(0);
-			}
-		} else if (skillId == COOKING_3_1_N || skillId == COOKING_3_1_S) {
-			if (cha instanceof L1PcInstance) {
-				L1PcInstance pc = (L1PcInstance) cha;
-				pc.addMaxHp(-50);
-				pc.sendPackets(new S_HPUpdate(pc.getCurrentHp(),
-						pc.getMaxHp()));
-				if (pc.isInParty()) { 
-					pc.getParty().updateMiniHP(pc);
-				}
-				pc.addMaxMp(-50);
-				pc.sendPackets(new S_MPUpdate(pc.getCurrentMp(),
-						pc.getMaxMp()));
-				pc.sendPackets(new S_PacketBox(53, 17, 0));
-				pc.setCookingId(0);
-			}
-		} else if (skillId == COOKING_3_2_N || skillId == COOKING_3_2_S) { 
-			if (cha instanceof L1PcInstance) {
-				L1PcInstance pc = (L1PcInstance) cha;
-				pc.sendPackets(new S_PacketBox(53, 18, 0));
-				pc.setCookingId(0);
-			}
-		} else if (skillId == COOKING_3_3_N || skillId == COOKING_3_3_S) {
-			if (cha instanceof L1PcInstance) {
-				L1PcInstance pc = (L1PcInstance) cha;
-				pc.addAc(3);
-				pc.sendPackets(new S_PacketBox(53, 19, 0));
-				pc.setCookingId(0);
-			}
-		} else if (skillId == COOKING_3_4_N || skillId == COOKING_3_4_S) { 
-			if (cha instanceof L1PcInstance) {
-				L1PcInstance pc = (L1PcInstance) cha;
-				pc.addMr(-15);
-				pc.sendPackets(new S_SPMR(pc));
-				pc.addWind(-10);
-				pc.addWater(-10);
-				pc.addFire(-10);
-				pc.addEarth(-10);
-				pc.sendPackets(new S_OwnCharAttrDef(pc));
-				pc.sendPackets(new S_PacketBox(53, 20, 0));
-				pc.setCookingId(0);
-			}
-		} else if (skillId == COOKING_3_5_N || skillId == COOKING_3_5_S) { 
-			if (cha instanceof L1PcInstance) {
-				L1PcInstance pc = (L1PcInstance) cha;
-				pc.addSp(-2);
-				pc.sendPackets(new S_SPMR(pc));
-				pc.sendPackets(new S_PacketBox(53, 21, 0));
-				pc.setCookingId(0);
-			}
-		} else if (skillId == COOKING_3_6_N || skillId == COOKING_3_6_S) {
-			if (cha instanceof L1PcInstance) {
-				L1PcInstance pc = (L1PcInstance) cha;
-				pc.addMaxHp(-30);
-				pc.sendPackets(new S_HPUpdate(pc.getCurrentHp(),
-						pc.getMaxHp()));
-				if (pc.isInParty()) { 
-					pc.getParty().updateMiniHP(pc);
-				}
-				pc.sendPackets(new S_PacketBox(53, 22, 0));
-				pc.setCookingId(0);
-			}
-		} else if (skillId == COOKING_3_7_N || skillId == COOKING_3_7_S) { 
-			if (cha instanceof L1PcInstance) {
-				L1PcInstance pc = (L1PcInstance) cha;
-				pc.sendPackets(new S_PacketBox(53, 23, 0));
-				pc.setDessertId(0);
-			}
-		}
-
-		if (cha instanceof L1PcInstance) {
-			L1PcInstance pc = (L1PcInstance) cha;
-			sendStopMessage(pc, skillId);
-			pc.sendPackets(new S_OwnCharStatus(pc));
-		}
+		sendPacket(cha, skillId);
 	}
 
 
 	private static void sendStopMessage(L1PcInstance charaPc, int skillid) {
-		L1Skills l1skills = SkillsTable.getInstance().getTemplate(skillid);
+		L1Skill l1skills = SkillTable.getInstance().findBySkillId(skillid);
 		if (l1skills == null || charaPc == null) {
 			return;
 		}

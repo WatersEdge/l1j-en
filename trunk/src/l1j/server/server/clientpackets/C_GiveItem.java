@@ -83,7 +83,7 @@ public class C_GiveItem extends ClientBasePacket {
 		L1Inventory inv = pc.getInventory();
 		L1ItemInstance item = inv.getItem(itemId);
 		//TRICIDTODO: set configurable auto ban
-		if (itemId != item.getId() || (!item.isStackable() && count != 1) || item.getCount() <= 0 || count <= 0 || count > 2000000000 || count > item.getCount()) {
+		if ((!item.isStackable() && count != 1) || item.getCount() <= 0 || count <= 0 || count > 2000000000 || count > item.getCount()) {
 			Account.ban(pc.getAccountName());
 			IpTable.getInstance().banIp(pc.getNetConnection().getIp());
 			_log.info(pc.getName() + " Attempted Dupe Exploit (C_GiveItem).");
@@ -91,8 +91,9 @@ public class C_GiveItem extends ClientBasePacket {
 			pc.sendPackets(new S_Disconnect());
 			return;
 		}
-		if (item == null) {
-			return;
+		if (itemId != item.getId()) {
+			_log.warning(pc.getName() + " had item " +
+					Integer.toString(itemId) + " not match.");
 		}
 		if (item.isEquipped()) {
 			pc.sendPackets(new S_ServerMessage(141)); 
@@ -135,11 +136,36 @@ public class C_GiveItem extends ClientBasePacket {
 			tamePet(pc, target);
 		}
 		
-		if (item.getItemId() == 40070 && petType.canEvolve()) {
+/*		if (item.getItemId() == 40070 && petType.canEvolve()) {
 			evolvePet(pc, target);
 		}
+	}  */
+		
+	if (item.getItemId() == 40070 && petType.canEvolve()) {
+		if (petType.getBaseNpcId()== 45686 || petType.getBaseNpcId() == 45687
+				|| petType.getBaseNpcId() == 45688 || petType.getBaseNpcId() == 45689 || petType.getBaseNpcId() == 45690
+				|| petType.getBaseNpcId() == 45691 || petType.getBaseNpcId() == 45692 || petType.getBaseNpcId() == 45693
+				|| petType.getBaseNpcId() == 45694 || petType.getBaseNpcId() == 45695 || petType.getBaseNpcId() == 45696 
+				|| petType.getBaseNpcId() == 45697 || petType.getBaseNpcId() == 45710 || petType.getBaseNpcId() == 45712){
+			
+		return;
+	}else{
+		evolvePet(pc, target);
 	}
-
+}
+	if (item.getItemId() == 41310 && petType.canEvolve()) { //added for Golden Dragon
+		if (petType.getBaseNpcId()== 45034 || petType.getBaseNpcId() == 45039
+				|| petType.getBaseNpcId() == 45040 || petType.getBaseNpcId() == 45042 || petType.getBaseNpcId() == 45043
+				|| petType.getBaseNpcId() == 45044 || petType.getBaseNpcId() == 45046 || petType.getBaseNpcId() == 45047
+				|| petType.getBaseNpcId() == 45048 || petType.getBaseNpcId() == 45049 || petType.getBaseNpcId() == 45053 
+				|| petType.getBaseNpcId() == 45054 || petType.getBaseNpcId() == 45313 || petType.getBaseNpcId() == 45712){
+			
+		return;
+	}else{
+		evolvePet(pc, target);
+		}
+	}
+}
 	private final static String receivableImpls[] = new String[] { "L1Npc", "L1Monster", "L1Guardian", "L1Teleporter", "L1Guard" }; 
 
 	private boolean isNpcItemReceivable(L1Npc npc) {

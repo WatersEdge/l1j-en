@@ -21,6 +21,7 @@ package l1j.server.server;
 import l1j.server.Config;
 import l1j.server.server.GeneralThreadPool;
 import l1j.server.server.controllers.AuctionTimeController;
+import l1j.server.server.controllers.CrackOfTimeController;
 import l1j.server.server.controllers.FishingTimeController;
 import l1j.server.server.controllers.HomeTownTimeController;
 import l1j.server.server.controllers.HouseTaxTimeController;
@@ -54,7 +55,7 @@ import l1j.server.server.datatables.PetTypeTable;
 import l1j.server.server.datatables.PolyTable;
 import l1j.server.server.datatables.ResolventTable;
 import l1j.server.server.datatables.ShopTable;
-import l1j.server.server.datatables.SkillsTable;
+import l1j.server.server.datatables.SkillTable;
 import l1j.server.server.datatables.SpawnTable;
 import l1j.server.server.datatables.SprTable;
 import l1j.server.server.datatables.UBSpawnTable;
@@ -208,6 +209,8 @@ public GameServerThread() throws Exception {
 	LightTimeController lightTimeController = LightTimeController.getInstance();
 	GeneralThreadPool.getInstance().execute(lightTimeController);
 
+	CrackOfTimeController.getStart();
+	
 	// AnnounceMents
 	Announcements.getInstance();
 	
@@ -223,7 +226,7 @@ public GameServerThread() throws Exception {
 	}
 	SpawnTable.getInstance();
 	MobGroupTable.getInstance();
-	SkillsTable.getInstance();
+	SkillTable.getInstance();
 	PolyTable.getInstance();
 	ItemTable.getInstance();
 	DropTable.getInstance();
