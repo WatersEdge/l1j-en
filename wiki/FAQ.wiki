@@ -11,7 +11,7 @@ This document is an in-progress collection of information about L1J-En.  If you 
 
 L1J-En is a server emulator for the fantasy MMORPG Lineage 1.
 
-The US servers for Lineage 1 served most of the rest of the world outside of Asia (though many Asians still played on it).  On June 29, 2011, NCSoft shut down the US Lineage 1 servers, probably due to lacking profits from its dwindling player base.  The English emulator effort was started a few years prior to this, and attempts to faithfully recreate the gameplay experience from these servers.  This codebase was made open source in an attempt to draw upon the domain knowledge of the US server player base and, of course, to enable others to relive the L1 experience that would otherwise be lost.
+The US servers for Lineage 1 served most of the rest of the world outside of Asia (though many Asians still played on it).  On June 29, 2011, NCSoft shut down the US Lineage 1 servers, probably due to lacking profits from its dwindling player base.  The predecessor to L1J-En, called LinDC, was started prior to this in 2007 and attempts to faithfully recreate the gameplay experience from these servers.  This codebase was made open source in an attempt to draw upon the domain knowledge of the US server player base and, of course, to enable others to relive the L1 experience that would otherwise be lost.
 
 == How does L1J-En compare to other L1J variants? ==
 
