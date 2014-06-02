@@ -12,7 +12,7 @@ This document is a platform-independent guide to setting up and installing your 
 Some words of caution: 
 
   * This guide is, by necessity, platform independent. We support multiple OSes, and don't want to provide a guide for each. When something is OS-specific, it will be noted as such.
-  * Along those lines, it's not possible to make a setup guide specific to every possible tool one could use.  Some tool-specific help will be provided here, but they will by necessity probably be inadequate if you require a complete step by step guide for your specific tool used.
+  * Along those lines, it's not possible to make a setup guide specific to every possible tool one could use.  Some tool-specific help will be provided here, but it will by necessity probably be inadequate if you require a complete step by step guide for your specific tool used.
   * If you want to competently run a server with a large player count, you'll probably need to know at least some of the emulator internals, at least on the database side.  Most people can get away without looking at a line of code though.
   * We are not responsible for anything that you do to your computer.
 
