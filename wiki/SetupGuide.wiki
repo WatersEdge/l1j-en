@@ -20,7 +20,7 @@ Some words of caution:
 
 The L1J-En team realizes that not everyone is patient or skilled enough to follow this guide to completion. If you consider yourself a novice or have trouble at some point following the steps here, then you have the option of using a pre-built version of the server and a pre-packaged database that is associated with it. This will spare you multiple, potentially-confusing steps in this process. We will try to release milestones at points where either significant progress has been made, large amounts of code have been merged in, or a major client version becomes supported.
 
-Note that at the current time (2014-06-01), no milestone build is available for the S3ep1 client.  The remainder of this section can be safely ignored until that changes.
+*Note that at the current time (2014-06-01), no milestone build is available for the S3ep1 client.  The remainder of this section can be safely ignored until that changes.
 
 To use a milestone build, grab the latest pre-built server binary from the Downloads tab and check out the full repository from ONLY the revision in which it is noted to be associated with. Then use the l1jdb_mX.sql file (where X is the number of the milestone) to build your database in MySQL. Once you've done this, jump to the configuration section below for the rest of the setup process.
 
