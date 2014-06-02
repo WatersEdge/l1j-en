@@ -60,7 +60,7 @@ Update: Recently, some contributors have been checking in database scripts outsi
 
 With these tasks complete, you can now create a directory for your server to execute from and copy over the startup script, the build .jar file, and the config, data, maps, and lib subdirectories to it. The maps.tar.bz2 file in /maps needs to be unpacked within /maps, too.  Alternatively, you can simply run it from its current project location.  However, if you plan to do development on the server, you'll want a separate execution folder for the server, separate from your local copy of the repository.
 
-Before you can actually run the server, be sure to open config/server.properties and edit at least the "URL" parameter in the beginning of the file.  You'll need to make sure this matches the host and database name that you created earlier.
+Before you can actually run the server, be sure to open config/server.properties and edit the "URL" parameter in the beginning of the file.  You'll need to make sure this matches the host and database name that you created earlier.  Do the same with the MySQL login and password.
 
 Now would be a good time to test running the server to see if you've done everything up to this point correctly.  To do so, simply execute the startup script.  You have three options for this:
 
