@@ -506,3 +506,78 @@ update droplist set chance = 75000 where mobid = 81173 and itemid = 40899;
 -- Fix Devil's Blood name.
 update etcitem set name = 'Devil\'s Blood' where item_id = 40031;
 
+-- Rebalance TOI 20F spawn and fix group_ids.
+-- Dancing Sword 25 -> (6 * 3)
+update spawnlist set count = 6, group_id = 30 where id = 12000001;
+-- Wicked Beholder 50 -> (12 * 3)
+update spawnlist set count = 12, group_id = 29 where id = 12000002;
+-- Dire Wolf 100 -> (12 * 3)
+update spawnlist set count = 15, group_id = 28 where id = 12000003;
+-- Dire Wolf 20 -> 35
+update spawnlist set count = 35 where id = 12000005;
+
+-- Rebalance TOI 19F spawn and fix group_ids.
+-- Dancing Sword 22 -> 15
+update spawnlist set count = 15 where id = 11900001;
+-- Wicked Beholder
+update spawnlist set group_id = 0 where id = 11900002;
+-- Dire Wolf 80 -> 65
+update spawnlist set count = 65 where id = 11900003;
+
+-- Rebalance TOI 18F spawn and fix group_ids.
+-- Dancing Sword 20 -> 12
+update spawnlist set count = 12 where id = 11800001;
+-- Wicked Beholder
+update spawnlist set group_id = 0 where id = 11800002;
+--  Dire Wolf 80 -> 60
+update spawnlist set count = 60 where id = 11800003;
+
+-- Rebalance TOI 17F spawn and fix group_ids.
+-- Dancing Sword 19 -> 10
+update spawnlist set count = 10 where id = 11700001;
+-- Wicked Beholder
+update spawnlist set group_id = 0 where id = 11700002;
+-- Dire Wolf 76 -> 55
+update spawnlist set count = 55 where id = 11700003;
+
+-- Correct Necromancer spawn cycle.
+update spawnlist_boss set cycle_type='Caspa' where id = 10;
+
+-- Correct Zenith Queen light_size.
+update npc set light_size = 3 where npcid = 45513;
+
+-- Correct Seer light_size.
+update npc set light_size = 3 where npcid = 45547;
+
+-- Correct TOI Vampire light_size.
+update npc set light_size = 3 where npcid = 45606;
+
+-- Correct Zombie Lord light_size.
+update npc set light_size = 3 where npcid = 45650;
+
+-- Correct Cougar light_size.
+update npc set light_size = 3 where npcid = 45652;
+
+-- Correct Mummy Lord light_size.
+update npc set light_size = 3 where npcid = 45653;
+
+-- Correct Knight Vlad light_size.
+update npc set light_size = 3 where npcid = 45618;
+
+-- Correct Grim Reaper light_size.
+update npc set light_size = 8 where npcid = 45673;
+
+-- Update beginner equipment.
+delete from beginner where id = 2;
+insert into beginner values (2, 4, 1, 0, 'Dagger', 'P', 0, 0);
+insert into beginner values (11, 4, 1, 0, 'Dagger', 'K', 0, 0);
+insert into beginner values (12, 4, 1, 0, 'Dagger', 'E', 0, 0);
+insert into beginner values (13, 4, 1, 0, 'Dagger', 'W', 0, 0);
+insert into beginner values (14, 4, 1, 0, 'Dagger', 'D', 0, 0);
+insert into beginner values (15, 138, 1, 0, 'Club', 'R', 0, 0);
+insert into beginner values (16, 138, 1, 0, 'Club', 'I', 0, 0);
+insert into beginner values (17, 20322, 1, 0, 'Leather Jacket', 'R', 0, 0);
+insert into beginner values (18, 20322, 1, 0, 'Leather Jacket', 'I', 0, 0);
+
+-- Fix broken stairs on DVC2F.
+insert into dungeon values (32727, 32809, 31, "Dragon Valley Caves 2F", 32709, 32818, 32, "Dragon Valley Caves 3F", 4);
