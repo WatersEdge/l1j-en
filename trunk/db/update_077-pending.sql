@@ -81,7 +81,7 @@ CREATE TABLE LogIP (
 
 -- Lance master crashes Tikal client
 delete from polymorphs where id = 7338 or id = 7339 or id = 7340 or id = 7341 or id = 7332;
--- insert into polymorphs values
+-- replace into polymorphs values
 -- (7332,'spearm 52',7332,52,1080,4095,1,7),
 -- (7338,'spearm 55',7338,55,1080,4095,1,7),
 -- (7339,'spearm 60',7339,60,1080,4095,1,7),
@@ -569,15 +569,36 @@ update npc set light_size = 8 where npcid = 45673;
 
 -- Update beginner equipment.
 delete from beginner where id = 2;
-insert into beginner values (2, 4, 1, 0, 'Dagger', 'P', 0, 0);
-insert into beginner values (11, 4, 1, 0, 'Dagger', 'K', 0, 0);
-insert into beginner values (12, 4, 1, 0, 'Dagger', 'E', 0, 0);
-insert into beginner values (13, 4, 1, 0, 'Dagger', 'W', 0, 0);
-insert into beginner values (14, 4, 1, 0, 'Dagger', 'D', 0, 0);
-insert into beginner values (15, 138, 1, 0, 'Club', 'R', 0, 0);
-insert into beginner values (16, 138, 1, 0, 'Club', 'I', 0, 0);
-insert into beginner values (17, 20322, 1, 0, 'Leather Jacket', 'R', 0, 0);
-insert into beginner values (18, 20322, 1, 0, 'Leather Jacket', 'I', 0, 0);
+replace into beginner values (2, 4, 1, 0, 'Dagger', 'P', 0, 0);
+replace into beginner values (11, 4, 1, 0, 'Dagger', 'K', 0, 0);
+replace into beginner values (12, 4, 1, 0, 'Dagger', 'E', 0, 0);
+replace into beginner values (13, 4, 1, 0, 'Dagger', 'W', 0, 0);
+replace into beginner values (14, 4, 1, 0, 'Dagger', 'D', 0, 0);
+replace into beginner values (15, 138, 1, 0, 'Club', 'R', 0, 0);
+replace into beginner values (16, 138, 1, 0, 'Club', 'I', 0, 0);
+replace into beginner values (17, 20322, 1, 0, 'Leather Jacket', 'R', 0, 0);
+replace into beginner values (18, 20322, 1, 0, 'Leather Jacket', 'I', 0, 0);
 
 -- Fix broken stairs on DVC2F.
-insert into dungeon values (32727, 32809, 31, "Dragon Valley Caves 2F", 32709, 32818, 32, "Dragon Valley Caves 3F", 4);
+replace into dungeon values (32727, 32809, 31, "Dragon Valley Caves 2F", 32709, 32818, 32, "Dragon Valley Caves 3F", 4);
+
+-- Fix Ifrit naming in droplist, was erroneously labeled Basilisk
+update droplist set mob_name = 'Ifrit' where mobId = 45516;
+
+-- Fix wolf range
+update npc set ranged = 2 where npcid = 45043;
+
+-- Gelatinous cube is not supposed to poison
+update npc set poison_atk = 0 where npcid = 45296;
+
+-- Reduce npcchat spam on mobs that repeatedly chat (caspa group, dark elder, etc)
+update npcchat set repeat_interval = 120000 where npc_id in (45473, 45488, 45497, 45464);
+update npcchat set repeat_interval = 60000 where npc_id in (45545, 81175);
+
+-- Spartois are supposed to slowly regen hp while hidden
+update npc set hpr = 5 where npcid in (45161, 45181);
+update npc set hpr = 15 where npcid = 45455;
+update npc set hprinterval = 5000 where npcid in (45161, 45181, 45455);
+
+-- Fix greater minotaur's attack interval for two handed blunt weapons
+update spr_action set framecount = 13 where spr_id = 3102 and act_id = 12;
