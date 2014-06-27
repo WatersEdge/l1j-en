@@ -54,7 +54,7 @@ To download the files contained in this repository, follow the instructions alre
 
 Some recommendations: The command line Subversion client is best for shell scripts, TortoiseSVN is popular for Windows users, Subclipse allows for integrated SVN access from the Eclipse IDE, and psvn.el is a full-featured Emacs SVN module.  If you're a casual Windows user, go with TortoiseSVN, which can be found [http://tortoisesvn.net/ here].
 
-If you're using the [https://github.com/l1j/en GitHub version of l1j-en], which does get updates more frequently than here now, then follow the instructions on the GitHub help pages to setup your environment.
+If you're using the [https://github.com/l1j/en GitHub version of l1j-en], which does get updates more frequently than here now, follow the instructions on the GitHub help pages to setup your environment.
 
 == Setting up your Environment ==
 
