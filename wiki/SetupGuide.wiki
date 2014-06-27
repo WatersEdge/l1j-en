@@ -36,7 +36,7 @@ This is the default setup assumed in most of this document.  You'll grab the sou
 
 === Using a Config Manager ===
 
-A new possibility recently opened up by some contributors is to use a tool like Vagrant to automate the deployment of the server amd database.  These have both upsides (like sparing you from typing in a lot of commands and ensuring the proper order of them) and some downsides (like limiting you to deployment on a VM).  See the [https://github.com/phuedx/l1j-vagrant l1j-vagrant project page] to explore this option.
+A new possibility recently opened up by some contributors is to use a tool like Vagrant to automate the deployment of the server and database.  These have both upsides (like sparing you from typing in a lot of commands and ensuring the proper order of them) and some downsides (like limiting you to deployment on a VM).  See the [https://github.com/phuedx/l1j-vagrant l1j-vagrant project page] to explore this option.
 
 There is some interest in posting pre-built VM images with the server and database installed.  If this comes to fruition, links will be provided here.
 
