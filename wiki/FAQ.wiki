@@ -131,7 +131,9 @@ Milestone 6: Another maintenance update.
 
 Milestone 7: The main 3.0 update.
 
-Milestone 8: The stabilization update for all new 3.0 content.  This is already done for the most part, minus the final database milestone script.
+Milestone 8: The stabilization update for all new 3.0 content.
+
+Milestone 9: In progress.  Currently targeting feature coverage, codebase refactoring, and even more fixes.
 
 == What's the current status? ==
 
