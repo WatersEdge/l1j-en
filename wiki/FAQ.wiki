@@ -25,6 +25,8 @@ Choose from one of the many servers currently running L1J-En (or even another ve
 
 [http://zelgo.net/ Lineage Resurrection] - A long term stable server that just started.
 
+[www.satansden.enjin.com Satan's Den] - A new server for Theistic Satanists that targets live-like rates.
+
 [http://www.lineagedc.com/ Lineage DC] - Previously the largest Lineage 1 private server. Long running with moderate rates and live-like gameplay.  Currently down.
 
 [http://www.westknights.com/ Westknights Lineage 1] - Mid rate English server.  Extended L1J-En with 3.58 (I think).
