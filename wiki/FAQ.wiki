@@ -23,7 +23,7 @@ As far as MMORPG server emulators go, most projects are fairly buggy, only suppo
 
 Choose from one of the many servers currently running L1J-En (or even another version of L1J). These servers come and go regularly, and it's difficult to keep track of them.  Here's a few to get you started, but Google searches will probably turn up more current results.
 
-[http://zelgo.net/ Lineage Resurrection] - A long term stable server that just started.
+[http://zelgo.net/ Lineage Resurrection] - The new Official l1j-en server.  Focuses on long-term stability.
 
 [http://www.satansden.enjin.com Satan's Den] - A new server for Theistic Satanists that targets live-like rates.
 
