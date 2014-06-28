@@ -2,16 +2,15 @@ package l1j.server.server.model.Instance;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Logger;
 import java.util.Random;
 
 import l1j.server.server.ActionCodes;
-import l1j.server.server.encryptions.IdFactory;
 import l1j.server.server.datatables.ExpTable;
 import l1j.server.server.datatables.ItemTable;
 import l1j.server.server.datatables.PetItemTable;
 import l1j.server.server.datatables.PetTable;
 import l1j.server.server.datatables.PetTypeTable;
+import l1j.server.server.encryptions.IdFactory;
 import l1j.server.server.model.L1Attack;
 import l1j.server.server.model.L1Character;
 import l1j.server.server.model.L1Inventory;
@@ -34,8 +33,6 @@ public class L1PetInstance extends L1NpcInstance {
 
 	private static final long serialVersionUID = 1L;
 	private static Random _random = new Random();
-	private static Logger _log = 
-		Logger.getLogger(L1PetInstance.class.getName());
 	private int _currentPetStatus;
 	private L1PcInstance _petMaster;
 	private int _itemObjId;
@@ -45,39 +42,41 @@ public class L1PetInstance extends L1NpcInstance {
 	public boolean noTarget(int depth) {
 		if (_currentPetStatus == 3) { // If pet is in rest mode
 			return true;
-		} else if (_currentPetStatus == 4) { 
+		} else if (_currentPetStatus == 4) {
 			if (_petMaster != null
 					&& _petMaster.getMapId() == getMapId()
 					&& getLocation().getTileLineDistance(
 							_petMaster.getLocation()) < 5) {
-				int dir = targetReverseDirection(_petMaster.getX(), _petMaster
-						.getY());
+				int dir = targetReverseDirection(_petMaster.getX(),
+						_petMaster.getY());
 				dir = checkObject(getX(), getY(), getMapId(), dir);
 				setDirectionMove(dir);
 				setSleepTime(calcSleepTime(getPassispeed(), MOVE_SPEED));
-			} else { 
+			} else {
 				_currentPetStatus = 3;
 				return true;
 			}
-		} else if (_currentPetStatus == 5) { 
+		} else if (_currentPetStatus == 5) {
 			if (Math.abs(getHomeX() - getX()) > 1
 					|| Math.abs(getHomeY() - getY()) > 1) {
 				int dir = moveDirection(getHomeX(), getHomeY());
 				if (dir == -1) { // If the pet cant find a way to the owner
-						//Original code
-						/*setHomeX(getX());
-						setHomeY(getY());*/
-					//Fix by Ssargon, should make summons move better without getting stuck
+					// Original code
+					/*
+					 * setHomeX(getX()); setHomeY(getY());
+					 */
+					// Fix by Ssargon, should make summons move better without
+					// getting stuck
 					try {
 						Thread.sleep(200);
-						// Prevent infinite recursion by max-bounding retry depth
+						// Prevent infinite recursion by max-bounding retry
+						// depth
 						if (depth > 80) {
 							setHomeX(getX());
 							setHomeY(getY());
 							return true;
-						}
-						else {
-							return noTarget(depth+1);
+						} else {
+							return noTarget(depth + 1);
 						}
 					} catch (Exception exception) {
 						setHomeX(getX());
@@ -89,7 +88,7 @@ public class L1PetInstance extends L1NpcInstance {
 					setSleepTime(calcSleepTime(getPassispeed(), MOVE_SPEED));
 				}
 			}
-		} else if (_currentPetStatus == 7) { 
+		} else if (_currentPetStatus == 7) {
 			if (_petMaster != null
 					&& _petMaster.getMapId() == getMapId()
 					&& getLocation().getTileLineDistance(
@@ -100,18 +99,17 @@ public class L1PetInstance extends L1NpcInstance {
 			int locx = _petMaster.getX() + _random.nextInt(1);
 			int locy = _petMaster.getY() + _random.nextInt(1);
 			int dir = moveDirection(locx, locy);
-			if (dir == -1) { 
+			if (dir == -1) {
 				_currentPetStatus = 3;
 				return true;
 			}
 			setDirectionMove(dir);
 			setSleepTime(calcSleepTime(getPassispeed(), MOVE_SPEED));
-		} else if (_petMaster != null && _petMaster.getMapId() == getMapId()) { 
+		} else if (_petMaster != null && _petMaster.getMapId() == getMapId()) {
 			if (getLocation().getTileLineDistance(_petMaster.getLocation()) > 2) {
 				int dir = moveDirection(_petMaster.getX(), _petMaster.getY());
 				if (dir == -1) {
-					_currentPetStatus = 3;
-					return true;
+					return false;
 				}
 				setDirectionMove(dir);
 				setSleepTime(calcSleepTime(getPassispeed(), MOVE_SPEED));
@@ -137,8 +135,8 @@ public class L1PetInstance extends L1NpcInstance {
 		setMaxMp(l1pet.get_mp());
 		setCurrentMpDirect(l1pet.get_mp());
 		setExp(l1pet.get_exp());
-		setExpPercent(ExpTable.getExpPercentage(l1pet.get_level(), 
-					l1pet.get_exp()));
+		setExpPercent(ExpTable.getExpPercentage(l1pet.get_level(),
+				l1pet.get_exp()));
 		setLawful(l1pet.get_lawful());
 		setTempLawful(l1pet.get_lawful());
 		ItemTable items = ItemTable.getInstance();
@@ -198,8 +196,8 @@ public class L1PetInstance extends L1NpcInstance {
 	@Override
 	public void receiveDamage(L1Character attacker, int damage) {
 		if (getCurrentHp() > 0) {
-			if (damage > 0) { 
-				setHate(attacker, 0); 
+			if (damage > 0) {
+				setHate(attacker, 0);
 				removeSkillEffect(L1SkillId.FOG_OF_SLEEPING);
 			}
 			if (attacker instanceof L1PcInstance && damage > 0) {
@@ -212,7 +210,7 @@ public class L1PetInstance extends L1NpcInstance {
 			} else {
 				setCurrentHp(newHp);
 			}
-		} else if (!isDead()) { 
+		} else if (!isDead()) {
 			death(attacker);
 		}
 	}
@@ -299,11 +297,11 @@ public class L1PetInstance extends L1NpcInstance {
 			if (item.isEquipped()) {
 				continue;
 			}
-			if (_petMaster.getInventory().checkAddItem( // 
+			if (_petMaster.getInventory().checkAddItem( //
 					item, item.getCount()) == L1Inventory.OK) {
 				_inventory.tradeItem(item, item.getCount(), targetInventory);
 				_petMaster.sendPackets(new S_ServerMessage(143, getName(), item
-						.getLogName())); 
+						.getLogName()));
 			} else {
 				targetInventory = L1World.getInstance().getInventory(getX(),
 						getY(), getMapId());
@@ -329,7 +327,7 @@ public class L1PetInstance extends L1NpcInstance {
 		if (id != 0) {
 			broadcastPacket(new S_NpcChatPacket(this, "$" + id, 0));
 		}
-		setCurrentPetStatus(7); 
+		setCurrentPetStatus(7);
 	}
 
 	public void setTarget(L1Character target) {
@@ -356,7 +354,7 @@ public class L1PetInstance extends L1NpcInstance {
 	public void onPerceive(L1PcInstance perceivedFrom) {
 		perceivedFrom.sendPackets(new S_Light(this.getId(), getLightSize()));
 		perceivedFrom.addKnownObject(this);
-		perceivedFrom.sendPackets(new S_PetPack(this, perceivedFrom)); 
+		perceivedFrom.sendPackets(new S_PetPack(this, perceivedFrom));
 		if (isDead()) {
 			perceivedFrom.sendPackets(new S_DoActionGFX(getId(),
 					ActionCodes.ACTION_Die));
@@ -367,11 +365,11 @@ public class L1PetInstance extends L1NpcInstance {
 	public void onAction(L1PcInstance player) {
 		L1Character cha = this.getMaster();
 		L1PcInstance master = (L1PcInstance) cha;
-		if (master.isTeleport()) { 
+		if (master.isTeleport()) {
 			return;
 		}
 		if (getZoneType() == ZoneType.Safety) {
-			L1Attack attack_mortion = new L1Attack(player, this); 
+			L1Attack attack_mortion = new L1Attack(player, this);
 			attack_mortion.action();
 			return;
 		}
@@ -405,11 +403,13 @@ public class L1PetInstance extends L1NpcInstance {
 			}
 		}
 	}
+
 	/*
 	 * Save to DataBase
 	 */
 	public void save() {
-		PetTable.getInstance().storePet(PetTable.getInstance().getTemplate(_itemObjId));
+		PetTable.getInstance().storePet(
+				PetTable.getInstance().getTemplate(_itemObjId));
 	}
 
 	@Override
@@ -419,22 +419,22 @@ public class L1PetInstance extends L1NpcInstance {
 			return;
 		}
 		if (status == 6) {
-			liberate(); 
+			liberate();
 		} else {
 			Object[] petList = _petMaster.getPetList().values().toArray();
 			for (Object petObject : petList) {
-				if (petObject instanceof L1PetInstance) { 
+				if (petObject instanceof L1PetInstance) {
 					L1PetInstance pet = (L1PetInstance) petObject;
-					if (_petMaster != null && _petMaster.getLevel() >= pet
-							.getLevel()) {
+					if (_petMaster != null
+							&& _petMaster.getLevel() >= pet.getLevel()) {
 						pet.setCurrentPetStatus(status);
 					} else {
 						L1PetType type = PetTypeTable.getInstance().get(
 								pet.getNpcTemplate().get_npcId());
 						int id = type.getDefyMessageId();
 						if (id != 0) {
-							broadcastPacket(new S_NpcChatPacket(pet,
-									"$" + id, 0));
+							broadcastPacket(new S_NpcChatPacket(pet, "$" + id,
+									0));
 						}
 					}
 				}
@@ -445,9 +445,9 @@ public class L1PetInstance extends L1NpcInstance {
 	@Override
 	public void onItemUse() {
 		if (!isActived()) {
-			useItem(USEITEM_HASTE, 100); 
+			useItem(USEITEM_HASTE, 100);
 		}
-		if (getCurrentHp() * 100 / getMaxHp() < 40) { 
+		if (getCurrentHp() * 100 / getMaxHp() < 40) {
 			useItem(USEITEM_HEAL, 100);
 		}
 	}
@@ -471,19 +471,19 @@ public class L1PetInstance extends L1NpcInstance {
 
 	private int actionType(String action) {
 		int status = 0;
-		if (action.equalsIgnoreCase("aggressive")) { 
+		if (action.equalsIgnoreCase("aggressive")) {
 			status = 1;
-		} else if (action.equalsIgnoreCase("defensive")) { 
+		} else if (action.equalsIgnoreCase("defensive")) {
 			status = 2;
-		} else if (action.equalsIgnoreCase("stay")) { 
+		} else if (action.equalsIgnoreCase("stay")) {
 			status = 3;
-		} else if (action.equalsIgnoreCase("extend")) { 
+		} else if (action.equalsIgnoreCase("extend")) {
 			status = 4;
-		} else if (action.equalsIgnoreCase("alert")) { 
+		} else if (action.equalsIgnoreCase("alert")) {
 			status = 5;
-		} else if (action.equalsIgnoreCase("dismiss")) { 
+		} else if (action.equalsIgnoreCase("dismiss")) {
 			status = 6;
-		} else if (action.equalsIgnoreCase("getitem")) { 
+		} else if (action.equalsIgnoreCase("getitem")) {
 			collect();
 		}
 		return status;
@@ -561,8 +561,8 @@ public class L1PetInstance extends L1NpcInstance {
 
 		if (weapon == null)
 			return;
-		
-		// FIXME: This is a dreadful experimental hack.	
+
+		// FIXME: This is a dreadful experimental hack.
 		L1Pet l1pet = PetTable.getInstance().getTemplate(_itemObjId);
 		if (l1pet != null)
 			l1pet.set_weapon(weapon.getItemId());
@@ -599,7 +599,7 @@ public class L1PetInstance extends L1NpcInstance {
 		if (armor == null)
 			return;
 
-		// FIXME: see note in setWeapon().	
+		// FIXME: see note in setWeapon().
 		L1Pet l1pet = PetTable.getInstance().getTemplate(_itemObjId);
 		if (l1pet != null)
 			l1pet.set_armor(armor.getItemId());

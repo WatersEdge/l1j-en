@@ -18,8 +18,6 @@
  */
 package l1j.server.server.command.executor;
 
-import java.util.logging.Logger;
-
 import l1j.server.server.model.L1World;
 import l1j.server.server.model.Instance.L1PcInstance;
 import l1j.server.server.serverpackets.S_Message_YN;
@@ -27,7 +25,6 @@ import l1j.server.server.serverpackets.S_SkillSound;
 import l1j.server.server.serverpackets.S_SystemMessage;
 
 public class L1Ress implements L1CommandExecutor {
-	private static Logger _log = Logger.getLogger(L1Ress.class.getName());
 
 	private L1Ress() {
 	}
@@ -49,9 +46,9 @@ public class L1Ress implements L1CommandExecutor {
 					tg.sendPackets(new S_SystemMessage("GM resurrected you."));
 					tg.broadcastPacket(new S_SkillSound(tg.getId(), 3944));
 					tg.sendPackets(new S_SkillSound(tg.getId(), 3944));
-					
+
 					tg.setTempID(objid);
-					tg.sendPackets(new S_Message_YN(322, "")); 
+					tg.sendPackets(new S_Message_YN(322, ""));
 				} else {
 					tg.sendPackets(new S_SystemMessage("GM healed you."));
 					tg.broadcastPacket(new S_SkillSound(tg.getId(), 832));

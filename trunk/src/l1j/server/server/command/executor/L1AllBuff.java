@@ -18,10 +18,39 @@
  */
 package l1j.server.server.command.executor;
 
-import static l1j.server.server.model.skill.L1SkillId.*;
+import static l1j.server.server.model.skill.L1SkillId.ADDITIONAL_FIRE;
+import static l1j.server.server.model.skill.L1SkillId.ADVANCE_SPIRIT;
+import static l1j.server.server.model.skill.L1SkillId.AQUA_PROTECTER;
+import static l1j.server.server.model.skill.L1SkillId.BERSERKERS;
+import static l1j.server.server.model.skill.L1SkillId.BLESS_WEAPON;
+import static l1j.server.server.model.skill.L1SkillId.BOUNCE_ATTACK;
+import static l1j.server.server.model.skill.L1SkillId.BRAVE_AURA;
+import static l1j.server.server.model.skill.L1SkillId.BURNING_SPIRIT;
+import static l1j.server.server.model.skill.L1SkillId.BURNING_WEAPON;
+import static l1j.server.server.model.skill.L1SkillId.CLEAR_MIND;
+import static l1j.server.server.model.skill.L1SkillId.DECREASE_WEIGHT;
+import static l1j.server.server.model.skill.L1SkillId.DOUBLE_BRAKE;
+import static l1j.server.server.model.skill.L1SkillId.DRESS_EVASION;
+import static l1j.server.server.model.skill.L1SkillId.ELEMENTAL_FIRE;
+import static l1j.server.server.model.skill.L1SkillId.ELEMENTAL_PROTECTION;
+import static l1j.server.server.model.skill.L1SkillId.ENCHANT_VENOM;
+import static l1j.server.server.model.skill.L1SkillId.EXOTIC_VITALIZE;
+import static l1j.server.server.model.skill.L1SkillId.GLOWING_AURA;
+import static l1j.server.server.model.skill.L1SkillId.IMMUNE_TO_HARM;
+import static l1j.server.server.model.skill.L1SkillId.IRON_SKIN;
+import static l1j.server.server.model.skill.L1SkillId.LIGHT;
+import static l1j.server.server.model.skill.L1SkillId.MEDITATION;
+import static l1j.server.server.model.skill.L1SkillId.PHYSICAL_ENCHANT_DEX;
+import static l1j.server.server.model.skill.L1SkillId.PHYSICAL_ENCHANT_STR;
+import static l1j.server.server.model.skill.L1SkillId.REDUCTION_ARMOR;
+import static l1j.server.server.model.skill.L1SkillId.RESIST_MAGIC;
+import static l1j.server.server.model.skill.L1SkillId.SOLID_CARRIAGE;
+import static l1j.server.server.model.skill.L1SkillId.SOUL_OF_FLAME;
+import static l1j.server.server.model.skill.L1SkillId.UNCANNY_DODGE;
+import static l1j.server.server.model.skill.L1SkillId.VENOM_RESIST;
+import static l1j.server.server.model.skill.L1SkillId.WATER_LIFE;
 
 import java.util.StringTokenizer;
-import java.util.logging.Logger;
 
 import l1j.server.server.datatables.SkillTable;
 import l1j.server.server.model.L1PolyMorph;
@@ -34,7 +63,6 @@ import l1j.server.server.serverpackets.S_SystemMessage;
 import l1j.server.server.templates.L1Skill;
 
 public class L1AllBuff implements L1CommandExecutor {
-	private static Logger _log = Logger.getLogger(L1AllBuff.class.getName());
 
 	private L1AllBuff() {
 	}
@@ -58,7 +86,7 @@ public class L1AllBuff implements L1CommandExecutor {
 			String name = st.nextToken();
 			L1PcInstance target = L1World.getInstance().getPlayer(name);
 			if (target == null) {
-				pc.sendPackets(new S_ServerMessage(73, name)); 
+				pc.sendPackets(new S_ServerMessage(73, name));
 				return;
 			}
 
@@ -68,9 +96,9 @@ public class L1AllBuff implements L1CommandExecutor {
 			for (int i = 0; i < allBuffSkill.length; i++) {
 				L1Skill skill = SkillTable.getInstance().findBySkillId(
 						allBuffSkill[i]);
-				new L1SkillUse().handleCommands(target, allBuffSkill[i], target
-						.getId(), target.getX(), target.getY(), null, skill
-						.getBuffDuration() * 1000, L1SkillUse.TYPE_GMBUFF);
+				new L1SkillUse().handleCommands(target, allBuffSkill[i],
+						target.getId(), target.getX(), target.getY(), null,
+						skill.getBuffDuration() * 1000, L1SkillUse.TYPE_GMBUFF);
 			}
 		} catch (Exception e) {
 			pc.sendPackets(new S_SystemMessage(".allBuff player_name"));

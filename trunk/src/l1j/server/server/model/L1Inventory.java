@@ -19,26 +19,24 @@
 package l1j.server.server.model;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.logging.Logger;
 import java.util.Random;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import l1j.server.Config;
-import l1j.server.server.encryptions.IdFactory;
 import l1j.server.server.datatables.FurnitureSpawnTable;
 import l1j.server.server.datatables.ItemTable;
 import l1j.server.server.datatables.LetterTable;
 import l1j.server.server.datatables.PetTable;
+import l1j.server.server.encryptions.IdFactory;
 import l1j.server.server.model.Instance.L1FurnitureInstance;
 import l1j.server.server.model.Instance.L1ItemInstance;
 import l1j.server.server.templates.L1Item;
 
 public class L1Inventory extends L1Object {
 	private static final long serialVersionUID = 1L;
-	private static Logger _log = Logger.getLogger(L1Inventory.class.getName());
 	protected List<L1ItemInstance> _items = new CopyOnWriteArrayList<L1ItemInstance>();
 	public static final int MAX_AMOUNT = 2000000000; // 2G
 	public static final int MAX_WEIGHT = 1500;
@@ -48,7 +46,7 @@ public class L1Inventory extends L1Object {
 	public static final int AMOUNT_OVER = 3;
 	public static final int WAREHOUSE_TYPE_PERSONAL = 0;
 	public static final int WAREHOUSE_TYPE_CLAN = 1;
-	
+
 	public L1Inventory() {
 	}
 
@@ -77,14 +75,15 @@ public class L1Inventory extends L1Object {
 		}
 		if (getSize() > Config.MAX_NPC_ITEM
 				|| (getSize() == Config.MAX_NPC_ITEM && (!item.isStackable() || !checkItem(item
-						.getItem().getItemId())))) { 
+						.getItem().getItemId())))) {
 			return SIZE_OVER;
 		}
-		int weight = getWeight() + item.getItem().getWeight() * count / 1000 + 1;
+		int weight = getWeight() + item.getItem().getWeight() * count / 1000
+				+ 1;
 		if (weight < 0 || (item.getItem().getWeight() * count / 1000) < 0) {
 			return WEIGHT_OVER;
 		}
-		if (weight > (MAX_WEIGHT * Config.RATE_WEIGHT_LIMIT_PET)) { 
+		if (weight > (MAX_WEIGHT * Config.RATE_WEIGHT_LIMIT_PET)) {
 			return WEIGHT_OVER;
 		}
 		L1ItemInstance itemExist = findItemId(item.getItemId());
@@ -194,7 +193,7 @@ public class L1Inventory extends L1Object {
 		item.setX(getX());
 		item.setY(getY());
 		item.setMap(getMapId());
-		
+
 		_items.add(item);
 		insertItem(item);
 		return item;
@@ -228,7 +227,6 @@ public class L1Inventory extends L1Object {
 		return false;
 	}
 
-	@SuppressWarnings("unchecked")
 	private class EnchantComparator implements Comparator<L1ItemInstance> {
 		public int compare(L1ItemInstance first, L1ItemInstance second) {
 			return first.getEnchantLevel() - second.getEnchantLevel();
@@ -256,16 +254,16 @@ public class L1Inventory extends L1Object {
 		}
 		if (item.getCount() == count) {
 			int itemId = item.getItem().getItemId();
-			if (itemId == 40314 || itemId == 40316) { 
+			if (itemId == 40314 || itemId == 40316) {
 				PetTable.getInstance().deletePet(item.getId());
-			} else if (itemId >= 49016 && itemId <= 49025) { 
+			} else if (itemId >= 49016 && itemId <= 49025) {
 				LetterTable lettertable = new LetterTable();
 				lettertable.deleteLetter(item.getId());
-			} else if (itemId >= 41383 && itemId <= 41400) { 
+			} else if (itemId >= 41383 && itemId <= 41400) {
 				for (L1Object l1object : L1World.getInstance().getObject()) {
 					if (l1object instanceof L1FurnitureInstance) {
 						L1FurnitureInstance furniture = (L1FurnitureInstance) l1object;
-						if (furniture.getItemObjId() == item.getId()) { 
+						if (furniture.getItemObjId() == item.getId()) {
 							FurnitureSpawnTable.getInstance().deleteFurniture(
 									furniture);
 						}
@@ -336,13 +334,14 @@ public class L1Inventory extends L1Object {
 	}
 
 	public L1ItemInstance receiveDamage(L1ItemInstance item, int count) {
-		int itemType = item.getItem().getType2();
-		int currentDurability = item.get_durability();
 
 		if (item == null) {
 			return null;
 		}
-		
+
+		int itemType = item.getItem().getType2();
+		int currentDurability = item.get_durability();
+
 		if ((currentDurability == 0 && itemType == 0) || currentDurability < 0) {
 			item.set_durability(0);
 			return null;
@@ -372,12 +371,13 @@ public class L1Inventory extends L1Object {
 	}
 
 	public L1ItemInstance recoveryDamage(L1ItemInstance item) {
-		int itemType = item.getItem().getType2();
-		int durability = item.get_durability();
 
 		if (item == null) {
 			return null;
 		}
+
+		int itemType = item.getItem().getType2();
+		int durability = item.get_durability();
 
 		if ((durability == 0 && itemType != 0) || durability < 0) {
 			item.set_durability(0);
@@ -456,11 +456,11 @@ public class L1Inventory extends L1Object {
 	public boolean checkEnchantItem(int id, int enchant, int count) {
 		int num = 0;
 		for (L1ItemInstance item : _items) {
-			if (item.isEquipped()) { 
+			if (item.isEquipped()) {
 				continue;
 			}
 			if (item.getItemId() == id && item.getEnchantLevel() == enchant) {
-				num ++;
+				num++;
 				if (num == count) {
 					return true;
 				}
@@ -468,10 +468,10 @@ public class L1Inventory extends L1Object {
 		}
 		return false;
 	}
-	
+
 	public boolean consumeEnchantItem(int id, int enchant, int count) {
 		for (L1ItemInstance item : _items) {
-			if (item.isEquipped()) { 
+			if (item.isEquipped()) {
 				continue;
 			}
 			if (item.getItemId() == id && item.getEnchantLevel() == enchant) {

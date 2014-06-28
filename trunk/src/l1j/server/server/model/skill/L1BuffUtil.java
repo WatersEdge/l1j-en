@@ -16,18 +16,22 @@
  *
  * http://www.gnu.org/copyleft/gpl.html
  */
- package l1j.server.server.model.skill;
+package l1j.server.server.model.skill;
 
-import java.util.logging.Logger;
-
+import static l1j.server.server.model.skill.L1SkillId.BLOODLUST;
+import static l1j.server.server.model.skill.L1SkillId.HOLY_WALK;
+import static l1j.server.server.model.skill.L1SkillId.MOVING_ACCELERATION;
+import static l1j.server.server.model.skill.L1SkillId.STATUS_BRAVE;
+import static l1j.server.server.model.skill.L1SkillId.STATUS_ELFBRAVE;
+import static l1j.server.server.model.skill.L1SkillId.STATUS_HASTE;
+import static l1j.server.server.model.skill.L1SkillId.STATUS_RIBRAVE;
+import static l1j.server.server.model.skill.L1SkillId.WIND_WALK;
 import l1j.server.server.model.Instance.L1PcInstance;
 import l1j.server.server.serverpackets.S_SkillBrave;
 import l1j.server.server.serverpackets.S_SkillHaste;
 import l1j.server.server.serverpackets.S_SkillSound;
-import static l1j.server.server.model.skill.L1SkillId.*;
 
 public class L1BuffUtil {
-	private static Logger _log = Logger.getLogger(L1BuffUtil.class.getName());
 
 	public static void haste(L1PcInstance pc, int timeMillis) {
 		pc.setSkillEffect(STATUS_HASTE, timeMillis);
@@ -41,36 +45,36 @@ public class L1BuffUtil {
 	}
 
 	public static void brave(L1PcInstance pc, int timeMillis) {
-		if (pc.hasSkillEffect(STATUS_ELFBRAVE)) { 
+		if (pc.hasSkillEffect(STATUS_ELFBRAVE)) {
 			pc.killSkillEffectTimer(STATUS_ELFBRAVE);
 			pc.sendPackets(new S_SkillBrave(pc.getId(), 0, 0));
 			pc.broadcastPacket(new S_SkillBrave(pc.getId(), 0, 0));
 			pc.setBraveSpeed(0);
 		}
-		if (pc.hasSkillEffect(HOLY_WALK)) { 
+		if (pc.hasSkillEffect(HOLY_WALK)) {
 			pc.killSkillEffectTimer(HOLY_WALK);
 			pc.sendPackets(new S_SkillBrave(pc.getId(), 0, 0));
 			pc.broadcastPacket(new S_SkillBrave(pc.getId(), 0, 0));
 			pc.setBraveSpeed(0);
 		}
-		if (pc.hasSkillEffect(MOVING_ACCELERATION)) { 
+		if (pc.hasSkillEffect(MOVING_ACCELERATION)) {
 			pc.killSkillEffectTimer(MOVING_ACCELERATION);
 			pc.sendPackets(new S_SkillBrave(pc.getId(), 0, 0));
 			pc.broadcastPacket(new S_SkillBrave(pc.getId(), 0, 0));
 			pc.setBraveSpeed(0);
 		}
-		if (pc.hasSkillEffect(WIND_WALK)) { 
+		if (pc.hasSkillEffect(WIND_WALK)) {
 			pc.killSkillEffectTimer(WIND_WALK);
 			pc.sendPackets(new S_SkillBrave(pc.getId(), 0, 0));
 			pc.broadcastPacket(new S_SkillBrave(pc.getId(), 0, 0));
 			pc.setBraveSpeed(0);
 		}
-		if (pc.hasSkillEffect(STATUS_RIBRAVE)) { 
+		if (pc.hasSkillEffect(STATUS_RIBRAVE)) {
 			pc.killSkillEffectTimer(STATUS_RIBRAVE);
 
 			pc.setBraveSpeed(0);
 		}
-		if (pc.hasSkillEffect(BLOODLUST)) { 
+		if (pc.hasSkillEffect(BLOODLUST)) {
 			pc.killSkillEffectTimer(BLOODLUST);
 			pc.sendPackets(new S_SkillBrave(pc.getId(), 0, 0));
 			pc.broadcastPacket(new S_SkillBrave(pc.getId(), 0, 0));

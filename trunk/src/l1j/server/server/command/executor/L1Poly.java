@@ -19,7 +19,6 @@
 package l1j.server.server.command.executor;
 
 import java.util.StringTokenizer;
-import java.util.logging.Logger;
 
 import l1j.server.server.model.L1PolyMorph;
 import l1j.server.server.model.L1World;
@@ -28,7 +27,6 @@ import l1j.server.server.serverpackets.S_ServerMessage;
 import l1j.server.server.serverpackets.S_SystemMessage;
 
 public class L1Poly implements L1CommandExecutor {
-	private static Logger _log = Logger.getLogger(L1Poly.class.getName());
 
 	private L1Poly() {
 	}
@@ -47,19 +45,17 @@ public class L1Poly implements L1CommandExecutor {
 			L1PcInstance tg = L1World.getInstance().getPlayer(name);
 
 			if (tg == null) {
-				pc.sendPackets(new S_ServerMessage(73, name)); 
+				pc.sendPackets(new S_ServerMessage(73, name));
 			} else {
 				try {
 					L1PolyMorph.doPoly(tg, polyid, 7200,
 							L1PolyMorph.MORPH_BY_GM);
 				} catch (Exception exception) {
-					pc.sendPackets(new S_SystemMessage(
-							".poly PLAYER POLYID"));
+					pc.sendPackets(new S_SystemMessage(".poly PLAYER POLYID"));
 				}
 			}
 		} catch (Exception e) {
-			pc.sendPackets(new S_SystemMessage(cmdName
-					+ " PLAYER POLYID"));
+			pc.sendPackets(new S_SystemMessage(cmdName + " PLAYER POLYID"));
 		}
 	}
 }

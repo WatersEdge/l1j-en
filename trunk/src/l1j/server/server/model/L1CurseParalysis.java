@@ -18,12 +18,13 @@
  */
 package l1j.server.server.model;
 
+import static l1j.server.server.model.skill.L1SkillId.STATUS_CURSE_PARALYZED;
+import static l1j.server.server.model.skill.L1SkillId.STATUS_CURSE_PARALYZING;
 import l1j.server.server.GeneralThreadPool;
 import l1j.server.server.model.Instance.L1MonsterInstance;
 import l1j.server.server.model.Instance.L1PcInstance;
 import l1j.server.server.serverpackets.S_Paralysis;
 import l1j.server.server.serverpackets.S_ServerMessage;
-import static l1j.server.server.model.skill.L1SkillId.*;
 
 /*
  * L1ParalysisPoison
@@ -41,7 +42,7 @@ public class L1CurseParalysis extends L1Paralysis {
 			_target.setSkillEffect(STATUS_CURSE_PARALYZING, 0);
 
 			try {
-				Thread.sleep(_delay); 
+				Thread.sleep(_delay);
 			} catch (InterruptedException e) {
 				_target.killSkillEffectTimer(STATUS_CURSE_PARALYZING);
 				return;
@@ -50,12 +51,12 @@ public class L1CurseParalysis extends L1Paralysis {
 			if (_target instanceof L1PcInstance) {
 				L1PcInstance player = (L1PcInstance) _target;
 				if (!player.isDead()) {
-					player.sendPackets(new S_Paralysis(1, true)); 
+					player.sendPackets(new S_Paralysis(1, true));
 				}
 			}
 			_target.setParalyzed(true);
 			_timer = new ParalysisTimer();
-			GeneralThreadPool.getInstance().execute(_timer); 
+			GeneralThreadPool.getInstance().execute(_timer);
 			if (isInterrupted()) {
 				_timer.interrupt();
 			}
@@ -76,7 +77,7 @@ public class L1CurseParalysis extends L1Paralysis {
 			if (_target instanceof L1PcInstance) {
 				L1PcInstance player = (L1PcInstance) _target;
 				if (!player.isDead()) {
-					player.sendPackets(new S_Paralysis(1, false)); 
+					player.sendPackets(new S_Paralysis(1, false));
 				}
 			}
 			_target.setParalyzed(false);
@@ -125,7 +126,7 @@ public class L1CurseParalysis extends L1Paralysis {
 	@Override
 	public void cure() {
 		if (_timer != null) {
-			_timer.interrupt(); 
+			_timer.interrupt();
 		}
 
 		_target.setPoisonEffect(0);

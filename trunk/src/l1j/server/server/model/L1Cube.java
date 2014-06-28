@@ -18,6 +18,18 @@
  */
 package l1j.server.server.model;
 
+import static l1j.server.server.model.skill.L1SkillId.ABSOLUTE_BARRIER;
+import static l1j.server.server.model.skill.L1SkillId.EARTH_BIND;
+import static l1j.server.server.model.skill.L1SkillId.FREEZING_BLIZZARD;
+import static l1j.server.server.model.skill.L1SkillId.FREEZING_BREATH;
+import static l1j.server.server.model.skill.L1SkillId.ICE_LANCE;
+import static l1j.server.server.model.skill.L1SkillId.STATUS_CUBE_BALANCE;
+import static l1j.server.server.model.skill.L1SkillId.STATUS_CUBE_IGNITION_TO_ENEMY;
+import static l1j.server.server.model.skill.L1SkillId.STATUS_CUBE_QUAKE_TO_ENEMY;
+import static l1j.server.server.model.skill.L1SkillId.STATUS_CUBE_SHOCK_TO_ENEMY;
+import static l1j.server.server.model.skill.L1SkillId.STATUS_FREEZE;
+import static l1j.server.server.model.skill.L1SkillId.STATUS_MR_REDUCTION_BY_CUBE_SHOCK;
+
 import java.util.TimerTask;
 import java.util.concurrent.ScheduledFuture;
 import java.util.logging.Level;
@@ -25,12 +37,10 @@ import java.util.logging.Logger;
 
 import l1j.server.server.ActionCodes;
 import l1j.server.server.GeneralThreadPool;
-import l1j.server.server.model.L1Character;
 import l1j.server.server.model.Instance.L1MonsterInstance;
 import l1j.server.server.model.Instance.L1PcInstance;
 import l1j.server.server.serverpackets.S_DoActionGFX;
 import l1j.server.server.serverpackets.S_Paralysis;
-import static l1j.server.server.model.skill.L1SkillId.*;
 
 public class L1Cube extends TimerTask {
 	private static Logger _log = Logger.getLogger(L1Cube.class.getName());
@@ -148,14 +158,14 @@ public class L1Cube extends TimerTask {
 				mob.setParalyzed(true);
 			}
 		} else if (_skillId == STATUS_CUBE_SHOCK_TO_ENEMY) {
-// if (_timeCounter % 5 != 0) {
-// return;
-// }
-// _cha.addMr(-10);
-// if (_cha instanceof L1PcInstance) {
-// L1PcInstance pc = (L1PcInstance) _cha;
-// pc.sendPackets(new S_SPMR(pc));
-// }
+			// if (_timeCounter % 5 != 0) {
+			// return;
+			// }
+			// _cha.addMr(-10);
+			// if (_cha instanceof L1PcInstance) {
+			// L1PcInstance pc = (L1PcInstance) _cha;
+			// pc.sendPackets(new S_SPMR(pc));
+			// }
 			_cha.setSkillEffect(STATUS_MR_REDUCTION_BY_CUBE_SHOCK, 4000);
 		} else if (_skillId == STATUS_CUBE_BALANCE) {
 			if (_timeCounter % 4 == 0) {

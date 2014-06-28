@@ -20,15 +20,13 @@ package l1j.server.server.command.executor;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.util.logging.Logger;
 
 import l1j.server.L1DatabaseFactory;
-import l1j.server.server.utils.SQLUtil;
 import l1j.server.server.model.Instance.L1PcInstance;
 import l1j.server.server.serverpackets.S_SystemMessage;
+import l1j.server.server.utils.SQLUtil;
 
 public class L1Resolve implements L1CommandExecutor {
-	private static Logger _log = Logger.getLogger(L1Resolve.class.getName());
 
 	private L1Resolve() {
 	}
@@ -43,15 +41,17 @@ public class L1Resolve implements L1CommandExecutor {
 		PreparedStatement pstm = null;
 		try {
 			con = L1DatabaseFactory.getInstance().getConnection();
-			pstm = con.prepareStatement("UPDATE bugs SET resolved=1 WHERE id=?");
+			pstm = con
+					.prepareStatement("UPDATE bugs SET resolved=1 WHERE id=?");
 			pstm.setInt(1, Integer.valueOf(arg).intValue());
 			pstm.execute();
-			pc.sendPackets(new S_SystemMessage("Bug #"+arg+" has been resolved!"));
+			pc.sendPackets(new S_SystemMessage("Bug #" + arg
+					+ " has been resolved!"));
 		} catch (Exception e) {
 			pc.sendPackets(new S_SystemMessage(".resolve bugID"));
 		} finally {
 			SQLUtil.close(pstm);
 			SQLUtil.close(con);
-		}	
+		}
 	}
 }

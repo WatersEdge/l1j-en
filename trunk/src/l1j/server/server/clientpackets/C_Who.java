@@ -18,8 +18,6 @@
  */
 package l1j.server.server.clientpackets;
 
-import java.util.logging.Logger;
-
 import l1j.server.Config;
 import l1j.server.server.ClientThread;
 import l1j.server.server.model.L1World;
@@ -33,7 +31,6 @@ import l1j.server.server.serverpackets.S_WhoCharinfo;
 public class C_Who extends ClientBasePacket {
 
 	private static final String C_WHO = "[C] C_Who";
-	private static Logger _log = Logger.getLogger(C_Who.class.getName());
 
 	public C_Who(byte[] decrypt, ClientThread client) {
 		super(decrypt);
@@ -46,7 +43,8 @@ public class C_Who extends ClientBasePacket {
 			pc.sendPackets(s_whocharinfo);
 		} else {
 			if (Config.ALT_WHO_COMMAND) {
-				String amount = String.valueOf(L1World.getInstance().getAllPlayers().size());
+				String amount = String.valueOf(L1World.getInstance()
+						.getAllPlayers().size());
 				S_WhoAmount s_whoamount = new S_WhoAmount(amount);
 				pc.sendPackets(s_whoamount);
 			}

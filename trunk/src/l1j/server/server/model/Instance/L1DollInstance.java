@@ -19,20 +19,17 @@
 package l1j.server.server.model.Instance;
 
 import java.util.Arrays;
-import java.util.concurrent.ScheduledFuture;
-import java.util.logging.Logger;
 import java.util.Random;
+import java.util.concurrent.ScheduledFuture;
 
 import l1j.server.server.GeneralThreadPool;
 import l1j.server.server.encryptions.IdFactory;
 import l1j.server.server.model.L1World;
-import l1j.server.server.model.Instance.L1PcInstance;
 import l1j.server.server.serverpackets.S_DollPack;
 import l1j.server.server.serverpackets.S_SkillSound;
 import l1j.server.server.templates.L1Npc;
 
 public class L1DollInstance extends L1NpcInstance {
-	private static Logger _log = Logger.getLogger(L1DollInstance.class.getName());
 	private static final long serialVersionUID = 1L;
 	public static final int DOLLTYPE_BUGBEAR = 0;
 	public static final int DOLLTYPE_SUCCUBUS = 1;
@@ -73,7 +70,7 @@ public class L1DollInstance extends L1NpcInstance {
 	class DollTimer implements Runnable {
 		@Override
 		public void run() {
-			if (_destroyed) { 
+			if (_destroyed) {
 				return;
 			}
 			deleteDoll();
@@ -86,8 +83,8 @@ public class L1DollInstance extends L1NpcInstance {
 		setId(IdFactory.getInstance().nextId());
 		setDollType(dollType);
 		setItemObjId(itemObjId);
-		_dollFuture = GeneralThreadPool.getInstance().schedule(
-				new DollTimer(), DOLL_TIME);
+		_dollFuture = GeneralThreadPool.getInstance().schedule(new DollTimer(),
+				DOLL_TIME);
 
 		setMaster(master);
 		setX(master.getX() + _random.nextInt(5) - 2);
@@ -165,11 +162,9 @@ public class L1DollInstance extends L1NpcInstance {
 				damage = 15;
 				if (_master instanceof L1PcInstance) {
 					L1PcInstance pc = (L1PcInstance) _master;
-					pc.sendPackets(new S_SkillSound(_master.getId(),
-							6319));
+					pc.sendPackets(new S_SkillSound(_master.getId(), 6319));
 				}
-				_master.broadcastPacket(new S_SkillSound(_master
-						.getId(), 6319));
+				_master.broadcastPacket(new S_SkillSound(_master.getId(), 6319));
 			}
 		}
 		return damage;
@@ -202,11 +197,9 @@ public class L1DollInstance extends L1NpcInstance {
 				damageReduction = 15;
 				if (_master instanceof L1PcInstance) {
 					L1PcInstance pc = (L1PcInstance) _master;
-					pc.sendPackets(new S_SkillSound(_master.getId(),
-							6320));
+					pc.sendPackets(new S_SkillSound(_master.getId(), 6320));
 				}
-				_master.broadcastPacket(new S_SkillSound(_master
-						.getId(), 6320));
+				_master.broadcastPacket(new S_SkillSound(_master.getId(), 6320));
 			}
 		}
 		return damageReduction;

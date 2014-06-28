@@ -18,15 +18,12 @@
  */
 package l1j.server.server.model;
 
-import java.util.logging.Logger;
 import java.util.TimerTask;
 
 import l1j.server.server.model.Instance.L1ItemInstance;
 import l1j.server.server.model.Instance.L1PcInstance;
 
 public class L1EquipmentTimer extends TimerTask {
-	private static final Logger _log = Logger.getLogger(L1EquipmentTimer.class
-			.getName());
 
 	public L1EquipmentTimer(L1PcInstance pc, L1ItemInstance item) {
 		_pc = pc;
@@ -37,8 +34,8 @@ public class L1EquipmentTimer extends TimerTask {
 	public void run() {
 		if ((_item.getRemainingTime() - 1) > 0) {
 			_item.setRemainingTime(_item.getRemainingTime() - 1);
-			_pc.getInventory().updateItem(_item, L1PcInventory
-					.COL_REMAINING_TIME);
+			_pc.getInventory().updateItem(_item,
+					L1PcInventory.COL_REMAINING_TIME);
 		} else {
 			_pc.getInventory().removeItem(_item, 1);
 			this.cancel();

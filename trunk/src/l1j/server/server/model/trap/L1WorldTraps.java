@@ -30,8 +30,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import l1j.server.L1DatabaseFactory;
-import l1j.server.server.encryptions.IdFactory;
 import l1j.server.server.datatables.TrapTable;
+import l1j.server.server.encryptions.IdFactory;
 import l1j.server.server.model.L1Location;
 import l1j.server.server.model.L1World;
 import l1j.server.server.model.Instance.L1PcInstance;
@@ -138,7 +138,7 @@ public class L1WorldTraps {
 		L1Location loc = player.getLocation();
 		for (L1TrapInstance trap : _allTraps) {
 			if (trap.isEnable() && loc.equals(trap.getLocation())) {
-				if(!player.isGmInvis()) {
+				if (!player.isGmInvis()) {
 					trap.onTrod(player);
 					disableTrap(trap);
 				}

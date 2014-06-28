@@ -18,8 +18,6 @@
  */
 package l1j.server.server.clientpackets;
 
-import java.util.logging.Logger;
-
 import l1j.server.server.ClientThread;
 import l1j.server.server.model.L1ChatParty;
 import l1j.server.server.model.L1World;
@@ -32,7 +30,6 @@ import l1j.server.server.serverpackets.S_ServerMessage;
 public class C_ChatParty extends ClientBasePacket {
 
 	private static final String C_CHAT_PARTY = "[C] C_ChatParty";
-	private static Logger _log = Logger.getLogger(C_ChatParty.class.getName());
 
 	public C_ChatParty(byte abyte0[], ClientThread clientthread) {
 		super(abyte0);
@@ -43,7 +40,7 @@ public class C_ChatParty extends ClientBasePacket {
 		}
 
 		int type = readC();
-		if (type == 0) { //chatban
+		if (type == 0) { // chatban
 			String name = readS();
 
 			if (!pc.isInChatParty()) {
@@ -77,7 +74,8 @@ public class C_ChatParty extends ClientBasePacket {
 		} else if (type == 2) { // /chatparty
 			L1ChatParty chatParty = pc.getChatParty();
 			if (pc.isInChatParty()) {
-				pc.sendPackets(new S_Party("party", pc.getId(), chatParty.getLeader().getName(), chatParty.getMembersNameList()));
+				pc.sendPackets(new S_Party("party", pc.getId(), chatParty
+						.getLeader().getName(), chatParty.getMembersNameList()));
 			} else {
 				pc.sendPackets(new S_ServerMessage(425));
 			}

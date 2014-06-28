@@ -18,6 +18,18 @@
  */
 package l1j.server.server.model;
 
+import static l1j.server.server.model.skill.L1SkillId.ADDITIONAL_FIRE;
+import static l1j.server.server.model.skill.L1SkillId.CONCENTRATION;
+import static l1j.server.server.model.skill.L1SkillId.COOKING_1_2_N;
+import static l1j.server.server.model.skill.L1SkillId.COOKING_1_2_S;
+import static l1j.server.server.model.skill.L1SkillId.COOKING_2_4_N;
+import static l1j.server.server.model.skill.L1SkillId.COOKING_2_4_S;
+import static l1j.server.server.model.skill.L1SkillId.COOKING_3_5_N;
+import static l1j.server.server.model.skill.L1SkillId.COOKING_3_5_S;
+import static l1j.server.server.model.skill.L1SkillId.EXOTIC_VITALIZE;
+import static l1j.server.server.model.skill.L1SkillId.MEDITATION;
+import static l1j.server.server.model.skill.L1SkillId.STATUS_BLUE_POTION;
+
 import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,11 +37,11 @@ import java.util.logging.Logger;
 import l1j.server.Config;
 import l1j.server.server.model.Instance.L1PcInstance;
 import l1j.server.server.model.map.Maps;
-import static l1j.server.server.model.skill.L1SkillId.*;
 
 public class MpRegeneration extends TimerTask {
-	
-	private static Logger _log = Logger.getLogger(MpRegeneration.class.getName());
+
+	private static Logger _log = Logger.getLogger(MpRegeneration.class
+			.getName());
 	private final L1PcInstance _pc;
 	private int _regenPoint = 0;
 	private int _curPoint = 4;
@@ -73,25 +85,28 @@ public class MpRegeneration extends TimerTask {
 			baseMpr = 3;
 		}
 
-		if (_pc.hasSkillEffect(STATUS_BLUE_POTION)) { 
-			if (wis < 11) { 
+		if (_pc.hasSkillEffect(STATUS_BLUE_POTION)) {
+			if (wis < 11) {
 				wis = 11;
 			}
 			// probably should change this to class based.
 			// doesn't make sense for knight to get 6MP/tick, for example.
 			baseMpr += wis - 5;
 		}
-		if (_pc.hasSkillEffect(MEDITATION) == true) { 
+		if (_pc.hasSkillEffect(MEDITATION) == true) {
 			baseMpr += 5;
 		}
 		if (_pc.hasSkillEffect(CONCENTRATION)) {
 			baseMpr += 2;
 		}
-		if (_pc.hasSkillEffect(COOKING_1_2_N) || _pc.hasSkillEffect(COOKING_1_2_S)) {
+		if (_pc.hasSkillEffect(COOKING_1_2_N)
+				|| _pc.hasSkillEffect(COOKING_1_2_S)) {
 			baseMpr += 3;
 		}
- 		if (_pc.hasSkillEffect(COOKING_2_4_N) || _pc.hasSkillEffect(COOKING_2_4_S) 
- 				|| _pc.hasSkillEffect(COOKING_3_5_N) || _pc.hasSkillEffect(COOKING_3_5_S)) {
+		if (_pc.hasSkillEffect(COOKING_2_4_N)
+				|| _pc.hasSkillEffect(COOKING_2_4_S)
+				|| _pc.hasSkillEffect(COOKING_3_5_N)
+				|| _pc.hasSkillEffect(COOKING_3_5_S)) {
 			baseMpr += 2;
 		}
 		// You can only be in one place at once...
@@ -100,18 +115,18 @@ public class MpRegeneration extends TimerTask {
 		} else if (Maps.isInInn(_pc)) {
 			baseMpr += Config.RATE_MP_HOTEL;
 		} else if (Maps.isInCastle(_pc)) {
-        	baseMpr += Config.RATE_MP_CASTLE;
+			baseMpr += Config.RATE_MP_CASTLE;
 		} else if (_pc.isElf() && Maps.atMotherTree(_pc)) {
 			baseMpr += Config.RATE_HP_MOTHERTREE;
 		} else if (_pc.isIllusionist() && Maps.atSilveriaCenter(_pc)) {
 			baseMpr += Config.RATE_HP_ILLUSIONISTTOWN;
-        } else if (_pc.isDragonKnight() && Maps.atBehimousCenter(_pc)) {
+		} else if (_pc.isDragonKnight() && Maps.atBehimousCenter(_pc)) {
 			baseMpr += Config.RATE_HP_DRAGONKNIGHTTOWN;
-        }
+		}
 
- 		if (_pc.getOriginalMpr() > 0) { 
- 			baseMpr += _pc.getOriginalMpr();
- 		}
+		if (_pc.getOriginalMpr() > 0) {
+			baseMpr += _pc.getOriginalMpr();
+		}
 
 		int itemMpr = _pc.getInventory().mpRegenPerTick();
 		itemMpr += _pc.getMpr();
@@ -123,7 +138,7 @@ public class MpRegeneration extends TimerTask {
 			}
 		}
 		int mpPluss = _pc.getWis() - 12;
-		if (mpPluss <= 12){
+		if (mpPluss <= 12) {
 			mpPluss = 12;
 		}
 		int mpr = baseMpr + itemMpr + mpPluss;
@@ -135,8 +150,8 @@ public class MpRegeneration extends TimerTask {
 	}
 
 	private boolean isOverWeight(L1PcInstance pc) {
-		if (pc.hasSkillEffect(EXOTIC_VITALIZE) ||
-				pc.hasSkillEffect(ADDITIONAL_FIRE)) {
+		if (pc.hasSkillEffect(EXOTIC_VITALIZE)
+				|| pc.hasSkillEffect(ADDITIONAL_FIRE)) {
 			return false;
 		}
 		return 120 <= pc.getInventory().getWeight240();

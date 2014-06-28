@@ -18,8 +18,6 @@
  */
 package l1j.server.server.clientpackets;
 
-import java.util.logging.Logger;
-
 import l1j.server.server.ClientThread;
 import l1j.server.server.datatables.ClanTable;
 import l1j.server.server.model.L1Clan;
@@ -33,27 +31,29 @@ import l1j.server.server.serverpackets.S_ServerMessage;
 public class C_CreateClan extends ClientBasePacket {
 
 	private static final String C_CREATE_CLAN = "[C] C_CreateClan";
-	private static Logger _log = Logger.getLogger(C_CreateClan.class.getName());
 
-	public C_CreateClan(byte abyte0[], ClientThread clientthread) throws Exception {
+	public C_CreateClan(byte abyte0[], ClientThread clientthread)
+			throws Exception {
 		super(abyte0);
 		String s = readS();
-		//TODO Never used
-		//int i = s.length();
+		// TODO Never used
+		// int i = s.length();
 
 		L1PcInstance l1pcinstance = clientthread.getActiveChar();
 		if (l1pcinstance.isCrown()) {
 			if (l1pcinstance.getClanid() == 0) {
 
-				for (L1Clan clan : L1World.getInstance().getAllClans()) { 
-					if (clan.getClanName().toLowerCase().equals(s.toLowerCase())) {
+				for (L1Clan clan : L1World.getInstance().getAllClans()) {
+					if (clan.getClanName().toLowerCase()
+							.equals(s.toLowerCase())) {
 						l1pcinstance.sendPackets(new S_ServerMessage(99));
 						return;
 					}
 				}
-				L1Clan clan = ClanTable.getInstance().createClan(l1pcinstance, s); 
+				L1Clan clan = ClanTable.getInstance().createClan(l1pcinstance,
+						s);
 				if (clan != null) {
-					l1pcinstance.sendPackets(new S_ServerMessage(84, s)); 
+					l1pcinstance.sendPackets(new S_ServerMessage(84, s));
 				}
 			} else {
 				l1pcinstance.sendPackets(new S_ServerMessage(86));

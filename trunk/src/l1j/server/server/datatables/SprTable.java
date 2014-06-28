@@ -18,6 +18,31 @@
  */
 package l1j.server.server.datatables;
 
+import static l1j.server.server.ActionCodes.ACTION_Attack;
+import static l1j.server.server.ActionCodes.ACTION_AxeAttack;
+import static l1j.server.server.ActionCodes.ACTION_AxeWalk;
+import static l1j.server.server.ActionCodes.ACTION_BowAttack;
+import static l1j.server.server.ActionCodes.ACTION_BowWalk;
+import static l1j.server.server.ActionCodes.ACTION_ClawAttack;
+import static l1j.server.server.ActionCodes.ACTION_ClawWalk;
+import static l1j.server.server.ActionCodes.ACTION_DaggerAttack;
+import static l1j.server.server.ActionCodes.ACTION_DaggerWalk;
+import static l1j.server.server.ActionCodes.ACTION_EdoryuAttack;
+import static l1j.server.server.ActionCodes.ACTION_EdoryuWalk;
+import static l1j.server.server.ActionCodes.ACTION_SkillAttack;
+import static l1j.server.server.ActionCodes.ACTION_SkillBuff;
+import static l1j.server.server.ActionCodes.ACTION_SpearAttack;
+import static l1j.server.server.ActionCodes.ACTION_SpearWalk;
+import static l1j.server.server.ActionCodes.ACTION_StaffAttack;
+import static l1j.server.server.ActionCodes.ACTION_StaffWalk;
+import static l1j.server.server.ActionCodes.ACTION_SwordAttack;
+import static l1j.server.server.ActionCodes.ACTION_SwordWalk;
+import static l1j.server.server.ActionCodes.ACTION_ThrowingKnifeAttack;
+import static l1j.server.server.ActionCodes.ACTION_ThrowingKnifeWalk;
+import static l1j.server.server.ActionCodes.ACTION_TwoHandSwordAttack;
+import static l1j.server.server.ActionCodes.ACTION_TwoHandSwordWalk;
+import static l1j.server.server.ActionCodes.ACTION_Walk;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -27,14 +52,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import l1j.server.L1DatabaseFactory;
-import static l1j.server.server.ActionCodes.*;
 import l1j.server.server.utils.SQLUtil;
 
 public class SprTable {
 	private static Logger _log = Logger.getLogger(SprTable.class.getName());
 	private static final HashMap<Integer, Spr> _dataMap = new HashMap<Integer, Spr>();
 	private static final SprTable _instance = new SprTable();
-	
+
 	private static class Spr {
 		private final HashMap<Integer, Integer> moveSpeed = new HashMap<Integer, Integer>();
 		private final HashMap<Integer, Integer> attackSpeed = new HashMap<Integer, Integer>();
@@ -119,7 +143,7 @@ public class SprTable {
 		}
 		_log.config("SPR entries " + _dataMap.size() + " loaded.");
 	}
-	
+
 	private int calcActionSpeed(int frameCount, int frameRate) {
 		return (int) (frameCount * 40 * (24D / frameRate));
 	}

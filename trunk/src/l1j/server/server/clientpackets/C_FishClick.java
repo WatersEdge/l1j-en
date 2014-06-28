@@ -21,15 +21,14 @@
  */
 package l1j.server.server.clientpackets;
 
-import java.util.logging.Logger;
 import java.util.Random;
 
 import l1j.server.server.ClientThread;
 import l1j.server.server.controllers.FishingTimeController;
 import l1j.server.server.datatables.ItemTable;
+import l1j.server.server.model.L1World;
 import l1j.server.server.model.Instance.L1ItemInstance;
 import l1j.server.server.model.Instance.L1PcInstance;
-import l1j.server.server.model.L1World;
 import l1j.server.server.serverpackets.S_CharVisualUpdate;
 import l1j.server.server.serverpackets.S_ServerMessage;
 
@@ -38,22 +37,23 @@ import l1j.server.server.serverpackets.S_ServerMessage;
 
 public class C_FishClick extends ClientBasePacket {
 	private static final String C_FISHCLICK = "[C] C_FishClick";
-	private static Logger _log = Logger.getLogger(C_FishClick.class.getName());
 	private static Random _random = new Random();
 	private static final int HEADING_TABLE_X[] = { 0, 1, 1, 1, 0, -1, -1, -1 };
 	private static final int HEADING_TABLE_Y[] = { -1, -1, 0, 1, 1, 1, 0, -1 };
 
-	public C_FishClick(byte abyte0[], ClientThread clientthread) throws Exception {
+	public C_FishClick(byte abyte0[], ClientThread clientthread)
+			throws Exception {
 		super(abyte0);
 		L1PcInstance pc = clientthread.getActiveChar();
 		long currentTime = System.currentTimeMillis();
 		long time = pc.getFishingTime();
 
-		if (currentTime < (time + 500) && currentTime > (time - 500) && pc.isFishingReady()) {
+		if (currentTime < (time + 500) && currentTime > (time - 500)
+				&& pc.isFishingReady()) {
 			finishFishing(pc);
-			
+
 			int chance = _random.nextInt(200) + 1;
-			
+
 			if (chance < 50) {
 				successFishing(pc, 41298, "$5256"); // 25%
 			} else if (chance < 65) {
@@ -121,9 +121,12 @@ public class C_FishClick extends ClientBasePacket {
 		dropLoc[1] = loc[1] - HEADING_TABLE_Y[heading];
 
 		if (pc.getMap().isPassable(dropLoc[0], dropLoc[1])) {
-			L1World.getInstance().getInventory(dropLoc[0], dropLoc[1], pc.getMapId()).storeItem(item);
+			L1World.getInstance()
+					.getInventory(dropLoc[0], dropLoc[1], pc.getMapId())
+					.storeItem(item);
 		} else {
-			L1World.getInstance().getInventory(loc[0], loc[1], pc.getMapId()).storeItem(item);
+			L1World.getInstance().getInventory(loc[0], loc[1], pc.getMapId())
+					.storeItem(item);
 		}
 		pc.sendPackets(new S_ServerMessage(1185, message));
 	}

@@ -18,8 +18,6 @@
  */
 package l1j.server.server.command.executor;
 
-import java.util.logging.Logger;
-
 import l1j.server.server.datatables.IpTable;
 import l1j.server.server.model.L1World;
 import l1j.server.server.model.Instance.L1PcInstance;
@@ -27,7 +25,6 @@ import l1j.server.server.serverpackets.S_Disconnect;
 import l1j.server.server.serverpackets.S_SystemMessage;
 
 public class L1PowerKick implements L1CommandExecutor {
-	private static Logger _log = Logger.getLogger(L1PowerKick.class.getName());
 
 	private L1PowerKick() {
 	}
@@ -43,14 +40,13 @@ public class L1PowerKick implements L1CommandExecutor {
 
 			IpTable iptable = IpTable.getInstance();
 			if (target != null) {
-				iptable.banIp(target.getNetConnection().getIp()); 
+				iptable.banIp(target.getNetConnection().getIp());
 				pc.sendPackets(new S_SystemMessage((new StringBuilder())
-						.append(target.getName()).append(" has been kicked and banned.")
-						.toString()));
+						.append(target.getName())
+						.append(" has been kicked and banned.").toString()));
 				target.sendPackets(new S_Disconnect());
 			} else {
-				pc.sendPackets(new S_SystemMessage(
-						"Who dat?"));
+				pc.sendPackets(new S_SystemMessage("Who dat?"));
 			}
 		} catch (Exception e) {
 			pc.sendPackets(new S_SystemMessage(cmdName + " player_name"));

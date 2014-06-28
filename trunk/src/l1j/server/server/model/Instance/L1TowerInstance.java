@@ -18,8 +18,6 @@
  */
 package l1j.server.server.model.Instance;
 
-import java.util.logging.Logger;
-
 import l1j.server.server.ActionCodes;
 import l1j.server.server.GeneralThreadPool;
 import l1j.server.server.controllers.WarTimeController;
@@ -31,14 +29,13 @@ import l1j.server.server.model.L1Object;
 import l1j.server.server.model.L1War;
 import l1j.server.server.model.L1WarSpawn;
 import l1j.server.server.model.L1World;
-import l1j.server.server.serverpackets.S_RemoveObject;
 import l1j.server.server.serverpackets.S_DoActionGFX;
 import l1j.server.server.serverpackets.S_NPCPack;
+import l1j.server.server.serverpackets.S_RemoveObject;
 import l1j.server.server.templates.L1Npc;
 
 public class L1TowerInstance extends L1NpcInstance {
 	private static final long serialVersionUID = 1L;
-	private static Logger _log = Logger.getLogger(L1TowerInstance.class.getName());
 
 	public L1TowerInstance(L1Npc template) {
 		super(template);
@@ -69,24 +66,18 @@ public class L1TowerInstance extends L1NpcInstance {
 	}
 
 	@Override
-	public void receiveDamage(L1Character attacker, int damage) { 
-		if (_castle_id == 0) { 
-			//this makes absolutely no sense to me, surely this isn't proper?
+	public void receiveDamage(L1Character attacker, int damage) {
+		if (_castle_id == 0) {
 			if (isSubTower()) {
 				_castle_id = L1CastleLocation.ADEN_CASTLE_ID;
-				_castle_id = L1CastleLocation.OT_CASTLE_ID;
-				_castle_id = L1CastleLocation.WW_CASTLE_ID;
-				_castle_id = L1CastleLocation.GIRAN_CASTLE_ID;
-				_castle_id = L1CastleLocation.HEINE_CASTLE_ID;
-				_castle_id = L1CastleLocation.DOWA_CASTLE_ID;
-				_castle_id = L1CastleLocation.DIAD_CASTLE_ID;
-				_castle_id = L1CastleLocation.KENT_CASTLE_ID;
 			} else {
-				_castle_id = L1CastleLocation.getCastleId(getX(), getY(), getMapId());
+				_castle_id = L1CastleLocation.getCastleId(getX(), getY(),
+						getMapId());
 			}
 		}
 
-		if (_castle_id > 0 && WarTimeController.getInstance().isNowWar(_castle_id)) { 
+		if (_castle_id > 0
+				&& WarTimeController.getInstance().isNowWar(_castle_id)) {
 			if (_castle_id == L1CastleLocation.ADEN_CASTLE_ID && !isSubTower()) {
 				int subTowerDeadCount = 0;
 				for (L1Object l1object : L1World.getInstance().getObject()) {
@@ -127,7 +118,7 @@ public class L1TowerInstance extends L1NpcInstance {
 			}
 			boolean isProclamation = false;
 			for (L1War war : L1World.getInstance().getWarList()) {
-				if (_castle_id == war.GetCastleId()) { 
+				if (_castle_id == war.GetCastleId()) {
 					isProclamation = war.CheckClanInWar(pc.getClanname());
 					break;
 				}
@@ -172,7 +163,7 @@ public class L1TowerInstance extends L1NpcInstance {
 						}
 					}
 				}
-			} else if (!isDead()) { 
+			} else if (!isDead()) {
 				setDead(true);
 				setStatus(ActionCodes.ACTION_TowerDie);
 				_lastattacker = attacker;
@@ -231,15 +222,15 @@ public class L1TowerInstance extends L1NpcInstance {
 		}
 		removeAllKnownObjects();
 	}
-	
+
 	public boolean isSubTower2() {
 		return false;
 	}
-	
+
 	public boolean isSubTower() {
 		return (getNpcTemplate().get_npcId() == 81190
 				|| getNpcTemplate().get_npcId() == 81191
-				|| getNpcTemplate().get_npcId() == 81192
-				|| getNpcTemplate().get_npcId() == 81193);
+				|| getNpcTemplate().get_npcId() == 81192 || getNpcTemplate()
+				.get_npcId() == 81193);
 	}
 }

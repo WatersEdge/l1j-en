@@ -18,15 +18,12 @@
  */
 package l1j.server.server.model.map;
 
-import java.util.logging.Logger;
-
 import l1j.server.server.ActionCodes;
 import l1j.server.server.datatables.DoorTable;
 import l1j.server.server.model.Instance.L1DoorInstance;
 import l1j.server.server.types.Point;
 
 public class L1V1Map extends L1Map {
-	private static Logger _log = Logger.getLogger(L1Map.class.getName());
 
 	private int _mapId;
 
@@ -61,9 +58,10 @@ public class L1V1Map extends L1Map {
 	private boolean _isUsableItem;
 
 	private boolean _isUsableSkill;
-	/* Map information to a front-page flag holder for a bit reluctantly. 
-	 * Readability is a large drop in child imitating not so good.
-	 * Mob, and traffic on the tiles is impossible to object if a bit flag indicating
+	/*
+	 * Map information to a front-page flag holder for a bit reluctantly.
+	 * Readability is a large drop in child imitating not so good. Mob, and
+	 * traffic on the tiles is impossible to object if a bit flag indicating
 	 */
 	private static final byte BITFLAG_IS_IMPASSABLE = (byte) 128; // 1000 0000
 
@@ -125,7 +123,7 @@ public class L1V1Map extends L1Map {
 	}
 
 	private void setTile(int x, int y, int tile) {
-		if (!isInMap(x, y)) { 
+		if (!isInMap(x, y)) {
 			return;
 		}
 		_map[x - _worldTopLeftX][y - _worldTopLeftY] = (byte) tile;
@@ -181,8 +179,7 @@ public class L1V1Map extends L1Map {
 
 	@Override
 	public boolean isInMap(int x, int y) {
-		if (_mapId == 4
-				&& (x < 32520 || y < 32070 || (y < 32190 && x < 33950))) {
+		if (_mapId == 4 && (x < 32520 || y < 32070 || (y < 32190 && x < 33950))) {
 			return false;
 		}
 		return (_worldTopLeftX <= x && x <= _worldBottomRightX
@@ -470,21 +467,19 @@ public class L1V1Map extends L1Map {
 			int leftEdgeLocation = door.getLeftEdgeLocation();
 			int rightEdgeLocation = door.getRightEdgeLocation();
 			int size = rightEdgeLocation - leftEdgeLocation;
-			if (size == 0) { // 
+			if (size == 0) { //
 				if (x == door.getX() && y == door.getY()) {
 					return true;
 				}
-			} else { // 
-				if (door.getDirection() == 0) { // 
-					for (int doorX = leftEdgeLocation;
-							doorX <= rightEdgeLocation; doorX++) {
+			} else { //
+				if (door.getDirection() == 0) { //
+					for (int doorX = leftEdgeLocation; doorX <= rightEdgeLocation; doorX++) {
 						if (x == doorX && y == door.getY()) {
 							return true;
 						}
 					}
-				} else { // 
-					for (int doorY = leftEdgeLocation;
-							doorY <= rightEdgeLocation; doorY++) {
+				} else { //
+					for (int doorY = leftEdgeLocation; doorY <= rightEdgeLocation; doorY++) {
 						if (x == door.getX() && y == doorY) {
 							return true;
 						}
