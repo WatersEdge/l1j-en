@@ -121,6 +121,12 @@ There's a limit to how much can be modified via the config files.  A great deal 
 
 If you've made it through and set everything up, then congrats.  However, there seem to be a large supply of others who always seem to have problems.  One way to help them is to contribute alternative guides.  Several other setup guides existed in various private server forums, but these always disappeared when the server went offline.  Of particular use to newbies were the graphical guides specific to Windows.  If you have a copy of one of these or feel like writing one, let us know and we'll host it here.
 
+Here's a few that we know of:
+
+[Lineage Retribution's old setup guide](http://web.archive.org/web/20100430082609/http://www.retrib.net/wiki/Setting_up_your_own_L1J-EN_server_database): Only covers the database, but goes into a bit of extra detail than covered here.
+
+(A video setup guide)[https://www.youtube.com/watch?v=KBlMCjzcnhA]: Probably is pretty accurate due to being recent.
+
 == Conclusion ==
 
 While admittedly not all-encompassing, this document hopefully demystifies server setup for those who are almost there but couldn't quite figure it out on their own. Literally anyone should be able to follow the steps here and have their own server up and running within an hour or two. Have fun, and let us know how it goes.
