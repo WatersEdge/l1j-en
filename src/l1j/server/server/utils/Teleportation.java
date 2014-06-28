@@ -18,9 +18,12 @@
  */
 package l1j.server.server.utils;
 
+import static l1j.server.server.model.skill.L1SkillId.BLOODLUST;
+import static l1j.server.server.model.skill.L1SkillId.WIND_SHACKLE;
+
 import java.util.HashSet;
-import java.util.logging.Logger;
 import java.util.Random;
+import java.util.logging.Logger;
 
 import l1j.server.server.model.L1Clan;
 import l1j.server.server.model.L1Location;
@@ -35,19 +38,19 @@ import l1j.server.server.model.map.L1WorldMap;
 import l1j.server.server.model.skill.L1SkillId;
 import l1j.server.server.serverpackets.S_CharVisualUpdate;
 import l1j.server.server.serverpackets.S_DollPack;
-import l1j.server.server.serverpackets.S_SkillBrave;
-import l1j.server.server.serverpackets.S_SkillIconWindShackle;
 import l1j.server.server.serverpackets.S_MapID;
 import l1j.server.server.serverpackets.S_OtherCharPacks;
 import l1j.server.server.serverpackets.S_OwnCharPack;
 import l1j.server.server.serverpackets.S_PetPack;
+import l1j.server.server.serverpackets.S_SkillBrave;
+import l1j.server.server.serverpackets.S_SkillIconWindShackle;
 import l1j.server.server.serverpackets.S_SummonPack;
-import static l1j.server.server.model.skill.L1SkillId.*;
 
 // Referenced classes of package l1j.server.server.utils:
 // FaceToFace
 public class Teleportation {
-	private static Logger _log = Logger.getLogger(Teleportation.class.getName());
+	private static Logger _log = Logger
+			.getLogger(Teleportation.class.getName());
 	private static Random _random = new Random();
 
 	private Teleportation() {
@@ -75,8 +78,8 @@ public class Teleportation {
 
 		L1Clan clan = L1World.getInstance().getClan(pc.getClanname());
 		if (clan != null) {
-			if (clan.getWarehouseUsingChar() == pc.getId()) { 
-				clan.setWarehouseUsingChar(0); 
+			if (clan.getWarehouseUsingChar() == pc.getId()) {
+				clan.setWarehouseUsingChar(0);
 			}
 		}
 
@@ -85,19 +88,18 @@ public class Teleportation {
 		pc.setHeading(head);
 		pc.sendPackets(new S_MapID(pc.getMapId(), pc.getMap().isUnderwater()));
 
-		if (pc.isReserveGhost()) { 
+		if (pc.isReserveGhost()) {
 			pc.endGhost();
 		}
 		if (pc.isGhost() || pc.isGmInvis()) {
 		} else if (pc.isInvisble()) {
-			pc.broadcastPacketForFindInvis(new S_OtherCharPacks(pc, true),
-					true);
+			pc.broadcastPacketForFindInvis(new S_OtherCharPacks(pc, true), true);
 		} else {
 			pc.broadcastPacket(new S_OtherCharPacks(pc));
 		}
 		pc.sendPackets(new S_OwnCharPack(pc));
 		pc.removeAllKnownObjects();
-		pc.sendVisualEffectAtTeleport(); 
+		pc.sendVisualEffectAtTeleport();
 		pc.updateObject();
 		pc.sendPackets(new S_CharVisualUpdate(pc));
 		pc.killSkillEffectTimer(L1SkillId.MEDITATION);
@@ -110,6 +112,10 @@ public class Teleportation {
 					L1Location loc = pc.getLocation().randomLocation(3, false);
 					int nx = loc.getX();
 					int ny = loc.getY();
+					if (!pc.glanceCheck(nx, ny)) {
+						nx = pc.getLocation().getX();
+						ny = pc.getLocation().getY();
+					}
 					if (pc.getMapId() == 5125 || pc.getMapId() == 5131
 							|| pc.getMapId() == 5132 || pc.getMapId() == 5133
 							|| pc.getMapId() == 5134) {
@@ -164,13 +170,14 @@ public class Teleportation {
 			updatePc.updateObject();
 		}
 		pc.setTeleport(false);
-		
+
 		if (pc.hasSkillEffect(WIND_SHACKLE)) {
-			pc.sendPackets(new S_SkillIconWindShackle(pc.getId(),
-					pc.getSkillEffectTimeSec(WIND_SHACKLE)));
+			pc.sendPackets(new S_SkillIconWindShackle(pc.getId(), pc
+					.getSkillEffectTimeSec(WIND_SHACKLE)));
 		}
 		if (pc.hasSkillEffect(BLOODLUST)) {
-			pc.sendPackets(new S_SkillBrave(pc.getId(), 6, pc.getSkillEffectTimeSec(BLOODLUST)));
+			pc.sendPackets(new S_SkillBrave(pc.getId(), 6, pc
+					.getSkillEffectTimeSec(BLOODLUST)));
 			pc.broadcastPacket(new S_SkillBrave(pc.getId(), 6, 0));
 		}
 	}
@@ -179,13 +186,13 @@ public class Teleportation {
 			int head) {
 		L1World.getInstance().moveVisibleObject(npc, map);
 
-		L1WorldMap.getInstance().getMap(npc.getMapId()).setPassable(npc.getX(),
-				npc.getY(), true);
+		L1WorldMap.getInstance().getMap(npc.getMapId())
+				.setPassable(npc.getX(), npc.getY(), true);
 		npc.setX(x);
 		npc.setY(y);
 		npc.setMap(map);
 		npc.setHeading(head);
-		L1WorldMap.getInstance().getMap(npc.getMapId()).setPassable(npc.getX(),
-				npc.getY(), false);
+		L1WorldMap.getInstance().getMap(npc.getMapId())
+				.setPassable(npc.getX(), npc.getY(), false);
 	}
 }

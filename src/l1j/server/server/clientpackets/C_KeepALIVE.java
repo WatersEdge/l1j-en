@@ -17,8 +17,6 @@
  */
 package l1j.server.server.clientpackets;
 
-import java.util.logging.Logger;
-
 import l1j.server.server.ClientThread;
 import l1j.server.server.model.Instance.L1PcInstance;
 import l1j.server.server.serverpackets.S_GameTime;
@@ -26,12 +24,12 @@ import l1j.server.server.serverpackets.S_GameTime;
 // Referenced classes of package l1j.server.server.clientpackets:
 // ClientBasePacket
 public class C_KeepALIVE extends ClientBasePacket {
-	private static Logger _log = Logger.getLogger(C_KeepALIVE.class.getName());
 	private static final String C_KEEP_ALIVE = "[C] C_KeepALIVE";
 
 	public C_KeepALIVE(byte decrypt[], ClientThread client) {
 		super(decrypt);
-		// XXX:GameTime Send (3 bytes of data to send it to come because you do not have to use something maybe)
+		// XXX:GameTime Send (3 bytes of data to send it to come because you do
+		// not have to use something maybe)
 		L1PcInstance pc = client.getActiveChar();
 		pc.sendPackets(new S_GameTime());
 	}

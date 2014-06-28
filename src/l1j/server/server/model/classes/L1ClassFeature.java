@@ -21,41 +21,40 @@ package l1j.server.server.model.classes;
 import java.util.Map;
 
 import l1j.server.server.model.L1Attribute;
-import l1j.server.server.model.Instance.L1PcInstance;
 
 /**
  * Class related constants.
- *
+ * 
  * A lot of this could really go into Config files, but that's a pain in the
  * rear and even the super custom servers don't seem to tweak this from classic
  * Lineage.
  */
 public abstract class L1ClassFeature {
 	public static L1ClassFeature newClassFeature(int classId) {
-		switch(classId) {
-			case L1PcInstance.CLASSID_PRINCE: 
-			case L1PcInstance.CLASSID_PRINCESS:
-				return new L1RoyalClassFeature();
-			case L1PcInstance.CLASSID_ELF_MALE:
-			case L1PcInstance.CLASSID_ELF_FEMALE:
-				return new L1ElfClassFeature();
-			case L1PcInstance.CLASSID_KNIGHT_MALE:
-			case L1PcInstance.CLASSID_KNIGHT_FEMALE:
-				return new L1KnightClassFeature();
-			case L1PcInstance.CLASSID_WIZARD_MALE:
-			case L1PcInstance.CLASSID_WIZARD_FEMALE:
-				return new L1WizardClassFeature();
-			case L1PcInstance.CLASSID_DARK_ELF_MALE:
-			case L1PcInstance.CLASSID_DARK_ELF_FEMALE:
-				return new L1DarkElfClassFeature();
-			case L1PcInstance.CLASSID_DRAGON_KNIGHT_MALE:
-			case L1PcInstance.CLASSID_DRAGON_KNIGHT_FEMALE:
-				return new L1DragonKnightClassFeature();
-			case L1PcInstance.CLASSID_ILLUSIONIST_MALE:
-			case L1PcInstance.CLASSID_ILLUSIONIST_FEMALE:
-				return new L1IllusionistClassFeature();
-			default:
-				throw new IllegalArgumentException();
+		switch (classId) {
+		case L1ClassId.CLASSID_PRINCE:
+		case L1ClassId.CLASSID_PRINCESS:
+			return new L1RoyalClassFeature();
+		case L1ClassId.CLASSID_ELF_MALE:
+		case L1ClassId.CLASSID_ELF_FEMALE:
+			return new L1ElfClassFeature();
+		case L1ClassId.CLASSID_KNIGHT_MALE:
+		case L1ClassId.CLASSID_KNIGHT_FEMALE:
+			return new L1KnightClassFeature();
+		case L1ClassId.CLASSID_WIZARD_MALE:
+		case L1ClassId.CLASSID_WIZARD_FEMALE:
+			return new L1WizardClassFeature();
+		case L1ClassId.CLASSID_DARK_ELF_MALE:
+		case L1ClassId.CLASSID_DARK_ELF_FEMALE:
+			return new L1DarkElfClassFeature();
+		case L1ClassId.CLASSID_DRAGON_KNIGHT_MALE:
+		case L1ClassId.CLASSID_DRAGON_KNIGHT_FEMALE:
+			return new L1DragonKnightClassFeature();
+		case L1ClassId.CLASSID_ILLUSIONIST_MALE:
+		case L1ClassId.CLASSID_ILLUSIONIST_FEMALE:
+			return new L1IllusionistClassFeature();
+		default:
+			throw new IllegalArgumentException();
 		}
 	}
 
@@ -117,5 +116,5 @@ public abstract class L1ClassFeature {
 
 	public abstract int getOriginalHpRegen(int con);
 
-	public abstract int getOriginalMpRegen(int wis);	
+	public abstract int getOriginalMpRegen(int wis);
 }

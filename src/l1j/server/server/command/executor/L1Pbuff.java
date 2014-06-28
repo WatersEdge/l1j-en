@@ -19,8 +19,8 @@
 package l1j.server.server.command.executor;
 
 import l1j.server.Config;
-import l1j.server.server.model.Instance.L1PcInstance;
 import l1j.server.server.model.L1World;
+import l1j.server.server.model.Instance.L1PcInstance;
 
 public class L1Pbuff implements L1CommandExecutor {
 	private L1Pbuff() {
@@ -33,12 +33,12 @@ public class L1Pbuff implements L1CommandExecutor {
 	@Override
 	public void execute(L1PcInstance pc, String cmdName, String arg) {
 		L1World world = L1World.getInstance();
-    		if (Config.POWER_BUFF == false){
-    			Config.POWER_BUFF = true;
-    			world.broadcastServerMessage("The power buff command has been enabled!");	
-    		}else{
-    			Config.POWER_BUFF = false;
-    			world.broadcastServerMessage("The power buff command has been disabled!");
-    	}
+		if (Config.POWER_BUFF == false) {
+			Config.POWER_BUFF = true;
+			world.broadcastServerMessage("The power buff command has been enabled!");
+		} else {
+			Config.POWER_BUFF = false;
+			world.broadcastServerMessage("The power buff command has been disabled!");
+		}
 	}
 }

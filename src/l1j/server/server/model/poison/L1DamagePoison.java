@@ -18,18 +18,14 @@
  */
 package l1j.server.server.model.poison;
 
-import java.util.logging.Logger;
-
+import static l1j.server.server.model.skill.L1SkillId.STATUS_POISON;
 import l1j.server.server.GeneralThreadPool;
 import l1j.server.server.model.L1Character;
 import l1j.server.server.model.Instance.L1MonsterInstance;
 import l1j.server.server.model.Instance.L1NpcInstance;
 import l1j.server.server.model.Instance.L1PcInstance;
-import static l1j.server.server.model.skill.L1SkillId.*;
 
 public class L1DamagePoison extends L1Poison {
-	private static Logger _log = Logger.getLogger(L1DamagePoison.class
-			.getName());
 
 	private Thread _timer;
 	private final L1Character _attacker;
@@ -63,13 +59,13 @@ public class L1DamagePoison extends L1Poison {
 				if (_target instanceof L1PcInstance) {
 					L1PcInstance player = (L1PcInstance) _target;
 					player.receiveDamage(_attacker, _damage, false);
-					if (player.isDead()) { 
+					if (player.isDead()) {
 						break;
 					}
 				} else if (_target instanceof L1MonsterInstance) {
 					L1MonsterInstance mob = (L1MonsterInstance) _target;
 					mob.receiveDamage(_attacker, _damage);
-					if (mob.isDead()) { 
+					if (mob.isDead()) {
 						return;
 					}
 				}
@@ -94,7 +90,7 @@ public class L1DamagePoison extends L1Poison {
 
 		if (isDamageTarget(_target)) {
 			_timer = new NormalPoisonTimer();
-			GeneralThreadPool.getInstance().execute(_timer); 
+			GeneralThreadPool.getInstance().execute(_timer);
 		}
 	}
 

@@ -18,8 +18,6 @@
  */
 package l1j.server.server.model.Instance;
 
-import java.util.logging.Logger;
-
 import l1j.server.server.datatables.HouseTable;
 import l1j.server.server.datatables.NPCTalkDataTable;
 import l1j.server.server.model.L1Attack;
@@ -35,8 +33,6 @@ public class L1HousekeeperInstance extends L1NpcInstance {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private static Logger _log = Logger.getLogger(L1HousekeeperInstance.class
-			.getName());
 
 	/**
 	 * @param template
@@ -67,8 +63,8 @@ public class L1HousekeeperInstance extends L1NpcInstance {
 			if (clan != null) {
 				int houseId = clan.getHouseId();
 				if (houseId != 0) {
-					L1House house = HouseTable.getInstance()
-							.getHouseTable(houseId);
+					L1House house = HouseTable.getInstance().getHouseTable(
+							houseId);
 					if (npcid == house.getKeeperId()) {
 						isOwner = true;
 					}
@@ -107,12 +103,9 @@ public class L1HousekeeperInstance extends L1NpcInstance {
 				}
 			}
 
-
 			if (htmlid != null) {
 				if (htmldata != null) {
-					pc
-							.sendPackets(new S_NPCTalkReturn(objid, htmlid,
-									htmldata));
+					pc.sendPackets(new S_NPCTalkReturn(objid, htmlid, htmldata));
 				} else {
 					pc.sendPackets(new S_NPCTalkReturn(objid, htmlid));
 				}

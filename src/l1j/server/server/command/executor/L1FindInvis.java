@@ -18,16 +18,13 @@
  */
 package l1j.server.server.command.executor;
 
-import java.util.logging.Logger;
-
+import static l1j.server.server.model.skill.L1SkillId.GMSTATUS_FINDINVIS;
 import l1j.server.server.model.L1World;
 import l1j.server.server.model.Instance.L1PcInstance;
 import l1j.server.server.serverpackets.S_RemoveObject;
 import l1j.server.server.serverpackets.S_SystemMessage;
-import static l1j.server.server.model.skill.L1SkillId.*;
 
 public class L1FindInvis implements L1CommandExecutor {
-	private static Logger _log = Logger.getLogger(L1FindInvis.class.getName());
 
 	private L1FindInvis() {
 	}
@@ -44,8 +41,8 @@ public class L1FindInvis implements L1CommandExecutor {
 			pc.updateObject();
 		} else if (arg.equalsIgnoreCase("off")) {
 			pc.removeSkillEffect(GMSTATUS_FINDINVIS);
-			for (L1PcInstance visible : L1World.getInstance()
-					.getVisiblePlayer(pc)) {
+			for (L1PcInstance visible : L1World.getInstance().getVisiblePlayer(
+					pc)) {
 				if (visible.isInvisble()) {
 					pc.sendPackets(new S_RemoveObject(visible));
 				}

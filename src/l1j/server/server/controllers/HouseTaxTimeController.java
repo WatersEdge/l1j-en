@@ -19,7 +19,6 @@
 package l1j.server.server.controllers;
 
 import java.util.Calendar;
-import java.util.logging.Logger;
 import java.util.TimeZone;
 
 import l1j.server.Config;
@@ -32,7 +31,6 @@ import l1j.server.server.templates.L1AuctionBoard;
 import l1j.server.server.templates.L1House;
 
 public class HouseTaxTimeController implements Runnable {
-	private static Logger _log = Logger.getLogger(HouseTaxTimeController.class.getName());
 	private static HouseTaxTimeController _instance;
 
 	public static HouseTaxTimeController getInstance() {
@@ -61,7 +59,7 @@ public class HouseTaxTimeController implements Runnable {
 
 	private void checkTaxDeadline() {
 		for (L1House house : HouseTable.getInstance().getHouseTableList()) {
-			if (!house.isOnSale()) { 
+			if (!house.isOnSale()) {
 				if (house.getTaxDeadline().before(getRealTime())) {
 					sellHouse(house);
 				}
@@ -80,7 +78,7 @@ public class HouseTaxTimeController implements Runnable {
 			TimeZone tz = TimeZone.getTimeZone(Config.TIME_ZONE);
 			Calendar cal = Calendar.getInstance(tz);
 			cal.add(Calendar.DATE, 5);
-			cal.set(Calendar.MINUTE, 0); 
+			cal.set(Calendar.MINUTE, 0);
 			cal.set(Calendar.SECOND, 0);
 			board.setDeadline(cal);
 			board.setPrice(100000);
@@ -90,8 +88,8 @@ public class HouseTaxTimeController implements Runnable {
 			board.setBidder("");
 			board.setBidderId(0);
 			boardTable.insertAuctionBoard(board);
-			house.setOnSale(true); 
-			house.setPurchaseBasement(true); 
+			house.setOnSale(true);
+			house.setPurchaseBasement(true);
 			cal.add(Calendar.DATE, Config.HOUSE_TAX_INTERVAL);
 			house.setTaxDeadline(cal);
 			HouseTable.getInstance().updateHouse(house);

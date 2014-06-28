@@ -1,14 +1,11 @@
 package l1j.server.server.command.executor;
 
-import java.util.logging.Logger;
-
 import l1j.server.server.model.L1Teleport;
 import l1j.server.server.model.L1World;
 import l1j.server.server.model.Instance.L1PcInstance;
 import l1j.server.server.serverpackets.S_SystemMessage;
 
 public class L1Jail implements L1CommandExecutor {
-	private static Logger _log = Logger.getLogger(L1ToPC.class.getName());
 
 	private L1Jail() {
 	}
@@ -23,8 +20,9 @@ public class L1Jail implements L1CommandExecutor {
 			L1PcInstance convict = L1World.getInstance().getPlayer(arg);
 
 			if (convict != null) {
-				L1Teleport.teleport(convict , 32737, 32796, (short) 99, 5, true);
-				convict.sendPackets(new S_SystemMessage(pc.getName()+" jailed you for bad behavior."));
+				L1Teleport.teleport(convict, 32737, 32796, (short) 99, 5, true);
+				convict.sendPackets(new S_SystemMessage(pc.getName()
+						+ " jailed you for bad behavior."));
 				pc.sendPackets(new S_SystemMessage(arg + " has been jailed."));
 			} else {
 				pc.sendPackets(new S_SystemMessage((new StringBuilder())

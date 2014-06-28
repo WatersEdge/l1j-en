@@ -19,14 +19,12 @@
 package l1j.server.server.model;
 
 import java.util.Random;
-import java.util.logging.Logger;
 
 import l1j.server.server.model.map.L1Map;
 import l1j.server.server.model.map.L1WorldMap;
 import l1j.server.server.types.Point;
 
 public class L1Location extends Point {
-	private static Logger _log = Logger.getLogger(L1Location.class.getName());
 	private static Random _random = new Random();
 	protected L1Map _map = L1Map.newNull();
 
@@ -174,16 +172,14 @@ public class L1Location extends Point {
 			locY2 = mapY2;
 		}
 
-		int diffX = locX2 - locX1; 
-		int diffY = locY2 - locY1; 
-		
+		int diffX = locX2 - locX1;
+		int diffY = locY2 - locY1;
+
 		// fix rare exception with negative diffs
-		if (diffX < 0)
-		{
+		if (diffX < 0) {
 			diffX = 0;
 		}
-		if (diffY < 0)
-		{
+		if (diffY < 0) {
 			diffY = 0;
 		}
 
@@ -208,8 +204,8 @@ public class L1Location extends Point {
 				continue;
 
 			}
-			if (isRandomTeleport) { 
-				if (L1CastleLocation.checkInAllWarArea(newX, newY, mapId)) { 
+			if (isRandomTeleport) {
+				if (L1CastleLocation.checkInAllWarArea(newX, newY, mapId)) {
 					continue;
 				}
 

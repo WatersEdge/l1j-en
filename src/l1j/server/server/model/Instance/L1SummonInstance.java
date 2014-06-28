@@ -1,16 +1,17 @@
 package l1j.server.server.model.Instance;
 
+import static l1j.server.server.model.skill.L1SkillId.FOG_OF_SLEEPING;
+
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.ScheduledFuture;
-import java.util.logging.Logger;
 import java.util.Random;
+import java.util.concurrent.ScheduledFuture;
 
 import l1j.server.server.ActionCodes;
 import l1j.server.server.GeneralThreadPool;
-import l1j.server.server.encryptions.IdFactory;
 import l1j.server.server.datatables.DropTable;
 import l1j.server.server.datatables.NpcTable;
+import l1j.server.server.encryptions.IdFactory;
 import l1j.server.server.model.L1Attack;
 import l1j.server.server.model.L1Character;
 import l1j.server.server.model.L1Inventory;
@@ -24,13 +25,10 @@ import l1j.server.server.serverpackets.S_ServerMessage;
 import l1j.server.server.serverpackets.S_SkillSound;
 import l1j.server.server.serverpackets.S_SummonPack;
 import l1j.server.server.templates.L1Npc;
-import static l1j.server.server.model.skill.L1SkillId.*;
 
 public class L1SummonInstance extends L1NpcInstance {
 	private static final long serialVersionUID = 1L;
 
-	private static Logger _log = Logger.getLogger(L1SummonInstance.class
-			.getName());
 	private ScheduledFuture<?> _summonFuture;
 	private static final long SUMMON_TIME = 3600000L;
 	private int _currentPetStatus;
@@ -50,7 +48,8 @@ public class L1SummonInstance extends L1NpcInstance {
 				setDirectionMove(dir);
 				setSleepTime(calcSleepTime(getPassispeed(), MOVE_SPEED));
 			} else {
-				// If Summon owner is not avaliable or far away the summon goes to rest mode
+				// If Summon owner is not avaliable or far away the summon goes
+				// to rest mode
 				_currentPetStatus = 3;
 				return true;
 			}
@@ -59,19 +58,22 @@ public class L1SummonInstance extends L1NpcInstance {
 					|| Math.abs(getHomeY() - getY()) > 1) {
 				int dir = moveDirection(getHomeX(), getHomeY());
 				if (dir == -1) { // If the summon cant find a way to the owner
-						//Original code
-						/*setHomeX(getX());
-						setHomeY(getY());*/
-					//Fix by Ssargon, should make summons move better without getting stuck
+					// Original code
+					/*
+					 * setHomeX(getX()); setHomeY(getY());
+					 */
+					// Fix by Ssargon, should make summons move better without
+					// getting stuck
 					try {
 						Thread.sleep(200);
-						// Prevent infinite recursion by max-bounding retry depth
+						// Prevent infinite recursion by max-bounding retry
+						// depth
 						if (depth > 80) {
 							setHomeX(getX());
 							setHomeY(getY());
 							return true;
 						} else {
-							return noTarget(depth+1);
+							return noTarget(depth + 1);
 						}
 					} catch (Exception exception) {
 						setHomeX(getX());
@@ -87,8 +89,7 @@ public class L1SummonInstance extends L1NpcInstance {
 			if (getLocation().getTileLineDistance(_master.getLocation()) > 2) {
 				int dir = moveDirection(_master.getX(), _master.getY());
 				if (dir == -1) {
-					_currentPetStatus = 3;
-					return true;
+					return false;
 				} else {
 					setDirectionMove(dir);
 					setSleepTime(calcSleepTime(getPassispeed(), MOVE_SPEED));
@@ -208,10 +209,10 @@ public class L1SummonInstance extends L1NpcInstance {
 	}
 
 	@Override
-	public void receiveDamage(L1Character attacker, int damage) { 
+	public void receiveDamage(L1Character attacker, int damage) {
 		if (getCurrentHp() > 0) {
 			if (damage > 0) {
-				setHate(attacker, 0); 
+				setHate(attacker, 0);
 				removeSkillEffect(FOG_OF_SLEEPING);
 				if (!isExsistMaster()) {
 					_currentPetStatus = 1;
@@ -230,8 +231,7 @@ public class L1SummonInstance extends L1NpcInstance {
 			} else {
 				setCurrentHp(newHp);
 			}
-		} else if (!isDead())
-		{
+		} else if (!isDead()) {
 			Death(attacker);
 		}
 	}
@@ -247,8 +247,7 @@ public class L1SummonInstance extends L1NpcInstance {
 			L1Inventory targetInventory = _master.getInventory();
 			List<L1ItemInstance> items = _inventory.getItems();
 			for (L1ItemInstance item : items) {
-				if (_master.getInventory().checkAddItem( 
-						item, item.getCount()) == L1Inventory.OK) {
+				if (_master.getInventory().checkAddItem(item, item.getCount()) == L1Inventory.OK) {
 					_inventory
 							.tradeItem(item, item.getCount(), targetInventory);
 					((L1PcInstance) _master).sendPackets(new S_ServerMessage(
@@ -278,8 +277,7 @@ public class L1SummonInstance extends L1NpcInstance {
 			L1Inventory targetInventory = _master.getInventory();
 			List<L1ItemInstance> items = _inventory.getItems();
 			for (L1ItemInstance item : items) {
-				if (_master.getInventory().checkAddItem( 
-						item, item.getCount()) == L1Inventory.OK) {
+				if (_master.getInventory().checkAddItem(item, item.getCount()) == L1Inventory.OK) {
 					_inventory
 							.tradeItem(item, item.getCount(), targetInventory);
 					((L1PcInstance) _master).sendPackets(new S_ServerMessage(
@@ -365,8 +363,7 @@ public class L1SummonInstance extends L1NpcInstance {
 		if (master.isTeleport()) {
 			return;
 		}
-		if ((getZoneType() == ZoneType.Safety || 
-					attacker.getZoneType() == ZoneType.Safety)
+		if ((getZoneType() == ZoneType.Safety || attacker.getZoneType() == ZoneType.Safety)
 				&& isExsistMaster()) {
 			L1Attack attack_mortion = new L1Attack(attacker, this);
 			attack_mortion.action();
@@ -408,7 +405,7 @@ public class L1SummonInstance extends L1NpcInstance {
 				Death(null);
 			}
 		} else {
-		
+
 			Object[] petList = _master.getPetList().values().toArray();
 			for (Object petObject : petList) {
 				if (petObject instanceof L1SummonInstance) {
@@ -456,17 +453,17 @@ public class L1SummonInstance extends L1NpcInstance {
 
 	private int ActionType(String action) {
 		int status = 0;
-		if (action.equalsIgnoreCase("aggressive")) { 
+		if (action.equalsIgnoreCase("aggressive")) {
 			status = 1;
 		} else if (action.equalsIgnoreCase("defensive")) {
 			status = 2;
-		} else if (action.equalsIgnoreCase("stay")) { 
+		} else if (action.equalsIgnoreCase("stay")) {
 			status = 3;
-		} else if (action.equalsIgnoreCase("extend")) { 
+		} else if (action.equalsIgnoreCase("extend")) {
 			status = 4;
-		} else if (action.equalsIgnoreCase("alert")) { 
+		} else if (action.equalsIgnoreCase("alert")) {
 			status = 5;
-		} else if (action.equalsIgnoreCase("dismiss")) { 
+		} else if (action.equalsIgnoreCase("dismiss")) {
 			status = 6;
 		}
 		return status;

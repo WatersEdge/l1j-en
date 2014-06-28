@@ -19,7 +19,6 @@
 package l1j.server.server.command.executor;
 
 import java.util.StringTokenizer;
-import java.util.logging.Logger;
 
 import l1j.server.server.model.L1World;
 import l1j.server.server.model.Instance.L1PcInstance;
@@ -29,7 +28,6 @@ import l1j.server.server.serverpackets.S_ServerMessage;
 import l1j.server.server.serverpackets.S_SystemMessage;
 
 public class L1Status implements L1CommandExecutor {
-	private static Logger _log = Logger.getLogger(L1Status.class.getName());
 
 	private L1Status() {
 	}
@@ -54,7 +52,7 @@ public class L1Status implements L1CommandExecutor {
 			}
 
 			if (target == null) {
-				pc.sendPackets(new S_ServerMessage(73, char_name)); 
+				pc.sendPackets(new S_ServerMessage(73, char_name));
 				return;
 			}
 
@@ -70,19 +68,15 @@ public class L1Status implements L1CommandExecutor {
 				// -- use DB --
 			} else {
 				if (param.equalsIgnoreCase("HP")) {
-					target
-							.addBaseMaxHp((short) (value - target
-									.getBaseMaxHp()));
+					target.addBaseMaxHp((short) (value - target.getBaseMaxHp()));
 					target.setCurrentHpDirect(target.getMaxHp());
 				} else if (param.equalsIgnoreCase("MP")) {
-					target
-							.addBaseMaxMp((short) (value - target
-									.getBaseMaxMp()));
+					target.addBaseMaxMp((short) (value - target.getBaseMaxMp()));
 					target.setCurrentMpDirect(target.getMaxMp());
 				} else if (param.equalsIgnoreCase("LAWFUL")) {
 					target.setLawful(value);
-					S_Lawful s_lawful = new S_Lawful(target.getId(), target
-							.getLawful());
+					S_Lawful s_lawful = new S_Lawful(target.getId(),
+							target.getLawful());
 					target.sendPackets(s_lawful);
 					target.broadcastPacket(s_lawful);
 				} else if (param.equalsIgnoreCase("KARMA")) {
@@ -92,7 +86,8 @@ public class L1Status implements L1CommandExecutor {
 						value = 200;
 					}
 					target.setAccessLevel((short) value);
-					target.sendPackets(new S_SystemMessage("Your " + param + " was changed to " + value));
+					target.sendPackets(new S_SystemMessage("Your " + param
+							+ " was changed to " + value));
 				} else if (param.equalsIgnoreCase("STR")) {
 					target.addBaseStr((byte) (value - target.getBaseStr()));
 				} else if (param.equalsIgnoreCase("CON")) {
@@ -106,17 +101,19 @@ public class L1Status implements L1CommandExecutor {
 				} else if (param.equalsIgnoreCase("CHA")) {
 					target.addBaseCha((byte) (value - target.getBaseCha()));
 				} else {
-					pc.sendPackets(new S_SystemMessage(param + " is an unknown setting"));
+					pc.sendPackets(new S_SystemMessage(param
+							+ " is an unknown setting"));
 					return;
 				}
 				target.save();
 			}
 			target.sendPackets(new S_OwnCharStatus(target));
-			pc.sendPackets(new S_SystemMessage("Changed " + target.getName() + "'s " + param
-					+ "to " + value));
+			pc.sendPackets(new S_SystemMessage("Changed " + target.getName()
+					+ "'s " + param + "to " + value));
 		} catch (Exception e) {
-			pc.sendPackets(new S_SystemMessage(cmdName
-					+ " player AC/MR/HIT/DMG/HP/MP/LAWFUL/KARMA/GM/STR/CON/DEX/INT/WIS/CHA"));
+			pc.sendPackets(new S_SystemMessage(
+					cmdName
+							+ " player AC/MR/HIT/DMG/HP/MP/LAWFUL/KARMA/GM/STR/CON/DEX/INT/WIS/CHA"));
 		}
 	}
 }

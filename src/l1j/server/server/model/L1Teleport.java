@@ -18,8 +18,6 @@
  */
 package l1j.server.server.model;
 
-import java.util.logging.Logger;
-
 import l1j.server.Config;
 import l1j.server.server.model.Instance.L1NpcInstance;
 import l1j.server.server.model.Instance.L1PcInstance;
@@ -30,8 +28,6 @@ import l1j.server.server.serverpackets.S_Teleport;
 import l1j.server.server.utils.Teleportation;
 
 public class L1Teleport {
-
-	private static Logger _log = Logger.getLogger(L1Teleport.class.getName());
 
 	public static final int TELEPORT = 0;
 
@@ -68,8 +64,7 @@ public class L1Teleport {
 	public static void teleport(L1PcInstance pc, int x, int y, short mapId,
 			int head, boolean effectable, int skillType) {
 
-		pc.sendPackets(new S_Paralysis(S_Paralysis.TYPE_TELEPORT_UNLOCK,
-						false));
+		pc.sendPackets(new S_Paralysis(S_Paralysis.TYPE_TELEPORT_UNLOCK, false));
 
 		if (effectable && (skillType >= 0 && skillType <= EFFECT_SPR.length)) {
 			S_SkillSound packet = new S_SkillSound(pc.getId(),
@@ -145,8 +140,8 @@ public class L1Teleport {
 
 		if (map.isPassable(locX, locY)) {
 			if (cha instanceof L1PcInstance) {
-				teleport((L1PcInstance) cha, locX, locY, mapId, cha
-						.getHeading(), true);
+				teleport((L1PcInstance) cha, locX, locY, mapId,
+						cha.getHeading(), true);
 			} else if (cha instanceof L1NpcInstance) {
 				((L1NpcInstance) cha).teleport(locX, locY, cha.getHeading());
 			}

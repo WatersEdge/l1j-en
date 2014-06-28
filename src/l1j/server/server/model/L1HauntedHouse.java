@@ -18,30 +18,26 @@
  */
 package l1j.server.server.model;
 
+import static l1j.server.server.model.skill.L1SkillId.CANCELLATION;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import l1j.server.Config;
-import l1j.server.server.model.L1Object;
 import l1j.server.server.model.Instance.L1DoorInstance;
 import l1j.server.server.model.Instance.L1PcInstance;
 import l1j.server.server.model.skill.L1SkillUse;
-import static l1j.server.server.model.skill.L1SkillId.CANCELLATION;
 
 public class L1HauntedHouse {
-	private static final Logger _log = 
-		Logger.getLogger(L1HauntedHouse.class.getName());
 	public static final int STATUS_NONE = 0;
 	public static final int STATUS_READY = 1;
 	public static final int STATUS_PLAYING = 2;
 
 	private static final int HAUNTED_HOUSE_MAP = 5140;
 
-	private final List<L1PcInstance> _members =
-			new ArrayList<L1PcInstance>();
+	private final List<L1PcInstance> _members = new ArrayList<L1PcInstance>();
 	private int _hauntedHouseStatus = STATUS_NONE;
 	private int _winnersCount = 0;
 	private int _goalCount = 0;
@@ -103,7 +99,7 @@ public class L1HauntedHouse {
 		}
 
 		_members.clear();
-	
+
 		changeDoors(false);
 	}
 
@@ -136,7 +132,7 @@ public class L1HauntedHouse {
 			L1PolyMorph.undoPoly(pc);
 		}
 	}
-	
+
 	public void removeMember(L1PcInstance pc) {
 		_members.remove(pc);
 	}
@@ -171,7 +167,8 @@ public class L1HauntedHouse {
 
 	public class L1HauntedHouseReadyTimer extends TimerTask {
 
-		public L1HauntedHouseReadyTimer() {}
+		public L1HauntedHouseReadyTimer() {
+		}
 
 		@Override
 		public void run() {
@@ -187,13 +184,14 @@ public class L1HauntedHouse {
 
 		public void begin() {
 			Timer timer = new Timer();
-			timer.schedule(this, Config.HAUNTEDHOUSETIME); 
+			timer.schedule(this, Config.HAUNTEDHOUSETIME);
 		}
 	}
 
 	public class L1HauntedHouseTimer extends TimerTask {
 
-		public L1HauntedHouseTimer() {}
+		public L1HauntedHouseTimer() {
+		}
 
 		@Override
 		public void run() {
@@ -203,7 +201,7 @@ public class L1HauntedHouse {
 
 		public void begin() {
 			Timer timer = new Timer();
-			timer.schedule(this, 300000); 
+			timer.schedule(this, 300000);
 		}
 	}
 }

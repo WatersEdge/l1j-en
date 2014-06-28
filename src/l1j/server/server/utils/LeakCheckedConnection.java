@@ -32,9 +32,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class LeakCheckedConnection {
-	private static final Logger _log = Logger.getLogger(LeakCheckedConnection.class.getName());
+	private static final Logger _log = Logger
+			.getLogger(LeakCheckedConnection.class.getName());
 	private Connection _con;
-	private Throwable _stackTrace;
 	private Map<Statement, Throwable> _openedStatements = new HashMap<Statement, Throwable>();
 	private Map<ResultSet, Throwable> _openedResultSets = new HashMap<ResultSet, Throwable>();
 	private Object _proxy;
@@ -43,7 +43,6 @@ public class LeakCheckedConnection {
 		_con = con;
 		_proxy = Proxy.newProxyInstance(Connection.class.getClassLoader(),
 				new Class[] { Connection.class }, new ConnectionHandler());
-		_stackTrace = new Throwable();
 	}
 
 	public static Connection create(Connection con) {
@@ -90,20 +89,6 @@ public class LeakCheckedConnection {
 		}
 	}
 
-	/**
-	 * t@CiCUpNX _guardiangpxoAB
-	 */
-	private final Object _guardian = new Object() {
-		@Override
-		protected void finalize() throws Throwable {
-			if (!_con.isClosed()) {
-				_log.log(Level.WARNING, "Leaked Connection detected.",
-						_stackTrace);
-				_con.close();
-			}
-		}
-	};
-
 	private class ConnectionHandler implements
 			java.lang.reflect.InvocationHandler {
 		@Override
@@ -124,7 +109,8 @@ public class LeakCheckedConnection {
 	private class Delegate implements InvocationHandler {
 		private Object _delegateProxy;
 		private Object _original;
-		Delegate(Object o, Class c) {
+
+		Delegate(Object o, Class<?> c) {
 			_original = o;
 			_delegateProxy = Proxy.newProxyInstance(c.getClassLoader(),
 					new Class[] { c }, this);

@@ -18,8 +18,10 @@
  */
 package l1j.server.telnet.command;
 
+import static l1j.server.telnet.command.TelnetCommandResult.CMD_INTERNAL_ERROR;
+import static l1j.server.telnet.command.TelnetCommandResult.CMD_NOT_FOUND;
+
 import java.util.StringTokenizer;
-import static l1j.server.telnet.command.TelnetCommandResult.*;
 
 public class TelnetCommandExecutor {
 	private static TelnetCommandExecutor _instance = new TelnetCommandExecutor();
@@ -45,8 +47,8 @@ public class TelnetCommandExecutor {
 			}
 			return command.execute(args);
 		} catch (Exception e) {
-			return new TelnetCommandResult(CMD_INTERNAL_ERROR, e
-					.getLocalizedMessage());
+			return new TelnetCommandResult(CMD_INTERNAL_ERROR,
+					e.getLocalizedMessage());
 		}
 	}
 }

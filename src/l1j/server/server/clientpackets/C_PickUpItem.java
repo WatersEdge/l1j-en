@@ -19,12 +19,11 @@
 package l1j.server.server.clientpackets;
 
 import java.util.logging.Logger;
-import l1j.server.server.Account;
 
-import l1j.server.server.datatables.IpTable;
-import l1j.server.server.serverpackets.S_Disconnect;
+import l1j.server.server.Account;
 import l1j.server.server.ActionCodes;
 import l1j.server.server.ClientThread;
+import l1j.server.server.datatables.IpTable;
 import l1j.server.server.log.LogPickUpItem;
 import l1j.server.server.model.L1Inventory;
 import l1j.server.server.model.L1Object;
@@ -33,6 +32,7 @@ import l1j.server.server.model.Instance.L1ItemInstance;
 import l1j.server.server.model.Instance.L1PcInstance;
 import l1j.server.server.model.item.L1ItemId;
 import l1j.server.server.serverpackets.S_AttackPacket;
+import l1j.server.server.serverpackets.S_Disconnect;
 import l1j.server.server.serverpackets.S_ServerMessage;
 
 public class C_PickUpItem extends ClientBasePacket {
@@ -48,26 +48,27 @@ public class C_PickUpItem extends ClientBasePacket {
 		int pickupCount = readD();
 
 		L1PcInstance pc = client.getActiveChar();
-		//additional dupe checks.  Thanks Mike
+		// additional dupe checks. Thanks Mike
 		if (pc.getOnlineStatus() != 1) {
 			Account.ban(pc.getAccountName());
 			IpTable.getInstance().banIp(pc.getNetConnection().getIp());
 			_log.info(pc.getName() + " Attempted Dupe Exploit (C_PickUpItem).");
-			L1World.getInstance().broadcastServerMessage("Player " + pc.getName() + " Attempted A Dupe exploit!");
+			L1World.getInstance().broadcastServerMessage(
+					"Player " + pc.getName() + " Attempted A Dupe exploit!");
 			pc.sendPackets(new S_Disconnect());
 			return;
 		}
-		//TRICIDTODO: Set configurable auto ban
-		if (pickupCount < 0)
-		{
+		// TRICIDTODO: Set configurable auto ban
+		if (pickupCount < 0) {
 			Account.ban(pc.getAccountName());
 			IpTable.getInstance().banIp(pc.getNetConnection().getIp());
 			_log.info(pc.getName() + " Attempted Dupe Exploit (C_PickUpItem).");
-			L1World.getInstance().broadcastServerMessage("Player " + pc.getName() + " Attempted A Dupe exploit!");
+			L1World.getInstance().broadcastServerMessage(
+					"Player " + pc.getName() + " Attempted A Dupe exploit!");
 			pc.sendPackets(new S_Disconnect());
 			return;
 		}
-		
+
 		if (pc.isDead() || pc.isGhost()) {
 			return;
 		}
@@ -80,42 +81,53 @@ public class C_PickUpItem extends ClientBasePacket {
 			return;
 		}
 
-		L1Inventory groundInventory = L1World.getInstance().getInventory(x, y, pc.getMapId());
+		L1Inventory groundInventory = L1World.getInstance().getInventory(x, y,
+				pc.getMapId());
 		L1Object object = groundInventory.getItem(objectId);
 
 		if (object != null && !pc.isDead()) {
 			L1ItemInstance item = (L1ItemInstance) object;
-			if ((!item.isStackable() && pickupCount != 1) || item.getCount() <= 0 || pickupCount <= 0 || pickupCount > 2000000000 || pickupCount > item.getCount()) {
+			if ((!item.isStackable() && pickupCount != 1)
+					|| item.getCount() <= 0 || pickupCount <= 0
+					|| pickupCount > 2000000000
+					|| pickupCount > item.getCount()) {
 				Account.ban(pc.getAccountName());
 				IpTable.getInstance().banIp(pc.getNetConnection().getIp());
-				_log.info(pc.getName() + " Attempted Dupe Exploit (C_PickUpItem).");
-				L1World.getInstance().broadcastServerMessage("Player " + pc.getName() + " Attempted A Dupe exploit!");
+				_log.info(pc.getName()
+						+ " Attempted Dupe Exploit (C_PickUpItem).");
+				L1World.getInstance()
+						.broadcastServerMessage(
+								"Player " + pc.getName()
+										+ " Attempted A Dupe exploit!");
 				pc.sendPackets(new S_Disconnect());
 				return;
 			}
 			if (objectId != item.getId()) {
-				_log.warning(pc.getName() + " had item " +
-						Integer.toString(objectId) + " not match.");
+				_log.warning(pc.getName() + " had item "
+						+ Integer.toString(objectId) + " not match.");
 			}
 
-			if (item.getItemOwnerId() != 0 && pc.getId() != item.getItemOwnerId()) {
+			if (item.getItemOwnerId() != 0
+					&& pc.getId() != item.getItemOwnerId()) {
 				pc.sendPackets(new S_ServerMessage(623));
 				return;
 			}
-			
+
 			if (pc.getLocation().getTileLineDistance(item.getLocation()) > 3) {
 				return;
 			}
 
 			if (item.getItem().getItemId() == L1ItemId.ADENA) {
-				L1ItemInstance inventoryItem = pc.getInventory().findItemId(L1ItemId.ADENA);
+				L1ItemInstance inventoryItem = pc.getInventory().findItemId(
+						L1ItemId.ADENA);
 				int inventoryItemCount = 0;
 				if (inventoryItem != null) {
 					inventoryItemCount = inventoryItem.getCount();
 				}
 
 				if ((long) inventoryItemCount + (long) pickupCount > 2000000000L) {
-					pc.sendPackets(new S_ServerMessage(166, "You Cannot Carry More Than 2,000,000,000 Of An Item."));
+					pc.sendPackets(new S_ServerMessage(166,
+							"You Cannot Carry More Than 2,000,000,000 Of An Item."));
 					return;
 				}
 			}

@@ -18,11 +18,12 @@
  */
 package l1j.server.server.model.poison;
 
+import static l1j.server.server.model.skill.L1SkillId.STATUS_POISON_PARALYZED;
+import static l1j.server.server.model.skill.L1SkillId.STATUS_POISON_PARALYZING;
 import l1j.server.server.GeneralThreadPool;
 import l1j.server.server.model.L1Character;
 import l1j.server.server.model.Instance.L1PcInstance;
 import l1j.server.server.serverpackets.S_Paralysis;
-import static l1j.server.server.model.skill.L1SkillId.*;
 
 public class L1ParalysisPoison extends L1Poison {
 
@@ -38,10 +39,9 @@ public class L1ParalysisPoison extends L1Poison {
 			_target.setSkillEffect(STATUS_POISON_PARALYZING, 0);
 
 			try {
-				Thread.sleep(_delay); 
+				Thread.sleep(_delay);
 			} catch (InterruptedException e) {
-				_target
-						.killSkillEffectTimer(STATUS_POISON_PARALYZING);
+				_target.killSkillEffectTimer(STATUS_POISON_PARALYZING);
 				return;
 			}
 
@@ -53,7 +53,7 @@ public class L1ParalysisPoison extends L1Poison {
 				if (player.isDead() == false) {
 					player.sendPackets(new S_Paralysis(1, true));
 					_timer = new ParalysisTimer();
-					GeneralThreadPool.getInstance().execute(_timer); 
+					GeneralThreadPool.getInstance().execute(_timer);
 					if (isInterrupted()) {
 						_timer.interrupt();
 					}

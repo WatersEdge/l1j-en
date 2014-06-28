@@ -18,6 +18,8 @@
  */
 package l1j.server.server.model;
 
+import static l1j.server.server.model.skill.L1SkillId.ABSOLUTE_BARRIER;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -31,16 +33,15 @@ import java.util.logging.Logger;
 import l1j.server.L1DatabaseFactory;
 import l1j.server.server.model.Instance.L1PcInstance;
 import l1j.server.server.utils.SQLUtil;
-import static l1j.server.server.model.skill.L1SkillId.*;
 
 // Referenced classes of package l1j.server.server.model:
 // L1Teleport, L1PcInstance
 public class DungeonRandom {
-	private static Logger _log = Logger.getLogger(DungeonRandom.class.getName());
+	private static Logger _log = Logger
+			.getLogger(DungeonRandom.class.getName());
 	private static DungeonRandom _instance = null;
 
-	private static Map<String, NewDungeonRandom> _dungeonMap =
-			new HashMap<String, NewDungeonRandom>();
+	private static Map<String, NewDungeonRandom> _dungeonMap = new HashMap<String, NewDungeonRandom>();
 	private static Random _random = new Random();
 
 	public static DungeonRandom getInstance() {
@@ -83,10 +84,11 @@ public class DungeonRandom {
 				newY[4] = rs.getInt("new_y5");
 				newMapId[4] = rs.getShort("new_mapid5");
 				int heading = rs.getInt("new_heading");
-				NewDungeonRandom newDungeonRandom = new NewDungeonRandom(newX, newY,
-						newMapId, heading);
+				NewDungeonRandom newDungeonRandom = new NewDungeonRandom(newX,
+						newY, newMapId, heading);
 				if (_dungeonMap.containsKey(key)) {
-					_log.log(Level.WARNING, "List of dungeons does not contain key: " + key);
+					_log.log(Level.WARNING,
+							"List of dungeons does not contain key: " + key);
 				}
 				_dungeonMap.put(key, newDungeonRandom);
 			}

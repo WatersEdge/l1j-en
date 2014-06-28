@@ -21,9 +21,6 @@ package l1j.server.server.model.npc.action;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-
 import l1j.server.server.datatables.ItemTable;
 import l1j.server.server.model.L1Object;
 import l1j.server.server.model.L1ObjectAmount;
@@ -36,6 +33,9 @@ import l1j.server.server.serverpackets.S_HowManyMake;
 import l1j.server.server.serverpackets.S_ServerMessage;
 import l1j.server.server.templates.L1Item;
 import l1j.server.server.utils.IterableElementList;
+
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 public class L1NpcMakeItemAction extends L1NpcXmlAction {
 	private final List<L1ObjectAmount<Integer>> _materials = new ArrayList<L1ObjectAmount<Integer>>();
@@ -87,9 +87,10 @@ public class L1NpcMakeItemAction extends L1NpcXmlAction {
 					material.getAmount() * amount)) {
 				L1Item temp = ItemTable.getInstance().getTemplate(
 						material.getObject());
-				pc.sendPackets(new S_ServerMessage(337, temp.getName() + "("
+				pc.sendPackets(new S_ServerMessage(337, temp.getName()
+						+ "("
 						+ ((material.getAmount() * amount) - pc.getInventory()
-						.countItems(temp.getItemId())) + ")"));
+								.countItems(temp.getItemId())) + ")"));
 				isEnoughMaterials = false;
 			}
 		}
@@ -97,7 +98,7 @@ public class L1NpcMakeItemAction extends L1NpcXmlAction {
 			return false;
 		}
 
-		int countToCreate = 0; 
+		int countToCreate = 0;
 		int weight = 0;
 
 		for (L1ObjectAmount<Integer> makingItem : _items) {
@@ -114,7 +115,7 @@ public class L1NpcMakeItemAction extends L1NpcXmlAction {
 					/ 1000;
 		}
 		if (pc.getInventory().getSize() + countToCreate > 180) {
-			pc.sendPackets(new S_ServerMessage(263)); 
+			pc.sendPackets(new S_ServerMessage(263));
 			return false;
 		}
 		if (pc.getMaxWeight() < pc.getInventory().getWeight() + weight) {
@@ -131,8 +132,8 @@ public class L1NpcMakeItemAction extends L1NpcXmlAction {
 			L1ItemInstance item = pc.getInventory().storeItem(
 					makingItem.getObject(), makingItem.getAmount() * amount);
 			if (item != null) {
-				String itemName = ItemTable.getInstance().getTemplate(
-						makingItem.getObject()).getName();
+				String itemName = ItemTable.getInstance()
+						.getTemplate(makingItem.getObject()).getName();
 				if (makingItem.getAmount() * amount > 1) {
 					itemName = itemName + " (" + makingItem.getAmount()
 							* amount + ")";

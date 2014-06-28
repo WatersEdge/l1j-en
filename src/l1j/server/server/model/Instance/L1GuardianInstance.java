@@ -18,12 +18,14 @@
  */
 package l1j.server.server.model.Instance;
 
+import static l1j.server.server.model.skill.L1SkillId.FOG_OF_SLEEPING;
+
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.Random;
 
 import l1j.server.Config;
 import l1j.server.server.ActionCodes;
@@ -37,12 +39,11 @@ import l1j.server.server.model.L1Object;
 import l1j.server.server.model.L1World;
 import l1j.server.server.serverpackets.S_ChangeHeading;
 import l1j.server.server.serverpackets.S_DoActionGFX;
-import l1j.server.server.serverpackets.S_NpcChatPacket;
 import l1j.server.server.serverpackets.S_NPCTalkReturn;
+import l1j.server.server.serverpackets.S_NpcChatPacket;
 import l1j.server.server.serverpackets.S_ServerMessage;
 import l1j.server.server.templates.L1Npc;
 import l1j.server.server.utils.CalcExp;
-import static l1j.server.server.model.skill.L1SkillId.*;
 
 public class L1GuardianInstance extends L1NpcInstance {
 	/**
@@ -175,7 +176,6 @@ public class L1GuardianInstance extends L1NpcInstance {
 		L1Object object = L1World.getInstance().findObject(getId());
 		L1NpcInstance target = (L1NpcInstance) object;
 		String htmlid = null;
-		String[] htmldata = null;
 
 		if (talking != null) {
 			int pcx = player.getX();
@@ -202,14 +202,29 @@ public class L1GuardianInstance extends L1NpcInstance {
 			}
 			broadcastPacket(new S_ChangeHeading(this));
 
-			//
-			if (htmlid != null) { //
-				if (htmldata != null) { //
-					player.sendPackets(new S_NPCTalkReturn(objid, htmlid,
-							htmldata));
+			switch (getId()) {
+			// ent
+			case 70848:
+				if (player.isElf()) {
+					htmlid = "ente1";
 				} else {
-					player.sendPackets(new S_NPCTalkReturn(objid, htmlid));
+					htmlid = "entm1";
 				}
+				break;
+
+			// pan
+			case 70850:
+				if (player.isElf()) {
+					htmlid = "pane1";
+				} else {
+					htmlid = "panm1";
+				}
+				break;
+			}
+			if (htmlid != null) {
+
+				player.sendPackets(new S_NPCTalkReturn(objid, htmlid));
+
 			} else {
 				if (player.getLawful() < -1000) {
 					player.sendPackets(new S_NPCTalkReturn(talking, objid, 2));
@@ -232,8 +247,7 @@ public class L1GuardianInstance extends L1NpcInstance {
 	public void receiveDamage(L1Character attacker, int damage) {
 		if (attacker instanceof L1PcInstance && damage > 0) {
 			L1PcInstance pc = (L1PcInstance) attacker;
-			if (pc.getType() == 2 && 
-					pc.getCurrentWeapon() == 0) {
+			if (pc.getType() == 2 && pc.getCurrentWeapon() == 0) {
 			} else {
 				if (getCurrentHp() > 0 && !isDead()) {
 					if (damage >= 0) {
@@ -334,8 +348,8 @@ public class L1GuardianInstance extends L1NpcInstance {
 				ArrayList<Integer> dropHateList = _dropHateList
 						.toHateArrayList();
 				try {
-					DropTable.getInstance().dropShare(_npc,
-							dropTargetList, dropHateList);
+					DropTable.getInstance().dropShare(_npc, dropTargetList,
+							dropHateList);
 				} catch (Exception e) {
 					_log.log(Level.SEVERE, e.getLocalizedMessage(), e);
 				}

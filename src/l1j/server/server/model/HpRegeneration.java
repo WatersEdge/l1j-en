@@ -18,21 +18,30 @@
  */
 package l1j.server.server.model;
 
+import static l1j.server.server.model.skill.L1SkillId.BERSERKERS;
+import static l1j.server.server.model.skill.L1SkillId.COOKING_1_5_N;
+import static l1j.server.server.model.skill.L1SkillId.COOKING_1_5_S;
+import static l1j.server.server.model.skill.L1SkillId.COOKING_2_4_N;
+import static l1j.server.server.model.skill.L1SkillId.COOKING_2_4_S;
+import static l1j.server.server.model.skill.L1SkillId.COOKING_3_6_N;
+import static l1j.server.server.model.skill.L1SkillId.COOKING_3_6_S;
+import static l1j.server.server.model.skill.L1SkillId.NATURES_TOUCH;
+
+import java.util.Random;
 import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.Random;
 
 import l1j.server.Config;
 import l1j.server.server.model.Instance.L1EffectInstance;
 import l1j.server.server.model.Instance.L1PcInstance;
-import l1j.server.server.model.skill.L1SkillId;
 import l1j.server.server.model.map.Maps;
-import static l1j.server.server.model.skill.L1SkillId.*;
+import l1j.server.server.model.skill.L1SkillId;
 
 public class HpRegeneration extends TimerTask {
 
-	private static Logger _log = Logger.getLogger(HpRegeneration.class.getName());
+	private static Logger _log = Logger.getLogger(HpRegeneration.class
+			.getName());
 	private final L1PcInstance _pc;
 	private int _regenMax = 0;
 	private int _regenPoint = 0;
@@ -71,7 +80,8 @@ public class HpRegeneration extends TimerTask {
 	}
 
 	public void updateLevel() {
-		final int lvlTable[] = new int[] { 30, 25, 20, 16, 14, 12, 11, 10, 9, 3, 2 };
+		final int lvlTable[] = new int[] { 30, 25, 20, 16, 14, 12, 11, 10, 9,
+				3, 2 };
 
 		int regenLvl = Math.min(10, _pc.getLevel());
 		if (30 <= _pc.getLevel() && _pc.isKnight()) {
@@ -103,11 +113,14 @@ public class HpRegeneration extends TimerTask {
 		if (_pc.hasSkillEffect(NATURES_TOUCH)) {
 			bonus += 15;
 		}
- 		if (_pc.hasSkillEffect(COOKING_1_5_N) || _pc.hasSkillEffect(COOKING_1_5_S)) {
+		if (_pc.hasSkillEffect(COOKING_1_5_N)
+				|| _pc.hasSkillEffect(COOKING_1_5_S)) {
 			bonus += 3;
 		}
- 		if (_pc.hasSkillEffect(COOKING_2_4_N) || _pc.hasSkillEffect(COOKING_2_4_S) 
- 				|| _pc.hasSkillEffect(COOKING_3_6_N) || _pc.hasSkillEffect(COOKING_3_6_S)) {
+		if (_pc.hasSkillEffect(COOKING_2_4_N)
+				|| _pc.hasSkillEffect(COOKING_2_4_S)
+				|| _pc.hasSkillEffect(COOKING_3_6_N)
+				|| _pc.hasSkillEffect(COOKING_3_6_S)) {
 			bonus += 2;
 		}
 		// Only one of the location bonuses can apply.
@@ -121,20 +134,21 @@ public class HpRegeneration extends TimerTask {
 			bonus += Config.RATE_HP_MOTHERTREE;
 		} else if (_pc.isIllusionist() && Maps.atSilveriaCenter(_pc)) {
 			bonus += Config.RATE_HP_ILLUSIONISTTOWN;
-        } else if (_pc.isDragonKnight() && Maps.atBehimousCenter(_pc)) {
+		} else if (_pc.isDragonKnight() && Maps.atBehimousCenter(_pc)) {
 			bonus += Config.RATE_HP_DRAGONKNIGHTTOWN;
-        }
+		}
 
- 		if (_pc.getOriginalHpr() > 0) {
- 			bonus += _pc.getOriginalHpr();
- 		}
+		if (_pc.getOriginalHpr() > 0) {
+			bonus += _pc.getOriginalHpr();
+		}
 
 		boolean inLifeStream = isPlayerInLifeStream(_pc);
 		if (inLifeStream) {
 			bonus += 3;
 		}
 
-		if (_pc.get_food() < 3 || isOverWeight(_pc) || _pc.hasSkillEffect(BERSERKERS)) {
+		if (_pc.get_food() < 3 || isOverWeight(_pc)
+				|| _pc.hasSkillEffect(BERSERKERS)) {
 			bonus = 0;
 			if (equipHpr > 0) {
 				equipHpr = 0;
@@ -143,7 +157,7 @@ public class HpRegeneration extends TimerTask {
 
 		// fixes the low con DE negative regen.
 		int conHp = _pc.getCon() - 10;
-		
+
 		if (conHp < 0) {
 			conHp = 1;
 		}
@@ -170,7 +184,7 @@ public class HpRegeneration extends TimerTask {
 				_pc.death(null);
 			}
 		}
-		
+
 		if (!_pc.isDead()) {
 			_pc.setCurrentHp(Math.min(newHp, _pc.getMaxHp()));
 		}
@@ -181,10 +195,13 @@ public class HpRegeneration extends TimerTask {
 			return false;
 		}
 		// added Monitor invulnerability to underwater dmg
-		if (pc.hasSkillEffect(L1SkillId.STATUS_UNDERWATER_BREATH) || pc.isMonitor()) {
+		if (pc.hasSkillEffect(L1SkillId.STATUS_UNDERWATER_BREATH)
+				|| pc.isMonitor()) {
 			return false;
 		}
-		if (pc.getInventory().checkEquipped(21048) && pc.getInventory().checkEquipped(21049) && pc.getInventory().checkEquipped(21050)) {
+		if (pc.getInventory().checkEquipped(21048)
+				&& pc.getInventory().checkEquipped(21049)
+				&& pc.getInventory().checkEquipped(21050)) {
 			return false;
 		}
 
@@ -192,8 +209,8 @@ public class HpRegeneration extends TimerTask {
 	}
 
 	private boolean isOverWeight(L1PcInstance pc) {
-		if (pc.hasSkillEffect(L1SkillId.EXOTIC_VITALIZE) ||
-				pc.hasSkillEffect(L1SkillId.ADDITIONAL_FIRE)) {
+		if (pc.hasSkillEffect(L1SkillId.EXOTIC_VITALIZE)
+				|| pc.hasSkillEffect(L1SkillId.ADDITIONAL_FIRE)) {
 			return false;
 		}
 		if (pc.getInventory().checkEquipped(20049)) {
@@ -208,7 +225,9 @@ public class HpRegeneration extends TimerTask {
 				continue;
 			}
 			L1EffectInstance effect = (L1EffectInstance) object;
-			if (effect.getNpcId() == 81169 && effect.getLocation().getTileLineDistance(pc.getLocation()) < 4) {
+			if (effect.getNpcId() == 81169
+					&& effect.getLocation().getTileLineDistance(
+							pc.getLocation()) < 4) {
 				return true;
 			}
 		}

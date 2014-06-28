@@ -1,5 +1,18 @@
 package l1j.server.server.model;
 
+import static l1j.server.server.model.skill.L1SkillId.BLIND_HIDING;
+import static l1j.server.server.model.skill.L1SkillId.COUNTER_BARRIER;
+import static l1j.server.server.model.skill.L1SkillId.DETECTION;
+import static l1j.server.server.model.skill.L1SkillId.ENCHANT_WEAPON;
+import static l1j.server.server.model.skill.L1SkillId.EXTRA_HEAL;
+import static l1j.server.server.model.skill.L1SkillId.GREATER_HASTE;
+import static l1j.server.server.model.skill.L1SkillId.HASTE;
+import static l1j.server.server.model.skill.L1SkillId.HEAL;
+import static l1j.server.server.model.skill.L1SkillId.INVISIBILITY;
+import static l1j.server.server.model.skill.L1SkillId.PHYSICAL_ENCHANT_DEX;
+import static l1j.server.server.model.skill.L1SkillId.PHYSICAL_ENCHANT_STR;
+import static l1j.server.server.model.skill.L1SkillId.STATUS_BRAVE;
+
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -10,13 +23,12 @@ import l1j.server.server.model.Instance.L1PcInstance;
 import l1j.server.server.serverpackets.S_Ability;
 import l1j.server.server.serverpackets.S_AddSkill;
 import l1j.server.server.serverpackets.S_DelSkill;
-import l1j.server.server.serverpackets.S_RemoveObject;
 import l1j.server.server.serverpackets.S_Invis;
+import l1j.server.server.serverpackets.S_RemoveObject;
 import l1j.server.server.serverpackets.S_SPMR;
 import l1j.server.server.serverpackets.S_SkillBrave;
 import l1j.server.server.serverpackets.S_SkillHaste;
 import l1j.server.server.templates.L1Item;
-import static l1j.server.server.model.skill.L1SkillId.*;
 
 public class L1EquipmentSlot {
 	private static Logger _log = Logger.getLogger(L1EquipmentSlot.class
@@ -52,7 +64,7 @@ public class L1EquipmentSlot {
 
 	private void setArmor(L1ItemInstance armor) {
 		L1Item item = armor.getItem();
-		
+
 		// Quick hack to deal with multiple gear equipment issue. I'm 90% sure
 		// it's a synchronization issue, but that means it'll be a pain to find
 		// the right place(s) to lock access. In the meantime, this should
@@ -64,8 +76,7 @@ public class L1EquipmentSlot {
 			if (equippedItem.getType() == 9) {
 				ringCount++;
 				if (ringCount >= 2 && type == 9) {
-					_log.log(Level.WARNING,
-							"Tried to equip too many rings.");
+					_log.log(Level.WARNING, "Tried to equip too many rings.");
 					return;
 				}
 			} else if (equippedItem.getType() == type) {
@@ -74,14 +85,14 @@ public class L1EquipmentSlot {
 				return;
 			}
 		}
-		
+
 		int itemId = armor.getItem().getItemId();
 
 		if (item.getType2() == 2 && type >= 8 && type <= 12)
 			_owner.addAc(item.get_ac() - armor.getAcByMagic());
 		else
-			_owner.addAc(item.get_ac() - armor.getEnchantLevel() - armor
-					.getAcByMagic());
+			_owner.addAc(item.get_ac() - armor.getEnchantLevel()
+					- armor.getAcByMagic());
 		_owner.addDamageReductionByArmor(item.getDamageReduction());
 		_owner.addWeightReduction(item.getWeightReduction());
 		_owner.addHitModifierByArmor(item.getHitModifierByArmor());
@@ -123,22 +134,22 @@ public class L1EquipmentSlot {
 				_owner.sendPackets(new S_Invis(_owner.getId(), 1));
 				_owner.broadcastPacketForFindInvis(new S_RemoveObject(_owner),
 						false);
-		// _owner.broadcastPacket(new S_RemoveObject(_owner));
+				// _owner.broadcastPacket(new S_RemoveObject(_owner));
 			}
 		}
 		if (itemId == 20288) { // ROTC
 			_owner.sendPackets(new S_Ability(1, true));
 		}
-		if (itemId == 20383) { 
+		if (itemId == 20383) {
 			if (armor.getChargeCount() != 0) {
 				armor.setChargeCount(armor.getChargeCount() - 1);
-				_owner.getInventory().updateItem(armor, L1PcInventory
-						.COL_CHARGE_COUNT);
+				_owner.getInventory().updateItem(armor,
+						L1PcInventory.COL_CHARGE_COUNT);
 			}
 		}
 		armor.startEquipmentTimer(_owner);
 	}
-	
+
 	private void removeWeapon(L1ItemInstance weapon) {
 		int itemId = weapon.getItem().getItemId();
 		_owner.setWeapon(null);
@@ -159,7 +170,7 @@ public class L1EquipmentSlot {
 			_owner.addAc(-(item.get_ac() - armor.getAcByMagic()));
 		else
 			_owner.addAc(-(item.get_ac() - armor.getEnchantLevel() - armor
-						.getAcByMagic()));
+					.getAcByMagic()));
 		_owner.addDamageReductionByArmor(-item.getDamageReduction());
 		_owner.addWeightReduction(-item.getWeightReduction());
 		_owner.addHitModifierByArmor(-item.getHitModifierByArmor());
@@ -237,7 +248,7 @@ public class L1EquipmentSlot {
 				_owner.broadcastPacket(new S_SkillHaste(_owner.getId(), 1, 0));
 			}
 		}
-		if (item.getItemId() == 20383) { // 
+		if (item.getItemId() == 20383) { //
 			if (_owner.hasSkillEffect(STATUS_BRAVE)) {
 				_owner.killSkillEffectTimer(STATUS_BRAVE);
 				_owner.sendPackets(new S_SkillBrave(_owner.getId(), 0, 0));
@@ -245,7 +256,7 @@ public class L1EquipmentSlot {
 				_owner.setBraveSpeed(0);
 			}
 		}
- 		_owner.getEquipSlot().setMagicHelm(equipment);
+		_owner.getEquipSlot().setMagicHelm(equipment);
 
 		if (item.getType2() == 1) {
 			setWeapon(equipment);
@@ -338,7 +349,7 @@ public class L1EquipmentSlot {
 
 	public void removeMagicHelm(int objectId, L1ItemInstance item) {
 		switch (item.getItemId()) {
-		case 20013: 
+		case 20013:
 			if (!SkillTable.getInstance().spellCheck(objectId,
 					PHYSICAL_ENCHANT_DEX)) {
 				_owner.removeSkillMastery(PHYSICAL_ENCHANT_DEX);
@@ -351,7 +362,7 @@ public class L1EquipmentSlot {
 						0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0));
 			}
 			break;
-		case 20014: 
+		case 20014:
 			if (!SkillTable.getInstance().spellCheck(objectId, HEAL)) {
 				_owner.removeSkillMastery(HEAL);
 				_owner.sendPackets(new S_DelSkill(1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -363,9 +374,8 @@ public class L1EquipmentSlot {
 						0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0));
 			}
 			break;
-		case 20015: 
-			if (!SkillTable.getInstance().spellCheck(objectId,
-					ENCHANT_WEAPON)) {
+		case 20015:
+			if (!SkillTable.getInstance().spellCheck(objectId, ENCHANT_WEAPON)) {
 				_owner.removeSkillMastery(ENCHANT_WEAPON);
 				_owner.sendPackets(new S_DelSkill(0, 8, 0, 0, 0, 0, 0, 0, 0, 0,
 						0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0));
@@ -373,8 +383,7 @@ public class L1EquipmentSlot {
 			if (!SkillTable.getInstance().spellCheck(objectId, DETECTION)) {
 				_owner.removeSkillMastery(DETECTION);
 				_owner.sendPackets(new S_DelSkill(0, 16, 0, 0, 0, 0, 0, 0, 0,
-						0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-						0));
+						0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0));
 			}
 			if (!SkillTable.getInstance().spellCheck(objectId,
 					PHYSICAL_ENCHANT_STR)) {
@@ -383,20 +392,18 @@ public class L1EquipmentSlot {
 						0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0));
 			}
 			break;
-		case 20008: 
+		case 20008:
 			if (!SkillTable.getInstance().spellCheck(objectId, HASTE)) {
 				_owner.removeSkillMastery(HASTE);
 				_owner.sendPackets(new S_DelSkill(0, 0, 0, 0, 0, 4, 0, 0, 0, 0,
 						0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0));
 			}
 			break;
-		case 20023: 
-			if (!SkillTable.getInstance().spellCheck(objectId,
-					GREATER_HASTE)) {
+		case 20023:
+			if (!SkillTable.getInstance().spellCheck(objectId, GREATER_HASTE)) {
 				_owner.removeSkillMastery(GREATER_HASTE);
 				_owner.sendPackets(new S_DelSkill(0, 0, 0, 0, 0, 0, 32, 0, 0,
-						0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-						0));
+						0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0));
 			}
 			break;
 		}

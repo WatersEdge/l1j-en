@@ -21,15 +21,14 @@ package l1j.server.server.command.executor;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.logging.Logger;
 
 import l1j.server.L1DatabaseFactory;
-import l1j.server.server.utils.SQLUtil;
+import l1j.server.server.model.L1Teleport;
 import l1j.server.server.model.Instance.L1PcInstance;
 import l1j.server.server.serverpackets.S_SystemMessage;
-import l1j.server.server.model.L1Teleport;
+import l1j.server.server.utils.SQLUtil;
+
 public class L1GotoBug implements L1CommandExecutor {
-	private static Logger _log = Logger.getLogger(L1GotoBug.class.getName());
 
 	private L1GotoBug() {
 	}
@@ -43,27 +42,28 @@ public class L1GotoBug implements L1CommandExecutor {
 		Connection con = null;
 		PreparedStatement pstm = null;
 		ResultSet rs = null;
-		
+
 		try {
 			con = L1DatabaseFactory.getInstance().getConnection();
-			int bugid=Integer.valueOf(arg).intValue();
+			int bugid = Integer.valueOf(arg).intValue();
 			pstm = con.prepareStatement("select * from bugs where id = ?");
 			pstm.setInt(1, bugid);
 			rs = pstm.executeQuery();
 			rs.next();
-			L1Teleport.teleport(pc, rs.getInt("mapX"), rs.getInt("mapY"), (short) rs.getInt("mapID"), 5, true);
-			if(rs.getInt("resolved")==1) {
-				pc.sendPackets(new S_SystemMessage(rs.getInt("id")+"(Resolved). "+
-					rs.getString("charname")+" (on Map:"+rs.getInt("mapID")+
-					", X:"+rs.getInt("mapX")+", Y:"+rs.getInt("mapY")+
-					") wrote: "+rs.getString("bugtext")+"."
-					));
+			L1Teleport.teleport(pc, rs.getInt("mapX"), rs.getInt("mapY"),
+					(short) rs.getInt("mapID"), 5, true);
+			if (rs.getInt("resolved") == 1) {
+				pc.sendPackets(new S_SystemMessage(rs.getInt("id")
+						+ "(Resolved). " + rs.getString("charname")
+						+ " (on Map:" + rs.getInt("mapID") + ", X:"
+						+ rs.getInt("mapX") + ", Y:" + rs.getInt("mapY")
+						+ ") wrote: " + rs.getString("bugtext") + "."));
 			} else {
-				pc.sendPackets(new S_SystemMessage(rs.getInt("id")+". "+
-					rs.getString("charname")+" (on Map:"+rs.getInt("mapID")+
-					", X:"+rs.getInt("mapX")+", Y:"+rs.getInt("mapY")+
-					") wrote: "+rs.getString("bugtext")+"."
-					));
+				pc.sendPackets(new S_SystemMessage(rs.getInt("id") + ". "
+						+ rs.getString("charname") + " (on Map:"
+						+ rs.getInt("mapID") + ", X:" + rs.getInt("mapX")
+						+ ", Y:" + rs.getInt("mapY") + ") wrote: "
+						+ rs.getString("bugtext") + "."));
 			}
 			rs.close();
 		} catch (Exception e) {
@@ -73,6 +73,6 @@ public class L1GotoBug implements L1CommandExecutor {
 			SQLUtil.close(rs);
 			SQLUtil.close(pstm);
 			SQLUtil.close(con);
-		}	
+		}
 	}
 }
