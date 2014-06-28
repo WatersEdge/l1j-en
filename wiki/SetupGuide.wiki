@@ -123,9 +123,9 @@ If you've made it through and set everything up, then congrats.  However, there 
 
 Here's a few that we know of:
 
-[Lineage Retribution's old setup guide](http://web.archive.org/web/20100430082609/http://www.retrib.net/wiki/Setting_up_your_own_L1J-EN_server_database): Only covers the database, but goes into a bit of extra detail than covered here.
+[http://web.archive.org/web/20100430082609/http://www.retrib.net/wiki/Setting_up_your_own_L1J-EN_server_database Lineage Retribution's old setup guide]: Only covers the database, but goes into a bit of extra detail than covered here.
 
-(A video setup guide)[https://www.youtube.com/watch?v=KBlMCjzcnhA]: Probably is pretty accurate due to being recent.
+[https://www.youtube.com/watch?v=KBlMCjzcnhA A video guide]: Probably is pretty accurate due to being recent.
 
 == Conclusion ==
 
