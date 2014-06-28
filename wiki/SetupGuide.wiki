@@ -22,7 +22,7 @@ You basically have 3 options:
 
 === Using a Milestone Build ===
 
-*Note that at the current time (2014-06-01), no milestone build is available for the S3ep1 client.  The remainder of this section can be safely ignored until that changes.
+*Note that at the current time (2014-06-01), no milestone build is available for the S3ep1 client.  This is due to Google Code disabling adding new downloads.  So, we're unable to post a new m8 precompiled build.  The remainder of this section can be safely ignored until that changes.
 
 Acknowledging that not everyone is patient or skilled enough to follow this guide to completion. If you consider yourself a novice or have trouble at some point following the steps here, then you have the option of using a pre-built version of the server and a pre-packaged database that is associated with it. This will spare you multiple, potentially-confusing steps in this process. We will try to release milestones at points where either significant progress has been made, large amounts of code have been merged in, or a major client version becomes supported.
 
