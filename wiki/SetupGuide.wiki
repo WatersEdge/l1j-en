@@ -78,17 +78,17 @@ With these tasks complete, you can now create a directory for your server to exe
 
 Before you can actually run the server, be sure to open config/server.properties and edit the "URL" parameter in the beginning of the file.  You'll need to make sure this matches the host and database name that you created earlier.  Do the same with the MySQL login and password.
 
-Now would be a good time to test running the server to see if you've done everything up to this point correctly.  To do so, simply execute the startup script.  You have three options for this:
+Now would be a good time to test running the server to see if you've done everything up to this point correctly.  To do so, simply execute the startup script.  You have two options for this:
 
   * If on Windows, just run the serverstart-console.bat file.
   * If on a Unix-variant, chmod u+x serverstart.sh, then run it.
-  * If you are on a Unix-variant and want to background the process, edit l1server_startup.sh, chmod u+x both it and severstart.sh, then run the former.
 
 Some common problems are encountered here:
 
   * If you have a database connection error, check that MySQL is running, is accessible from where you're running it, and that you have the database name correct.
   * If you have a bunch of errors about missing tables or fields, then go back and check that you ran the database build in the correct order.
   * If you have an error when loading maps, then ensure that you unpacked them in the correct subdirectory.
+  * If you can't see logs or emblems won't upload, be sure to create an emblem/ and log/ directory (these should be automated when running on *nixes).
 
 == Configuration ==
 
